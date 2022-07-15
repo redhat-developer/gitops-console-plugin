@@ -1,0 +1,64 @@
+{
+  "name": "@patternfly/react-core",
+  "version": "4.175.4",
+  "description": "This library provides a set of common React components for use with the PatternFly reference implementation.",
+  "main": "dist/js/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "patternfly:src": "src/",
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "prerelease"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patternfly/patternfly-react.git"
+  },
+  "keywords": [
+    "react",
+    "patternfly"
+  ],
+  "author": "Red Hat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/patternfly/patternfly-react/issues"
+  },
+  "homepage": "https://github.com/patternfly/patternfly-react#readme",
+  "scripts": {
+    "build:umd": "rollup -c && rollup -c --environment IS_PRODUCTION",
+    "clean": "rimraf dist",
+    "generate": "node scripts/copyStyles.js"
+  },
+  "dependencies": {
+    "@patternfly/react-icons": "^4.26.4",
+    "@patternfly/react-styles": "^4.25.4",
+    "@patternfly/react-tokens": "^4.27.4",
+    "focus-trap": "6.2.2",
+    "react-dropzone": "9.0.0",
+    "tippy.js": "5.1.2",
+    "tslib": "^2.0.0"
+  },
+  "devDependencies": {
+    "@patternfly/patternfly": "4.159.1",
+    "@rollup/plugin-commonjs": "^21.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-replace": "^3.0.0",
+    "css": "^2.2.3",
+    "fs-extra": "^6.0.1",
+    "glob": "^7.1.2",
+    "rimraf": "^2.6.2",
+    "rollup": "^2.58.0",
+    "rollup-plugin-scss": "^3.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "typescript": "^4.0.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0"
+  },
+  "gitHead": "f6c85091da9f26a75bd7a063d8ee99a2b80dd64f"
+}

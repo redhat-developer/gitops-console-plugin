@@ -1,0 +1,46 @@
+import * as React from 'react';
+import { DropdownPosition, DropdownDirection, DropdownContext } from './dropdownConstants';
+import { ToggleMenuBaseProps } from '../../helpers/Popper/Popper';
+import { OUIAProps } from '../../helpers';
+export interface DropdownProps extends ToggleMenuBaseProps, React.HTMLProps<HTMLDivElement>, OUIAProps {
+    /** Anything which can be rendered in a dropdown */
+    children?: React.ReactNode;
+    /** Classes applied to root element of dropdown */
+    className?: string;
+    /** Array of DropdownItem nodes that will be rendered in the dropdown Menu list */
+    dropdownItems?: any[];
+    /** Flag to indicate if menu is opened */
+    isOpen?: boolean;
+    /** Display the toggle with no border or background */
+    isPlain?: boolean;
+    /** Display the toggle in text only mode */
+    isText?: boolean;
+    /** Flag indicating that the dropdown should expand to full height */
+    isFullHeight?: boolean;
+    /** Indicates where menu will be aligned horizontally */
+    position?: DropdownPosition | 'right' | 'left';
+    /** Indicates how the menu will align at screen size breakpoints. Default alignment is set via the position property. */
+    alignments?: {
+        sm?: 'right' | 'left';
+        md?: 'right' | 'left';
+        lg?: 'right' | 'left';
+        xl?: 'right' | 'left';
+        '2xl'?: 'right' | 'left';
+    };
+    /** Display menu above or below dropdown toggle */
+    direction?: DropdownDirection | 'up' | 'down';
+    /** Flag to indicate if dropdown has groups */
+    isGrouped?: boolean;
+    /** Toggle for the dropdown, examples: <DropdownToggle> or <DropdownToggleCheckbox> */
+    toggle: React.ReactElement<any>;
+    /** Function callback called when user selects item */
+    onSelect?: (event?: React.SyntheticEvent<HTMLDivElement>) => void;
+    /** Flag to indicate if the first dropdown item should gain initial focus, set false when adding
+     * a specific auto-focus item (like a current selection) otherwise leave as true
+     */
+    autoFocus?: boolean;
+    /** Props for extreme customization of dropdown */
+    contextProps?: typeof DropdownContext;
+}
+export declare const Dropdown: React.FunctionComponent<DropdownProps>;
+//# sourceMappingURL=Dropdown.d.ts.map

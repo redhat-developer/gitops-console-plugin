@@ -1,0 +1,40 @@
+{
+  "name": "console-gitops-plugin",
+  "version": "0.0.1",
+  "displayName": "GitOps Plugin",
+  "description": "OpenShift Console plugin for Gitops.",
+  "dependencies": {
+    "@console/pluginAPI": "*"
+  },
+  "extensions": [
+    {
+      "type": "console.navigation/href",
+      "properties": {
+        "id": "gitops-environment",
+        "perspective": "dev",
+        "section": "resources",
+        "insertBefore": "helm",
+        "name": "Environments - Dynamic",
+        "href": "/envdynamic",
+        "dataAttributes": {
+          "data-test-id": "envdynamic-header"
+        }
+      },
+      "flags": {
+        "required": [
+          "OPENSHIFT"
+        ]
+      }
+    },
+    {
+      "type": "console.page/route",
+      "properties": {
+        "component": {
+          "$codeRef": "environments"
+        },
+        "exact": false,
+        "path": "/envdynamic"
+      }
+    }
+  ]
+}
