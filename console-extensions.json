@@ -1,0 +1,37 @@
+/**
+ * This file declares all extensions contributed by the plugin.
+ *
+ * Depending on extension 'type', the 'properties' object may contain code references, encoded
+ * as object literals { $codeRef: string }. The '$codeRef' value should be formatted as either
+ * 'moduleName.exportName' (referring to a named export) or 'moduleName' (referring to the
+ * 'default' export). Only the plugin's exposed modules may be used in code references.
+ *
+ * TODO: update properties.name and properties.href
+ */
+[
+  {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "gitops-environment",
+      "perspective": "dev",
+      "section": "resources",
+      "insertBefore": "helm",
+      "name": "Environments - Dynamic",
+      "href": "/envdynamic",
+      "dataAttributes": {
+        "data-test-id": "envdynamic-header"
+      }
+    },
+    "flags": {
+      "required": ["OPENSHIFT"]
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "component": { "$codeRef": "environments" },
+      "exact": false,
+      "path": "/envdynamic"
+    }
+  }
+]
