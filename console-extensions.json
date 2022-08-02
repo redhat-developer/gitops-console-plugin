@@ -5,6 +5,8 @@
  * as object literals { $codeRef: string }. The '$codeRef' value should be formatted as either
  * 'moduleName.exportName' (referring to a named export) or 'moduleName' (referring to the
  * 'default' export). Only the plugin's exposed modules may be used in code references.
+ *
+ * TODO: update properties.name and properties.href
  */
 [
   {

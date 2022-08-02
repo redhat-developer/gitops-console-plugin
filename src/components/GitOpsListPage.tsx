@@ -9,6 +9,7 @@ import { fetchAllAppGroups, getManifestURLs } from './utils/gitops-utils';
 import { GitOpsAppGroupData } from './utils//gitops-types';
 import GitOpsList from './list/GitOpsList';
 
+// TODO: check and match the latest code when uncomment out these imports
 // import { PageHeading /*, LoadingBox */ } from '@console/internal/components/utils';
 // import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
 // import { ProjectModel } from '@console/internal/models';

@@ -1,13 +1,10 @@
 {
   "name": "console-gitops-plugin",
-  "description": "OpenShift Console plugin for GitOps",
+  "description": "OpenShift Console plugin for GitOps.",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build-ORIG": "yarn clean && NODE_ENV=production yarn ts-node ./node_modules/.bin/webpack --mode=production",
-    "build-dev-ORIG": "yarn clean && yarn ts-node ./node_modules/.bin/webpack --mode=development",
-    "http-server-ORIG": "./http-server.sh ./dist",
-    "ts-node-ORIG": "ts-node -O '{\"module\":\"commonjs\"}' -I '/node_modules/(?!(@openshift-console)/)/'",
+    "http-server": "./http-server.sh ./dist",
     "clean": "rm -rf dist",
     "build": "yarn clean && NODE_ENV=production yarn ts-node node_modules/.bin/webpack",
     "build-dev": "yarn clean && yarn ts-node node_modules/.bin/webpack",
@@ -22,17 +19,21 @@
     "@openshift-console/dynamic-plugin-sdk-internal": "0.0.10",
     "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.7",
     "@openshift-console/plugin-shared": "^0.0.1",
-    "@patternfly/react-core": "4.175.4",
-    "@patternfly/react-icons": "3.15.17",
+    "@patternfly/react-core": "4.224.1",
     "@patternfly/react-table": "4.44.4",
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.37",
     "@types/react-helmet": "^6.1.4",
     "@types/react-router-dom": "^5.3.2",
     "@types/webpack-dev-server": "^4.7.2",
+    "@types/classnames": "^2.2.7",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
-    "css-loader": "^6.7.1",
+    "prop-types": "^15.6.1",
+    "css-loader": "^5.2.7",
+    "sass": "^1.42.1",
+    "sass-loader": "^10.1.1",
+    "style-loader": "^2.0.0",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -40,19 +41,19 @@
     "i18next": "^19.8.3",
     "lodash-es": "^4.17.21",
     "prettier": "^2.6.0",
-    "react": "17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
-    "react-i18next": "^11.8.11",
+    "react-i18next": "^11.14.3",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
-    "style-loader": "^3.3.1",
     "ts-loader": "^9.2.8",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.2",
     "webpack": "^5.68.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.3"
+    "webpack-dev-server": "^4.9.3",
+    "showdown": "1.8.6"
   },
   "consolePlugin": {
     "name": "console-gitops-plugin",
@@ -65,5 +66,9 @@
     "dependencies": {
       "@console/pluginAPI": "*"
     }
+  },
+  "dependencies": {
+    "classnames": "2.x",
+    "fuzzysearch": "1.0.x"
   }
 }
