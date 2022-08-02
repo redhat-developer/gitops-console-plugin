@@ -2,7 +2,11 @@
 
 set -euo pipefail
 
+<<<<<<< HEAD
 npm_package_consolePlugin_name="gitops-plugin"
+=======
+npm_package_consolePlugin_name="console-gitops-plugin"
+>>>>>>> bd7368a3 (First commit for console-gitops-plugin (#1))
 
 CONSOLE_IMAGE=${CONSOLE_IMAGE:="quay.io/openshift/origin-console:latest"}
 CONSOLE_PORT=${CONSOLE_PORT:=9000}

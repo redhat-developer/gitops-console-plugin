@@ -102,6 +102,7 @@ const config: Configuration = {
 
 if (process.env.NODE_ENV === "production") {
   config.mode = "production";
+<<<<<<< HEAD
   if (config.output) {
     config.output.filename = "[name]-bundle-[hash].min.js";
     config.output.chunkFilename = "[name]-chunk-[chunkhash].min.js";
@@ -110,6 +111,12 @@ if (process.env.NODE_ENV === "production") {
     config.optimization.chunkIds = "deterministic";
     config.optimization.minimize = true;
   }
+=======
+  config.output.filename = "[name]-bundle-[hash].min.js";
+  config.output.chunkFilename = "[name]-chunk-[chunkhash].min.js";
+  config.optimization.chunkIds = "deterministic";
+  config.optimization.minimize = true;
+>>>>>>> bd7368a3 (First commit for console-gitops-plugin (#1))
 }
 
 export default config;
