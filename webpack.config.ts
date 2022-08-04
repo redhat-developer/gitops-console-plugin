@@ -37,8 +37,31 @@ const config: Configuration = {
         ],
       },
       {
+        test: /\.s?css$/,
+        exclude: /node_modules\/(?!(@patternfly|@console\/plugin-shared)\/).*/,
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              sassOptions: {
+                outputStyle: 'compressed',
+              },
+            },
+          },
+        ],
+      },
+      {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"],
+        include: path.resolve(__dirname, './node_modules/monaco-editor'),
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg|woff2?|ttf|eot|otf)(\?.*$|$)/,
@@ -79,10 +102,14 @@ const config: Configuration = {
 
 if (process.env.NODE_ENV === "production") {
   config.mode = "production";
-  config.output.filename = "[name]-bundle-[hash].min.js";
-  config.output.chunkFilename = "[name]-chunk-[chunkhash].min.js";
-  config.optimization.chunkIds = "deterministic";
-  config.optimization.minimize = true;
+  if (config.output) {
+    config.output.filename = "[name]-bundle-[hash].min.js";
+    config.output.chunkFilename = "[name]-chunk-[chunkhash].min.js";
+  }
+  if (config.optimization) {
+    config.optimization.chunkIds = "deterministic";
+    config.optimization.minimize = true;
+  }
 }
 
 export default config;
