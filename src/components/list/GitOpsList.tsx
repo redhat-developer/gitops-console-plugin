@@ -1,13 +1,19 @@
+import './GitOpsList.scss';
+
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { VirtualizedTable } from '@openshift-console/dynamic-plugin-sdk';
+
+import {
+  ListPageFilter,
+  RowFilter,
+  useListPageFilter,
+  VirtualizedTable,
+} from '@openshift-console/dynamic-plugin-sdk';
+
 import GitOpsEmptyState from '../GitOpsEmptyState';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
-import useGitOpsColumns from '../../hooks/useGitOpsColumns';
+import { GitOpsColumns } from './GitOpsColumns';
 import GitOpsTableRow from './GitOpsTableRow';
-import './GitOpsList.scss';
-import { fuzzyCaseInsensitive } from '../helpers/stringHelpers';
-import { TextFilter } from '../import/list-page';
 
 interface GitOpsListProps {
   appGroups: GitOpsAppGroupData[];
@@ -16,35 +22,46 @@ interface GitOpsListProps {
 
 const GitOpsList: React.FC<GitOpsListProps> = ({ appGroups, emptyStateMsg }) => {
   const { t } = useTranslation();
-  const [textFilter, setTextFilter] = React.useState('');
-  
-  const visibleItems = appGroups?.filter(({ name }) => {
-    return fuzzyCaseInsensitive(textFilter, name);
-  });
+
+  const filters: RowFilter[] = [
+    {
+      filterGroupName: 'App name',
+      type: 'name',
+      reducer: ({ name }) => name,
+      filter: (input, app) => {
+        if (input.selected?.length) {
+          return app.name.includes(input.selected);
+        }
+        return true;
+      },
+      items: [{ id: 'name', title: 'name' }],
+    },
+  ];
+
+  const [staticData, filteredData, onFilterChange] = useListPageFilter(appGroups, filters);
 
   const hasSyncStatus: boolean =
-  appGroups?.some(
-    ({ sync_status }) => sync_status /* eslint-disable-line @typescript-eslint/camelcase */,
+    appGroups?.some(
+      ({ sync_status }) => sync_status /* eslint-disable-line @typescript-eslint/camelcase */,
     ) || false;
-  const columns = useGitOpsColumns(hasSyncStatus);
-    
+
   return (
     <div className="gop-gitops-list">
       {!emptyStateMsg && appGroups ? (
         <>
-          <div className="co-m-pane__filter-row">
-            <TextFilter
-              value={textFilter}
-              label={t('gitops-plugin~by name')}
-              onChange={(val) => setTextFilter(val)}
-            />
-          </div>
+          <ListPageFilter
+            data={staticData}
+            loaded={!emptyStateMsg}
+            onFilterChange={onFilterChange}
+            nameFilterPlaceholder={t('gitops-plugin~by name')}
+            hideLabelFilter
+          />
           <VirtualizedTable<GitOpsAppGroupData>
-            data={visibleItems || []}
-            unfilteredData={appGroups || []}
+            data={filteredData || []}
+            unfilteredData={staticData || []}
             loaded={!emptyStateMsg}
             loadError={null}
-            columns={columns}
+            columns={GitOpsColumns(hasSyncStatus)}
             Row={GitOpsTableRow}
           />
         </>

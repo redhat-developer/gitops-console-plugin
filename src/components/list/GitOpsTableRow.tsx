@@ -1,22 +1,24 @@
+import './GitOpsTableRow.scss';
+
+import classNames from 'classnames';
 import * as React from 'react';
-import { Flex, FlexItem, Split, SplitItem } from '@patternfly/react-core';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { RowProps, TableData } from '@openshift-console/dynamic-plugin-sdk';
-import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
+
 import {
   GreenCheckCircleIcon,
+  RowProps,
+  TableData,
+  Timestamp,
   YellowExclamationTriangleIcon,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { GitOpsAppGroupData } from '../utils/gitops-types';
-import GitOpsSyncFragment from './GitOpsSyncFragment';
-
-import './GitOpsTableRow.scss';
-import classNames from 'classnames';
+import { Flex, FlexItem, Split, SplitItem } from '@patternfly/react-core';
 
 import { routeDecoratorIcon } from '../import/render-utils';
-import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GrayUnknownIcon } from '../status/icons';
+import ExternalLink from '../utils/ExternalLink/ExternalLink';
+import { GitOpsAppGroupData } from '../utils/gitops-types';
+import GitOpsSyncFragment from './GitOpsSyncFragment';
 
 const tableColumnClasses = [
   classNames('pf-m-width-20'), // Application name
@@ -25,14 +27,12 @@ const tableColumnClasses = [
   classNames('pf-m-hidden', 'pf-m-visible-on-lg', 'pf-m-width-30'), // Last deployment
 ];
 
-const getMatchingEnvs = (envs: string[], desiredStatus: string) => (
-  acc: string[],
-  status: string,
-  idx: number,
-): string[] =>
-  desiredStatus === status
-    ? [...acc, envs[idx]] // 1:1 between a status and an env
-    : acc;
+const getMatchingEnvs =
+  (envs: string[], desiredStatus: string) =>
+  (acc: string[], status: string, idx: number): string[] =>
+    desiredStatus === status
+      ? [...acc, envs[idx]] // 1:1 between a status and an env
+      : acc;
 
 const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
   console.log('props: ', props);
@@ -60,12 +60,16 @@ const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
     : '';
   return (
     <>
-      <TableData id='name' className={tableColumnClasses[0]} activeColumnIDs={activeColumnIDs}>
+      <TableData id="name" className={tableColumnClasses[0]} activeColumnIDs={activeColumnIDs}>
         <Link to={`/environments/${appGroup.name}/overview?url=${appGroup.repo_url}`} title={name}>
           {name}
         </Link>
       </TableData>
-      <TableData id='gitRepository' className={classNames(tableColumnClasses[1])} activeColumnIDs={activeColumnIDs}>
+      <TableData
+        id="gitRepository"
+        className={classNames(tableColumnClasses[1])}
+        activeColumnIDs={activeColumnIDs}
+      >
         <ExternalLink href={repoUrl} additionalClassName={'co-break-all'}>
           <span style={{ marginRight: 'var(--pf-global--spacer--xs)' }}>
             {routeDecoratorIcon(repoUrl, 12, t)}
@@ -73,7 +77,11 @@ const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
           <span style={{ marginRight: 'var(--pf-global--spacer--xs)' }}>{repoUrl}</span>
         </ExternalLink>
       </TableData>
-      <TableData id='environments' className={classNames(tableColumnClasses[2])} activeColumnIDs={activeColumnIDs}>
+      <TableData
+        id="environments"
+        className={classNames(tableColumnClasses[2])}
+        activeColumnIDs={activeColumnIDs}
+      >
         {syncStatuses.length > 0 ? (
           <Flex className="gop-gitops-syncStatus">
             <GitOpsSyncFragment
@@ -120,7 +128,11 @@ const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
           <span>{envs.join(', ')}</span>
         )}
       </TableData>
-      <TableData id='lastDeployment' className={tableColumnClasses[3]} activeColumnIDs={activeColumnIDs}>
+      <TableData
+        id="lastDeployment"
+        className={tableColumnClasses[3]}
+        activeColumnIDs={activeColumnIDs}
+      >
         {latestDeployedTime !== '' ? (
           <Flex>
             <FlexItem className="gop-gitops-lastDeploymentTime" spacer={{ default: 'spacerXs' }}>

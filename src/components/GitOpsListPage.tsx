@@ -1,16 +1,20 @@
-import * as React from 'react';
-import { fetchAllAppGroups, getManifestURLs } from './utils/gitops-utils';
-import GitOpsList from './list/GitOpsList';
-import DevPreviewBadge from './import/badges/DevPreviewBadge';
-import { LoadingBox } from '@patternfly/quickstarts';
 import './GitOpsListPage.scss';
+
+import * as React from 'react';
+import { Helmet } from 'react-helmet';
+import { useTranslation } from 'react-i18next';
+
 import {
   ListPageBody,
   ListPageHeader,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { useTranslation } from 'react-i18next';
-import { Helmet } from 'react-helmet';
+import { LoadingBox } from '@patternfly/quickstarts';
+
+import DevPreviewBadge from './import/badges/DevPreviewBadge';
+import GitOpsList from './list/GitOpsList';
+import { fetchAllAppGroups, getManifestURLs, getPipelinesBaseURI } from './utils/gitops-utils';
+import useDefaultSecret from './utils/useDefaultSecret';
 
 // TODO: check and match the latest code when uncomment out these imports
 // import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
@@ -26,7 +30,8 @@ const GitOpsListPage: React.FC = () => {
   const [appGroups, setAppGroups] = React.useState(null);
   const [emptyStateMsg, setEmptyStateMsg] = React.useState(null);
   const [namespaces, nsLoaded, nsError] = useK8sWatchResource<any[]>(projectRes);
-  const baseURL = '/api/gitops/pipelines';
+  const [secretNS, secretName] = useDefaultSecret();
+  const baseURL = getPipelinesBaseURI(secretNS, secretName);
   const { t } = useTranslation();
 
   React.useEffect(() => {

@@ -5,7 +5,6 @@ import CheIcon from './CheIcon';
 import { detectGitType } from '../helpers/stringHelpers';
 import { GitProvider } from '../../types';
 
-
 export const routeDecoratorIcon = (
   routeURL: string,
   radius: number,

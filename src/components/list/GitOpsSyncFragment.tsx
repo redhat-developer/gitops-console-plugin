@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { Flex, FlexItem, Tooltip } from '@patternfly/react-core';
+
 import {
-  UnknownIcon
-} from '@patternfly/react-icons';
+  ColoredIconProps,
+  GreenCheckCircleIcon,
+  YellowExclamationTriangleIcon,
+} from '@openshift-console/dynamic-plugin-sdk';
+import { Flex, FlexItem, Tooltip } from '@patternfly/react-core';
+import { UnknownIcon } from '@patternfly/react-icons';
 import { global_disabled_color_100 as disabledColor } from '@patternfly/react-tokens/dist/js/global_disabled_color_100';
-import { GreenCheckCircleIcon, YellowExclamationTriangleIcon, ColoredIconProps} from '@openshift-console/dynamic-plugin-sdk';
 
 interface SyncProps {
   tooltip: any[];

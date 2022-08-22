@@ -71,9 +71,10 @@
   },
   "dependencies": {
     "classnames": "2.x",
-    "fuzzysearch": "1.0.x"
+    "fuzzysearch": "1.0.x",
+    "react-redux": "7.2.2"
   },
   "//TODO": [
-    "find another solution for icons from older react-icons version and remove this dependency."
+    "For @patternfly/react-icons: find another solution for icons from older react-icons version and remove this dependency."
   ]
 }
