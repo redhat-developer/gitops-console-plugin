@@ -1,12 +1,14 @@
+import './GitOpsEmptyState.scss';
+
 import * as React from 'react';
+
 import {
   EmptyState,
+  EmptyStateBody,
   EmptyStateIcon,
   EmptyStateVariant,
-  EmptyStateBody,
 } from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
-// import './GitOpsEmptyState.scss';
 
 interface GitOpsEmptyStateProps {
   emptyStateMsg: string;

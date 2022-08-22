@@ -2,5 +2,9 @@
   "arrowParens": "always",
   "printWidth": 100,
   "singleQuote": true,
-  "trailingComma": "all"
+  "prettier.useTabs": true,
+  "trailingComma": "all",
+  "importOrder": ["^components/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }
