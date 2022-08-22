@@ -1,9 +1,9 @@
-import { consoleFetchJSON } from '@openshift-console/dynamic-plugin-sdk';
 import { TFunction } from 'i18next';
 import * as _ from 'lodash-es';
-// import { coFetchJSON } from '@console/internal/co-fetch';
-// import { K8sResourceKind } from '@console/internal/module/k8s';
-import { GitOpsManifestData, GitOpsAppGroupData } from './gitops-types';
+
+import { consoleFetchJSON } from '@openshift-console/dynamic-plugin-sdk';
+
+import { GitOpsAppGroupData, GitOpsManifestData } from './gitops-types';
 
 export const getManifestURLs = (namespaces: any[]): string[] => {
   const annotation = 'app.openshift.io/vcs-uri';

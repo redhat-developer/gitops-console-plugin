@@ -20,7 +20,9 @@
     "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.7",
     "@openshift-console/plugin-shared": "^0.0.1",
     "@patternfly/react-core": "4.224.1",
+    "@patternfly/react-icons": "3.15.17",
     "@patternfly/react-table": "4.44.4",
+    "@patternfly/quickstarts": "2.0.1",
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.37",
     "@types/react-helmet": "^6.1.4",
@@ -69,6 +71,10 @@
   },
   "dependencies": {
     "classnames": "2.x",
-    "fuzzysearch": "1.0.x"
-  }
+    "fuzzysearch": "1.0.x",
+    "react-redux": "7.2.2"
+  },
+  "//TODO": [
+    "For @patternfly/react-icons: find another solution for icons from older react-icons version and remove this dependency."
+  ]
 }
