@@ -15,7 +15,7 @@
     "lint": "eslint ./src --fix"
   },
   "devDependencies": {
-    "@openshift-console/dynamic-plugin-sdk": "0.0.12",
+    "@openshift-console/dynamic-plugin-sdk": "0.0.13",
     "@openshift-console/dynamic-plugin-sdk-internal": "0.0.10",
     "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.7",
     "@openshift-console/plugin-shared": "^0.0.1",
@@ -26,11 +26,13 @@
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.37",
     "@types/react-helmet": "^6.1.4",
-    "@types/react-router-dom": "^5.3.2",
+    "@types/react-router-dom": "5.1.2",
+    "@types/react-redux": "6.0.2",
     "@types/webpack-dev-server": "^4.7.2",
     "@types/classnames": "^2.2.7",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
+    "@types/git-url-parse": "^9.0.0",
     "prop-types": "^15.6.1",
     "css-loader": "^5.2.7",
     "sass": "^1.42.1",
@@ -40,6 +42,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
+    "file-loader": "2.x",
     "i18next": "^19.8.3",
     "lodash-es": "^4.17.21",
     "prettier": "^2.6.0",
@@ -47,11 +50,9 @@
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
     "react-i18next": "^11.14.3",
-    "react-router": "5.2.0",
-    "react-router-dom": "5.2.0",
     "ts-loader": "^9.2.8",
     "ts-node": "^10.7.0",
-    "typescript": "^4.6.2",
+    "typescript": "3.8.3",
     "webpack": "^5.68.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.9.3",
@@ -63,7 +64,8 @@
     "displayName": "GitOps Plugin",
     "description": "OpenShift Console plugin for Gitops.",
     "exposedModules": {
-      "environments": "./components/GitOpsListPage"
+      "environments": "./components/GitOpsListPage",
+      "gitopsDetailsPage": "./components/GitOpsDetailsPageTabs"
     },
     "dependencies": {
       "@console/pluginAPI": "*"
@@ -71,8 +73,13 @@
   },
   "dependencies": {
     "classnames": "2.x",
-    "fuzzysearch": "1.0.x",
-    "react-redux": "7.2.2"
+    "react": "^17.0.1",
+    "react-router": "5.2.0",
+    "react-router-dom": "5.2.0",
+    "react-router-hash-link": "^2.0.0",
+    "react-redux": "7.2.2",
+    "git-url-parse": "^11.4.0",
+    "redux": "4.0.1"
   },
   "//TODO": [
     "For @patternfly/react-icons: find another solution for icons from older react-icons version and remove this dependency."

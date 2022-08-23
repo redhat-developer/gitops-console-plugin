@@ -30,8 +30,16 @@
     "type": "console.page/route",
     "properties": {
       "component": { "$codeRef": "environments" },
-      "exact": false,
+      "exact": true,
       "path": "/envdynamic"
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "component": { "$codeRef": "gitopsDetailsPage" },
+      "exact": false,
+      "path": "/envdynamic/:appName"
     }
   }
 ]

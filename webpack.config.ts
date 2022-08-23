@@ -65,9 +65,9 @@ const config: Configuration = {
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg|woff2?|ttf|eot|otf)(\?.*$|$)/,
-        type: 'asset/resource',
-        generator: {
-          filename: 'assets/[name].[ext]',
+        loader: 'file-loader',
+        options: {
+          name: 'assets/[name].[ext]',
         },
       },
       {

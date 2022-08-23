@@ -3,7 +3,9 @@ import { BitbucketIcon, GitAltIcon, GithubIcon, GitlabIcon } from '@patternfly/r
 import { TFunction } from 'i18next';
 import CheIcon from './CheIcon';
 import { detectGitType } from '../helpers/stringHelpers';
-import { GitProvider } from '../../types';
+import { GitProvider } from '../../types/git';
+import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
+import { Link } from 'react-router-dom';
 
 export const routeDecoratorIcon = (
   routeURL: string,
@@ -35,3 +37,31 @@ export const routeDecoratorIcon = (
       return <GitAltIcon style={{ fontSize: radius }} title={t('devconsole~Edit source code')} />;
   }
 };
+
+export type BreadCrumbsProps = {
+  breadcrumbs: { name: string; path: string }[];
+};
+
+export const BreadCrumbs: React.SFC<BreadCrumbsProps> = ({ breadcrumbs }) => (
+  <Breadcrumb className="co-breadcrumb">
+    {breadcrumbs.map((crumb, i, { length }) => {
+      const isLast = i === length - 1;
+
+      return (
+        <BreadcrumbItem key={i} isActive={isLast}>
+          {isLast ? (
+            crumb.name
+          ) : (
+            <Link
+              className="pf-c-breadcrumb__link"
+              to={crumb.path}
+              data-test-id={`breadcrumb-link-${i}`}
+            >
+              {crumb.name}
+            </Link>
+          )}
+        </BreadcrumbItem>
+      );
+    })}
+  </Breadcrumb>
+);
