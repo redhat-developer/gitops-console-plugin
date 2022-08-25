@@ -1,5 +1,6 @@
 {
   "Environments": "Environments",
+  "Dev preview": "Dev preview",
   "Compatibility Issue": "Compatibility Issue",
   "Compatibility Issue Message": "It is detected that an older version of the GitOps Operator is installed. Please upgrade the GitOps Operator",
   "Cluster URL not available": "Cluster URL not available",
