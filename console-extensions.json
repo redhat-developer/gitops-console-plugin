@@ -15,6 +15,7 @@
       "id": "gitops-environment",
       "perspective": "dev",
       "section": "resources",
+      "insertAfter": "pipelines",
       "insertBefore": "helm",
       "name": "Environments - Dynamic",
       "href": "/envdynamic",
