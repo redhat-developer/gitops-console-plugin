@@ -157,7 +157,7 @@ const GitOpsDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manifestUR
                         <Split className="gop-gitops-details__env-section__deployment-history">
                           <SplitItem className="gop-gitops-details__env-section__deployment-history__deploymentHistoryPageLink">
                             <Link
-                              to={`/environments/${appName}/deploymenthistory?url=${manifestURL}&rowFilter-environment=${env.environment}`}
+                              to={`/envdynamic/${appName}/deploymenthistory?url=${manifestURL}&rowFilter-environment=${env.environment}`}
                               title={t('gitops-plugin~Deployment history')}
                             >
                               {t<string>('gitops-plugin~Deployment history')}
