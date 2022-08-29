@@ -1,5 +1,3 @@
-import './GitOpsList.scss';
-
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,8 +10,11 @@ import {
 
 import GitOpsEmptyState from '../GitOpsEmptyState';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
+
 import { GitOpsColumns } from './GitOpsColumns';
 import GitOpsTableRow from './GitOpsTableRow';
+
+import './GitOpsList.scss';
 
 interface GitOpsListProps {
   appGroups: GitOpsAppGroupData[];
@@ -40,10 +41,7 @@ const GitOpsList: React.FC<GitOpsListProps> = ({ appGroups, emptyStateMsg }) => 
 
   const [staticData, filteredData, onFilterChange] = useListPageFilter(appGroups, filters);
 
-  const hasSyncStatus: boolean =
-    appGroups?.some(
-      ({ sync_status }) => sync_status /* eslint-disable-line @typescript-eslint/camelcase */,
-    ) || false;
+  const hasSyncStatus: boolean = appGroups?.some(({ sync_status }) => sync_status) || false;
 
   return (
     <div className="gop-gitops-list">

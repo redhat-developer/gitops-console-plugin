@@ -15,11 +15,11 @@ import { global_palette_blue_300 as blueInfoColor } from '@patternfly/react-toke
 import { global_warning_color_100 as warningColor } from '@patternfly/react-tokens/dist/js/global_warning_color_100';
 
 export {
+  BlueInfoCircleIcon,
   ColoredIconProps,
   GreenCheckCircleIcon,
   RedExclamationCircleIcon,
   YellowExclamationTriangleIcon,
-  BlueInfoCircleIcon,
 } from '@openshift-console/dynamic-plugin-sdk';
 
 export const GrayUnknownIcon: React.FC<ColoredIconProps> = ({ className, title }) => (
