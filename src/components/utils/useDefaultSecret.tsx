@@ -1,9 +1,7 @@
+// FIXME upgrading redux types is causing many errors at this time
+import { useSelector } from 'react-redux';
 import { Map as ImmutableMap } from 'immutable';
 import * as _ from 'lodash';
-// FIXME upgrading redux types is causing many errors at this time
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import { useSelector } from 'react-redux';
 
 import { RequestMap } from '@openshift-console/dynamic-plugin-sdk/lib/api/internal-types';
 import { SDKStoreState, UserKind } from '@openshift-console/dynamic-plugin-sdk/lib/app/redux-types';
