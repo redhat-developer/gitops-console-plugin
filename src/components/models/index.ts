@@ -16,3 +16,4 @@ export const ConsoleLinkModel: K8sKind = {
     id: 'consolelink',
     crd: true,
   };
+  

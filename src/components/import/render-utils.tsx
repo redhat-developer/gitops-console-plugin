@@ -38,7 +38,7 @@ export const routeDecoratorIcon = (
   }
 };
 
-export type BreadCrumbsProps = {
+type BreadCrumbsProps = {
   breadcrumbs: { name: string; path: string }[];
 };
 
