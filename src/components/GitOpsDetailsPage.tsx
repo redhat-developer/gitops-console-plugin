@@ -7,18 +7,21 @@ import { LoadingBox } from '@patternfly/quickstarts';
 import GitOpsDetails from './details/GitOpsDetails';
 import GitOpsEmptyState from './GitOpsEmptyState';
 import { GitOpsEnvironment } from './utils/gitops-types';
-import { getApplicationsBaseURI, getEnvData, getPipelinesBaseURI } from './utils/gitops-utils';
-import useDefaultSecret from './utils/useDefaultSecret';
-import useEnvDetails from './utils/useEnvDetails';
+import { getEnvData } from './utils/gitops-utils';
 
-const GitOpsDetailsPage: React.FC<RouteComponentProps<{ appName?: string }>> = ({ match }) => {
+type GitOpsOverviewPageProps = {
+  customData: {
+    emptyStateMsg: string;
+    envs: string[];
+    applicationBaseURI: string;
+    manifestURL: string;
+  };
+};
+type GitOpsDetailsPageProps = RouteComponentProps<{ appName?: string }> & GitOpsOverviewPageProps;
+
+const GitOpsDetailsPage: React.FC<GitOpsDetailsPageProps> = ({ match, customData }) => {
+  const { emptyStateMsg, envs, applicationBaseURI, manifestURL } = customData;
   const { appName } = match.params;
-  const [secretNS, secretName] = useDefaultSecret();
-  const pipelinesBaseURI = getPipelinesBaseURI(secretNS, secretName);
-  const searchParams = new URLSearchParams(location.search);
-  const manifestURL = searchParams.get('url');
-  const applicationBaseURI = getApplicationsBaseURI(appName, secretNS, secretName, manifestURL);
-  const [envs, emptyStateMsg] = useEnvDetails(appName, manifestURL, pipelinesBaseURI);
 
   const [envsData, setEnvsData] = React.useState<GitOpsEnvironment[]>(null);
   const environmentBaseURI = `/api/gitops/environments`;

@@ -3,7 +3,7 @@ import './GitOpsDeploymentHistory.scss';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { RouteComponentProps } from 'react-router-dom';
+// import { RouteComponentProps } from 'react-router-dom';
 
 import {
   ListPageFilter,
@@ -15,26 +15,22 @@ import { LoadingBox } from '@patternfly/quickstarts';
 
 import GitOpsEmptyState from '../GitOpsEmptyState';
 import { GitOpsHistoryData } from '../utils/gitops-types';
-import { getApplicationsBaseURI, getEnvData, getPipelinesBaseURI } from '../utils/gitops-utils';
-import useDefaultSecret from '../utils/useDefaultSecret';
-import useEnvDetails from '../utils/useEnvDetails';
+import { getEnvData } from '../utils/gitops-utils';
 import { GitOpsDeploymentHistoryColumns } from './GitOpsDeploymentHistoryColumns';
 import { GitOpsDeploymentHistoryTableRow } from './GitOpsDeploymentHistoryTableRow';
 
-type GitOpsDeploymentHistoryProps = RouteComponentProps<{ appName?: string }>;
-const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({ match }) => {
-  const { appName } = match.params;
-  const [secretNS, secretName] = useDefaultSecret();
-  const pipelinesBaseURI = getPipelinesBaseURI(secretNS, secretName);
-  const searchParams = new URLSearchParams(location.search);
-  const manifestURL = searchParams.get('url');
-  const applicationBaseURI = getApplicationsBaseURI(appName, secretNS, secretName, manifestURL);
-  const [envs, emptyStateMsg] = useEnvDetails(appName, manifestURL, pipelinesBaseURI);
-
+type GitOpsDeploymentHistoryProps = {
+  customData: {
+    emptyStateMsg: string;
+    envs: string[];
+    applicationBaseURI: string;
+  };
+};
+const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
+  customData: { emptyStateMsg, envs, applicationBaseURI },
+}) => {
   const { t } = useTranslation();
-
   const columns = GitOpsDeploymentHistoryColumns();
-
   const envRowFilters: RowFilter[] = [
     {
       filterGroupName: t('gitops-plugin~Environment'),

@@ -10,7 +10,7 @@ import GitOpsDetailsPageHeading from './details/GitOpsDetailsPageHeading';
 import GitOpsDetailsPage from './GitOpsDetailsPage';
 import GitOpsDeploymentHistory from './history/GitOpsDeploymentHistory';
 import DevPreviewBadge from './import/badges/DevPreviewBadge';
-import { getPipelinesBaseURI } from './utils/gitops-utils';
+import { getApplicationsBaseURI, getPipelinesBaseURI } from './utils/gitops-utils';
 import useDefaultSecret from './utils/useDefaultSecret';
 import useEnvDetails from './utils/useEnvDetails';
 
@@ -23,22 +23,36 @@ export const GitOpsDetailsPageTabs: React.FC<GitOpsDetailsPageTabsProps> = ({ ma
   const pipelinesBaseURI = getPipelinesBaseURI(secretNS, secretName);
   const searchParams = new URLSearchParams(location.search);
   const manifestURL = searchParams.get('url');
+  const applicationBaseURI = getApplicationsBaseURI(appName, secretNS, secretName, manifestURL);
   const [envs, emptyStateMsg] = useEnvDetails(appName, manifestURL, pipelinesBaseURI);
 
-  const pages: NavPage[] = [
-    {
-      href: `${'overview?url='}${manifestURL}`,
-      name: t('gitops-plugin~Overview'),
-      path: 'overview',
-      component: GitOpsDetailsPage,
-    },
-    {
-      href: `${'deploymenthistory?url='}${manifestURL}`,
-      name: t('gitops-plugin~Deployment history'),
-      path: 'deploymenthistory',
-      component: GitOpsDeploymentHistory,
-    },
-  ];
+  const pages: NavPage[] = React.useMemo(
+    () => [
+      {
+        href: `${'overview?url='}${manifestURL}`,
+        name: t('gitops-plugin~Overview'),
+        path: 'overview',
+        component: (props) => (
+          <GitOpsDetailsPage
+            {...props}
+            customData={{ emptyStateMsg, envs, applicationBaseURI, manifestURL }}
+          />
+        ),
+      },
+      {
+        href: `${'deploymenthistory?url='}${manifestURL}`,
+        name: t('gitops-plugin~Deployment history'),
+        path: 'deploymenthistory',
+        component: (props) => (
+          <GitOpsDeploymentHistory
+            {...props}
+            customData={{ emptyStateMsg, envs, applicationBaseURI }}
+          />
+        ),
+      },
+    ],
+    [t, emptyStateMsg, envs, applicationBaseURI, manifestURL],
+  );
 
   return (
     <>
