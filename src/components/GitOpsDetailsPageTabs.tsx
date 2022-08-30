@@ -46,7 +46,6 @@ export const GitOpsDetailsPageTabs: React.FC<GitOpsDetailsPageTabsProps> = ({ ma
         <title>{t('gitops-plugin~{{appName}} · Details', { appName })}</title>
       </Helmet>
       <GitOpsDetailsPageHeading
-        url={match.url}
         appName={appName}
         manifestURL={manifestURL}
         badge={<DevPreviewBadge />}

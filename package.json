@@ -15,7 +15,7 @@
     "lint": "eslint ./src --fix"
   },
   "devDependencies": {
-    "@openshift-console/dynamic-plugin-sdk": "0.0.13",
+    "@openshift-console/dynamic-plugin-sdk": "0.0.14",
     "@openshift-console/dynamic-plugin-sdk-internal": "0.0.10",
     "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.7",
     "@openshift-console/plugin-shared": "^0.0.1",
@@ -60,7 +60,7 @@
   },
   "consolePlugin": {
     "name": "console-gitops-plugin",
-    "version": "0.0.1",
+    "version": "0.0.14",
     "displayName": "GitOps Plugin",
     "description": "OpenShift Console plugin for Gitops.",
     "exposedModules": {

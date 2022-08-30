@@ -3,38 +3,30 @@ import './GitOpsDetailsPageHeading.scss';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { BreadCrumbs, routeDecoratorIcon } from '../import/render-utils';
+import { routeDecoratorIcon } from '../import/render-utils';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
+import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 
 interface GitOpsDetailsPageHeadingProps {
-  url: string;
   appName: string;
   manifestURL: string;
   badge?: React.ReactNode;
 }
 
 const GitOpsDetailsPageHeading: React.FC<GitOpsDetailsPageHeadingProps> = ({
-  url,
   appName,
   manifestURL,
   badge,
 }) => {
   const { t } = useTranslation();
-  const breadcrumbs = [
-    {
-      name: t('gitops-plugin~Environments'),
-      path: '/envdynamic', //TODO: update path
-    },
-    {
-      name: t('gitops-plugin~Application environments'),
-      path: `${url}`,
-    },
-  ];
 
   return (
     <>
       <div className="pf-c-page__main-breadcrumb">
-        <BreadCrumbs breadcrumbs={breadcrumbs} />
+        <Breadcrumb className="co-breadcrumb">
+          <BreadcrumbItem to='/envdynamic'>{t('gitops-plugin~Environments')}</BreadcrumbItem>
+          <BreadcrumbItem>{t('gitops-plugin~Application environments')}</BreadcrumbItem>
+        </Breadcrumb>
       </div>
       <div className="gop-gitops-details-page-heading co-m-nav-title co-m-nav-title--breadcrumbs">
         <h1 className="co-m-pane__heading" style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
