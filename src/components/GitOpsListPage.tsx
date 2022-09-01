@@ -17,11 +17,7 @@ import { fetchAllAppGroups, getManifestURLs, getPipelinesBaseURI } from './utils
 import useDefaultSecret from './utils/useDefaultSecret';
 
 // TODO: check and match the latest code when uncomment out these imports
-// import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
 // import { ProjectModel } from '@console/internal/models';
-// import { K8sResourceKind } from '@console/internal/module/k8s';
-// import { DevPreviewBadge } from '@console/shared';
-// import useDefaultSecret from './utils/useDefaultSecret';
 
 // const projectRes = { isList: true, kind: ProjectModel.kind, optional: true };
 const projectRes = { isList: true, kind: 'Project', optional: true };

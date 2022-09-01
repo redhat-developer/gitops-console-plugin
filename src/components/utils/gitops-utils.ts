@@ -236,15 +236,11 @@ export const fetchAppGroups = async (
 // };
 
 export const fetchAllAppGroups = async (baseURL: string, manifestURLs: string[], t: TFunction) => {
-  console.log('baseURLs: ', baseURL);
-  console.log('manifestURLs: ', manifestURLs);
-
   let emptyMsg: string = null;
   let allAppGroups: GitOpsAppGroupData[] = null;
-  console.log('Getting app groups ');
   if (baseURL) {
     if (_.isEmpty(manifestURLs)) {
-      emptyMsg = 'No GitOps manifest URLs found'; // t('gitops-plugin~No GitOps manifest URLs found');
+      emptyMsg = t('gitops-plugin~No GitOps manifest URLs found');
     } else {
       try {
         allAppGroups = _.sortBy(
@@ -255,7 +251,10 @@ export const fetchAllAppGroups = async (baseURL: string, manifestURLs: string[],
           ),
           ['name'],
         );
-      } catch {} // eslint-disable-line no-empty
+      } catch {
+        emptyMsg = t('gitops-plugin~Error cannot retrieve applications');
+        return [allAppGroups, emptyMsg];
+      }
       if (_.isEmpty(allAppGroups)) {
         emptyMsg = 'gitops-plugin~No Application groups found'; // t('gitops-plugin~No Application groups found');
       }
@@ -265,17 +264,20 @@ export const fetchAllAppGroups = async (baseURL: string, manifestURLs: string[],
 };
 
 // TODO
-// export const getEnvData = async (v2EnvURI: string, envURI: string, env: string, appURI: string) => {
-//   let data;
-//   try {
-//     data = await coFetchJSON(`${v2EnvURI}/${env}${appURI}`);
-//   } catch {
-//     try {
-//       data = await coFetchJSON(`${envURI}/${env}${appURI}`);
-//     } catch {} // eslint-disable-line no-empty
-//   }
-//   return data;
-// };
+export const getEnvData = async (v2EnvURI: string, envURI: string, env: string, appURI: string) => {
+  let data;
+  try {
+    data = await consoleFetchJSON(`${v2EnvURI}/${env}${appURI}&method=GET`);
+  } catch {
+    try {
+      data = await consoleFetchJSON(`${envURI}/${env}${appURI}&method=GET`);
+    } catch (error) {
+      console.log('error when getEnvData: ', error);
+      throw error;
+    }
+  }
+  return data;
+};
 
 export const getPipelinesBaseURI = (secretNS: string, secretName: string) => {
   return secretNS && secretName
