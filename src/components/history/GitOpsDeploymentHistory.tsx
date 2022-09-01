@@ -3,7 +3,6 @@ import './GitOpsDeploymentHistory.scss';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-// import { RouteComponentProps } from 'react-router-dom';
 
 import {
   ListPageFilter,
@@ -36,7 +35,9 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
       filterGroupName: t('gitops-plugin~Environment'),
       type: 'environment',
       reducer: (s: GitOpsHistoryData): string => s?.environment,
-      filter: (input, history) => history.environment.includes(input.selected),
+      filter: (input, history) =>
+        history.environment.includes(input.selected) ||
+        input.selected.includes(history.environment),
       items: _.map(envs, (env) => ({ id: env, title: env })),
     },
   ];
@@ -57,7 +58,6 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
           );
           arrayHistory = arrayHistory?.flat(1);
         } catch (err) {
-          console.log('err: ', err);
           if (err instanceof Error) {
             if (err.name === 'HttpError' && err.message === 'Not Found') {
               setError(
