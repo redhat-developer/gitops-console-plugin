@@ -1,8 +1,10 @@
-import { TableColumn } from '@openshift-console/dynamic-plugin-sdk';
-import { sortable } from '@patternfly/react-table';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { TableColumn } from '@openshift-console/dynamic-plugin-sdk';
+import { sortable } from '@patternfly/react-table';
+
 import { GitOpsAppGroupData } from '../utils/gitops-types';
 
 const tableColumnClasses = [
@@ -53,5 +55,3 @@ export const GitOpsColumns = (hasSyncStatus: boolean) => {
 
   return columns;
 };
-
-//   export default useGitOpsColumns;

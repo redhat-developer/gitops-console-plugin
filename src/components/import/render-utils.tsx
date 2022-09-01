@@ -3,7 +3,7 @@ import { BitbucketIcon, GitAltIcon, GithubIcon, GitlabIcon } from '@patternfly/r
 import { TFunction } from 'i18next';
 import CheIcon from './CheIcon';
 import { detectGitType } from '../helpers/stringHelpers';
-import { GitProvider } from '../../types';
+import { GitProvider } from '../../types/git';
 
 export const routeDecoratorIcon = (
   routeURL: string,

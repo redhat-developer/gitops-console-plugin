@@ -84,3 +84,12 @@ export interface CommitData {
   msg: string;
   ref: string;
 }
+
+export interface GitOpsHistoryData {
+  deployed_at: number;
+  message: string;
+  environment: string;
+  repo_url: string;
+  author: string;
+  revision: string;
+}
