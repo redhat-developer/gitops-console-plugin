@@ -20,7 +20,6 @@ import { GitOpsAppGroupData } from '../utils/gitops-types';
 import GitOpsSyncFragment from './GitOpsSyncFragment';
 
 import './GitOpsTableRow.scss';
-import { GrayUnknownIcon } from '../status/icons';
 
 const tableColumnClasses = [
   classNames('pf-m-width-20'), // Application name
