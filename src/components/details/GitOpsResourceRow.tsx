@@ -1,5 +1,3 @@
-import './GitOpsResourcesSection.scss';
-
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +9,8 @@ import {
 } from '@patternfly/react-tokens';
 
 import { GitOpsEnvironmentService, GitOpsHealthResources } from '../utils/gitops-types';
+
+import './GitOpsResourcesSection.scss';
 
 interface GitOpsResourceRowProps {
   resources: GitOpsHealthResources[] | GitOpsEnvironmentService[];

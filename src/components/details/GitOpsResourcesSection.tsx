@@ -1,5 +1,3 @@
-import './GitOpsResourcesSection.scss';
-
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,7 +5,10 @@ import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { Card, CardBody, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 
 import { GitOpsEnvironmentService, GitOpsHealthResources } from '../utils/gitops-types';
+
 import GitOpsResourceRow from './GitOpsResourceRow';
+
+import './GitOpsResourcesSection.scss';
 
 interface GitOpsResourcesSectionProps {
   services: GitOpsEnvironmentService[];

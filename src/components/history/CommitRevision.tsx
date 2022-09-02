@@ -1,5 +1,5 @@
-import * as GitUrlParse from 'git-url-parse';
 import * as React from 'react';
+import * as GitUrlParse from 'git-url-parse';
 
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 
