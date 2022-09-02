@@ -13,6 +13,7 @@ import {
 import { Flex, FlexItem, Split, SplitItem } from '@patternfly/react-core';
 
 import { routeDecoratorIcon } from '../import/render-utils';
+import { GrayUnknownIcon } from '../status/icons';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
 

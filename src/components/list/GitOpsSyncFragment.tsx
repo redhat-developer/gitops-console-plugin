@@ -5,6 +5,7 @@ import {
   YellowExclamationTriangleIcon,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Flex, FlexItem, Tooltip } from '@patternfly/react-core';
+
 import { GrayUnknownIcon } from '../status/icons';
 
 interface SyncProps {
