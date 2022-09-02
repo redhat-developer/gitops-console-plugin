@@ -3,8 +3,8 @@ import { TFunction } from 'i18next';
 
 import { BitbucketIcon, GitAltIcon, GithubIcon, GitlabIcon } from '@patternfly/react-icons';
 
-import { GitProvider } from '../../types';
 import { detectGitType } from '../helpers/stringHelpers';
+import { GitProvider } from '../utils/types';
 
 import CheIcon from './CheIcon';
 

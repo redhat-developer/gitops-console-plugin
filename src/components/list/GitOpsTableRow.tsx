@@ -16,7 +16,7 @@ import { routeDecoratorIcon } from '../import/render-utils';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
 
-import GitOpsSyncFragment from './GitOpsSyncFragment';
+import GitOpsSyncFragment, { GrayUnknownIcon } from './GitOpsSyncFragment';
 
 import './GitOpsTableRow.scss';
 

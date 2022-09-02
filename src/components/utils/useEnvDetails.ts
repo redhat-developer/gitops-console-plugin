@@ -1,6 +1,7 @@
 import * as React from 'react';
-import * as _ from 'lodash';
 import { useTranslation } from 'react-i18next';
+import * as _ from 'lodash';
+
 import { fetchAppGroups } from './gitops-utils';
 
 const useEnvDetails = (appName, manifestURL, pipelinesBaseURI) => {

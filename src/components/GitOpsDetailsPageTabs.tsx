@@ -7,12 +7,12 @@ import { HorizontalNav, NavPage } from '@openshift-console/dynamic-plugin-sdk';
 import { LoadingBox } from '@patternfly/quickstarts';
 
 import GitOpsDetailsPageHeading from './details/GitOpsDetailsPageHeading';
-import GitOpsDetailsPage from './GitOpsDetailsPage';
 import GitOpsDeploymentHistory from './history/GitOpsDeploymentHistory';
 import DevPreviewBadge from './import/badges/DevPreviewBadge';
 import { getApplicationsBaseURI, getPipelinesBaseURI } from './utils/gitops-utils';
 import useDefaultSecret from './utils/useDefaultSecret';
 import useEnvDetails from './utils/useEnvDetails';
+import GitOpsDetailsPage from './GitOpsDetailsPage';
 
 type GitOpsDetailsPageTabsProps = RouteComponentProps<{ appName?: string }>;
 
