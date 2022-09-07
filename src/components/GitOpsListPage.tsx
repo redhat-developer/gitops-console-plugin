@@ -1,5 +1,3 @@
-import './GitOpsListPage.scss';
-
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +13,8 @@ import DevPreviewBadge from './import/badges/DevPreviewBadge';
 import GitOpsList from './list/GitOpsList';
 import { fetchAllAppGroups, getManifestURLs, getPipelinesBaseURI } from './utils/gitops-utils';
 import useDefaultSecret from './utils/useDefaultSecret';
+
+import './GitOpsListPage.scss';
 
 // TODO: check and match the latest code when uncomment out these imports
 // import { ProjectModel } from '@console/internal/models';

@@ -1,13 +1,13 @@
-import * as _ from 'lodash';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import * as _ from 'lodash';
 
 import { LoadingBox } from '@patternfly/quickstarts';
 
 import GitOpsDetails from './details/GitOpsDetails';
-import GitOpsEmptyState from './GitOpsEmptyState';
 import { GitOpsEnvironment } from './utils/gitops-types';
 import { getEnvData } from './utils/gitops-utils';
+import GitOpsEmptyState from './GitOpsEmptyState';
 
 type GitOpsOverviewPageProps = {
   customData: {
@@ -48,17 +48,15 @@ const GitOpsDetailsPage: React.FC<GitOpsDetailsPageProps> = ({ match, customData
     getEnvsData();
   }, [applicationBaseURI, environmentBaseURIV2, environmentBaseURI, envs, error]);
 
-  return (
-    <>
-      {!envsData ? (
-        <LoadingBox />
-      ) : !emptyStateMsg ? (
-        <GitOpsDetails envs={envsData} appName={appName} manifestURL={manifestURL} error={error} />
-      ) : (
-        <GitOpsEmptyState emptyStateMsg={emptyStateMsg} />
-      )}
-    </>
-  );
+  if (!envsData) {
+    return <LoadingBox />;
+  } else if (!emptyStateMsg) {
+    return (
+      <GitOpsDetails envs={envsData} appName={appName} manifestURL={manifestURL} error={error} />
+    );
+  } else {
+    return <GitOpsEmptyState emptyStateMsg={emptyStateMsg} />;
+  }
 };
 
 export default GitOpsDetailsPage;

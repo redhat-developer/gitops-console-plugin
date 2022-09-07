@@ -1,9 +1,7 @@
-import './GitOpsTableRow.scss';
-
-import classNames from 'classnames';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 import {
   GreenCheckCircleIcon,
@@ -15,9 +13,13 @@ import {
 import { Flex, FlexItem, Split, SplitItem } from '@patternfly/react-core';
 
 import { routeDecoratorIcon } from '../import/render-utils';
+import { GrayUnknownIcon } from '../status/icons';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
-import GitOpsSyncFragment, { GrayUnknownIcon } from './GitOpsSyncFragment';
+
+import GitOpsSyncFragment from './GitOpsSyncFragment';
+
+import './GitOpsTableRow.scss';
 
 const tableColumnClasses = [
   classNames('pf-m-width-20'), // Application name

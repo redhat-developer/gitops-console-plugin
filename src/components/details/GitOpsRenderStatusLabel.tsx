@@ -7,8 +7,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Label } from '@patternfly/react-core';
 
-import { GrayUnknownIcon } from '../list/GitOpsSyncFragment';
-
+import { GrayUnknownIcon } from '../status/icons';
 interface GitOpsRenderStatusLabelProps {
   status: string;
 }
