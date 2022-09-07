@@ -1,9 +1,7 @@
-import './EnvironmentDetails.scss';
-
-import * as _ from 'lodash';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import * as _ from 'lodash';
 
 import { Timestamp, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { getReferenceForModel } from '@openshift-console/dynamic-plugin-sdk/lib/utils/k8s/k8s-ref';
@@ -25,9 +23,12 @@ import * as argoIcon from '../../images/argo.png';
 import { ConsoleLinkModel } from '../models';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsEnvironment } from '../utils/gitops-types';
+import { K8sResourceKind } from '../utils/types';
+
 import RenderStatusLabel from './RenderStatusLabel';
 import GitOpsResourcesSection from './ResourcesSection';
-import { K8sResourceKind } from '../utils/types';
+
+import './EnvironmentDetails.scss';
 
 interface GitOpsDetailsProps {
   envs: GitOpsEnvironment[];
@@ -36,7 +37,12 @@ interface GitOpsDetailsProps {
   error: Error;
 }
 
-const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manifestURL, error }) => {
+const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
+  envs,
+  appName,
+  manifestURL,
+  error,
+}) => {
   const { t } = useTranslation();
   const [consoleLinks] = useK8sWatchResource<K8sResourceKind[]>({
     isList: true,
@@ -82,7 +88,10 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manif
         envs,
         (env) =>
           env && (
-            <Stack className="gitops-plugin__environment-details__env-section" key={env.environment}>
+            <Stack
+              className="gitops-plugin__environment-details__env-section"
+              key={env.environment}
+            >
               <StackItem>
                 <Card>
                   <CardTitle className="gitops-plugin__environment-details__env-section__header">

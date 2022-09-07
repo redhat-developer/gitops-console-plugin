@@ -6,6 +6,7 @@ import {
   YellowExclamationTriangleIcon,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Label } from '@patternfly/react-core';
+
 import { GrayUnknownIcon } from '../status/icons';
 
 interface RenderStatusLabelProps {

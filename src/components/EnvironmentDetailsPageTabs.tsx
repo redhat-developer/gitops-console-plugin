@@ -7,16 +7,18 @@ import { HorizontalNav, NavPage } from '@openshift-console/dynamic-plugin-sdk';
 import { LoadingBox } from '@patternfly/quickstarts';
 
 import EnvironmentDetailsPageHeading from './details/EnvironmentDetailsPageHeading';
-import EnvironmentDetailsPage from './EnvironmentDetailsPage';
 import DeploymentHistory from './history/DeploymentHistory';
 import DevPreviewBadge from './import/badges/DevPreviewBadge';
 import { getApplicationsBaseURI, getPipelinesBaseURI } from './utils/gitops-utils';
 import useDefaultSecret from './utils/useDefaultSecret';
 import useEnvDetails from './utils/useEnvDetails';
+import EnvironmentDetailsPage from './EnvironmentDetailsPage';
 
 type EnvironmentDetailsPageTabsProps = RouteComponentProps<{ appName?: string }>;
 
-export const EnvironmentDetailsPageTabs: React.FC<EnvironmentDetailsPageTabsProps> = ({ match }) => {
+export const EnvironmentDetailsPageTabs: React.FC<EnvironmentDetailsPageTabsProps> = ({
+  match,
+}) => {
   const { t } = useTranslation();
   const { appName } = match.params;
   const [secretNS, secretName] = useDefaultSecret();
@@ -44,10 +46,7 @@ export const EnvironmentDetailsPageTabs: React.FC<EnvironmentDetailsPageTabsProp
         name: t('gitops-plugin~Deployment history'),
         path: 'deploymenthistory',
         component: (props) => (
-          <DeploymentHistory
-            {...props}
-            customData={{ emptyStateMsg, envs, applicationBaseURI }}
-          />
+          <DeploymentHistory {...props} customData={{ emptyStateMsg, envs, applicationBaseURI }} />
         ),
       },
     ],

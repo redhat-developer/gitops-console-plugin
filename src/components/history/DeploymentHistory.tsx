@@ -10,6 +10,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { LoadingBox } from '@patternfly/quickstarts';
 
+import EnvironmentEmptyState from '../EnvironmentEmptyState';
 import { GitOpsHistoryData } from '../utils/gitops-types';
 import { getEnvData } from '../utils/gitops-utils';
 
@@ -17,7 +18,6 @@ import { DeploymentHistoryColumns } from './DeploymentHistoryColumns';
 import { DeploymentHistoryTableRow } from './DeploymentHistoryTableRow';
 
 import './DeploymentHistory.scss';
-import EnvironmentEmptyState from '../EnvironmentEmptyState';
 
 type GitOpsDeploymentHistoryProps = {
   customData: {
@@ -93,7 +93,9 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
     } else if (error) {
       return <EnvironmentEmptyState emptyStateMsg={error} />;
     } else if (emptyStateMsg) {
-      return <EnvironmentEmptyState emptyStateMsg={emptyStateMsg || t('gitops-plugin~No history')} />;
+      return (
+        <EnvironmentEmptyState emptyStateMsg={emptyStateMsg || t('gitops-plugin~No history')} />
+      );
     } else {
       return (
         <>

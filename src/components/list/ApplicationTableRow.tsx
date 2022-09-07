@@ -1,9 +1,7 @@
-import './ApplicationTableRow.scss';
-
-import classNames from 'classnames';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 import {
   GreenCheckCircleIcon,
@@ -15,10 +13,13 @@ import {
 import { Flex, FlexItem, Split, SplitItem } from '@patternfly/react-core';
 
 import { routeDecoratorIcon } from '../import/render-utils';
+import { GrayUnknownIcon } from '../status/icons';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
+
 import SyncFragment from './SyncFragment';
-import { GrayUnknownIcon } from '../status/icons';
+
+import './ApplicationTableRow.scss';
 
 const tableColumnClasses = [
   classNames('pf-m-width-20'), // Application name
@@ -134,7 +135,10 @@ const ApplicationTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
       >
         {latestDeployedTime !== '' ? (
           <Flex>
-            <FlexItem className="gitops-plugin__lastDeploymentTime" spacer={{ default: 'spacerXs' }}>
+            <FlexItem
+              className="gitops-plugin__lastDeploymentTime"
+              spacer={{ default: 'spacerXs' }}
+            >
               <span>
                 <Timestamp timestamp={latestDeployedTime} />
               </span>

@@ -1,9 +1,10 @@
-import classNames from 'classnames';
 import * as React from 'react';
+import classNames from 'classnames';
 
 import { RowProps, TableData, Timestamp } from '@openshift-console/dynamic-plugin-sdk';
 
 import { GitOpsHistoryData } from '../utils/gitops-types';
+
 import { CommitRevision } from './CommitRevision';
 import { DeploymentHistoryTableColumnClasses } from './DeploymentHistoryTableColumnClasses';
 

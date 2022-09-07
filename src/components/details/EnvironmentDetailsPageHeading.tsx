@@ -1,11 +1,12 @@
-import './EnvironmentDetailsPageHeading.scss';
-
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
+
 import { routeDecoratorIcon } from '../import/render-utils';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
-import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
+
+import './EnvironmentDetailsPageHeading.scss';
 
 interface EnvironmentDetailsPageHeadingProps {
   appName: string;
@@ -24,7 +25,7 @@ const EnvironmentDetailsPageHeading: React.FC<EnvironmentDetailsPageHeadingProps
     <>
       <div className="pf-c-page__main-breadcrumb">
         <Breadcrumb className="co-breadcrumb">
-          <BreadcrumbItem to='/envdynamic'>{t('gitops-plugin~Environments')}</BreadcrumbItem>
+          <BreadcrumbItem to="/envdynamic">{t('gitops-plugin~Environments')}</BreadcrumbItem>
           <BreadcrumbItem>{t('gitops-plugin~Application environments')}</BreadcrumbItem>
         </Breadcrumb>
       </div>

@@ -1,5 +1,3 @@
-import './ApplicationList.scss';
-
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,8 +10,11 @@ import {
 
 import EnvironmentEmptyState from '../EnvironmentEmptyState';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
+
 import { ApplicationColumns } from './ApplicationColumns';
 import ApplicationTableRow from './ApplicationTableRow';
+
+import './ApplicationList.scss';
 
 interface ApplicationListProps {
   appGroups: GitOpsAppGroupData[];
