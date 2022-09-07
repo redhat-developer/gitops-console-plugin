@@ -1,4 +1,4 @@
-.gop-gitops-details-page-heading {
+.gitops-plugin__environment-details-page-heading {
   border-bottom: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
 
   &__repo {
@@ -11,7 +11,7 @@
     margin-bottom: var(--pf-global--spacer--sm);
   }
 
-  .gop-gitops-details-page-title {
+  .gitops-plugin__environment-details-page-title {
     margin-bottom: var(--pf-global--spacer--xl);
   }
 }

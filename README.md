@@ -45,5 +45,5 @@ In your local `console/` directory, run
 ```
 oc login -u kubeadmin -p $(cat /path/to/install-dir/auth/kubeadmin-password)
 source ./contrib/oc-environment.sh
-./bin/bridge -plugins console-gitops-plugin=http://localhost:9001/
+./bin/bridge -plugins gitops-plugin=http://localhost:9001/
 ```

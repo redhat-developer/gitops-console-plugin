@@ -8,17 +8,15 @@ import {
 } from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
 
-import './GitOpsEmptyState.scss';
-
-interface GitOpsEmptyStateProps {
+interface EnvironmentEmptyStateProps {
   emptyStateMsg: string;
 }
 
-const GitOpsEmptyState: React.FC<GitOpsEmptyStateProps> = ({ emptyStateMsg }) => (
+const EnvironmentEmptyState: React.FC<EnvironmentEmptyStateProps> = ({ emptyStateMsg }) => (
   <EmptyState variant={EmptyStateVariant.full}>
     <EmptyStateIcon variant="container" component={CubesIcon} />
     <EmptyStateBody>{emptyStateMsg}</EmptyStateBody>
   </EmptyState>
 );
 
-export default GitOpsEmptyState;
+export default EnvironmentEmptyState;

@@ -10,14 +10,14 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { LoadingBox } from '@patternfly/quickstarts';
 
-import GitOpsEmptyState from '../GitOpsEmptyState';
 import { GitOpsHistoryData } from '../utils/gitops-types';
 import { getEnvData } from '../utils/gitops-utils';
 
-import { GitOpsDeploymentHistoryColumns } from './GitOpsDeploymentHistoryColumns';
-import { GitOpsDeploymentHistoryTableRow } from './GitOpsDeploymentHistoryTableRow';
+import { DeploymentHistoryColumns } from './DeploymentHistoryColumns';
+import { DeploymentHistoryTableRow } from './DeploymentHistoryTableRow';
 
-import './GitOpsDeploymentHistory.scss';
+import './DeploymentHistory.scss';
+import EnvironmentEmptyState from '../EnvironmentEmptyState';
 
 type GitOpsDeploymentHistoryProps = {
   customData: {
@@ -30,7 +30,7 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
   customData: { emptyStateMsg, envs, applicationBaseURI },
 }) => {
   const { t } = useTranslation();
-  const columns = GitOpsDeploymentHistoryColumns();
+  const columns = DeploymentHistoryColumns();
   const envRowFilters: RowFilter[] = [
     {
       filterGroupName: t('gitops-plugin~Environment'),
@@ -91,9 +91,9 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
     if (!historyData && !error) {
       return <LoadingBox />;
     } else if (error) {
-      return <GitOpsEmptyState emptyStateMsg={error} />;
+      return <EnvironmentEmptyState emptyStateMsg={error} />;
     } else if (emptyStateMsg) {
-      return <GitOpsEmptyState emptyStateMsg={emptyStateMsg || t('gitops-plugin~No history')} />;
+      return <EnvironmentEmptyState emptyStateMsg={emptyStateMsg || t('gitops-plugin~No history')} />;
     } else {
       return (
         <>
@@ -109,7 +109,7 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
             unfilteredData={historyData}
             loaded={!emptyStateMsg}
             columns={columns}
-            Row={GitOpsDeploymentHistoryTableRow}
+            Row={DeploymentHistoryTableRow}
             loadError={null}
           />
         </>
@@ -117,7 +117,7 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
     }
   };
 
-  return <div className="odc-gitops-history-list">{getReturnComponent()}</div>;
+  return <div className="gitops-plugin__deployment-history-list">{getReturnComponent()}</div>;
 };
 
 export default GitOpsDeploymentHistory;

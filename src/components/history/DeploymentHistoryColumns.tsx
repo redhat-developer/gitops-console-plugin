@@ -5,9 +5,9 @@ import { GitOpsHistoryData } from 'src/components/utils/gitops-types';
 import { TableColumn } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 
-import { GitOpsDeploymentHistoryTableColumnClasses } from './GitOpsDeploymentHistoryTableColumnClasses';
+import { DeploymentHistoryTableColumnClasses } from './DeploymentHistoryTableColumnClasses';
 
-export const GitOpsDeploymentHistoryColumns = () => {
+export const DeploymentHistoryColumns = () => {
   const { t } = useTranslation();
 
   const columns: TableColumn<GitOpsHistoryData>[] = React.useMemo(
@@ -17,35 +17,35 @@ export const GitOpsDeploymentHistoryColumns = () => {
         id: 'time',
         sort: 'deployed_at',
         transforms: [sortable],
-        props: { className: GitOpsDeploymentHistoryTableColumnClasses[0] },
+        props: { className: DeploymentHistoryTableColumnClasses[0] },
       },
       {
         title: t('gitops-plugin~Message'),
         id: 'message',
         sort: 'message',
         transforms: [sortable],
-        props: { className: GitOpsDeploymentHistoryTableColumnClasses[1] },
+        props: { className: DeploymentHistoryTableColumnClasses[1] },
       },
       {
         title: t('gitops-plugin~Environment'),
         id: 'environment',
         sort: 'environment',
         transforms: [sortable],
-        props: { className: GitOpsDeploymentHistoryTableColumnClasses[2] },
+        props: { className: DeploymentHistoryTableColumnClasses[2] },
       },
       {
         title: t('gitops-plugin~Author'),
         id: 'author',
         sort: 'author',
         transforms: [sortable],
-        props: { className: GitOpsDeploymentHistoryTableColumnClasses[3] },
+        props: { className: DeploymentHistoryTableColumnClasses[3] },
       },
       {
         title: t('gitops-plugin~Revision'),
         id: 'revision',
         sort: 'revision',
         transforms: [sortable],
-        props: { className: GitOpsDeploymentHistoryTableColumnClasses[4] },
+        props: { className: DeploymentHistoryTableColumnClasses[4] },
       },
     ],
     [t],

@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
-
 import { Label } from '@patternfly/react-core';
-
 import './Badge.scss';
+import { useTranslation } from 'react-i18next';
 
 const DevPreviewBadge: React.FC = () => {
   const { t } = useTranslation();
-  return <Label className="ocs-preview-badge">{t('gitops-plugin~Dev preview')}</Label>;
+  return <Label className="gitops-plugin__preview-badge">{t('console-shared~Dev preview')}</Label>;
 };
 
 export default DevPreviewBadge;

@@ -6,17 +6,17 @@ import { RouteComponentProps } from 'react-router';
 import { HorizontalNav, NavPage } from '@openshift-console/dynamic-plugin-sdk';
 import { LoadingBox } from '@patternfly/quickstarts';
 
-import GitOpsDetailsPageHeading from './details/GitOpsDetailsPageHeading';
-import GitOpsDeploymentHistory from './history/GitOpsDeploymentHistory';
+import EnvironmentDetailsPageHeading from './details/EnvironmentDetailsPageHeading';
+import EnvironmentDetailsPage from './EnvironmentDetailsPage';
+import DeploymentHistory from './history/DeploymentHistory';
 import DevPreviewBadge from './import/badges/DevPreviewBadge';
 import { getApplicationsBaseURI, getPipelinesBaseURI } from './utils/gitops-utils';
 import useDefaultSecret from './utils/useDefaultSecret';
 import useEnvDetails from './utils/useEnvDetails';
-import GitOpsDetailsPage from './GitOpsDetailsPage';
 
-type GitOpsDetailsPageTabsProps = RouteComponentProps<{ appName?: string }>;
+type EnvironmentDetailsPageTabsProps = RouteComponentProps<{ appName?: string }>;
 
-export const GitOpsDetailsPageTabs: React.FC<GitOpsDetailsPageTabsProps> = ({ match }) => {
+export const EnvironmentDetailsPageTabs: React.FC<EnvironmentDetailsPageTabsProps> = ({ match }) => {
   const { t } = useTranslation();
   const { appName } = match.params;
   const [secretNS, secretName] = useDefaultSecret();
@@ -33,7 +33,7 @@ export const GitOpsDetailsPageTabs: React.FC<GitOpsDetailsPageTabsProps> = ({ ma
         name: t('gitops-plugin~Overview'),
         path: 'overview',
         component: (props) => (
-          <GitOpsDetailsPage
+          <EnvironmentDetailsPage
             {...props}
             customData={{ emptyStateMsg, envs, applicationBaseURI, manifestURL }}
           />
@@ -44,7 +44,7 @@ export const GitOpsDetailsPageTabs: React.FC<GitOpsDetailsPageTabsProps> = ({ ma
         name: t('gitops-plugin~Deployment history'),
         path: 'deploymenthistory',
         component: (props) => (
-          <GitOpsDeploymentHistory
+          <DeploymentHistory
             {...props}
             customData={{ emptyStateMsg, envs, applicationBaseURI }}
           />
@@ -59,7 +59,7 @@ export const GitOpsDetailsPageTabs: React.FC<GitOpsDetailsPageTabsProps> = ({ ma
       <Helmet>
         <title>{t('gitops-plugin~{{appName}} · Details', { appName })}</title>
       </Helmet>
-      <GitOpsDetailsPageHeading
+      <EnvironmentDetailsPageHeading
         appName={appName}
         manifestURL={manifestURL}
         badge={<DevPreviewBadge />}
@@ -69,4 +69,4 @@ export const GitOpsDetailsPageTabs: React.FC<GitOpsDetailsPageTabsProps> = ({ ma
   );
 };
 
-export default GitOpsDetailsPageTabs;
+export default EnvironmentDetailsPageTabs;

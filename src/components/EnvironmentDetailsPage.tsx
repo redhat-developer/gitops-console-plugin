@@ -1,13 +1,13 @@
+import * as _ from 'lodash';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import * as _ from 'lodash';
 
 import { LoadingBox } from '@patternfly/quickstarts';
 
-import GitOpsDetails from './details/GitOpsDetails';
+import EnvironmentDetails from './details/EnvironmentDetails';
+import EnvironmentEmptyState from './EnvironmentEmptyState';
 import { GitOpsEnvironment } from './utils/gitops-types';
 import { getEnvData } from './utils/gitops-utils';
-import GitOpsEmptyState from './GitOpsEmptyState';
 
 type GitOpsOverviewPageProps = {
   customData: {
@@ -17,9 +17,9 @@ type GitOpsOverviewPageProps = {
     manifestURL: string;
   };
 };
-type GitOpsDetailsPageProps = RouteComponentProps<{ appName?: string }> & GitOpsOverviewPageProps;
+type EnvironmentDetailsPageProps = RouteComponentProps<{ appName?: string }> & GitOpsOverviewPageProps;
 
-const GitOpsDetailsPage: React.FC<GitOpsDetailsPageProps> = ({ match, customData }) => {
+const EnvironmentDetailsPage: React.FC<EnvironmentDetailsPageProps> = ({ match, customData }) => {
   const { emptyStateMsg, envs, applicationBaseURI, manifestURL } = customData;
   const { appName } = match.params;
 
@@ -52,11 +52,11 @@ const GitOpsDetailsPage: React.FC<GitOpsDetailsPageProps> = ({ match, customData
     return <LoadingBox />;
   } else if (!emptyStateMsg) {
     return (
-      <GitOpsDetails envs={envsData} appName={appName} manifestURL={manifestURL} error={error} />
+      <EnvironmentDetails envs={envsData} appName={appName} manifestURL={manifestURL} error={error} />
     );
   } else {
-    return <GitOpsEmptyState emptyStateMsg={emptyStateMsg} />;
+    return <EnvironmentEmptyState emptyStateMsg={emptyStateMsg} />;
   }
 };
 
-export default GitOpsDetailsPage;
+export default EnvironmentDetailsPage;

@@ -1,7 +1,9 @@
+import './ApplicationTableRow.scss';
+
+import classNames from 'classnames';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import classNames from 'classnames';
 
 import {
   GreenCheckCircleIcon,
@@ -13,13 +15,10 @@ import {
 import { Flex, FlexItem, Split, SplitItem } from '@patternfly/react-core';
 
 import { routeDecoratorIcon } from '../import/render-utils';
-import { GrayUnknownIcon } from '../status/icons';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
-
-import GitOpsSyncFragment from './GitOpsSyncFragment';
-
-import './GitOpsTableRow.scss';
+import SyncFragment from './SyncFragment';
+import { GrayUnknownIcon } from '../status/icons';
 
 const tableColumnClasses = [
   classNames('pf-m-width-20'), // Application name
@@ -35,7 +34,7 @@ const getMatchingEnvs =
       ? [...acc, envs[idx]] // 1:1 between a status and an env
       : acc;
 
-const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
+const ApplicationTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
   const { obj: appGroup, activeColumnIDs } = props;
 
   const {
@@ -83,10 +82,10 @@ const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
         activeColumnIDs={activeColumnIDs}
       >
         {syncStatuses.length > 0 ? (
-          <Flex className="gop-gitops-syncStatus">
-            <GitOpsSyncFragment
+          <Flex className="gitops-plugin__syncStatus">
+            <SyncFragment
               tooltip={syncedEnvs.map((env) => (
-                <Split className="gop-gitops-tooltip-text" hasGutter key={`${name}-${env}`}>
+                <Split className="gitops-plugin__tooltip-text" hasGutter key={`${name}-${env}`}>
                   <SplitItem>
                     <GreenCheckCircleIcon />
                   </SplitItem>
@@ -97,9 +96,9 @@ const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
               count={syncedEnvs.length}
               icon="check"
             />
-            <GitOpsSyncFragment
+            <SyncFragment
               tooltip={outOfSyncEnvs.map((env) => (
-                <Split className="gop-gitops-tooltip-text" hasGutter key={`${name}-${env}`}>
+                <Split className="gitops-plugin__tooltip-text" hasGutter key={`${name}-${env}`}>
                   <SplitItem>
                     <YellowExclamationTriangleIcon />
                   </SplitItem>
@@ -110,9 +109,9 @@ const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
               count={outOfSyncEnvs.length}
               icon="exclamation"
             />
-            <GitOpsSyncFragment
+            <SyncFragment
               tooltip={unknownEnvs.map((env) => (
-                <Split className="gop-gitops-tooltip-text" hasGutter key={`${name}-${env}`}>
+                <Split className="gitops-plugin__tooltip-text" hasGutter key={`${name}-${env}`}>
                   <SplitItem>
                     <GrayUnknownIcon />
                   </SplitItem>
@@ -135,7 +134,7 @@ const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
       >
         {latestDeployedTime !== '' ? (
           <Flex>
-            <FlexItem className="gop-gitops-lastDeploymentTime" spacer={{ default: 'spacerXs' }}>
+            <FlexItem className="gitops-plugin__lastDeploymentTime" spacer={{ default: 'spacerXs' }}>
               <span>
                 <Timestamp timestamp={latestDeployedTime} />
               </span>
@@ -150,4 +149,4 @@ const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
   );
 };
 
-export default GitOpsTableRow;
+export default ApplicationTableRow;

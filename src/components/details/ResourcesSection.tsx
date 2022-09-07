@@ -1,3 +1,5 @@
+import './ResourcesSection.scss';
+
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -5,10 +7,7 @@ import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { Card, CardBody, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 
 import { GitOpsEnvironmentService, GitOpsHealthResources } from '../utils/gitops-types';
-
-import GitOpsResourceRow from './GitOpsResourceRow';
-
-import './GitOpsResourcesSection.scss';
+import ResourceRow from './ResourceRow';
 
 interface GitOpsResourcesSectionProps {
   services: GitOpsEnvironmentService[];
@@ -79,12 +78,12 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
 
   return (
     <>
-      <StackItem className="gop-gitops-resources">
+      <StackItem className="gitops-plugin__resources">
         <Card>
-          <h3 className="gop-gitops-resources__title co-nowrap">{t('gitops-plugin~Resources')}</h3>
+          <h3 className="gitops-plugin__resources__title co-nowrap">{t('gitops-plugin~Resources')}</h3>
           <CardBody>
             <Split hasGutter>
-              <span className="gop-gitops-resources__list">
+              <span className="gitops-plugin__resources__list">
                 <SplitItem>
                   <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
                     <StackItem>{deployments ? deployments.length : 'N/A'}</StackItem>
@@ -127,37 +126,37 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
               </span>
               <SplitItem>
                 <Stack style={{ alignItems: 'flex-end' }}>
-                  <GitOpsResourceRow
+                  <ResourceRow
                     resources={deployments}
                     degradedResources={degradedDeployments}
                     nonSyncedResources={nonSyncedDeployments}
                   />
-                  <GitOpsResourceRow
+                  <ResourceRow
                     resources={secrets}
                     degradedResources={degradedSecrets}
                     nonSyncedResources={nonSyncedSecrets}
                   />
-                  <GitOpsResourceRow
+                  <ResourceRow
                     resources={services}
                     degradedResources={degradedServices}
                     nonSyncedResources={nonSyncedSyncServices}
                   />
-                  <GitOpsResourceRow
+                  <ResourceRow
                     resources={routes}
                     degradedResources={degradedRoutes}
                     nonSyncedResources={nonSyncedRoutes}
                   />
-                  <GitOpsResourceRow
+                  <ResourceRow
                     resources={roleBindings}
                     degradedResources={null}
                     nonSyncedResources={nonSyncedRoleBindings}
                   />
-                  <GitOpsResourceRow
+                  <ResourceRow
                     resources={clusterRoles}
                     degradedResources={null}
                     nonSyncedResources={nonSyncedClusterRoles}
                   />
-                  <GitOpsResourceRow
+                  <ResourceRow
                     resources={clusterRoleBindings}
                     degradedResources={null}
                     nonSyncedResources={nonSyncedClusterRoleBindings}

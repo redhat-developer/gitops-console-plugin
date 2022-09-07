@@ -1,6 +1,6 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import * as classNames from 'classnames';
 
 import { TableColumn } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
@@ -14,7 +14,7 @@ const tableColumnClasses = [
   classNames.default('pf-m-hidden', 'pf-m-visible-on-lg', 'pf-m-width-30'), // Last deployment
 ];
 
-export const GitOpsColumns = (hasSyncStatus: boolean) => {
+export const ApplicationColumns = (hasSyncStatus: boolean) => {
   const { t } = useTranslation();
 
   const columns: TableColumn<GitOpsAppGroupData>[] = React.useMemo(
