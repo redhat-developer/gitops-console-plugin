@@ -1,5 +1,6 @@
 {
   "Environments": "環境",
+  "Dev preview": "開発プレビュー",
   "by {{author}}": "{{author}} 別",
   "Commit details not available": "コミットの詳細は利用できません",
   "Cluster URL not available": "クラスター URL は利用できません",

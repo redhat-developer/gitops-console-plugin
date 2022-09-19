@@ -1,5 +1,6 @@
 {
   "Environments": "环境",
+  "Dev preview": "开发预览",
   "by {{author}}": "由 {{author}}",
   "Commit details not available": "没有提交详情",
   "Cluster URL not available": "没有集群 URL",

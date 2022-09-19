@@ -7,7 +7,7 @@ import './Badge.scss';
 
 const DevPreviewBadge: React.FC = () => {
   const { t } = useTranslation();
-  return <Label className="ocs-preview-badge">{t('console-shared~Dev preview')}</Label>;
+  return <Label className="ocs-preview-badge">{t('gitops-plugin~Dev preview')}</Label>;
 };
 
 export default DevPreviewBadge;
