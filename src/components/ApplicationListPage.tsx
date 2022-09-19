@@ -9,10 +9,11 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { LoadingBox } from '@patternfly/quickstarts';
 
+import { fetchDataFrequency, pipelinesBaseURI } from '../const';
+
 import DevPreviewBadge from './import/badges/DevPreviewBadge';
 import ApplicationList from './list/ApplicationList';
-import { fetchAllAppGroups, getManifestURLs, getPipelinesBaseURI } from './utils/gitops-utils';
-import useDefaultSecret from './utils/useDefaultSecret';
+import { fetchAllAppGroups, getManifestURLs } from './utils/gitops-utils';
 
 import './ApplicationListPage.scss';
 
@@ -26,8 +27,6 @@ const ApplicationListPage: React.FC = () => {
   const [appGroups, setAppGroups] = React.useState(null);
   const [emptyStateMsg, setEmptyStateMsg] = React.useState(null);
   const [namespaces, nsLoaded, nsError] = useK8sWatchResource<any[]>(projectRes);
-  const [secretNS, secretName] = useDefaultSecret();
-  const baseURL = getPipelinesBaseURI(secretNS, secretName);
   const { t } = useTranslation();
 
   React.useEffect(() => {
@@ -36,7 +35,7 @@ const ApplicationListPage: React.FC = () => {
     const getAppGroups = async () => {
       if (nsLoaded) {
         const manifestURLs = (!nsError && getManifestURLs(namespaces)) || [];
-        const [allAppGroups, emptyMsg] = await fetchAllAppGroups(baseURL, manifestURLs, t);
+        const [allAppGroups, emptyMsg] = await fetchAllAppGroups(pipelinesBaseURI, manifestURLs, t);
         if (ignore) return;
         setAppGroups(allAppGroups);
         setEmptyStateMsg(emptyMsg);
@@ -44,11 +43,12 @@ const ApplicationListPage: React.FC = () => {
     };
 
     getAppGroups();
-
+    const id = setInterval(getAppGroups, fetchDataFrequency * 1000);
     return () => {
       ignore = true;
+      clearInterval(id);
     };
-  }, [baseURL, namespaces, nsError, nsLoaded, t]);
+  }, [namespaces, nsError, nsLoaded, t]);
 
   return (
     <div className="gitops-plugin__application-list-page">

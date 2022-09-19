@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 
 import { LoadingBox } from '@patternfly/quickstarts';
 
+import { environmentBaseURI, environmentBaseURIV2, fetchDataFrequency } from '../const';
+
 import EnvironmentDetails from './details/EnvironmentDetails';
 import { GitOpsEnvironment } from './utils/gitops-types';
 import { getEnvData } from './utils/gitops-utils';
@@ -25,8 +27,6 @@ const EnvironmentDetailsPage: React.FC<EnvironmentDetailsPageProps> = ({ match, 
   const { appName } = match.params;
 
   const [envsData, setEnvsData] = React.useState<GitOpsEnvironment[]>(null);
-  const environmentBaseURI = `/api/gitops/environments`;
-  const environmentBaseURIV2 = `/api/gitops/environment`;
   const [error, setError] = React.useState<Error>(null);
 
   React.useEffect(() => {
@@ -47,7 +47,11 @@ const EnvironmentDetailsPage: React.FC<EnvironmentDetailsPageProps> = ({ match, 
     };
 
     getEnvsData();
-  }, [applicationBaseURI, environmentBaseURIV2, environmentBaseURI, envs, error]);
+    const id = setInterval(getEnvsData, fetchDataFrequency * 1000);
+    return () => {
+      clearInterval(id);
+    };
+  }, [applicationBaseURI, envs, error]);
 
   if (!envsData) {
     return <LoadingBox />;

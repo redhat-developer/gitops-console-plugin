@@ -9,8 +9,6 @@ import { LoadingBox } from '@patternfly/quickstarts';
 import EnvironmentDetailsPageHeading from './details/EnvironmentDetailsPageHeading';
 import DeploymentHistory from './history/DeploymentHistory';
 import DevPreviewBadge from './import/badges/DevPreviewBadge';
-import { getApplicationsBaseURI, getPipelinesBaseURI } from './utils/gitops-utils';
-import useDefaultSecret from './utils/useDefaultSecret';
 import useEnvDetails from './utils/useEnvDetails';
 import EnvironmentDetailsPage from './EnvironmentDetailsPage';
 
@@ -21,12 +19,10 @@ export const EnvironmentDetailsPageTabs: React.FC<EnvironmentDetailsPageTabsProp
 }) => {
   const { t } = useTranslation();
   const { appName } = match.params;
-  const [secretNS, secretName] = useDefaultSecret();
-  const pipelinesBaseURI = getPipelinesBaseURI(secretNS, secretName);
   const searchParams = new URLSearchParams(location.search);
   const manifestURL = searchParams.get('url');
-  const applicationBaseURI = getApplicationsBaseURI(appName, secretNS, secretName, manifestURL);
-  const [envs, emptyStateMsg] = useEnvDetails(appName, manifestURL, pipelinesBaseURI);
+  const applicationBaseURI = `/application/${appName}?url=${manifestURL}&app=${appName}`;
+  const [envs, emptyStateMsg] = useEnvDetails(appName, manifestURL);
 
   const pages: NavPage[] = React.useMemo(
     () => [

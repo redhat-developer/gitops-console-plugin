@@ -280,25 +280,8 @@ export const getEnvData = async (v2EnvURI: string, envURI: string, env: string, 
   return data;
 };
 
-export const getPipelinesBaseURI = (secretNS: string, secretName: string) => {
-  return secretNS && secretName
-    ? `/api/gitops/pipelines?secretNS=${secretNS}&secretName=${secretName}`
-    : undefined;
-};
-
 export const getArgoCDFilteredAppsURI = (argocdBaseUri: string, appGroupName: string) => {
   return argocdBaseUri && appGroupName
     ? `${argocdBaseUri}/applications?labels=app.kubernetes.io%252Fname%253D${appGroupName}`
-    : undefined;
-};
-
-export const getApplicationsBaseURI = (
-  appName: string,
-  secretNS: string,
-  secretName: string,
-  manifestURL: string,
-) => {
-  return secretNS && secretName
-    ? `/application/${appName}?secretNS=${secretNS}&secretName=${secretName}&url=${manifestURL}&app=${appName}`
     : undefined;
 };
