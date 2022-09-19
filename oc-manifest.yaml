@@ -1,32 +1,32 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: console-gitops-plugin
+  name: "${PLUGIN_NAME}"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: console-gitops-plugin
-  namespace: console-gitops-plugin
+  name: "${PLUGIN_NAME}"
+  namespace: "${PLUGIN_NAME}"
   labels:
-    app: console-gitops-plugin
-    app.kubernetes.io/component: console-gitops-plugin
-    app.kubernetes.io/instance: console-gitops-plugin
-    app.kubernetes.io/part-of: console-gitops-plugin
-    app.openshift.io/runtime-namespace: console-gitops-plugin
+    app: "${PLUGIN_NAME}"
+    app.kubernetes.io/component: "${PLUGIN_NAME}"
+    app.kubernetes.io/instance: "${PLUGIN_NAME}"
+    app.kubernetes.io/part-of: "${PLUGIN_NAME}"
+    app.openshift.io/runtime-namespace: "${PLUGIN_NAME}"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: console-gitops-plugin
+      app: "${PLUGIN_NAME}"
   template:
     metadata:
       labels:
-        app: console-gitops-plugin
+        app: "${PLUGIN_NAME}"
     spec:
       containers:
-        - name: console-gitops-plugin
-          image: quay.io/kykchong/console-gitops-plugin:latest
+        - name: "${PLUGIN_NAME}"
+          image: ${IMAGE}
           ports:
             - containerPort: 9001
               protocol: TCP
@@ -60,13 +60,13 @@ kind: Service
 metadata:
   annotations:
     service.alpha.openshift.io/serving-cert-secret-name: console-serving-cert
-  name: console-gitops-plugin
-  namespace: console-gitops-plugin
+  name: "${PLUGIN_NAME}"
+  namespace: "${PLUGIN_NAME}"
   labels:
-    app: console-gitops-plugin
-    app.kubernetes.io/component: console-gitops-plugin
-    app.kubernetes.io/instance: console-gitops-plugin
-    app.kubernetes.io/part-of: console-gitops-plugin
+    app: "${PLUGIN_NAME}"
+    app.kubernetes.io/component: "${PLUGIN_NAME}"
+    app.kubernetes.io/instance: "${PLUGIN_NAME}"
+    app.kubernetes.io/part-of: "${PLUGIN_NAME}"
 spec:
   ports:
     - name: 9001-tcp
@@ -74,22 +74,22 @@ spec:
       port: 9001
       targetPort: 9001
   selector:
-    app: console-gitops-plugin
+    app: "${PLUGIN_NAME}"
   type: ClusterIP
   sessionAffinity: None
 ---
 apiVersion: console.openshift.io/v1alpha1
 kind: ConsolePlugin
 metadata:
-  name: console-gitops-plugin
+  name: "${PLUGIN_NAME}"
   annotations:
   console.openshift.io/use-i18n: "true"
   # console.openshift.io/default-i18next-namespace: "true"
 spec:
   displayName: "Gitops Dynamic Plugin"
   service:
-    name: console-gitops-plugin
-    namespace: console-gitops-plugin
+    name: "${PLUGIN_NAME}"
+    namespace: "${PLUGIN_NAME}"
     port: 9001
     basePath: "/"
   proxy:

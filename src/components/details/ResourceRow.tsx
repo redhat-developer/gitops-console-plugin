@@ -10,15 +10,15 @@ import {
 
 import { GitOpsEnvironmentService, GitOpsHealthResources } from '../utils/gitops-types';
 
-import './GitOpsResourcesSection.scss';
+import './ResourcesSection.scss';
 
-interface GitOpsResourceRowProps {
+interface ResourceRowProps {
   resources: GitOpsHealthResources[] | GitOpsEnvironmentService[];
   degradedResources: string[] | null;
   nonSyncedResources: string[];
 }
 
-const GitOpsResourceRow: React.FC<GitOpsResourceRowProps> = ({
+const ResourceRow: React.FC<ResourceRowProps> = ({
   resources,
   degradedResources,
   nonSyncedResources,
@@ -62,4 +62,4 @@ const GitOpsResourceRow: React.FC<GitOpsResourceRowProps> = ({
   );
 };
 
-export default GitOpsResourceRow;
+export default ResourceRow;

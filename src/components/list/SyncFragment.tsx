@@ -14,7 +14,7 @@ interface SyncProps {
   icon: string;
 }
 
-const GitOpsSyncFragment: React.FC<SyncProps> = ({ tooltip, count, icon }) => {
+const SyncFragment: React.FC<SyncProps> = ({ tooltip, count, icon }) => {
   let targetIcon: React.ReactNode;
   if (icon === 'check') {
     targetIcon = <GreenCheckCircleIcon />;
@@ -42,4 +42,4 @@ const GitOpsSyncFragment: React.FC<SyncProps> = ({ tooltip, count, icon }) => {
   );
 };
 
-export default GitOpsSyncFragment;
+export default SyncFragment;

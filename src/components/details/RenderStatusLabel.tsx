@@ -8,11 +8,12 @@ import {
 import { Label } from '@patternfly/react-core';
 
 import { GrayUnknownIcon } from '../status/icons';
-interface GitOpsRenderStatusLabelProps {
+
+interface RenderStatusLabelProps {
   status: string;
 }
 
-const GitOpsRenderStatusLabel: React.FC<GitOpsRenderStatusLabelProps> = ({ status }) => {
+const RenderStatusLabel: React.FC<RenderStatusLabelProps> = ({ status }) => {
   const { t } = useTranslation();
   switch (status) {
     case 'Synced':
@@ -38,4 +39,4 @@ const GitOpsRenderStatusLabel: React.FC<GitOpsRenderStatusLabelProps> = ({ statu
   }
 };
 
-export default GitOpsRenderStatusLabel;
+export default RenderStatusLabel;

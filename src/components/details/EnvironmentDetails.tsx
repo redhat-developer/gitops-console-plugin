@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import * as _ from 'lodash';
-import { K8sResourceKind } from 'src/components/utils/types';
 
 import { Timestamp, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { getReferenceForModel } from '@openshift-console/dynamic-plugin-sdk/lib/utils/k8s/k8s-ref';
@@ -24,11 +23,12 @@ import * as argoIcon from '../../images/argo.png';
 import { ConsoleLinkModel } from '../models';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsEnvironment } from '../utils/gitops-types';
+import { K8sResourceKind } from '../utils/types';
 
-import GitOpsRenderStatusLabel from './GitOpsRenderStatusLabel';
-import GitOpsResourcesSection from './GitOpsResourcesSection';
+import RenderStatusLabel from './RenderStatusLabel';
+import GitOpsResourcesSection from './ResourcesSection';
 
-import './GitOpsDetails.scss';
+import './EnvironmentDetails.scss';
 
 interface GitOpsDetailsProps {
   envs: GitOpsEnvironment[];
@@ -37,7 +37,12 @@ interface GitOpsDetailsProps {
   error: Error;
 }
 
-const GitOpsDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manifestURL, error }) => {
+const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
+  envs,
+  appName,
+  manifestURL,
+  error,
+}) => {
   const { t } = useTranslation();
   const [consoleLinks] = useK8sWatchResource<K8sResourceKind[]>({
     isList: true,
@@ -60,12 +65,12 @@ const GitOpsDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manifestUR
   }
 
   return (
-    <div className="gop-gitops-details">
+    <div className="gitops-plugin__environment-details">
       {oldAPI && (
         <Alert
           isInline
           title={t('gitops-plugin~Compatibility Issue')}
-          className="gop-gitops-details__special-message-alert"
+          className="gitops-plugin__environment-details__special-message-alert"
         >
           {t('gitops-plugin~Compatibility Issue Message')}
         </Alert>
@@ -74,7 +79,7 @@ const GitOpsDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manifestUR
         <Alert
           isInline
           title={t('gitops-plugin~Error Encountered')}
-          className="gop-gitops-details__special-message-alert"
+          className="gitops-plugin__environment-details__special-message-alert"
         >
           {errMsg}
         </Alert>
@@ -83,13 +88,16 @@ const GitOpsDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manifestUR
         envs,
         (env) =>
           env && (
-            <Stack className="gop-gitops-details__env-section" key={env.environment}>
+            <Stack
+              className="gitops-plugin__environment-details__env-section"
+              key={env.environment}
+            >
               <StackItem>
                 <Card>
-                  <CardTitle className="gop-gitops-details__env-section__header">
+                  <CardTitle className="gitops-plugin__environment-details__env-section__header">
                     <Stack>
                       <StackItem>
-                        <h2 className="co-section-heading co-truncate co-nowrap gop-gitops-details__env-section__app-name">
+                        <h2 className="co-section-heading co-truncate co-nowrap gitops-plugin__environment-details__env-section__app-name">
                           <Tooltip content={env.environment}>
                             <span>{env.environment}</span>
                           </Tooltip>
@@ -98,44 +106,44 @@ const GitOpsDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manifestUR
                       <StackItem className="co-truncate co-nowrap">
                         {env.cluster ? (
                           <ExternalLink
-                            additionalClassName="gop-gitops-details__env-section__cluster-url"
+                            additionalClassName="gitops-plugin__environment-details__env-section__cluster-url"
                             href={env.cluster}
                           >
                             {env.cluster}
                           </ExternalLink>
                         ) : (
-                          <div className="gop-gitops-details__env-section__cluster-url-empty-state">
+                          <div className="gitops-plugin__environment-details__env-section__cluster-url-empty-state">
                             {t('gitops-plugin~Cluster URL not available')}
                           </div>
                         )}
                       </StackItem>
                       {env.status && (
-                        <StackItem className="gop-gitops-details__env-section__status-label">
+                        <StackItem className="gitops-plugin__environment-details__env-section__status-label">
                           <Tooltip content="Sync status">
-                            <GitOpsRenderStatusLabel status={env.status} />
+                            <RenderStatusLabel status={env.status} />
                           </Tooltip>
                         </StackItem>
                       )}
                     </Stack>
                   </CardTitle>
                   <CardBody>
-                    <Stack className="gop-gitops-details__revision">
+                    <Stack className="gitops-plugin__environment-details__revision">
                       {env.revision ? (
                         <>
                           {env.revision.message && (
-                            <StackItem className="gop-gitops-details__message">
+                            <StackItem className="gitops-plugin__environment-details__message">
                               {t('gitops-plugin~{{message}}', { message: env.revision.message })}
                             </StackItem>
                           )}
-                          <StackItem className="gop-gitops-details__author-sha">
+                          <StackItem className="gitops-plugin__environment-details__author-sha">
                             {env.revision.author && (
-                              <span className="gop-gitops-details__author">
+                              <span className="gitops-plugin__environment-details__author">
                                 {t('gitops-plugin~by {{author}}', { author: env.revision.author })}{' '}
                               </span>
                             )}
                             {env.revision.revision && (
                               <Label
-                                className="gop-gitops-details__sha"
+                                className="gitops-plugin__environment-details__sha"
                                 color="blue"
                                 icon={<GitAltIcon />}
                                 variant="outline"
@@ -149,14 +157,14 @@ const GitOpsDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manifestUR
                         <span>{t('gitops-plugin~Commit details not available')}</span>
                       )}
                       {env.lastDeployed && (
-                        <StackItem className="co-truncate co-nowrap gop-gitops-details__env-section__time">
+                        <StackItem className="co-truncate co-nowrap gitops-plugin__environment-details__env-section__time">
                           {t('gitops-plugin~Last deployed')}&nbsp;
                           <Timestamp timestamp={env.lastDeployed} />
                         </StackItem>
                       )}
                       <StackItem>
-                        <Split className="gop-gitops-details__env-section__deployment-history">
-                          <SplitItem className="gop-gitops-details__env-section__deployment-history__deploymentHistoryPageLink">
+                        <Split className="gitops-plugin__environment-details__env-section__deployment-history">
+                          <SplitItem className="gitops-plugin__environment-details__env-section__deployment-history__deploymentHistoryPageLink">
                             <Link
                               to={`/envdynamic/${appName}/deploymenthistory?url=${manifestURL}&rowFilter-environment=${env.environment}`}
                               title={t('gitops-plugin~Deployment history')}
@@ -166,11 +174,11 @@ const GitOpsDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manifestUR
                           </SplitItem>
                           {argocdLink && (
                             <Tooltip content="Argo CD">
-                              <SplitItem className="gop-gitops-details__env-section__deployment-history__argocd-link">
+                              <SplitItem className="gitops-plugin__environment-details__env-section__deployment-history__argocd-link">
                                 <ExternalLink
                                   href={`${argocdLink.spec.href}/applications/${env.environment}-${appName}`}
                                 >
-                                  <span className="gop-gitops-details__env-section__argo-external-link">
+                                  <span className="gitops-plugin__environment-details__env-section__argo-external-link">
                                     <img
                                       loading="lazy"
                                       src={argoIcon}
@@ -205,4 +213,4 @@ const GitOpsDetails: React.FC<GitOpsDetailsProps> = ({ envs, appName, manifestUR
   );
 };
 
-export default GitOpsDetails;
+export default EnvironmentDetails;

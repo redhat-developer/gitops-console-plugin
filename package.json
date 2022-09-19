@@ -1,5 +1,5 @@
 {
-  "name": "console-gitops-plugin",
+  "name": "gitops-plugin",
   "description": "OpenShift Console plugin for GitOps.",
   "version": "0.0.1",
   "private": true,
@@ -66,13 +66,13 @@
     "showdown": "1.8.6"
   },
   "consolePlugin": {
-    "name": "console-gitops-plugin",
+    "name": "gitops-plugin",
     "version": "0.0.14",
     "displayName": "GitOps Plugin",
-    "description": "OpenShift Console plugin for Gitops.",
+    "description": "OpenShift Console plugin for GitOps.",
     "exposedModules": {
-      "environments": "./components/GitOpsListPage",
-      "gitopsDetailsPage": "./components/GitOpsDetailsPageTabs"
+      "environments": "./components/ApplicationListPage",
+      "detailsPage": "./components/EnvironmentDetailsPageTabs"
     },
     "dependencies": {
       "@console/pluginAPI": "*"

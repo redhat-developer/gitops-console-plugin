@@ -14,7 +14,7 @@ const tableColumnClasses = [
   classNames.default('pf-m-hidden', 'pf-m-visible-on-lg', 'pf-m-width-30'), // Last deployment
 ];
 
-export const GitOpsColumns = (hasSyncStatus: boolean) => {
+export const ApplicationColumns = (hasSyncStatus: boolean) => {
   const { t } = useTranslation();
 
   const columns: TableColumn<GitOpsAppGroupData>[] = React.useMemo(

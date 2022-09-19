@@ -6,15 +6,15 @@ import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 import { routeDecoratorIcon } from '../import/render-utils';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 
-import './GitOpsDetailsPageHeading.scss';
+import './EnvironmentDetailsPageHeading.scss';
 
-interface GitOpsDetailsPageHeadingProps {
+interface EnvironmentDetailsPageHeadingProps {
   appName: string;
   manifestURL: string;
   badge?: React.ReactNode;
 }
 
-const GitOpsDetailsPageHeading: React.FC<GitOpsDetailsPageHeadingProps> = ({
+const EnvironmentDetailsPageHeading: React.FC<EnvironmentDetailsPageHeadingProps> = ({
   appName,
   manifestURL,
   badge,
@@ -29,7 +29,7 @@ const GitOpsDetailsPageHeading: React.FC<GitOpsDetailsPageHeadingProps> = ({
           <BreadcrumbItem>{t('gitops-plugin~Application environments')}</BreadcrumbItem>
         </Breadcrumb>
       </div>
-      <div className="gop-gitops-details-page-heading co-m-nav-title co-m-nav-title--breadcrumbs">
+      <div className="gitops-plugin__environment-details-page-heading co-m-nav-title co-m-nav-title--breadcrumbs">
         <h1 className="co-m-pane__heading" style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
           <div className="co-m-pane__name co-resource-item">
             <span className="co-resource-item__resource-name">{appName}</span>
@@ -38,7 +38,7 @@ const GitOpsDetailsPageHeading: React.FC<GitOpsDetailsPageHeadingProps> = ({
         </h1>
         <ExternalLink
           href={manifestURL}
-          additionalClassName={'co-break-all gop-gitops-details-page-title'}
+          additionalClassName={'co-break-all gitops-plugin__environment-details-page-title'}
         >
           {routeDecoratorIcon(manifestURL, 12, t)}&nbsp;
           {manifestURL}&nbsp;
@@ -48,4 +48,4 @@ const GitOpsDetailsPageHeading: React.FC<GitOpsDetailsPageHeadingProps> = ({
   );
 };
 
-export default GitOpsDetailsPageHeading;
+export default EnvironmentDetailsPageHeading;

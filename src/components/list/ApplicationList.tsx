@@ -8,20 +8,20 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 
-import GitOpsEmptyState from '../GitOpsEmptyState';
+import EnvironmentEmptyState from '../EnvironmentEmptyState';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
 
-import { GitOpsColumns } from './GitOpsColumns';
-import GitOpsTableRow from './GitOpsTableRow';
+import { ApplicationColumns } from './ApplicationColumns';
+import ApplicationTableRow from './ApplicationTableRow';
 
-import './GitOpsList.scss';
+import './ApplicationList.scss';
 
-interface GitOpsListProps {
+interface ApplicationListProps {
   appGroups: GitOpsAppGroupData[];
   emptyStateMsg: string;
 }
 
-const GitOpsList: React.FC<GitOpsListProps> = ({ appGroups, emptyStateMsg }) => {
+const ApplicationList: React.FC<ApplicationListProps> = ({ appGroups, emptyStateMsg }) => {
   const { t } = useTranslation();
 
   const filters: RowFilter[] = [
@@ -44,7 +44,7 @@ const GitOpsList: React.FC<GitOpsListProps> = ({ appGroups, emptyStateMsg }) => 
   const hasSyncStatus: boolean = appGroups?.some(({ sync_status }) => sync_status) || false;
 
   return (
-    <div className="gop-gitops-list">
+    <div className="gitops-plugin__application-list">
       {!emptyStateMsg && appGroups ? (
         <>
           <ListPageFilter
@@ -59,15 +59,15 @@ const GitOpsList: React.FC<GitOpsListProps> = ({ appGroups, emptyStateMsg }) => 
             unfilteredData={staticData || []}
             loaded={!emptyStateMsg}
             loadError={null}
-            columns={GitOpsColumns(hasSyncStatus)}
-            Row={GitOpsTableRow}
+            columns={ApplicationColumns(hasSyncStatus)}
+            Row={ApplicationTableRow}
           />
         </>
       ) : (
-        <GitOpsEmptyState emptyStateMsg={emptyStateMsg} />
+        <EnvironmentEmptyState emptyStateMsg={emptyStateMsg} />
       )}
     </div>
   );
 };
 
-export default GitOpsList;
+export default ApplicationList;
