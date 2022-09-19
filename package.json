@@ -69,7 +69,7 @@
     "name": "gitops-plugin",
     "version": "0.0.14",
     "displayName": "GitOps Plugin",
-    "description": "OpenShift Console plugin for Gitops.",
+    "description": "OpenShift Console plugin for GitOps.",
     "exposedModules": {
       "environments": "./components/ApplicationListPage",
       "detailsPage": "./components/EnvironmentDetailsPageTabs"
