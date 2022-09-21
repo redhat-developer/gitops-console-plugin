@@ -10,7 +10,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { LoadingBox } from '@patternfly/quickstarts';
 
-import { fetchDataFrequency } from '../../const';
+import { fetchDataFrequency, historyBaseURI } from '../../const';
 import EnvironmentEmptyState from '../EnvironmentEmptyState';
 import { GitOpsHistoryData } from '../utils/gitops-types';
 import { getEnvData } from '../utils/gitops-utils';
@@ -30,6 +30,7 @@ type GitOpsDeploymentHistoryProps = {
 const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
   customData: { emptyStateMsg, envs, applicationBaseURI },
 }) => {
+  console.log('~~ dev history is loaded')
   const { t } = useTranslation();
   const columns = DeploymentHistoryColumns();
   const envRowFilters: RowFilter[] = [
@@ -44,7 +45,6 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
     },
   ];
 
-  const historyBaseURI = `/api/gitops/history/environment`;
   const [historyData, setHistoryData] = React.useState<GitOpsHistoryData[]>(null);
   const [error, setError] = React.useState<string>(null);
   React.useEffect(() => {
@@ -87,7 +87,7 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
       ignore = true;
       clearInterval(id);
     };
-  }, [applicationBaseURI, envs, historyBaseURI, historyData, t]);
+  }, [applicationBaseURI, envs, t]);
 
   const [data, filteredData, onFilterChange] = useListPageFilter(historyData, envRowFilters);
 
