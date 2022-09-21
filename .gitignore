@@ -17,3 +17,6 @@ node_modules
 .DS_Store
 dist
 yarn-error.log
+
+# VisualStudioCode ###
+.vscode/*

@@ -2,39 +2,39 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as _ from 'lodash';
 
+import { pipelinesBaseURI } from '../../const';
+
 import { fetchAppGroups } from './gitops-utils';
 
-const useEnvDetails = (appName, manifestURL, pipelinesBaseURI) => {
+const useEnvDetails = (appName, manifestURL) => {
   const { t } = useTranslation();
   const [envs, setEnvs] = React.useState<string[]>(null);
   const [emptyStateMsg, setEmptyStateMsg] = React.useState(null);
   React.useEffect(() => {
     let ignore = false;
 
-    if (pipelinesBaseURI) {
-      fetchAppGroups(pipelinesBaseURI, manifestURL)
-        .then((appGroups) => {
-          if (ignore) return;
-          const app = _.find(appGroups, (appObj) => appName === appObj?.name);
-          if (!app?.environments) {
-            setEmptyStateMsg(
-              t(
-                'gitops-plugin~Environment details were not found. Try reloading the page or contacting an administrator.',
-              ),
-            );
-          }
-          setEnvs(app?.environments);
-        })
-        .catch((e) => {
-          // eslint-disable-next-line no-console
-          console.error('Unable to load EnvDetails', e);
-        });
-    }
+    fetchAppGroups(pipelinesBaseURI, manifestURL)
+      .then((appGroups) => {
+        if (ignore) return;
+        const app = _.find(appGroups, (appObj) => appName === appObj?.name);
+        if (!app?.environments) {
+          setEmptyStateMsg(
+            t(
+              'gitops-plugin~Environment details were not found. Try reloading the page or contacting an administrator.',
+            ),
+          );
+        }
+        setEnvs(app?.environments);
+      })
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.error('Unable to load EnvDetails', e);
+      });
 
     return () => {
       ignore = true;
     };
-  }, [appName, manifestURL, pipelinesBaseURI, t]);
+  }, [appName, manifestURL, t]);
   return [envs, emptyStateMsg];
 };
 

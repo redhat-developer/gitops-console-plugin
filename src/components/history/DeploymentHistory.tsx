@@ -10,6 +10,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { LoadingBox } from '@patternfly/quickstarts';
 
+import { fetchDataFrequency, historyBaseURI } from '../../const';
 import EnvironmentEmptyState from '../EnvironmentEmptyState';
 import { GitOpsHistoryData } from '../utils/gitops-types';
 import { getEnvData } from '../utils/gitops-utils';
@@ -43,13 +44,12 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
     },
   ];
 
-  const historyBaseURI = `/api/gitops/history/environment`;
   const [historyData, setHistoryData] = React.useState<GitOpsHistoryData[]>(null);
   const [error, setError] = React.useState<string>(null);
   React.useEffect(() => {
     let ignore = false;
     const getHistory = async () => {
-      if (!_.isEmpty(envs) && applicationBaseURI) {
+      if (!_.isEmpty(envs)) {
         let arrayHistory;
         try {
           arrayHistory = await Promise.all(
@@ -80,10 +80,13 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
       }
     };
     getHistory();
+    const id = setInterval(getHistory, fetchDataFrequency * 1000);
+
     return () => {
       ignore = true;
+      clearInterval(id);
     };
-  }, [applicationBaseURI, envs, historyBaseURI, historyData, t]);
+  }, [applicationBaseURI, envs, t]);
 
   const [data, filteredData, onFilterChange] = useListPageFilter(historyData, envRowFilters);
 
