@@ -30,7 +30,6 @@ type GitOpsDeploymentHistoryProps = {
 const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
   customData: { emptyStateMsg, envs, applicationBaseURI },
 }) => {
-  console.log('~~ dev history is loaded')
   const { t } = useTranslation();
   const columns = DeploymentHistoryColumns();
   const envRowFilters: RowFilter[] = [
