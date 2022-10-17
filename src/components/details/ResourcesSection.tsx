@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
+import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { Card, CardBody, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 
 import { GitOpsEnvironmentService, GitOpsHealthResources } from '../utils/gitops-types';
@@ -52,30 +52,60 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
   clusterRoleBindings,
 }) => {
   const { t } = useTranslation();
-  const degradedServices: string[] = services ? services.reduce(getUnhealthyResources(), []) : [];
-  const degradedDeployments: string[] = deployments
-    ? deployments.reduce(getUnhealthyResources(), [])
-    : [];
-  const degradedSecrets: string[] = secrets ? secrets.reduce(getUnhealthyResources(), []) : [];
-  const degradedRoutes: string[] = routes ? routes.reduce(getUnhealthyResources(), []) : [];
 
-  const nonSyncedSyncServices: string[] = services
-    ? services.reduce(getNonSyncedResources(), [])
-    : [];
-  const nonSyncedDeployments: string[] = deployments
-    ? deployments.reduce(getNonSyncedResources(), [])
-    : [];
-  const nonSyncedSecrets: string[] = secrets ? secrets.reduce(getNonSyncedResources(), []) : [];
-  const nonSyncedRoutes: string[] = routes ? routes.reduce(getNonSyncedResources(), []) : [];
-  const nonSyncedRoleBindings: string[] = roleBindings
-    ? roleBindings.reduce(getNonSyncedResources(), [])
-    : [];
-  const nonSyncedClusterRoles: string[] = clusterRoles
-    ? clusterRoles.reduce(getNonSyncedResources(), [])
-    : [];
-  const nonSyncedClusterRoleBindings: string[] = clusterRoleBindings
-    ? clusterRoleBindings.reduce(getNonSyncedResources(), [])
-    : [];
+  const resourcesList = [
+    {
+      resources: deployments,
+      degradedResources: deployments ? deployments.reduce(getUnhealthyResources(), []) : [],
+      nonSyncedResources: deployments ? deployments.reduce(getNonSyncedResources(), []) : [],
+      kind: 'Deployments',
+      name: 'Deployments',
+    },
+    {
+      resources: secrets,
+      degradedResources: secrets ? secrets.reduce(getUnhealthyResources(), []) : [],
+      nonSyncedResources: secrets ? secrets.reduce(getNonSyncedResources(), []) : [],
+      kind: 'Secret',
+      name: 'Secrets',
+    },
+    {
+      resources: services,
+      degradedResources: services ? services.reduce(getUnhealthyResources(), []) : [],
+      nonSyncedResources: services ? services.reduce(getNonSyncedResources(), []) : [],
+      kind: 'Services',
+      name: 'Services',
+    },
+    {
+      resources: routes,
+      degradedResources: routes ? routes.reduce(getUnhealthyResources(), []) : [],
+      nonSyncedResources: routes ? routes.reduce(getNonSyncedResources(), []) : [],
+      kind: 'Route',
+      name: 'Routes',
+    },
+    {
+      resources: roleBindings,
+      degradedResources: null,
+      nonSyncedResources: roleBindings ? roleBindings.reduce(getNonSyncedResources(), []) : [],
+      kind: 'RoleBinding',
+      name: 'Role Bindings',
+    },
+    {
+      resources: clusterRoles,
+      degradedResources: null,
+      nonSyncedResources: clusterRoles ? clusterRoles.reduce(getNonSyncedResources(), []) : [],
+      kind: 'ClusterRole',
+      name: 'Cluster Roles',
+    },
+    {
+      resources: clusterRoleBindings,
+      degradedResources: null,
+      nonSyncedResources: clusterRoleBindings
+        ? clusterRoleBindings.reduce(getNonSyncedResources(), [])
+        : [],
+      kind: 'ClusterRoleBinding',
+      name: 'Cluster Role Bindings',
+    },
+  ];
 
   return (
     <>
@@ -89,81 +119,33 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
               <span className="gitops-plugin__resources__list">
                 <SplitItem>
                   <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
-                    <StackItem>{deployments ? deployments.length : 'N/A'}</StackItem>
-                    <StackItem>{secrets ? secrets.length : 'N/A'}</StackItem>
-                    <StackItem>{services ? services.length : 'N/A'}</StackItem>
-                    <StackItem>{routes ? routes.length : 'N/A'}</StackItem>
-                    <StackItem>{roleBindings ? roleBindings.length : 'N/A'}</StackItem>
-                    <StackItem>{clusterRoles ? clusterRoles.length : 'N/A'}</StackItem>
-                    <StackItem>
-                      {clusterRoleBindings ? clusterRoleBindings.length : 'N/A'}
-                    </StackItem>
+                    {resourcesList.map((eachResource) => (
+                      <StackItem>
+                        {eachResource.resources ? eachResource.resources.length : 'N/A'}
+                      </StackItem>
+                    ))}
                   </Stack>
                 </SplitItem>
                 <SplitItem>
                   <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
-                    <StackItem>
-                      <ResourceIcon kind={'Deployments'} /> {t('gitops-plugin~Deployments')}
-                    </StackItem>
-                    <StackItem>
-                      <ResourceIcon kind="Secret" /> {t('gitops-plugin~Secrets')}
-                    </StackItem>
-                    <StackItem>
-                      <ResourceIcon kind="Service" /> {t('gitops-plugin~Services')}
-                    </StackItem>
-                    <StackItem>
-                      <ResourceIcon kind="Route" /> {t('gitops-plugin~Routes')}
-                    </StackItem>
-                    <StackItem>
-                      <ResourceIcon kind="RoleBinding" /> {t('gitops-plugin~Role Bindings')}
-                    </StackItem>
-                    <StackItem>
-                      <ResourceIcon kind="ClusterRole" /> {t('gitops-plugin~Cluster Roles')}
-                    </StackItem>
-                    <StackItem>
-                      <ResourceIcon kind="ClusterRoleBinding" />{' '}
-                      {t('gitops-plugin~Cluster Role Bindings')}
-                    </StackItem>
+                    {resourcesList.map((eachResource) => (
+                      <StackItem>
+                        <ResourceLink inline kind={eachResource.kind} />
+                        {t(`gitops-plugin~${eachResource.name}`)}
+                      </StackItem>
+                    ))}
                   </Stack>
                 </SplitItem>
               </span>
               <SplitItem>
                 <Stack style={{ alignItems: 'flex-end' }}>
-                  <ResourceRow
-                    resources={deployments}
-                    degradedResources={degradedDeployments}
-                    nonSyncedResources={nonSyncedDeployments}
-                  />
-                  <ResourceRow
-                    resources={secrets}
-                    degradedResources={degradedSecrets}
-                    nonSyncedResources={nonSyncedSecrets}
-                  />
-                  <ResourceRow
-                    resources={services}
-                    degradedResources={degradedServices}
-                    nonSyncedResources={nonSyncedSyncServices}
-                  />
-                  <ResourceRow
-                    resources={routes}
-                    degradedResources={degradedRoutes}
-                    nonSyncedResources={nonSyncedRoutes}
-                  />
-                  <ResourceRow
-                    resources={roleBindings}
-                    degradedResources={null}
-                    nonSyncedResources={nonSyncedRoleBindings}
-                  />
-                  <ResourceRow
-                    resources={clusterRoles}
-                    degradedResources={null}
-                    nonSyncedResources={nonSyncedClusterRoles}
-                  />
-                  <ResourceRow
-                    resources={clusterRoleBindings}
-                    degradedResources={null}
-                    nonSyncedResources={nonSyncedClusterRoleBindings}
-                  />
+                  {resourcesList.map((eachResource) => (
+                    <ResourceRow
+                      resources={eachResource.resources}
+                      degradedResources={eachResource.degradedResources}
+                      nonSyncedResources={eachResource.nonSyncedResources}
+                    />
+                  ))}
                 </Stack>
               </SplitItem>
             </Split>
