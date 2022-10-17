@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
+import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { Card, CardBody, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 
 import { GitOpsEnvironmentService, GitOpsHealthResources } from '../utils/gitops-types';
@@ -130,7 +130,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
                   <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
                     {resourcesList.map((eachResource) => (
                       <StackItem>
-                        <ResourceIcon kind={eachResource.kind} />{' '}
+                        <ResourceLink inline kind={eachResource.kind} />
                         {t(`gitops-plugin~${eachResource.name}`)}
                       </StackItem>
                     ))}
