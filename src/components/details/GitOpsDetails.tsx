@@ -1,9 +1,8 @@
-import './GitOpsDetails.scss';
-
-import * as _ from 'lodash';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import * as _ from 'lodash';
+import { K8sResourceKind } from 'src/components/utils/types';
 
 import { Timestamp, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { getReferenceForModel } from '@openshift-console/dynamic-plugin-sdk/lib/utils/k8s/k8s-ref';
@@ -25,9 +24,11 @@ import * as argoIcon from '../../images/argo.png';
 import { ConsoleLinkModel } from '../models';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsEnvironment } from '../utils/gitops-types';
+
 import GitOpsRenderStatusLabel from './GitOpsRenderStatusLabel';
 import GitOpsResourcesSection from './GitOpsResourcesSection';
-import { K8sResourceKind } from './TimestampWrapper';
+
+import './GitOpsDetails.scss';
 
 interface GitOpsDetailsProps {
   envs: GitOpsEnvironment[];

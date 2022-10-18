@@ -1,8 +1,6 @@
-import './GitOpsDeploymentHistory.scss';
-
-import * as _ from 'lodash';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import * as _ from 'lodash';
 
 import {
   ListPageFilter,
@@ -15,8 +13,11 @@ import { LoadingBox } from '@patternfly/quickstarts';
 import GitOpsEmptyState from '../GitOpsEmptyState';
 import { GitOpsHistoryData } from '../utils/gitops-types';
 import { getEnvData } from '../utils/gitops-utils';
+
 import { GitOpsDeploymentHistoryColumns } from './GitOpsDeploymentHistoryColumns';
 import { GitOpsDeploymentHistoryTableRow } from './GitOpsDeploymentHistoryTableRow';
+
+import './GitOpsDeploymentHistory.scss';
 
 type GitOpsDeploymentHistoryProps = {
   customData: {
@@ -86,15 +87,15 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
 
   const [data, filteredData, onFilterChange] = useListPageFilter(historyData, envRowFilters);
 
-  return (
-    <div className="odc-gitops-history-list">
-      {!historyData && !error ? (
-        <LoadingBox />
-      ) : error ? (
-        <GitOpsEmptyState emptyStateMsg={error} />
-      ) : emptyStateMsg ? (
-        <GitOpsEmptyState emptyStateMsg={emptyStateMsg || t('gitops-plugin~No history')} />
-      ) : (
+  const getReturnComponent = () => {
+    if (!historyData && !error) {
+      return <LoadingBox />;
+    } else if (error) {
+      return <GitOpsEmptyState emptyStateMsg={error} />;
+    } else if (emptyStateMsg) {
+      return <GitOpsEmptyState emptyStateMsg={emptyStateMsg || t('gitops-plugin~No history')} />;
+    } else {
+      return (
         <>
           <ListPageFilter
             data={data}
@@ -112,9 +113,11 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
             loadError={null}
           />
         </>
-      )}
-    </div>
-  );
+      );
+    }
+  };
+
+  return <div className="odc-gitops-history-list">{getReturnComponent()}</div>;
 };
 
 export default GitOpsDeploymentHistory;

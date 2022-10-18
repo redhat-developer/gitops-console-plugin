@@ -238,6 +238,7 @@ export const fetchAppGroups = async (
 export const fetchAllAppGroups = async (baseURL: string, manifestURLs: string[], t: TFunction) => {
   let emptyMsg: string = null;
   let allAppGroups: GitOpsAppGroupData[] = null;
+
   if (baseURL) {
     if (_.isEmpty(manifestURLs)) {
       emptyMsg = t('gitops-plugin~No GitOps manifest URLs found');
