@@ -3,6 +3,7 @@
   "description": "OpenShift Console plugin for GitOps.",
   "version": "0.0.1",
   "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "http-server": "./http-server.sh ./dist",
     "clean": "rm -rf dist",
@@ -19,7 +20,7 @@
     "@openshift-console/dynamic-plugin-sdk-internal": "0.0.10",
     "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.7",
     "@openshift-console/plugin-shared": "^0.0.1",
-    "@patternfly/react-core": "4.224.1",
+    "@patternfly/react-core": "^4.202.16",
     "@patternfly/react-icons": "3.15.17",
     "@patternfly/react-table": "4.44.4",
     "@patternfly/quickstarts": "2.0.1",

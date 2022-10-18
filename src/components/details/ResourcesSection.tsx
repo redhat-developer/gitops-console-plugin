@@ -120,7 +120,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
                 <SplitItem>
                   <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
                     {resourcesList.map((eachResource) => (
-                      <StackItem>
+                      <StackItem key={eachResource.kind}>
                         {eachResource.resources ? eachResource.resources.length : 'N/A'}
                       </StackItem>
                     ))}
@@ -129,7 +129,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
                 <SplitItem>
                   <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
                     {resourcesList.map((eachResource) => (
-                      <StackItem>
+                      <StackItem key={eachResource.kind}>
                         <ResourceLink inline kind={eachResource.kind} />
                         {t(`gitops-plugin~${eachResource.name}`)}
                       </StackItem>
@@ -141,6 +141,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
                 <Stack style={{ alignItems: 'flex-end' }}>
                   {resourcesList.map((eachResource) => (
                     <ResourceRow
+                      key={eachResource.kind}
                       resources={eachResource.resources}
                       degradedResources={eachResource.degradedResources}
                       nonSyncedResources={eachResource.nonSyncedResources}
