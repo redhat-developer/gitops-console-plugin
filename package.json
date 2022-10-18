@@ -81,7 +81,6 @@
   },
   "dependencies": {
     "classnames": "2.x",
-<<<<<<< HEAD
     "react": "^17.0.2",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
@@ -89,10 +88,6 @@
     "react-redux": "7.2.2",
     "git-url-parse": "^11.4.0",
     "redux": "4.0.1"
-=======
-    "fuzzysearch": "1.0.x",
-    "react-redux": "7.2.2"
->>>>>>> f65c1fa1 (gitops-1317 migrate list page (#3))
   },
   "//TODO": [
     "For @patternfly/react-icons: find another solution for icons from older react-icons version and remove this dependency."

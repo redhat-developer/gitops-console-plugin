@@ -15,10 +15,9 @@ import {
 import { Flex, FlexItem, Split, SplitItem } from '@patternfly/react-core';
 
 import { routeDecoratorIcon } from '../import/render-utils';
-import { GrayUnknownIcon } from '../status/icons';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
-import GitOpsSyncFragment from './GitOpsSyncFragment';
+import GitOpsSyncFragment, { GrayUnknownIcon } from './GitOpsSyncFragment';
 
 const tableColumnClasses = [
   classNames('pf-m-width-20'), // Application name
@@ -35,7 +34,6 @@ const getMatchingEnvs =
       : acc;
 
 const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
-  console.log('props: ', props);
   const { obj: appGroup, activeColumnIDs } = props;
 
   const {
@@ -61,7 +59,7 @@ const GitOpsTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
   return (
     <>
       <TableData id="name" className={tableColumnClasses[0]} activeColumnIDs={activeColumnIDs}>
-        <Link to={`/environments/${appGroup.name}/overview?url=${appGroup.repo_url}`} title={name}>
+        <Link to={`/envdynamic/${appGroup.name}/overview?url=${appGroup.repo_url}`} title={name}>
           {name}
         </Link>
       </TableData>
