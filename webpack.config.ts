@@ -65,9 +65,9 @@ const config: Configuration = {
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg|woff2?|ttf|eot|otf)(\?.*$|$)/,
-        loader: 'file-loader',
-        options: {
-          name: 'assets/[name].[ext]',
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/[name].[ext]',
         },
       },
       {
@@ -102,10 +102,6 @@ const config: Configuration = {
 
 if (process.env.NODE_ENV === "production") {
   config.mode = "production";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f65c1fa1 (gitops-1317 migrate list page (#3))
   if (config.output) {
     config.output.filename = "[name]-bundle-[hash].min.js";
     config.output.chunkFilename = "[name]-chunk-[chunkhash].min.js";
@@ -114,15 +110,6 @@ if (process.env.NODE_ENV === "production") {
     config.optimization.chunkIds = "deterministic";
     config.optimization.minimize = true;
   }
-<<<<<<< HEAD
-=======
-  config.output.filename = "[name]-bundle-[hash].min.js";
-  config.output.chunkFilename = "[name]-chunk-[chunkhash].min.js";
-  config.optimization.chunkIds = "deterministic";
-  config.optimization.minimize = true;
->>>>>>> bd7368a3 (First commit for console-gitops-plugin (#1))
-=======
->>>>>>> f65c1fa1 (gitops-1317 migrate list page (#3))
 }
 
 export default config;
