@@ -17,7 +17,7 @@
       "section": "resources",
       "insertAfter": "pipelines",
       "insertBefore": "helm",
-      "name": "Environments - Dynamic",
+      "name": "Environments",
       "href": "/envdynamic",
       "dataAttributes": {
         "data-test-id": "envdynamic-header"
