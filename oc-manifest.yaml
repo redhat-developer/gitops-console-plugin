@@ -99,4 +99,4 @@ spec:
       service:
         name: applications
         namespace: openshift-gitops
-        port: 8443
+        port: 9001

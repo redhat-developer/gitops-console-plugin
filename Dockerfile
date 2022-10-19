@@ -1,15 +1,11 @@
-FROM node:14
+FROM docker.io/library/node:16 AS build
 
-USER root
+ADD . /usr/src/app
+WORKDIR /usr/src/app
+RUN yarn config set network-timeout 600000 -g
+RUN yarn install && yarn build
 
-WORKDIR /usr/src/plugin
-COPY . /usr/src/plugin
-RUN yarn install
-RUN yarn build
+FROM --platform=linux/amd64 docker.io/library/nginx:stable
 
-RUN chmod g+wr -R /usr/src/plugin/dist
-
-USER node
-
-EXPOSE 9001
-ENTRYPOINT [ "./http-server.sh", "./dist" ]
+RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
