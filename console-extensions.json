@@ -17,7 +17,7 @@
       "section": "resources",
       "insertAfter": "pipelines",
       "insertBefore": "helm",
-      "name": "Environments",
+      "name": "%gitops-plugin~Environments%",
       "href": "/envdynamic",
       "dataAttributes": {
         "data-test-id": "envdynamic-header"
