@@ -5,7 +5,14 @@ WORKDIR /usr/src/app
 RUN yarn config set network-timeout 600000 -g
 RUN yarn install && yarn build
 
-FROM --platform=linux/amd64 docker.io/library/nginx:stable
+FROM --platform=linux/amd64 registry.redhat.io/rhel8/httpd-24
 
-RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
-COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+USER root
+RUN chown -R 1001:0 /opt/app-root/src
+USER 1001
+RUN chmod g+rwx /opt/app-root/src
+
+COPY --from=build /usr/src/app/ssl.conf /etc/httpd/conf.d
+COPY --from=build /usr/src/app/dist /var/www/html/plugin
+
+CMD run-httpd

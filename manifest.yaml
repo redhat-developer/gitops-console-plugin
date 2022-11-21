@@ -29,19 +29,24 @@ spec:
           volumeMounts:
             - name: console-serving-cert
               readOnly: true
-              mountPath: /var/serving-cert
-            - name: nginx-conf
+              mountPath: /etc/httpd-ssl/certs/tls.crt
+              subPath: tls.crt
+            - name: console-serving-cert
               readOnly: true
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf
+              mountPath: /etc/httpd-ssl/private/tls.key
+              subPath: tls.key
+            - name: httpd-cfg
+              readOnly: true
+              mountPath: /etc/httpd-cfg/httpd.conf
+              subPath: httpd.conf
       volumes:
         - name: console-serving-cert
           secret:
             secretName: console-serving-cert
             defaultMode: 420
-        - name: nginx-conf
+        - name: httpd-cfg
           configMap:
-            name: nginx-conf
+            name: httpd-cfg
             defaultMode: 420
       restartPolicy: Always
       dnsPolicy: ClusterFirst
@@ -54,27 +59,23 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nginx-conf
+  name: httpd-cfg
   namespace: openshift-gitops
   labels:
     app: gitops-plugin
     app.kubernetes.io/part-of: gitops-plugin
 data:
-  nginx.conf: |
-    error_log /dev/stdout info;
-    events {}
-    http {
-      access_log         /dev/stdout;
-      include            /etc/nginx/mime.types;
-      default_type       application/octet-stream;
-      keepalive_timeout  65;
-      server {
-        listen              9001 ssl;
-        ssl_certificate     /var/serving-cert/tls.crt;
-        ssl_certificate_key /var/serving-cert/tls.key;
-        root                /usr/share/nginx/html;
-      }
-    }
+  httpd.conf: |
+    LoadModule ssl_module modules/mod_ssl.so
+    Listen 9001 https
+    ServerRoot "/etc/httpd"
+
+    <VirtualHost *:9001>
+        DocumentRoot /var/www/html/plugin
+        SSLEngine on
+        SSLCertificateFile "/etc/httpd-ssl/certs/tls.crt"
+        SSLCertificateKeyFile "/etc/httpd-ssl/private/tls.key"
+    </VirtualHost>
 ---
 apiVersion: v1
 kind: Service
