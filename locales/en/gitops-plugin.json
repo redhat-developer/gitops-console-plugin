@@ -33,5 +33,8 @@
   "Unknown": "Unknown",
   "No GitOps manifest URLs found": "No GitOps manifest URLs found",
   "No Application groups found": "No Application groups found",
-  "Environment details were not found. Try reloading the page or contacting an administrator.": "Environment details were not found. Try reloading the page or contacting an administrator."
+  "Environment details were not found. Try reloading the page or contacting an administrator.": "Environment details were not found. Try reloading the page or contacting an administrator.",
+  "Commit message not available": "Commit message not available",
+  "Commit author not available": "Commit author not available",
+  "Last deployed time not available": "Last deployed time not available"
 }
