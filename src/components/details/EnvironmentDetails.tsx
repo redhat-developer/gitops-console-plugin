@@ -130,18 +130,26 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                     <Stack className="gitops-plugin__environment-details__revision">
                       {env.revision ? (
                         <>
-                          {env.revision.message && (
+                          {env.revision.message ? (
                             <StackItem className="gitops-plugin__environment-details__message">
                               {t('gitops-plugin~{{message}}', { message: env.revision.message })}
                             </StackItem>
+                          ) : (
+                            <StackItem className="gitops-plugin__environment-details__warning-message">
+                              <span>{t('gitops-plugin~Commit message not available')}</span>
+                            </StackItem>
                           )}
                           <StackItem className="gitops-plugin__environment-details__author-sha">
-                            {env.revision.author && (
+                            {env.revision.author ? (
                               <span className="gitops-plugin__environment-details__author">
                                 {t('gitops-plugin~by {{author}}', { author: env.revision.author })}{' '}
                               </span>
+                            ) : (
+                                <span className="gitops-plugin__environment-details__author-unavailable">
+                                  {t('gitops-plugin~Commit author not available')}{' '}
+                                </span>
                             )}
-                            {env.revision.revision && (
+                            {env.revision.revision ? (
                               <Label
                                 className="gitops-plugin__environment-details__sha"
                                 color="blue"
@@ -150,17 +158,30 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                               >
                                 {env.revision.revision.substring(0, 7)}
                               </Label>
+                            ) : (
+                              <Label
+                                className="gitops-plugin__environment-details__sha"
+                                color="blue"
+                                icon={<GitAltIcon />}
+                                variant="outline"
+                              >
+                                N/A
+                              </Label>
                             )}
                           </StackItem>
                         </>
                       ) : (
                         <span>{t('gitops-plugin~Commit details not available')}</span>
                       )}
-                      {env.lastDeployed && (
+                      {env.lastDeployed ? (
                         <StackItem className="co-truncate co-nowrap gitops-plugin__environment-details__env-section__time">
                           {t('gitops-plugin~Last deployed')}&nbsp;
                           <Timestamp timestamp={env.lastDeployed} />
                         </StackItem>
+                      ) : (
+                        <StackItem className="co-truncate co-nowrap gitops-plugin__environment-details__env-section__time-unavailable">
+                          <span>{t('gitops-plugin~Last deployed time not available')}</span>
+                        </StackItem> 
                       )}
                       <StackItem>
                         <Split className="gitops-plugin__environment-details__env-section__deployment-history">

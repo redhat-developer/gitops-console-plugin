@@ -42,7 +42,9 @@ const EnvironmentDetailsPage: React.FC<EnvironmentDetailsPageProps> = ({ match, 
         } catch (err) {
           setError(err);
         }
-        setEnvsData(data);
+        if (data && data.length > 0) {
+          setEnvsData(data);
+        }
       }
     };
 
