@@ -14,7 +14,11 @@
     margin-right: 4px;
   }
 
-  .pf-l-split.pf-m-gutter>*:not(:last-child) {
-    margin-right: var(--pf-global--spacer--sm);
+  .pf-l-split.pf-m-gutter {
+    justify-content: space-between;
+
+    &>*:not(:last-child) {
+      margin-right: var(--pf-global--spacer--sm);
+    }
   }
 }
