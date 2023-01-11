@@ -13,4 +13,8 @@
   .co-resource-item--inline {
     margin-right: 4px;
   }
+
+  .pf-l-split.pf-m-gutter>*:not(:last-child) {
+    margin-right: var(--pf-global--spacer--sm);
+  }
 }
