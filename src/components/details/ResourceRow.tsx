@@ -35,8 +35,8 @@ const ResourceRow: React.FC<ResourceRowProps> = ({
         >
           <SplitItem>
             <>
-              {degradedResources.length}{' '}
-              <HeartBrokenIcon color={RedColor.value} className="co-icon-space-r" />
+              {degradedResources.length}
+              <HeartBrokenIcon color={RedColor.value} className="co-icon-space-l" />
             </>
           </SplitItem>
         </Tooltip>
@@ -50,8 +50,8 @@ const ResourceRow: React.FC<ResourceRowProps> = ({
         >
           <SplitItem>
             <>
-              {nonSyncedResources.length}{' '}
-              <ExclamationTriangleIcon color={YellowColor.value} className="co-icon-space-r" />
+              {nonSyncedResources.length}
+              <ExclamationTriangleIcon color={YellowColor.value} className="co-icon-space-l" />
             </>
           </SplitItem>
         </Tooltip>
