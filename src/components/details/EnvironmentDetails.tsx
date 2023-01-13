@@ -19,7 +19,6 @@ import {
 } from '@patternfly/react-core';
 import { GitAltIcon } from '@patternfly/react-icons';
 
-import * as argoIcon from '../../images/argo.png';
 import { ConsoleLinkModel } from '../models';
 import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsEnvironment } from '../utils/gitops-types';
@@ -29,6 +28,7 @@ import RenderStatusLabel from './RenderStatusLabel';
 import GitOpsResourcesSection from './ResourcesSection';
 
 import './EnvironmentDetails.scss';
+import ArgoCdLink from './ArgoCdLink';
 
 interface GitOpsDetailsProps {
   envs: GitOpsEnvironment[];
@@ -195,21 +195,7 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                           </SplitItem>
                           {argocdLink && (
                             <Tooltip content="Argo CD">
-                              <SplitItem className="gitops-plugin__environment-details__env-section__deployment-history__argocd-link">
-                                <ExternalLink
-                                  href={`${argocdLink.spec.href}/applications/${env.environment}-${appName}`}
-                                >
-                                  <span className="gitops-plugin__environment-details__env-section__argo-external-link">
-                                    <img
-                                      loading="lazy"
-                                      src={argoIcon}
-                                      alt="Argo CD"
-                                      width="19px"
-                                      height="24px"
-                                    />
-                                  </span>
-                                </ExternalLink>
-                              </SplitItem>
+                              <ArgoCdLink appName={appName} envName={env.environment} argocdLink={argocdLink}/>
                             </Tooltip>
                           )}
                         </Split>
