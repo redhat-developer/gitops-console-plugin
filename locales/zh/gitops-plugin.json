@@ -24,5 +24,8 @@
   "OutOfSync": "OutOfSync",
   "Unknown": "未知",
   "No GitOps manifest URLs found": "未找到 GitOps 清单 URL",
-  "No Application groups found": "未找到应用程序组"
+  "No Application groups found": "未找到应用程序组",
+  "Commit message not available": "提交的信息不可用",
+  "Commit author not available": "提交的作者不可用",
+  "Last deployed time not available": "最后部署的时间不可用"
 }
