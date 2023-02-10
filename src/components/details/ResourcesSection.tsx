@@ -116,7 +116,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
           </h3>
           <CardBody>
             <Split hasGutter>
-              <span className="gitops-plugin__resources__list">
+              <SplitItem className="gitops-plugin__resources__list">
                 <SplitItem>
                   <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
                     {resourcesList.map((eachResource) => (
@@ -127,16 +127,16 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
                   </Stack>
                 </SplitItem>
                 <SplitItem>
-                  <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
+                  <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)'}}>
                     {resourcesList.map((eachResource) => (
                       <StackItem key={eachResource.kind}>
                         <ResourceLink inline kind={eachResource.kind} />
-                        {t(`gitops-plugin~${eachResource.name}`)}
+                          <span>{t(`gitops-plugin~${eachResource.name}`)}</span>
                       </StackItem>
                     ))}
                   </Stack>
                 </SplitItem>
-              </span>
+              </SplitItem>
               <SplitItem>
                 <Stack style={{ alignItems: 'flex-end' }}>
                   {resourcesList.map((eachResource) => (
