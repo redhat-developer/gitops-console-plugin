@@ -25,7 +25,9 @@ const EnvironmentDetailsPageHeading: React.FC<EnvironmentDetailsPageHeadingProps
     <>
       <div className="pf-c-page__main-breadcrumb">
         <Breadcrumb className="co-breadcrumb">
-          <BreadcrumbItem to="/envdynamic">{t('plugin__gitops-plugin~Environments')}</BreadcrumbItem>
+          <BreadcrumbItem to="/envdynamic">
+            {t('plugin__gitops-plugin~Environments')}
+          </BreadcrumbItem>
           <BreadcrumbItem>{t('plugin__gitops-plugin~Application environments')}</BreadcrumbItem>
         </Breadcrumb>
       </div>

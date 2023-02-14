@@ -97,7 +97,9 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
       return <EnvironmentEmptyState emptyStateMsg={error} />;
     } else if (emptyStateMsg) {
       return (
-        <EnvironmentEmptyState emptyStateMsg={emptyStateMsg || t('plugin__gitops-plugin~No history')} />
+        <EnvironmentEmptyState
+          emptyStateMsg={emptyStateMsg || t('plugin__gitops-plugin~No history')}
+        />
       );
     } else {
       return (

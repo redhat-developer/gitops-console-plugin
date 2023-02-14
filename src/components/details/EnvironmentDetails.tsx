@@ -24,11 +24,11 @@ import ExternalLink from '../utils/ExternalLink/ExternalLink';
 import { GitOpsEnvironment } from '../utils/gitops-types';
 import { K8sResourceKind } from '../utils/types';
 
+import ArgoCdLink from './ArgoCdLink';
 import RenderStatusLabel from './RenderStatusLabel';
 import GitOpsResourcesSection from './ResourcesSection';
 
 import './EnvironmentDetails.scss';
-import ArgoCdLink from './ArgoCdLink';
 
 interface GitOpsDetailsProps {
   envs: GitOpsEnvironment[];
@@ -132,7 +132,9 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                         <>
                           {env.revision.message ? (
                             <StackItem className="gitops-plugin__environment-details__message">
-                              {t('plugin__gitops-plugin~{{message}}', { message: env.revision.message })}
+                              {t('plugin__gitops-plugin~{{message}}', {
+                                message: env.revision.message,
+                              })}
                             </StackItem>
                           ) : (
                             <StackItem className="gitops-plugin__environment-details__warning-message">
@@ -142,12 +144,14 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                           <StackItem className="gitops-plugin__environment-details__author-sha">
                             {env.revision.author ? (
                               <span className="gitops-plugin__environment-details__author">
-                                {t('plugin__gitops-plugin~by {{author}}', { author: env.revision.author })}{' '}
+                                {t('plugin__gitops-plugin~by {{author}}', {
+                                  author: env.revision.author,
+                                })}{' '}
                               </span>
                             ) : (
-                                <span className="gitops-plugin__environment-details__author-unavailable">
-                                  {t('plugin__gitops-plugin~Commit author not available')}{' '}
-                                </span>
+                              <span className="gitops-plugin__environment-details__author-unavailable">
+                                {t('plugin__gitops-plugin~Commit author not available')}{' '}
+                              </span>
                             )}
                             {env.revision.revision ? (
                               <Label
@@ -181,7 +185,7 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                       ) : (
                         <StackItem className="co-truncate co-nowrap gitops-plugin__environment-details__env-section__time-unavailable">
                           <span>{t('plugin__gitops-plugin~Last deployed time not available')}</span>
-                        </StackItem> 
+                        </StackItem>
                       )}
                       <StackItem>
                         <Split className="gitops-plugin__environment-details__env-section__deployment-history">
@@ -195,7 +199,11 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                           </SplitItem>
                           {argocdLink && (
                             <Tooltip content="Argo CD">
-                              <ArgoCdLink appName={appName} envName={env.environment} argocdLink={argocdLink}/>
+                              <ArgoCdLink
+                                appName={appName}
+                                envName={env.environment}
+                                argocdLink={argocdLink}
+                              />
                             </Tooltip>
                           )}
                         </Split>

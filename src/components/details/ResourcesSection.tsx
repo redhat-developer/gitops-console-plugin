@@ -127,11 +127,11 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
                   </Stack>
                 </SplitItem>
                 <SplitItem>
-                  <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)'}}>
+                  <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
                     {resourcesList.map((eachResource) => (
                       <StackItem key={eachResource.kind}>
                         <ResourceLink inline kind={eachResource.kind} />
-                          <span>{t(`gitops-plugin~${eachResource.name}`)}</span>
+                        <span>{t(`gitops-plugin~${eachResource.name}`)}</span>
                       </StackItem>
                     ))}
                   </Stack>
