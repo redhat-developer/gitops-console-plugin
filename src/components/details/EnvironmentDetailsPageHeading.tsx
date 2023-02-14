@@ -19,14 +19,14 @@ const EnvironmentDetailsPageHeading: React.FC<EnvironmentDetailsPageHeadingProps
   manifestURL,
   badge,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
 
   return (
     <>
       <div className="pf-c-page__main-breadcrumb">
         <Breadcrumb className="co-breadcrumb">
-          <BreadcrumbItem to="/envdynamic">{t('gitops-plugin~Environments')}</BreadcrumbItem>
-          <BreadcrumbItem>{t('gitops-plugin~Application environments')}</BreadcrumbItem>
+          <BreadcrumbItem to="/envdynamic">{t('plugin__gitops-plugin~Environments')}</BreadcrumbItem>
+          <BreadcrumbItem>{t('plugin__gitops-plugin~Application environments')}</BreadcrumbItem>
         </Breadcrumb>
       </div>
       <div className="gitops-plugin__environment-details-page-heading co-m-nav-title co-m-nav-title--breadcrumbs">

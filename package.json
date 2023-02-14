@@ -36,6 +36,8 @@
     "@types/git-url-parse": "^9.0.0",
     "prop-types": "^15.6.1",
     "css-loader": "^5.2.7",
+    "copy-webpack-plugin": "^11.0.0",
+    "i18next-parser": "^3.3.0",
     "sass": "^1.42.1",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",

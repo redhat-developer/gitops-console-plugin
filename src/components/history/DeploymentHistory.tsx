@@ -30,11 +30,11 @@ type GitOpsDeploymentHistoryProps = {
 const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
   customData: { emptyStateMsg, envs, applicationBaseURI },
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
   const columns = DeploymentHistoryColumns();
   const envRowFilters: RowFilter[] = [
     {
-      filterGroupName: t('gitops-plugin~Environment'),
+      filterGroupName: t('plugin__gitops-plugin~Environment'),
       type: 'environment',
       reducer: (s: GitOpsHistoryData): string => s?.environment,
       filter: (input, history) =>
@@ -63,13 +63,13 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
             if (err.name === 'HttpError' && err.message === 'Not Found') {
               setError(
                 t(
-                  'gitops-plugin~The history cannot be obtained due to an HTTP Not Found Error. This could mean that the GitOps Operator needs to be upgraded to the latest version or the GitOps cluster pod is not running.',
+                  'plugin__gitops-plugin~The history cannot be obtained due to an HTTP Not Found Error. This could mean that the GitOps Operator needs to be upgraded to the latest version or the GitOps cluster pod is not running.',
                 ),
               );
             } else {
               setError(
                 t(
-                  'gitops-plugin~The history cannot be obtained due to an error. Check the GitOps cluster pod log for any errors.',
+                  'plugin__gitops-plugin~The history cannot be obtained due to an error. Check the GitOps cluster pod log for any errors.',
                 ),
               );
             }
@@ -97,7 +97,7 @@ const GitOpsDeploymentHistory: React.FC<GitOpsDeploymentHistoryProps> = ({
       return <EnvironmentEmptyState emptyStateMsg={error} />;
     } else if (emptyStateMsg) {
       return (
-        <EnvironmentEmptyState emptyStateMsg={emptyStateMsg || t('gitops-plugin~No history')} />
+        <EnvironmentEmptyState emptyStateMsg={emptyStateMsg || t('plugin__gitops-plugin~No history')} />
       );
     } else {
       return (

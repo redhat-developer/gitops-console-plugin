@@ -7,7 +7,7 @@ import { pipelinesBaseURI } from '../../const';
 import { fetchAppGroups } from './gitops-utils';
 
 const useEnvDetails = (appName, manifestURL) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
   const [envs, setEnvs] = React.useState<string[]>(null);
   const [emptyStateMsg, setEmptyStateMsg] = React.useState(null);
   React.useEffect(() => {
@@ -20,7 +20,7 @@ const useEnvDetails = (appName, manifestURL) => {
         if (!app?.environments) {
           setEmptyStateMsg(
             t(
-              'gitops-plugin~Environment details were not found. Try reloading the page or contacting an administrator.',
+              'plugin__gitops-plugin~Environment details were not found. Try reloading the page or contacting an administrator.',
             ),
           );
         }

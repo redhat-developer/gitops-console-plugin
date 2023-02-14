@@ -100,14 +100,18 @@ spec:
   type: ClusterIP
   sessionAffinity: None
 ---
-apiVersion: console.openshift.io/v1alpha1
+apiVersion: console.openshift.io/v1
 kind: ConsolePlugin
 metadata:
   name: gitops-plugin
 spec:
   displayName: "GitOps Plugin"
-  service:
-    name: gitops-plugin
-    namespace: openshift-gitops
-    port: 9001
-    basePath: "/"
+  backend:
+    service:
+      name: gitops-plugin
+      namespace: openshift-gitops
+      port: 9001
+      basePath: "/"
+    type: Service
+  i18n:
+    loadType: Preload

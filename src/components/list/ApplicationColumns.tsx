@@ -15,19 +15,19 @@ const tableColumnClasses = [
 ];
 
 export const ApplicationColumns = (hasSyncStatus: boolean) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
 
   const columns: TableColumn<GitOpsAppGroupData>[] = React.useMemo(
     () => [
       {
-        title: t('gitops-plugin~Application name'),
+        title: t('plugin__gitops-plugin~Application name'),
         id: 'name',
         sort: 'name',
         transforms: [sortable],
         props: { className: tableColumnClasses[0] },
       },
       {
-        title: t('gitops-plugin~Git repository'),
+        title: t('plugin__gitops-plugin~Git repository'),
         id: 'gitRepository',
         sort: 'gitRepository',
         transforms: [sortable],
@@ -35,15 +35,15 @@ export const ApplicationColumns = (hasSyncStatus: boolean) => {
       },
       {
         title: hasSyncStatus
-          ? t('gitops-plugin~Environment status')
-          : t('gitops-plugin~Environment'),
+          ? t('plugin__gitops-plugin~Environment status')
+          : t('plugin__gitops-plugin~Environment'),
         id: 'environments',
         sort: 'environments',
         transforms: [sortable],
         props: { className: tableColumnClasses[2] },
       },
       {
-        title: t('gitops-plugin~Last deployment'),
+        title: t('plugin__gitops-plugin~Last deployment'),
         id: 'lastDeployment',
         sort: 'lastDeployment',
         transforms: [sortable],

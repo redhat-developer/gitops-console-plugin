@@ -46,7 +46,7 @@ const ApplicationTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
     repo_url: repoUrl,
   } = appGroup;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
   const syncedEnvs: string[] = syncStatuses.reduce(getMatchingEnvs(envs, 'Synced'), []);
   const outOfSyncEnvs: string[] = syncStatuses.reduce(getMatchingEnvs(envs, 'OutOfSync'), []);
   const unknownEnvs: string[] = syncStatuses.reduce(getMatchingEnvs(envs, 'Unknown'), []);
@@ -91,7 +91,7 @@ const ApplicationTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
                     <GreenCheckCircleIcon />
                   </SplitItem>
                   <SplitItem isFilled>{env}</SplitItem>
-                  <SplitItem>{t('gitops-plugin~Synced')}</SplitItem>
+                  <SplitItem>{t('plugin__gitops-plugin~Synced')}</SplitItem>
                 </Split>
               ))}
               count={syncedEnvs.length}
@@ -104,7 +104,7 @@ const ApplicationTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
                     <YellowExclamationTriangleIcon />
                   </SplitItem>
                   <SplitItem isFilled>{env}</SplitItem>
-                  <SplitItem>{t('gitops-plugin~OutOfSync')}</SplitItem>
+                  <SplitItem>{t('plugin__gitops-plugin~OutOfSync')}</SplitItem>
                 </Split>
               ))}
               count={outOfSyncEnvs.length}
@@ -117,7 +117,7 @@ const ApplicationTableRow: React.FC<RowProps<GitOpsAppGroupData>> = (props) => {
                     <GrayUnknownIcon />
                   </SplitItem>
                   <SplitItem isFilled>{env}</SplitItem>
-                  <SplitItem>{t('gitops-plugin~Unknown')}</SplitItem>
+                  <SplitItem>{t('plugin__gitops-plugin~Unknown')}</SplitItem>
                 </Split>
               ))}
               count={unknownEnvs.length}

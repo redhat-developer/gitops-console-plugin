@@ -17,7 +17,7 @@ type EnvironmentDetailsPageTabsProps = RouteComponentProps<{ appName?: string }>
 export const EnvironmentDetailsPageTabs: React.FC<EnvironmentDetailsPageTabsProps> = ({
   match,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
   const { appName } = match.params;
   const searchParams = new URLSearchParams(location.search);
   const manifestURL = searchParams.get('url');
@@ -28,7 +28,7 @@ export const EnvironmentDetailsPageTabs: React.FC<EnvironmentDetailsPageTabsProp
     () => [
       {
         href: `${'overview?url='}${manifestURL}`,
-        name: t('gitops-plugin~Overview'),
+        name: t('plugin__gitops-plugin~Overview'),
         path: 'overview',
         component: (props) => (
           <EnvironmentDetailsPage
@@ -39,7 +39,7 @@ export const EnvironmentDetailsPageTabs: React.FC<EnvironmentDetailsPageTabsProp
       },
       {
         href: `${'deploymenthistory?url='}${manifestURL}`,
-        name: t('gitops-plugin~Deployment history'),
+        name: t('plugin__gitops-plugin~Deployment history'),
         path: 'deploymenthistory',
         component: (props) => (
           <DeploymentHistory {...props} customData={{ emptyStateMsg, envs, applicationBaseURI }} />
@@ -52,7 +52,7 @@ export const EnvironmentDetailsPageTabs: React.FC<EnvironmentDetailsPageTabsProp
   return (
     <>
       <Helmet>
-        <title>{t('gitops-plugin~{{appName}} · Details', { appName })}</title>
+        <title>{t('plugin__gitops-plugin~{{appName}} · Details', { appName })}</title>
       </Helmet>
       <EnvironmentDetailsPageHeading
         appName={appName}

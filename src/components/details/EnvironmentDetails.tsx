@@ -43,7 +43,7 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
   manifestURL,
   error,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
   const [consoleLinks] = useK8sWatchResource<K8sResourceKind[]>({
     isList: true,
     kind: getReferenceForModel(ConsoleLinkModel),
@@ -61,7 +61,7 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
   }
   let errMsg = '';
   if (error != null) {
-    errMsg = t('gitops-plugin~Error cannot retrieve environments');
+    errMsg = t('plugin__gitops-plugin~Error cannot retrieve environments');
   }
 
   return (
@@ -69,16 +69,16 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
       {oldAPI && (
         <Alert
           isInline
-          title={t('gitops-plugin~Compatibility Issue')}
+          title={t('plugin__gitops-plugin~Compatibility Issue')}
           className="gitops-plugin__environment-details__special-message-alert"
         >
-          {t('gitops-plugin~Compatibility Issue Message')}
+          {t('plugin__gitops-plugin~Compatibility Issue Message')}
         </Alert>
       )}
       {error != null && (
         <Alert
           isInline
-          title={t('gitops-plugin~Error Encountered')}
+          title={t('plugin__gitops-plugin~Error Encountered')}
           className="gitops-plugin__environment-details__special-message-alert"
         >
           {errMsg}
@@ -113,7 +113,7 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                           </ExternalLink>
                         ) : (
                           <div className="gitops-plugin__environment-details__env-section__cluster-url-empty-state">
-                            {t('gitops-plugin~Cluster URL not available')}
+                            {t('plugin__gitops-plugin~Cluster URL not available')}
                           </div>
                         )}
                       </StackItem>
@@ -132,21 +132,21 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                         <>
                           {env.revision.message ? (
                             <StackItem className="gitops-plugin__environment-details__message">
-                              {t('gitops-plugin~{{message}}', { message: env.revision.message })}
+                              {t('plugin__gitops-plugin~{{message}}', { message: env.revision.message })}
                             </StackItem>
                           ) : (
                             <StackItem className="gitops-plugin__environment-details__warning-message">
-                              <span>{t('gitops-plugin~Commit message not available')}</span>
+                              <span>{t('plugin__gitops-plugin~Commit message not available')}</span>
                             </StackItem>
                           )}
                           <StackItem className="gitops-plugin__environment-details__author-sha">
                             {env.revision.author ? (
                               <span className="gitops-plugin__environment-details__author">
-                                {t('gitops-plugin~by {{author}}', { author: env.revision.author })}{' '}
+                                {t('plugin__gitops-plugin~by {{author}}', { author: env.revision.author })}{' '}
                               </span>
                             ) : (
                                 <span className="gitops-plugin__environment-details__author-unavailable">
-                                  {t('gitops-plugin~Commit author not available')}{' '}
+                                  {t('plugin__gitops-plugin~Commit author not available')}{' '}
                                 </span>
                             )}
                             {env.revision.revision ? (
@@ -171,16 +171,16 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                           </StackItem>
                         </>
                       ) : (
-                        <span>{t('gitops-plugin~Commit details not available')}</span>
+                        <span>{t('plugin__gitops-plugin~Commit details not available')}</span>
                       )}
                       {env.lastDeployed ? (
                         <StackItem className="co-truncate co-nowrap gitops-plugin__environment-details__env-section__time">
-                          {t('gitops-plugin~Last deployed')}&nbsp;
+                          {t('plugin__gitops-plugin~Last deployed')}&nbsp;
                           <Timestamp timestamp={env.lastDeployed} />
                         </StackItem>
                       ) : (
                         <StackItem className="co-truncate co-nowrap gitops-plugin__environment-details__env-section__time-unavailable">
-                          <span>{t('gitops-plugin~Last deployed time not available')}</span>
+                          <span>{t('plugin__gitops-plugin~Last deployed time not available')}</span>
                         </StackItem> 
                       )}
                       <StackItem>
@@ -188,9 +188,9 @@ const EnvironmentDetails: React.FC<GitOpsDetailsProps> = ({
                           <SplitItem className="gitops-plugin__environment-details__env-section__deployment-history__deploymentHistoryPageLink">
                             <Link
                               to={`/envdynamic/${appName}/deploymenthistory?url=${manifestURL}&rowFilter-environment=${env.environment}`}
-                              title={t('gitops-plugin~Deployment history')}
+                              title={t('plugin__gitops-plugin~Deployment history')}
                             >
-                              {t<string>('gitops-plugin~Deployment history')}
+                              {t<string>('plugin__gitops-plugin~Deployment history')}
                             </Link>
                           </SplitItem>
                           {argocdLink && (

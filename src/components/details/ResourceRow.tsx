@@ -23,12 +23,12 @@ const ResourceRow: React.FC<ResourceRowProps> = ({
   degradedResources,
   nonSyncedResources,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
   return (
     <Split hasGutter>
       {degradedResources?.length > 0 && (
         <Tooltip
-          content={t('gitops-plugin~{{x}} of {{total}} Unhealthy', {
+          content={t('plugin__gitops-plugin~{{x}} of {{total}} Unhealthy', {
             x: degradedResources.length.toString(),
             total: resources?.length.toString() ?? '0',
           })}
@@ -43,7 +43,7 @@ const ResourceRow: React.FC<ResourceRowProps> = ({
       )}
       {nonSyncedResources.length > 0 && (
         <Tooltip
-          content={t('gitops-plugin~{{x}} of {{total}} OutOfSync', {
+          content={t('plugin__gitops-plugin~{{x}} of {{total}} OutOfSync', {
             x: nonSyncedResources.length.toString(),
             total: resources?.length.toString() ?? '0',
           })}

@@ -51,7 +51,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
   clusterRoles,
   clusterRoleBindings,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
 
   const resourcesList = [
     {
@@ -112,7 +112,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
       <StackItem className="gitops-plugin__resources">
         <Card>
           <h3 className="gitops-plugin__resources__title co-nowrap">
-            {t('gitops-plugin~Resources')}
+            {t('plugin__gitops-plugin~Resources')}
           </h3>
           <CardBody>
             <Split hasGutter>

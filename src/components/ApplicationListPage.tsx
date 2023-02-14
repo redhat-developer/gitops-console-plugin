@@ -27,7 +27,7 @@ const ApplicationListPage: React.FC = () => {
   const [appGroups, setAppGroups] = React.useState(null);
   const [emptyStateMsg, setEmptyStateMsg] = React.useState(null);
   const [namespaces, nsLoaded, nsError] = useK8sWatchResource<any[]>(projectRes);
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
 
   React.useEffect(() => {
     let ignore = false;
@@ -53,9 +53,9 @@ const ApplicationListPage: React.FC = () => {
   return (
     <div className="gitops-plugin__application-list-page">
       <Helmet>
-        <title>{t('gitops-plugin~Environments')}</title>
+        <title>{t('plugin__gitops-plugin~Environments')}</title>
       </Helmet>
-      <ListPageHeader title={t('gitops-plugin~Environments')} badge={<DevPreviewBadge />} />
+      <ListPageHeader title={t('plugin__gitops-plugin~Environments')} badge={<DevPreviewBadge />} />
       {!appGroups && !emptyStateMsg ? (
         <LoadingBox />
       ) : (
