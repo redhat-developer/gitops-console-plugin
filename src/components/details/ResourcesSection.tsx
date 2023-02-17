@@ -131,7 +131,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
                     {resourcesList.map((eachResource) => (
                       <StackItem key={eachResource.kind}>
                         <ResourceLink inline kind={eachResource.kind} />
-                        <span>{t(`gitops-plugin~${eachResource.name}`)}</span>
+                        <span>{t(`plugin__gitops-plugin~${eachResource.name}`)}</span>
                       </StackItem>
                     ))}
                   </Stack>

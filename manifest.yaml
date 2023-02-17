@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: gitops-plugin
-          image: quay.io/redhat-developer/gitops-console-plugin
+          image: quay.io/redhat-developer/gitops-console-plugin:v0.1.0
           ports:
             - containerPort: 9001
               protocol: TCP
