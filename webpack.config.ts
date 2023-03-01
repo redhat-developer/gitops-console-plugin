@@ -9,6 +9,8 @@ interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
 }
 
+const CopyPlugin = require('copy-webpack-plugin');
+
 const config: Configuration = {
   mode: "development",
   // No regular entry points. The remote container entry is handled by ConsoleRemotePlugin.
@@ -92,7 +94,12 @@ const config: Configuration = {
       writeToDisk: true,
     },
   },
-  plugins: [new ConsoleRemotePlugin()],
+  plugins: [
+    new ConsoleRemotePlugin(),
+    new CopyPlugin({
+      patterns: [{ from: '../locales', to: '../dist/locales' }],
+    }),
+  ],
   devtool: "source-map",
   optimization: {
     chunkIds: "named",

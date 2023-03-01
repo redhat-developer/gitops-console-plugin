@@ -51,7 +51,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
   clusterRoles,
   clusterRoleBindings,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
 
   const resourcesList = [
     {
@@ -112,11 +112,11 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
       <StackItem className="gitops-plugin__resources">
         <Card>
           <h3 className="gitops-plugin__resources__title co-nowrap">
-            {t('gitops-plugin~Resources')}
+            {t('plugin__gitops-plugin~Resources')}
           </h3>
           <CardBody>
             <Split hasGutter>
-              <span className="gitops-plugin__resources__list">
+              <SplitItem className="gitops-plugin__resources__list">
                 <SplitItem>
                   <Stack style={{ marginRight: 'var(--pf-global--spacer--sm)' }}>
                     {resourcesList.map((eachResource) => (
@@ -131,12 +131,12 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
                     {resourcesList.map((eachResource) => (
                       <StackItem key={eachResource.kind}>
                         <ResourceLink inline kind={eachResource.kind} />
-                        {t(`gitops-plugin~${eachResource.name}`)}
+                        <span>{t(`plugin__gitops-plugin~${eachResource.name}`)}</span>
                       </StackItem>
                     ))}
                   </Stack>
                 </SplitItem>
-              </span>
+              </SplitItem>
               <SplitItem>
                 <Stack style={{ alignItems: 'flex-end' }}>
                   {resourcesList.map((eachResource) => (

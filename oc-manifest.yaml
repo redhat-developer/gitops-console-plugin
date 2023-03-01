@@ -78,13 +78,10 @@ spec:
   type: ClusterIP
   sessionAffinity: None
 ---
-apiVersion: console.openshift.io/v1alpha1
+apiVersion: console.openshift.io/v1
 kind: ConsolePlugin
 metadata:
   name: "${PLUGIN_NAME}"
-  annotations:
-  console.openshift.io/use-i18n: "true"
-  # console.openshift.io/default-i18next-namespace: "true"
 spec:
   displayName: "Gitops Dynamic Plugin"
   service:

@@ -241,7 +241,7 @@ export const fetchAllAppGroups = async (baseURL: string, manifestURLs: string[],
 
   if (baseURL) {
     if (_.isEmpty(manifestURLs)) {
-      emptyMsg = t('gitops-plugin~No GitOps manifest URLs found');
+      emptyMsg = t('plugin__gitops-plugin~No GitOps manifest URLs found');
     } else {
       try {
         allAppGroups = _.sortBy(
@@ -253,11 +253,11 @@ export const fetchAllAppGroups = async (baseURL: string, manifestURLs: string[],
           ['name'],
         );
       } catch {
-        emptyMsg = t('gitops-plugin~Error cannot retrieve applications');
+        emptyMsg = t('plugin__gitops-plugin~Error cannot retrieve applications');
         return [allAppGroups, emptyMsg];
       }
       if (_.isEmpty(allAppGroups)) {
-        emptyMsg = t('gitops-plugin~No Application groups found');
+        emptyMsg = t('plugin__gitops-plugin~No Application groups found');
       }
     }
   }

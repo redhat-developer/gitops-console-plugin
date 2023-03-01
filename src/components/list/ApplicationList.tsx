@@ -22,7 +22,7 @@ interface ApplicationListProps {
 }
 
 const ApplicationList: React.FC<ApplicationListProps> = ({ appGroups, emptyStateMsg }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
 
   const filters: RowFilter[] = [
     {
@@ -51,7 +51,7 @@ const ApplicationList: React.FC<ApplicationListProps> = ({ appGroups, emptyState
             data={staticData}
             loaded={!emptyStateMsg}
             onFilterChange={onFilterChange}
-            nameFilterPlaceholder={t('gitops-plugin~by name')}
+            nameFilterPlaceholder={t('plugin__gitops-plugin~by name')}
             hideLabelFilter
           />
           <VirtualizedTable<GitOpsAppGroupData>

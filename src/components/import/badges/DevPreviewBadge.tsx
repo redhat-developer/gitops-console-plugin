@@ -6,7 +6,7 @@ import { Label } from '@patternfly/react-core';
 import './Badge.scss';
 
 const DevPreviewBadge: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
   return <Label className="gitops-plugin__preview-badge">{t('console-shared~Dev preview')}</Label>;
 };
 
