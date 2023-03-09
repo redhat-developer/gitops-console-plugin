@@ -59,7 +59,6 @@
     "react-i18next": "^11.14.3",
     "sass": "^1.42.1",
     "sass-loader": "^10.1.1",
-    "showdown": "1.8.6",
     "style-loader": "^2.0.0",
     "ts-loader": "^9.2.8",
     "ts-node": "^10.7.0",
