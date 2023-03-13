@@ -27,14 +27,32 @@ export const routeDecoratorIcon = (
       // Not a valid url and thus not safe to use
       return null;
     case GitProvider.GITHUB:
-      return <GithubIcon style={{ fontSize: radius }} title={t('devconsole~Edit source code')} />;
+      return (
+        <GithubIcon
+          style={{ fontSize: radius }}
+          title={t('plugin__gitops-plugin~Edit source code')}
+        />
+      );
     case GitProvider.BITBUCKET:
       return (
-        <BitbucketIcon style={{ fontSize: radius }} title={t('devconsole~Edit source code')} />
+        <BitbucketIcon
+          style={{ fontSize: radius }}
+          title={t('plugin__gitops-plugin~Edit source code')}
+        />
       );
     case GitProvider.GITLAB:
-      return <GitlabIcon style={{ fontSize: radius }} title={t('devconsole~Edit source code')} />;
+      return (
+        <GitlabIcon
+          style={{ fontSize: radius }}
+          title={t('plugin__gitops-plugin~Edit source code')}
+        />
+      );
     default:
-      return <GitAltIcon style={{ fontSize: radius }} title={t('devconsole~Edit source code')} />;
+      return (
+        <GitAltIcon
+          style={{ fontSize: radius }}
+          title={t('plugin__gitops-plugin~Edit source code')}
+        />
+      );
   }
 };

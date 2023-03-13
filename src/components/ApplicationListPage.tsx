@@ -61,7 +61,9 @@ const ApplicationListPage: React.FC = () => {
       ) : (
         <>
           <ListPageBody>
-            {t("gitops-plugin~Select an application to view the environment it's deployed in.")}
+            {t(
+              `plugin__gitops-plugin~Select an application to view the environment it's deployed in.`,
+            )}
           </ListPageBody>
           <ApplicationList appGroups={appGroups} emptyStateMsg={emptyStateMsg} />
         </>
