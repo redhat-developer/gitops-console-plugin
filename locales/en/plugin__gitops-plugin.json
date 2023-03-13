@@ -22,6 +22,7 @@
   "{{x}} of {{total}} OutOfSync": "{{x}} of {{total}} OutOfSync",
   "Deployments": "Deployments",
   "Secrets": "Secrets",
+  "Services": "Services",
   "Routes": "Routes",
   "Role Bindings": "Role Bindings",
   "Cluster Roles": "Cluster Roles",

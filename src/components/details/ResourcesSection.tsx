@@ -73,7 +73,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
       degradedResources: services ? services.reduce(getUnhealthyResources(), []) : [],
       nonSyncedResources: services ? services.reduce(getNonSyncedResources(), []) : [],
       kind: 'Services',
-      label: t(`plugin__gitops-plugin~Deployments`),
+      label: t(`plugin__gitops-plugin~Services`),
     },
     {
       resources: routes,
