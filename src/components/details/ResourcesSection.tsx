@@ -59,42 +59,42 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
       degradedResources: deployments ? deployments.reduce(getUnhealthyResources(), []) : [],
       nonSyncedResources: deployments ? deployments.reduce(getNonSyncedResources(), []) : [],
       kind: 'Deployments',
-      name: 'Deployments',
+      label: t(`plugin__gitops-plugin~Deployments`),
     },
     {
       resources: secrets,
       degradedResources: secrets ? secrets.reduce(getUnhealthyResources(), []) : [],
       nonSyncedResources: secrets ? secrets.reduce(getNonSyncedResources(), []) : [],
       kind: 'Secret',
-      name: 'Secrets',
+      label: t(`plugin__gitops-plugin~Secrets`),
     },
     {
       resources: services,
       degradedResources: services ? services.reduce(getUnhealthyResources(), []) : [],
       nonSyncedResources: services ? services.reduce(getNonSyncedResources(), []) : [],
       kind: 'Services',
-      name: 'Services',
+      label: t(`plugin__gitops-plugin~Services`),
     },
     {
       resources: routes,
       degradedResources: routes ? routes.reduce(getUnhealthyResources(), []) : [],
       nonSyncedResources: routes ? routes.reduce(getNonSyncedResources(), []) : [],
       kind: 'Route',
-      name: 'Routes',
+      label: t(`plugin__gitops-plugin~Routes`),
     },
     {
       resources: roleBindings,
       degradedResources: null,
       nonSyncedResources: roleBindings ? roleBindings.reduce(getNonSyncedResources(), []) : [],
       kind: 'RoleBinding',
-      name: 'Role Bindings',
+      label: t(`plugin__gitops-plugin~Role Bindings`),
     },
     {
       resources: clusterRoles,
       degradedResources: null,
       nonSyncedResources: clusterRoles ? clusterRoles.reduce(getNonSyncedResources(), []) : [],
       kind: 'ClusterRole',
-      name: 'Cluster Roles',
+      label: t(`plugin__gitops-plugin~Cluster Roles`),
     },
     {
       resources: clusterRoleBindings,
@@ -103,7 +103,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
         ? clusterRoleBindings.reduce(getNonSyncedResources(), [])
         : [],
       kind: 'ClusterRoleBinding',
-      name: 'Cluster Role Bindings',
+      label: t(`plugin__gitops-plugin~Cluster Role Bindings`),
     },
   ];
 
@@ -131,7 +131,7 @@ const GitOpsResourcesSection: React.FC<GitOpsResourcesSectionProps> = ({
                     {resourcesList.map((eachResource) => (
                       <StackItem key={eachResource.kind}>
                         <ResourceLink inline kind={eachResource.kind} />
-                        <span>{t(`plugin__gitops-plugin~${eachResource.name}`)}</span>
+                        {eachResource.label}
                       </StackItem>
                     ))}
                   </Stack>
