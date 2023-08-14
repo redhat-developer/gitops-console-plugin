@@ -13,7 +13,24 @@ In one terminal window, run:
 In another terminal window, run:
 
 1. `oc login` (requires [oc](https://console.redhat.com/openshift/downloads) and an [OpenShift cluster](https://console.redhat.com/openshift/create))
-2. `yarn run start-console` (requires [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io))
+2. Create a route to expose the backend service, `cluster-route.yaml`  and run `oc apply -f cluster-route.yaml`
+```
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+    name: cluster
+    namespace: openshift-gitops
+spec: 
+  to:
+    kind: Service
+    name: cluster
+  port:
+    targetPort: 8080
+  tls:
+    termination: reencrypt
+    insecureEdgeTerminationPolicy: Allow
+```
+3. `yarn run start-console` (requires [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io))
 
 This will run the OpenShift console in a container connected to the cluster
 you've logged into. The plugin HTTP server runs on port 9001 with CORS enabled.
@@ -40,10 +57,29 @@ In plugin directory, run
 1. `yarn install`
 2. `yarn run start`
 
-In your local `console/` directory, run
+In your local `console/` directory
 
+1. Sign into a new cluster and run the `oc login` command
+2. Create a route to expose the backend service, `cluster-route.yaml`  and run `oc apply -f cluster-route.yaml`
 ```
-oc login -u kubeadmin -p $(cat /path/to/install-dir/auth/kubeadmin-password)
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+    name: cluster
+    namespace: openshift-gitops
+spec: 
+  to:
+    kind: Service
+    name: cluster
+  port:
+    targetPort: 8080
+  tls:
+    termination: reencrypt
+    insecureEdgeTerminationPolicy: Allow
+```
+
+3. Set up the environment and run console with `gitops-plugin`
+```
 source ./contrib/oc-environment.sh
 ./bin/bridge -plugins gitops-plugin=http://localhost:9001/
 ```
