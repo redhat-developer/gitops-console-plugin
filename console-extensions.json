@@ -10,6 +10,12 @@
  */
 [
   {
+    "properties": {
+      "handler": { "$codeRef": "gitopsFlags.enableGitOpsDynamicFlag" }
+    },
+    "type": "console.flag"
+  },
+  {
     "type": "console.navigation/href",
     "properties": {
       "id": "gitops-environment",
