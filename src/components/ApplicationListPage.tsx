@@ -7,6 +7,7 @@ import {
   ListPageHeader,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { ProjectModel } from '@openshift-console/dynamic-plugin-sdk/lib/models';
 import { LoadingBox } from '@patternfly/quickstarts';
 
 import { fetchDataFrequency, pipelinesBaseURI } from '../const';
@@ -14,14 +15,11 @@ import { fetchDataFrequency, pipelinesBaseURI } from '../const';
 import DevPreviewBadge from './import/badges/DevPreviewBadge';
 import ApplicationList from './list/ApplicationList';
 import { fetchAllAppGroups, getManifestURLs } from './utils/gitops-utils';
+import EnvironmentEmptyState from './EnvironmentEmptyState';
 
 import './ApplicationListPage.scss';
 
-// TODO: check and match the latest code when uncomment out these imports
-// import { ProjectModel } from '@console/internal/models';
-
-// const projectRes = { isList: true, kind: ProjectModel.kind, optional: true };
-const projectRes = { isList: true, kind: 'Project', optional: true };
+const projectRes = { isList: true, kind: ProjectModel.kind, optional: true };
 
 const ApplicationListPage: React.FC = () => {
   const [appGroups, setAppGroups] = React.useState(null);
@@ -65,7 +63,13 @@ const ApplicationListPage: React.FC = () => {
               `plugin__gitops-plugin~Select an application to view the environment it's deployed in.`,
             )}
           </ListPageBody>
-          <ApplicationList appGroups={appGroups} emptyStateMsg={emptyStateMsg} />
+          {emptyStateMsg ? (
+            <div className="gitops-plugin__application-list">
+              <EnvironmentEmptyState emptyStateMsg={emptyStateMsg} />
+            </div>
+          ) : (
+            <ApplicationList appGroups={appGroups} />
+          )}
         </>
       )}
     </div>

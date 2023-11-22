@@ -8,7 +8,6 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 
-import EnvironmentEmptyState from '../EnvironmentEmptyState';
 import { GitOpsAppGroupData } from '../utils/gitops-types';
 
 import { ApplicationColumns } from './ApplicationColumns';
@@ -18,10 +17,9 @@ import './ApplicationList.scss';
 
 interface ApplicationListProps {
   appGroups: GitOpsAppGroupData[];
-  emptyStateMsg: string;
 }
 
-const ApplicationList: React.FC<ApplicationListProps> = ({ appGroups, emptyStateMsg }) => {
+const ApplicationList: React.FC<ApplicationListProps> = ({ appGroups }) => {
   const { t } = useTranslation('plugin__gitops-plugin');
 
   const filters: RowFilter[] = [
@@ -45,27 +43,21 @@ const ApplicationList: React.FC<ApplicationListProps> = ({ appGroups, emptyState
 
   return (
     <div className="gitops-plugin__application-list">
-      {!emptyStateMsg && appGroups ? (
-        <>
-          <ListPageFilter
-            data={staticData}
-            loaded={!emptyStateMsg}
-            onFilterChange={onFilterChange}
-            nameFilterPlaceholder={t('plugin__gitops-plugin~by name')}
-            hideLabelFilter
-          />
-          <VirtualizedTable<GitOpsAppGroupData>
-            data={filteredData || []}
-            unfilteredData={staticData || []}
-            loaded={!emptyStateMsg}
-            loadError={null}
-            columns={ApplicationColumns(hasSyncStatus)}
-            Row={ApplicationTableRow}
-          />
-        </>
-      ) : (
-        <EnvironmentEmptyState emptyStateMsg={emptyStateMsg} />
-      )}
+      <ListPageFilter
+        data={staticData}
+        loaded
+        onFilterChange={onFilterChange}
+        nameFilterPlaceholder={t('plugin__gitops-plugin~by name')}
+        hideLabelFilter
+      />
+      <VirtualizedTable<GitOpsAppGroupData>
+        data={filteredData || []}
+        unfilteredData={staticData || []}
+        loaded
+        loadError={false}
+        columns={ApplicationColumns(hasSyncStatus)}
+        Row={ApplicationTableRow}
+      />
     </div>
   );
 };
