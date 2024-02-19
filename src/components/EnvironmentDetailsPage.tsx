@@ -11,7 +11,7 @@ import { getEnvData } from './utils/gitops-utils';
 import EnvironmentEmptyState from './EnvironmentEmptyState';
 
 type GitOpsOverviewPageProps = {
-  appName?: string,
+  appName?: string;
   customData: {
     emptyStateMsg: string;
     envs: string[];
@@ -23,7 +23,7 @@ type EnvironmentDetailsPageProps = GitOpsOverviewPageProps;
 
 const EnvironmentDetailsPage: React.FC<EnvironmentDetailsPageProps> = (props) => {
   const { emptyStateMsg, envs, applicationBaseURI, manifestURL } = props.customData;
-  const  appName  = props.appName;
+  const appName = props.appName;
 
   const [envsData, setEnvsData] = React.useState<GitOpsEnvironment[]>(null);
   const [error, setError] = React.useState<Error>(null);

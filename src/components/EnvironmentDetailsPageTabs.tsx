@@ -12,11 +12,8 @@ import DevPreviewBadge from './import/badges/DevPreviewBadge';
 import useEnvDetails from './utils/useEnvDetails';
 import EnvironmentDetailsPage from './EnvironmentDetailsPage';
 
-//type EnvironmentDetailsPageTabsProps = RouteComponentProps<{ appName?: string }>;
-
 export const EnvironmentDetailsPageTabs: React.FC = () => {
   const { t } = useTranslation('plugin__gitops-plugin');
-  console.log("UseParams()", useParams());
   const { appName } = useParams();
   const searchParams = new URLSearchParams(location.search);
   const manifestURL = searchParams.get('url');
