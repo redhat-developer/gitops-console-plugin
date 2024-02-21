@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Helmet from 'react-helmet';
 import { useTranslation } from 'react-i18next';
-import { RouteComponentProps } from 'react-router';
+import { useParams } from 'react-router-dom-v5-compat';
 
 import { HorizontalNav, NavPage } from '@openshift-console/dynamic-plugin-sdk';
 import { LoadingBox } from '@patternfly/quickstarts';
@@ -12,13 +12,9 @@ import DevPreviewBadge from './import/badges/DevPreviewBadge';
 import useEnvDetails from './utils/useEnvDetails';
 import EnvironmentDetailsPage from './EnvironmentDetailsPage';
 
-type EnvironmentDetailsPageTabsProps = RouteComponentProps<{ appName?: string }>;
-
-export const EnvironmentDetailsPageTabs: React.FC<EnvironmentDetailsPageTabsProps> = ({
-  match,
-}) => {
+export const EnvironmentDetailsPageTabs: React.FC = () => {
   const { t } = useTranslation('plugin__gitops-plugin');
-  const { appName } = match.params;
+  const { appName } = useParams();
   const searchParams = new URLSearchParams(location.search);
   const manifestURL = searchParams.get('url');
   const applicationBaseURI = `/application/${appName}?url=${manifestURL}&app=${appName}`;

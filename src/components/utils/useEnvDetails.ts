@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as _ from 'lodash';
 
-import { pipelinesBaseURI } from '../../const';
+import { fetchDataFrequency, pipelinesBaseURI } from '../../const';
 
 import { fetchAppGroups } from './gitops-utils';
 
@@ -10,13 +10,16 @@ const useEnvDetails = (appName, manifestURL) => {
   const { t } = useTranslation('plugin__gitops-plugin');
   const [envs, setEnvs] = React.useState<string[]>(null);
   const [emptyStateMsg, setEmptyStateMsg] = React.useState(null);
+
   React.useEffect(() => {
     let ignore = false;
-
-    fetchAppGroups(pipelinesBaseURI, manifestURL)
-      .then((appGroups) => {
+    const getAppData = async () => {
+      let data;
+      try {
+        data = await fetchAppGroups(pipelinesBaseURI, manifestURL);
         if (ignore) return;
-        const app = _.find(appGroups, (appObj) => appName === appObj?.name);
+
+        const app = _.find(data, (appObj) => appName === appObj?.name);
         if (!app?.environments) {
           setEmptyStateMsg(
             t(
@@ -25,14 +28,15 @@ const useEnvDetails = (appName, manifestURL) => {
           );
         }
         setEnvs(app?.environments);
-      })
-      .catch((e) => {
-        // eslint-disable-next-line no-console
-        console.error('Unable to load EnvDetails', e);
-      });
+      } catch (err) {
+        console.error('Unable to load EnvDetails', err);
+      }
+    };
 
+    const id = setInterval(getAppData, fetchDataFrequency * 1000);
     return () => {
       ignore = true;
+      clearInterval(id);
     };
   }, [appName, manifestURL, t]);
   return [envs, emptyStateMsg];
