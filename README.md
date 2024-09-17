@@ -39,7 +39,7 @@ Navigate to <http://localhost:9000/envdynamic> to see the running plugin.
 #### Running start-console with Apple silicon and podman
 
 If you are using podman on a Mac with Apple silicon, `yarn run start-console`
-might fail since it runs an amd64 image. You can workaround the problem with
+might fail since it runs an amd64 image. You can work around the problem with
 [qemu-user-static](https://github.com/multiarch/qemu-user-static) by running
 these commands:
 
