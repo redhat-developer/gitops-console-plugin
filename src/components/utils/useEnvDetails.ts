@@ -33,6 +33,7 @@ const useEnvDetails = (appName, manifestURL) => {
       }
     };
 
+    getAppData();
     const id = setInterval(getAppData, fetchDataFrequency * 1000);
     return () => {
       ignore = true;
