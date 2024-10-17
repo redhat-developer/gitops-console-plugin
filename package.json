@@ -73,7 +73,7 @@
   "resolutions": {
     "glob-parent": "^5.1.2",
     "showdown": "^2.1.0",
-    "express": "4.20.0"
+    "express": "4.21.0"
   },
   "consolePlugin": {
     "name": "gitops-plugin",
