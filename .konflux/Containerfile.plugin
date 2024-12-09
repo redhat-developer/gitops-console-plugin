@@ -1,0 +1,40 @@
+FROM registry.access.redhat.como/ubi8/nodejs-20-minimal:1-72 as builder
+
+EXPOSE 8080
+
+ADD . /usr/src/app
+WORKDIR /usr/src/app
+RUN yarn config set network-timeout 600000 -g
+RUN yarn install && yarn build
+
+
+FROM --platform=linux/amd64 registry.access.redhat.com/ubi8/httpd-24:1-345.1732637100
+
+USER root
+RUN chown -R 1001:0 /opt/app-root/src
+USER 1001
+RUN chmod g+rwx /opt/app-root/src
+
+COPY --from=builder /usr/src/app/ssl.conf /etc/httpd/conf.d
+COPY --from=builder /usr/src/app/dist /var/www/html/plugin
+
+CMD run-httpd
+
+LABEL \
+    name="openshift-gitops-1/gitops-rhel8-console-plugin" \
+    License="Apache 2.0" \
+    com.redhat.component="openshift-gitops-console-plugin-container" \
+    com.redhat.delivery.appregistry="false" \
+    release=${CI_CONTAINER_RELEASE} \
+    upstream-vcs-type="git" \
+    upstream-version=${CI_UPSTREAM_VERSION} \
+    upstream-vcs-ref="${COMMIT_SHA}" \
+    summary="Red Hat OpenShift GitOps Console Plugin" \
+    maintainer="William Tam <wtam@redhat.com>" \
+    io.openshift.tags="openshift,gitops-console-plugin" \
+    io.k8s.display-name="Red Hat OpenShift GitOps Console Plugin" \
+    io.k8s.description="Red Hat OpenShift GitOps Console Plugin" \
+    io.openshift.maintainer.product="Red Hat OpenShift GitOps" \
+    io.openshift.maintainer.component="William Tam <wtam@redhat.com>"
+    description="Red Hat OpenShift GitOps Console Plugin"
+
