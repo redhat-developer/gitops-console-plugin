@@ -1,21 +1,27 @@
-FROM registry.redhat.io/ubi9/nodejs-22:9.5-1734358400 as builder
+FROM registry.access.redhat.com/ubi9/nodejs-18:1-118.1724037695 AS builder
 
 USER root
+RUN dnf upgrade -y && dnf install -y python3 make gcc gcc-c++
 
-EXPOSE 8080
-COPY ["package.json", "yarn.lock", "./"]
 # Install Yarn
 RUN npm install --global yarn
+
+EXPOSE 8080
+
+COPY ["package.json", "yarn.lock", "./"]
+
+RUN yarn install --no-progress --non-interactive
 
 ADD . /usr/src/app
 WORKDIR /usr/src/app
 
 RUN yarn config set network-timeout 600000 -g
 COPY [".", "."]
-RUN yarn install --no-progress --non-interactive
+
 RUN yarn build
 
 ####################################################################################################
+
 FROM --platform=linux/amd64 registry.redhat.io/ubi9/httpd-24:9.5-1733127463
 USER root
 RUN chown -R 1001:0 /opt/app-root/src
