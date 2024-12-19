@@ -1,7 +1,6 @@
 FROM registry.access.redhat.com/ubi9/nodejs-18:1-118.1724037695 AS builder
 
 USER root
-RUN dnf upgrade -y && dnf install -y python3 make gcc gcc-c++
 
 # Install Yarn
 RUN npm install --global yarn
