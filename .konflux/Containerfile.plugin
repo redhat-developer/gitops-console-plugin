@@ -3,7 +3,8 @@ FROM registry.access.redhat.com/ubi9/nodejs-18:1-118.1724037695 AS builder
 USER root
 
 # Install Yarn
-RUN npm install --global yarn
+RUN npm install -g yarn@3.3.0
+
 
 EXPOSE 8080
 
