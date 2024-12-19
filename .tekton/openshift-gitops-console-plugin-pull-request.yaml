@@ -28,6 +28,8 @@ spec:
     value: 5d
   - name: hermetic
     value: "true"
+  - name: prefetch-input
+    value: '{"type": "yarn", "path": "."}'
   - name: build-platforms
     value:
      - linux/x86_64
