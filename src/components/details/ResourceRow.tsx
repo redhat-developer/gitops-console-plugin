@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Split, SplitItem, Tooltip } from '@patternfly/react-core';
 import { ExclamationTriangleIcon, HeartBrokenIcon } from '@patternfly/react-icons';
-import RedColor from '@patternfly/react-tokens/dist/js/global_danger_color_100';
-import YellowColor from '@patternfly/react-tokens/dist/js/global_warning_color_100';
+import RedColor from '@patternfly/react-tokens/dist/esm/t_global_color_status_danger_100';
+import YellowColor from '@patternfly/react-tokens/dist/esm/t_global_color_status_warning_100';
 
 import { GitOpsEnvironmentService, GitOpsHealthResources } from '../utils/gitops-types';
 

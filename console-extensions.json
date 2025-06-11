@@ -1,13 +1,3 @@
-/**
- * This file declares all extensions contributed by the plugin.
- *
- * Depending on extension 'type', the 'properties' object may contain code references, encoded
- * as object literals { $codeRef: string }. The '$codeRef' value should be formatted as either
- * 'moduleName.exportName' (referring to a named export) or 'moduleName' (referring to the
- * 'default' export). Only the plugin's exposed modules may be used in code references.
- *
- * TODO: update properties.name and properties.href
- */
 [
   {
     "properties": {
@@ -47,6 +37,170 @@
       "component": { "$codeRef": "detailsPage" },
       "exact": false,
       "path": "/envdynamic/:appName"
+    }
+  },
+  {
+    "type": "console.flag/hookProvider",
+    "properties": {
+      "handler": { "$codeRef": "gitopsFlags.detectOpenShiftVersion" }
+    }
+  },
+  {
+    "type": "console.flag/model",
+    "properties": {
+      "model": {
+        "group": "argoproj.io",
+        "version": "v1alpha1",
+        "kind": "Rollout"
+      },
+      "flag": "ARGO_ROLLOUT"
+    }
+  },
+  {
+    "type": "console.topology/data/factory",
+    "properties": {
+      "id": "gitops-rollouts-topology-data-factory-dynamic-plugin",
+      "priority": "300",
+      "resources": {
+        "rollouts": {
+          "model": {
+            "group": "argoproj.io",
+            "version": "v1alpha1",
+            "kind": "Rollout"
+          },
+          "opts": { "isList": true, "optional": true, "namespaced": true }
+        }
+      },
+      "getDataModel": {
+        "$codeRef": "topology.getRolloutTopologyDataModel"
+      }
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+    }
+  },
+  {
+    "type": "console.topology/component/factory",
+    "properties": {
+      "getFactory": {
+        "$codeRef": "topology.getRolloutViewComponentFactory"
+      }
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+    }
+  },
+  {
+    "type": "console.topology/details/tab",
+    "properties": {
+      "id": "gitops-rollouts-topology-side-bar-tab-details",
+      "label": "Details",
+      "priority": "1000",      
+      "insertBefore": "topology-side-bar-tab-resource"
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+    }
+  },
+  {
+    "type": "console.topology/details/tab",
+    "properties": {
+      "id": "gitops-rollouts-topology-side-bar-tab-overview",
+      "label": "Overview"
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+    }
+  },
+  {
+    "type": "console.topology/details/tab-section",
+    "properties": {
+      "id": "gitops-rollouts-topology-sidebar-details-tab-section",
+      "tab": "gitops-rollouts-topology-side-bar-tab-details",
+      "provider": { "$codeRef": "topology.useRolloutSideBarDetails" },
+      "insertBefore": "gitops-rollouts-topology-sidebar-resource-tab-section" 
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+    }
+  },
+  {
+    "type": "console.topology/details/tab-section",
+    "properties": {
+      "id": "gitops-rollouts-topology-sidebar-resource-tab-section",
+      "tab": "topology-side-bar-tab-resource",
+      "provider": { "$codeRef": "topology.useOperatorBackedPanelResourceSection" }
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+    }
+  },
+  {
+    "type": "console.action/provider",
+    "properties": {
+      "contextId": "topology-actions",
+      "provider": { "$codeRef": "topology.useGitOpsActionProviderForTopology" }
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+    }
+  },
+  {
+    "type": "console.action/provider",
+    "properties": {
+      "contextId": "topology-context-actions",
+      "provider": { "$codeRef": "topology.useTopologyActionProvider" }
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+    }
+  },
+  {
+    "type": "console.model-metadata",
+    "properties": {
+      "model": {
+        "group": "argoproj.io",
+        "version": "v1alpha1",
+        "kind": "Rollout"
+      },
+      "badge": "dev",
+      "color": "#E9654B",
+      "label": "Argo Rollout",
+      "labelPlural": "Argo Rollouts",
+      "abbr": "AR"
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+    }
+  },
+  {
+    "type": "console.model-metadata",
+    "properties": {
+      "model": {
+        "group": "argoproj.io",
+        "version": "v1alpha1",
+        "kind": "RolloutManager"
+      },
+      "badge": "dev",
+      "color": "#E9654B",
+      "label": "Argo Rollout Manager",
+      "labelPlural": "Argo Rollout Managers",
+      "abbr": "ARM"
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+    }
+  },
+  {
+    "type": "console.topology/decorator/provider",
+    "properties": {
+      "id": "argo-rollout-node-decorator",
+      "priority": 100,
+      "quadrant": "upperRight",
+      "decorator": { "$codeRef": "topology.getArgoRolloutNodeDecorator" }
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
     }
   }
 ]
