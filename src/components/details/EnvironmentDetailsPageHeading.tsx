@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { Breadcrumb, BreadcrumbItem, Button } from '@patternfly/react-core';
 
@@ -21,14 +21,14 @@ const EnvironmentDetailsPageHeading: React.FC<EnvironmentDetailsPageHeadingProps
   badge,
 }) => {
   const { t } = useTranslation('plugin__gitops-plugin');
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <>
       <div className="pf-c-page__main-breadcrumb">
         <Breadcrumb className="co-breadcrumb">
           <BreadcrumbItem>
-            <Button onClick={() => history.push('/envdynamic')} isInline variant="link">
+            <Button onClick={() => navigate('/envdynamic')} isInline variant="link">
               {t('plugin__gitops-plugin~Environments')}
             </Button>
           </BreadcrumbItem>

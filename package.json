@@ -73,12 +73,12 @@
   "resolutions": {
     "glob-parent": "^5.1.2",
     "showdown": "^2.1.0",
-    "express": "4.21.0",
+    "express": "4.21.2",
     "@types/jest": "21.x",
     "hosted-git-info": "^3.0.8",
     "jquery": "3.5.1",
     "lodash-es": "^4.17.21",
-    "minimist": "1.2.5",
+    "minimist": "1.2.6",
     "ua-parser-js": "^0.7.24",
     "jest": "21.x",
     "postcss": "^8.2.13"
@@ -104,9 +104,7 @@
     "react": "17.0.1",
     "react-helmet": "^6.1.0",
     "react-redux": "7.2.9",
-    "react-router": "5.3.x",
-    "react-router-dom": "5.3.x",
-    "react-router-dom-v5-compat": "^6.22.0",
+    "react-router-dom-v5-compat": "^6.30.0",
     "react-router-hash-link": "2.4.3",
     "redux": "4.0.1"
   },
