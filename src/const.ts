@@ -8,3 +8,5 @@ export const environmentBaseURIV2 = `/api/gitops/environment`;
 export const fetchDataFrequency = 30;
 
 export const FLAG_GITOPS_DYNAMIC = 'GITOPS_DYNAMIC';
+
+export const FLAG_GITOPS_ENABLE_TOPOLOGY = 'GITOPS_ENABLE_TOPOLOGY';
