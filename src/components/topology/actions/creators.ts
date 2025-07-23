@@ -1,26 +1,10 @@
 import { Action, K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
 
-export const getDeleteRolloutAction = (obj: K8sResourceKind): Action => ({
+export const getDeleteRolloutAction = (deleteModal: () => void): Action => ({
   id: 'delete-rollout',
   label: 'Delete Rollout',
   cta: () => {
-    console.log('GitOps: DeleteRolloutAction disabled for ' + obj?.metadata?.name);
-    // Dependency on console. We need to implement later
-    // deleteResourceModal({
-    //   blocking: true,
-    //   resourceName: rollout,
-    //   resourceType: 'Rollout',
-    //   actionLabel: t('Delete'),
-    //   redirect,
-    //   onSubmit: () => {
-    //     return coFetchJSON.delete(
-    //       `/api/helm/release/async?name=${releaseName}&ns=${namespace}&version=${releaseVersion}`,
-    //       null,
-    //       null,
-    //       -1,
-    //     );
-    //   },
-    // });
+    deleteModal();
   },
 });
 
