@@ -202,5 +202,14 @@
     "flags": {
       "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
     }
+  },
+  {
+    "type": "console.navigation/section",
+    "properties": {
+        "id": "gitops-navigation-section",
+        "insertAfter": "workloads",
+        "perspective": "admin",
+        "name": "%plugin__gitops-plugin~GitOps%"
+    }
   }
 ]
