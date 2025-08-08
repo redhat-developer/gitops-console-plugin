@@ -1,0 +1,22 @@
+{
+  "Error": "Error",
+  "Receiving Traffic": "Receiving Traffic",
+  "Not Receiving Traffic": "Not Receiving Traffic",
+  "View logs": "View logs",
+  "Edit": "Edit",
+  "Name": "Name",
+  "Namespace": "Namespace",
+  "Annotations": "Annotations",
+  "No annotations": "No annotations",
+  "Labels": "Labels",
+  "No labels": "No labels",
+  "Update Strategy": "Update Strategy",
+  "Replicas": "Replicas",
+  "Revision History Limit": "Revision History Limit",
+  "Deployment": "Deployment",
+  "Deployments": "Deployments",
+  "ReplicaSet": "ReplicaSet",
+  "ReplicaSets": "ReplicaSets",
+  "ClusterVersion": "ClusterVersion",
+  "ClusterVersions": "ClusterVersions"
+}

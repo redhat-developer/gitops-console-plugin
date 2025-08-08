@@ -9,6 +9,12 @@
     "strict": false,
     "noUnusedLocals": true,
     "lib": ["dom", "es2017"],
+    "paths": {
+      "@gitops/*": ["src/gitops/*"],
+      "@gitops-models/*": ["src/gitops/models/*"],
+      "@gitops-services/*": ["src/gitops/services/*"],
+      "@gitops-shared/*": ["src/gitops/components/shared/*"]
+    }
   },
   "include": ["src"]
 }

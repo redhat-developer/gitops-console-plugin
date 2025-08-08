@@ -39,6 +39,7 @@
   "Author": "작성자",
   "Revision": "개정 버전",
   "Dev preview": "개발자 미리보기",
+  "Tech preview": "Tech preview",
   "Edit source code": "소스 코드 편집",
   "Application name": "애플리케이션 이름",
   "Git repository": "Git 리포지터리",
@@ -50,5 +51,17 @@
   "No GitOps manifest URLs found": "GitOps 매니페스트 URL을 찾을 수 없습니다",
   "Error cannot retrieve applications": "오류로 인해 애플리케이션을 검색할 수 없습니다",
   "No Application groups found": "애플리케이션 그룹을 찾을 수 없습니다",
-  "Environment details were not found. Try reloading the page or contacting an administrator.": "환경 세부 정보를 찾을 수 없습니다. 페이지를 새로 고침하거나 관리자에게 문의하십시오."
+  "Environment details were not found. Try reloading the page or contacting an administrator.": "환경 세부 정보를 찾을 수 없습니다. 페이지를 새로 고침하거나 관리자에게 문의하십시오.",
+  "Applications": "Applications",
+  "Name": "Name",
+  "Sync": "Sync",
+  "Stop": "Stop",
+  "Refresh": "Refresh",
+  "Refresh (Hard)": "Refresh (Hard)",
+  "Edit labels": "Edit labels",
+  "Edit annotations": "Edit annotations",
+  "Edit Application": "Edit Application",
+  "Delete Application": "Delete Application",
+  "Actions": "Actions",
+  "You don't have permission to perform this action": "You don't have permission to perform this action"
 }

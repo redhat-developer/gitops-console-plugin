@@ -39,6 +39,7 @@
   "Author": "Author",
   "Revision": "Revision",
   "Dev preview": "Dev preview",
+  "Tech preview": "Tech preview",
   "Edit source code": "Edit source code",
   "Application name": "Application name",
   "Git repository": "Git repository",
@@ -50,5 +51,17 @@
   "No GitOps manifest URLs found": "No GitOps manifest URLs found",
   "Error cannot retrieve applications": "Cannot retrieve applications. Ensure the Argo CD applications are available and check the log for the 'cluster' pod created by the GitOps Operator.",
   "No Application groups found": "No Application groups found",
-  "Environment details were not found. Try reloading the page or contacting an administrator.": "Environment details were not found. Try reloading the page or contacting an administrator."
+  "Environment details were not found. Try reloading the page or contacting an administrator.": "Environment details were not found. Try reloading the page or contacting an administrator.",
+  "Applications": "Argo CD Applications",
+  "Name": "Name",
+  "Sync": "Sync",
+  "Stop": "Stop",
+  "Refresh": "Refresh",
+  "Refresh (Hard)": "Refresh (Hard)",
+  "Edit labels": "Edit labels",
+  "Edit annotations": "Edit annotations",
+  "Edit Application": "Edit Application",
+  "Delete Application": "Delete Application",
+  "Actions": "Actions",
+  "You don't have permission to perform this action": "You don't have permission to perform this action"
 }
