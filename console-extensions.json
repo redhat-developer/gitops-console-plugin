@@ -211,5 +211,102 @@
         "perspective": "admin",
         "name": "%plugin__gitops-plugin~GitOps%"
     }
+  },
+  {
+    "type": "console.model-metadata",
+    "properties": {
+      "model": {
+        "group": "argoproj.io",
+        "version": "v1alpha1",
+        "kind": "Application"
+      },
+      "badge": "dev",
+      "color": "#E9654B",
+      "label": "Argo CD Application",
+      "labelPlural": "Argo CD Applications",
+      "abbr": "A"
+    },
+    "flags": {
+      "required": ["APPLICATION"]
+    }
+  },
+  {
+    "type": "console.model-metadata",
+    "properties": {
+      "model": {
+        "group": "argoproj.io",
+        "version": "v1alpha1",
+        "kind": "AppProject"
+      },
+      "color": "#E9654B",
+      "label": "Argo CD App Project",
+      "labelPlural": "Argo CD App Projects",
+      "abbr": "AP"
+    },
+    "flags": {
+      "required": ["APPLICATION"]
+    }
+  },
+  {
+    "type": "console.flag/model",
+    "properties": {
+        "flag": "APPLICATION",
+        "model": {
+            "group": "argoproj.io",
+            "kind": "Application",
+            "version": "v1alpha1"
+        }
+    }
+  },
+  {
+    "type": "console.navigation/resource-ns",
+    "properties": {
+        "id": "application",
+        "name": "Applications",
+        "perspective": "admin",
+        "section": "gitops-navigation-section",
+        "model": {
+            "group": "argoproj.io",
+            "kind": "Application",
+            "version": "v1alpha1"
+        }
+    }
+  },
+  {
+    "type": "console.page/resource/list",
+    "flags": {
+        "required": [
+            "APPLICATION"
+        ]
+    },
+    "properties": {
+        "model": {
+            "group": "argoproj.io",
+            "kind": "Application",
+            "version": "v1alpha1"
+        },
+        "component": {
+            "$codeRef": "ApplicationList"
+        }
+    }
+  },
+  {
+    "type": "console.yaml-template",
+    "flags": {
+        "required": [
+            "APPLICATION"
+        ]
+    },
+    "properties": {
+        "name": "default",
+        "model": {
+            "group": "argoproj.io",
+            "kind": "Application",
+            "version": "v1alpha1"
+        },
+        "template": {
+            "$codeRef": "yamlApplicationTemplates.defaultApplicationYamlTemplate"
+        }
+    }
   }
 ]
