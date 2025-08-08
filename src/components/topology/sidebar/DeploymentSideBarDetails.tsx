@@ -10,6 +10,7 @@ import {
   K8sResourceKindReference,
   ResourceLink,
   useAccessReview,
+  useAnnotationsModal,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { getK8sModel } from '@openshift-console/dynamic-plugin-sdk/lib/utils/k8s/hooks/useK8sModel';
@@ -143,7 +144,7 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
   const hide = hideEmpty && _.isEmpty(_.get(obj, path));
   const popoverContent: string = description; // ?? getPropertyDescription(model, path);
   const value: React.ReactNode = children || _.get(obj, path, defaultValue);
-  const editable = false; // onEdit && canEdit;
+  const editable = onEdit && canEdit;
   return hide ? null : (
     <DescriptionListGroup>
       <DescriptionListTermHelpText
@@ -209,6 +210,8 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
   const { t } = useTranslation();
   const model = getK8sModel(d);
   const labelsModalLauncher = useLabelsModal(d);
+  const annotationsModalLauncher = useAnnotationsModal(d);
+
   const canUpdateAccess = useAccessReview({
     group: model?.apiGroup,
     resource: model?.plural,
@@ -218,10 +221,22 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
   });
   const canUpdate = canUpdateAccess && true;
   const labelItems = _.map(d.metadata?.labels, (label, key) => (
-    <Label key={key} kind={d.kind} name={key} value={label} expand={true} />
+    <Label
+      key={key}
+      kind={d.apiVersion.replace('/', '~') + '~' + d.kind}
+      name={key}
+      value={label}
+      expand={true}
+    />
   ));
   const annotationItems = _.map(d.metadata?.annotations, (annotation, key) => (
-    <Label key={key} kind={rolloutKind.kind} name={key} value={annotation} expand={true} />
+    <Label
+      key={key}
+      kind={d.apiVersion.replace('/', '~') + '~' + d.kind}
+      name={key}
+      value={annotation}
+      expand={true}
+    />
   ));
   const strategy = d.spec?.strategy?.blueGreen ? 'Blue Green' : 'Canary';
   return (
@@ -248,7 +263,7 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
               label={t('public~Annotations')}
               obj={d}
               path="metadata.annotations"
-              onEdit={labelsModalLauncher}
+              onEdit={annotationsModalLauncher}
               canEdit={canUpdate}
               editAsGroup
             >
