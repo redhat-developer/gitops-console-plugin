@@ -56,7 +56,7 @@ export const useApplicationSetActionsProvider: UseApplicationSetActionsProvider 
       {
         id: 'gitops-action-edit-applicationset',
         disabled: false,
-        label: t('Edit Application Set'),
+        label: t('Edit ApplicationSet'),
         accessReview: {
           group: ApplicationSetModel.apiGroup,
           verb: 'update' as K8sVerb,
@@ -72,7 +72,7 @@ export const useApplicationSetActionsProvider: UseApplicationSetActionsProvider 
       {
         id: 'gitops-action-delete-applicationset',
         disabled: false,
-        label: t('Delete Application Set'),
+        label: t('Delete ApplicationSet'),
         accessReview: {
           group: ApplicationSetModel.apiGroup,
           verb: 'delete' as K8sVerb,

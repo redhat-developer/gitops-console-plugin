@@ -257,8 +257,8 @@
       },
       "badge": "dev",
       "color": "#E9654B",
-      "label": "Argo CD Application Set",
-      "labelPlural": "Argo CD Application Sets",
+      "label": "Argo CD ApplicationSet",
+      "labelPlural": "Argo CD ApplicationSets",
       "abbr": "AS"
     },
     "flags": {
@@ -305,7 +305,7 @@
     "type": "console.navigation/resource-ns",
     "properties": {
         "id": "applicationset",
-        "name": "Application Sets",
+        "name": "ApplicationSets",
         "perspective": "admin",
         "section": "gitops-navigation-section",
         "model": {
