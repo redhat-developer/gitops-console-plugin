@@ -7,17 +7,18 @@ spec:
   generators:
     - list:
         elements:
-          - cluster: "in-cluster"
+          - name: "myapp"
+            cluster: "in-cluster"
             url: "https://kubernetes.default.svc"
   template:
     metadata:
       name: "{{name}}-{{cluster}}"
     spec:
-      project: "default"
+      project: default
       source:
-        repoURL: "https://github.com/argoproj/argocd-example-apps"
+        repoURL: "https://"
         targetRevision: HEAD
-        path: "guestbook"
+        path: "."
       destination:
         server: "{{url}}"
         namespace: "{{name}}"
