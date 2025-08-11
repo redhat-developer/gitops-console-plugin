@@ -63,5 +63,13 @@
   "Edit Application": "Edit Application",
   "Delete Application": "Delete Application",
   "Actions": "Actions",
-  "You don't have permission to perform this action": "You don't have permission to perform this action"
+  "You don't have permission to perform this action": "You don't have permission to perform this action",
+  "Application Sets": "Application Sets",
+  "Create Application Set": "Create Application Set",
+  "No Application Sets found": "No Application Sets found",
+  "Edit Application Set": "Edit Application Set",
+  "Delete Application Set": "Delete Application Set",
+  "Generators": "Generators",
+  "Healthy": "Healthy",
+  "Error": "Error"
 }
