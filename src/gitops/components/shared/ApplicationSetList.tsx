@@ -14,7 +14,7 @@ import {
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody, Spinner } from '@patternfly/react-core';
+import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
 import {
   DataViewTable,
   DataViewTh,
@@ -29,6 +29,15 @@ import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetA
 import { ApplicationSetStatus } from '../../utils/constants';
 import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
 import { getAppSetStatus, getAppSetGeneratorCount } from '../../utils/gitops';
+import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
+import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
+
+// Import status icons for consistency with ApplicationList
+import {
+  HealthDegradedIcon,
+  HealthHealthyIcon,
+  HealthUnknownIcon,
+} from '../../utils/components/Icons/Icons';
 
 const getGeneratorType = (appSet: ApplicationSetKind): string => {
   if (!appSet.spec?.generators || appSet.spec.generators.length === 0) {
@@ -47,8 +56,39 @@ const getGeneratorType = (appSet: ApplicationSetKind): string => {
   
   return 'Unknown';
 };
-import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
-import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
+
+// Helper function to get generated applications count
+const getGeneratedAppsCount = (appSet: ApplicationSetKind, applications: any[], appsLoaded: boolean): number => {
+  if (!applications || !appsLoaded) return 0;
+  
+  return applications.filter((app: any) => {
+    if (!app.metadata?.ownerReferences) return false;
+    return app.metadata.ownerReferences.some((owner: any) => 
+      owner.kind === 'ApplicationSet' && owner.name === appSet.metadata.name
+    );
+  }).length;
+};
+
+const ApplicationSetStatusFragment: React.FC<{ status: string }> = ({ status }) => {
+  let targetIcon: React.ReactNode;
+  
+  switch (status) {
+    case ApplicationSetStatus.HEALTHY:
+      targetIcon = <HealthHealthyIcon />;
+      break;
+    case ApplicationSetStatus.ERROR:
+      targetIcon = <HealthDegradedIcon />;
+      break;
+    default:
+      targetIcon = <HealthUnknownIcon />;
+  }
+
+  return (
+    <span>
+      {targetIcon} {status}
+    </span>
+  );
+};
 
 interface ApplicationSetProps {
   namespace: string;
@@ -59,7 +99,7 @@ interface ApplicationSetProps {
 const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   namespace,
   hideNameLabelFilters,
-  showTitle = true,
+  showTitle,
 }) => {
   const [applicationSets, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
@@ -72,7 +112,19 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     namespace,
   });
 
-  const { t } = useTranslation();
+  // Watch Applications to count generated apps
+  const [applications, appsLoaded] = useK8sWatchResource<K8sResourceCommon[]>({
+    isList: true,
+    groupVersionKind: {
+      group: 'argoproj.io',
+      kind: 'Application',
+      version: 'v1alpha1',
+    },
+    namespaced: true,
+    namespace,
+  });
+
+  const { t } = useTranslation('plugin__gitops-plugin');
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
@@ -88,51 +140,17 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     columnIndex,
   });
 
-  const rowFilters: RowFilter[] = React.useMemo(
-    () => [
-      {
-        filterGroupName: t('Status'),
-        type: 'application-set-status',
-        reducer: (appSet: ApplicationSetKind) => getAppSetStatus(appSet),
-        filter: (input, appSet: ApplicationSetKind) => {
-          if (!input.selected?.length) {
-            return true;
-          }
-          return input.selected.includes(getAppSetStatus(appSet));
-        },
-        items: [
-          { id: ApplicationSetStatus.HEALTHY, title: t('Healthy') },
-          { id: ApplicationSetStatus.ERROR, title: t('Error') },
-          { id: ApplicationSetStatus.UNKNOWN, title: t('Unknown') },
-        ],
-      },
-    ],
-    [t],
-  );
-
-  const columns = useColumnsDV(namespace, getSortParams);
+  const columnsDV = useColumnsDV(namespace, getSortParams);
   const sortedApplicationSets = React.useMemo(() => {
     return sortData(applicationSets as ApplicationSetKind[], sortBy, direction);
   }, [applicationSets, sortBy, direction]);
-  const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, rowFilters);
-  const rows = useApplicationSetRowsDV(filteredData, namespace);
-
-  if (loadError) {
-    return <ErrorState />;
-  }
-
-  if (!loaded) {
-    return (
-      <div style={{ textAlign: 'center' }}>
-        <Spinner />
-      </div>
-    );
-  }
+  const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, filters);
+  const rows = useApplicationSetRowsDV(filteredData, namespace, applications, appsLoaded);
 
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columns.length}>
+        <Td colSpan={columnsDV.length}>
           <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No Argo CD ApplicationSets">
             <EmptyStateBody>
               There are no Argo CD ApplicationSets in {namespace ? 'this project' : 'all projects'}.
@@ -146,7 +164,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   const error = loadError && (
     <Tbody>
       <Tr key="loading" ouiaId={'table-tr-loading'}>
-        <Td colSpan={columns.length}>
+        <Td colSpan={columnsDV.length}>
           <ErrorState
             titleText="Unable to load data"
             bodyText="There was an error retrieving applicationsets. Check your connection and reload the page."
@@ -165,10 +183,10 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
 
   return (
     <div>
-      {showTitle && (
-        <ListPageHeader title={t('ApplicationSets')}>
+      {showTitle == undefined && (
+        <ListPageHeader title={t('plugin__gitops-plugin~ApplicationSets')}>
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>
-            {t('Create ApplicationSet')}
+            Create ApplicationSet
           </ListPageCreate>
         </ListPageHeader>
       )}
@@ -177,76 +195,20 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
           <ListPageFilter
             data={data}
             loaded={loaded}
-            rowFilters={rowFilters}
+            rowFilters={filters}
             onFilterChange={onFilterChange}
           />
         )}
         <DataView activeState={currentActiveState}>
           <DataViewTable
             rows={rows}
-            columns={columns}
+            columns={columnsDV}
             bodyStates={loadError ? { error } : { empty }}
           />
         </DataView>
       </ListPageBody>
     </div>
   );
-};
-
-export const sortData = (
-  data: ApplicationSetKind[],
-  sortBy: string | undefined,
-  direction: 'asc' | 'desc' | undefined,
-) => {
-  if (!sortBy || !direction) {
-    return data;
-  }
-
-  return [...data].sort((a, b) => {
-    let aValue: any;
-    let bValue: any;
-
-    switch (sortBy) {
-      case 'name':
-        aValue = a.metadata?.name || '';
-        bValue = b.metadata?.name || '';
-        break;
-      case 'namespace':
-        aValue = a.metadata?.namespace || '';
-        bValue = b.metadata?.namespace || '';
-        break;
-      case 'status':
-        aValue = getAppSetStatus(a);
-        bValue = getAppSetStatus(b);
-        break;
-      case 'generators':
-        aValue = getAppSetGeneratorCount(a);
-        bValue = getAppSetGeneratorCount(b);
-        break;
-      case 'generator-type':
-        aValue = getGeneratorType(a);
-        bValue = getGeneratorType(b);
-        break;
-      default:
-        return 0;
-    }
-
-    if (direction === 'asc') {
-      if (aValue < bValue) {
-        return -1;
-      } else if (aValue > bValue) {
-        return 1;
-      }
-      return 0;
-    } else {
-      if (aValue > bValue) {
-        return -1;
-      } else if (aValue < bValue) {
-        return 1;
-      }
-      return 0;
-    }
-  });
 };
 
 const ApplicationSetActionsCell: React.FC<{ appSet: ApplicationSetKind }> = ({ appSet }) => {
@@ -262,7 +224,7 @@ const ApplicationSetActionsCell: React.FC<{ appSet: ApplicationSetKind }> = ({ a
   );
 };
 
-const useApplicationSetRowsDV = (applicationSetsList, namespace): DataViewTr[] => {
+const useApplicationSetRowsDV = (applicationSetsList, namespace, applications, appsLoaded): DataViewTr[] => {
   const rows: DataViewTr[] = [];
   applicationSetsList.forEach((appSet: ApplicationSetKind, index: number) => {
     rows.push([
@@ -293,25 +255,24 @@ const useApplicationSetRowsDV = (applicationSetsList, namespace): DataViewTr[] =
         id: getAppSetStatus(appSet),
         cell: (
           <div>
-            <span style={{ 
-              color: getAppSetStatus(appSet) === 'Healthy' ? '#3e8635' : 
-                     getAppSetStatus(appSet) === 'Error' ? '#c9190b' : '#6a6e73'
-            }}>
-              {getAppSetStatus(appSet)}
-            </span>
+            <ApplicationSetStatusFragment status={getAppSetStatus(appSet)} />
           </div>
         ),
+      },
+      {
+        id: getGeneratedAppsCount(appSet, applications, appsLoaded).toString(),
+        cell: getGeneratedAppsCount(appSet, applications, appsLoaded).toString(),
       },
       {
         id: getAppSetGeneratorCount(appSet).toString(),
         cell: getAppSetGeneratorCount(appSet).toString(),
       },
       {
-        id: 'generator-type-' + index.toString(),
+        id: 'generator-type-' + index,
         cell: getGeneratorType(appSet),
       },
       {
-        id: 'actions-' + index.toString(),
+        id: 'actions-' + index,
         cell: <ApplicationSetActionsCell appSet={appSet} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
@@ -322,15 +283,15 @@ const useApplicationSetRowsDV = (applicationSetsList, namespace): DataViewTr[] =
 
 const useColumnsDV = (namespace, getSortParams) => {
   const i: number = namespace ? 1 : 0;
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
       id: 'name',
-      cell: t('Name'),
+      cell: t('plugin__gitops-plugin~Name'),
       props: {
         key: 'name',
         'aria-label': 'name',
-        className: 'pf-m-width-25',
+        className: 'pf-m-width-20',
         sort: getSortParams('name', 0),
       },
     },
@@ -338,11 +299,11 @@ const useColumnsDV = (namespace, getSortParams) => {
       ? [
           {
             id: 'namespace',
-            cell: t('Namespace'),
+            cell: 'Namespace',
             props: {
               key: 'namespace',
               'aria-label': 'namespace',
-              className: 'pf-m-width-15',
+              className: 'pf-m-width-12',
               sort: getSortParams('namespace', 1),
             },
           },
@@ -350,45 +311,129 @@ const useColumnsDV = (namespace, getSortParams) => {
       : []),
     {
       id: 'status',
-      cell: t('Status'),
+      cell: 'Health Status',
       props: {
         key: 'status',
-        'aria-label': 'status',
-        className: 'pf-m-width-15',
+        'aria-label': 'health status',
+        className: 'pf-m-width-12',
         sort: getSortParams('status', 1 + i),
       },
     },
     {
+      id: 'generated-apps',
+      cell: 'Generated Apps',
+      props: {
+        key: 'generated-apps',
+        'aria-label': 'generated apps',
+        className: 'pf-m-width-12',
+        sort: getSortParams('generated-apps', 2 + i),
+      },
+    },
+    {
       id: 'generators',
-      cell: t('Generators'),
+      cell: 'Generators',
       props: {
         key: 'generators',
         'aria-label': 'generators',
-        className: 'pf-m-width-15',
-        sort: getSortParams('generators', 2 + i),
+        className: 'pf-m-width-12',
+        sort: getSortParams('generators', 3 + i),
       },
     },
     {
       id: 'generator-type',
-      cell: t('Generator Type'),
+      cell: 'Generator Type',
       props: {
         key: 'generator-type',
         'aria-label': 'generator type',
         className: 'pf-m-width-20',
-        sort: getSortParams('generator-type', 3 + i),
+        sort: getSortParams('generator-type', 4 + i),
       },
     },
     {
       id: 'actions',
       cell: '',
-      props: {
-        key: 'actions',
-        'aria-label': 'actions',
-        className: 'pf-m-width-10',
-      },
+      props: { 'aria-label': 'actions' },
     },
   ];
   return columns;
+};
+
+export const filters: RowFilter[] = [
+  {
+    filterGroupName: 'Health Status',
+    type: 'application-set-status',
+    reducer: (applicationSet) => getAppSetStatus(applicationSet),
+    filter: (input, applicationSet) => {
+      if (input.selected?.length && applicationSet) {
+        return input.selected.includes(getAppSetStatus(applicationSet));
+      } else {
+        return true;
+      }
+    },
+    items: [
+      { id: ApplicationSetStatus.HEALTHY, title: ApplicationSetStatus.HEALTHY },
+      { id: ApplicationSetStatus.ERROR, title: ApplicationSetStatus.ERROR },
+      { id: ApplicationSetStatus.UNKNOWN, title: ApplicationSetStatus.UNKNOWN },
+    ],
+  },
+];
+
+export const sortData = (
+  data: ApplicationSetKind[],
+  sortBy: string | undefined,
+  direction: 'asc' | 'desc' | undefined,
+) => {
+  if (!sortBy || !direction) return data;
+
+  return [...data].sort((a, b) => {
+    let aValue: any, bValue: any;
+
+    switch (sortBy) {
+      case 'name':
+        aValue = a.metadata?.name || '';
+        bValue = b.metadata?.name || '';
+        break;
+      case 'namespace':
+        aValue = a.metadata?.namespace || '';
+        bValue = b.metadata?.namespace || '';
+        break;
+      case 'status':
+        aValue = getAppSetStatus(a);
+        bValue = getAppSetStatus(b);
+        break;
+      case 'generated-apps':
+        aValue = getGeneratedAppsCount(a, [], false);
+        bValue = getGeneratedAppsCount(b, [], false);
+        break;
+
+      case 'generators':
+        aValue = getAppSetGeneratorCount(a);
+        bValue = getAppSetGeneratorCount(b);
+        break;
+      case 'generator-type':
+        aValue = getGeneratorType(a);
+        bValue = getGeneratorType(b);
+        break;
+      default:
+        return 0;
+    }
+
+    if (direction === 'asc') {
+      if (aValue < bValue) {
+        return -1;
+      } else if (aValue > bValue) {
+        return 1;
+      }
+      return 0;
+    } else {
+      if (aValue > bValue) {
+        return -1;
+      } else if (aValue < bValue) {
+        return 1;
+      }
+      return 0;
+    }
+  });
 };
 
 export default ApplicationSetList;
