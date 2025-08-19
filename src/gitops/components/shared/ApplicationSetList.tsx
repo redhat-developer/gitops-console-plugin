@@ -39,22 +39,26 @@ import {
   HealthUnknownIcon,
 } from '../../utils/components/Icons/Icons';
 
-const getGeneratorType = (appSet: ApplicationSetKind): string => {
-  if (!appSet.spec?.generators || appSet.spec.generators.length === 0) {
-    return 'None';
+
+
+const formatCreationTimestamp = (timestamp: string): string => {
+  if (!timestamp) return '-';
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diffInMinutes = (now.getTime() - date.getTime()) / (1000 * 60);
+  
+  if (diffInMinutes < 60) {
+    return `${Math.floor(diffInMinutes)}m ago`;
+  } else if (diffInMinutes < 60 * 24) {
+    const hours = Math.floor(diffInMinutes / 60);
+    const minutes = Math.floor(diffInMinutes % 60);
+    return minutes > 0 ? `${hours}h ${minutes}m ago` : `${hours}h ago`;
+  } else if (diffInMinutes < 60 * 24 * 7) {
+    const days = Math.floor(diffInMinutes / (60 * 24));
+    return `${days}d ago`;
+  } else {
+    return date.toLocaleDateString();
   }
-  
-  const firstGenerator = appSet.spec.generators[0];
-  if (firstGenerator.list) return 'List';
-  if (firstGenerator.clusters) return 'Clusters';
-  if (firstGenerator.git) return 'Git';
-  if (firstGenerator.matrix) return 'Matrix';
-  if (firstGenerator.merge) return 'Merge';
-  if (firstGenerator.union) return 'Union';
-  if (firstGenerator.scmProvider) return 'SCM Provider';
-  if (firstGenerator.pullRequest) return 'Pull Request';
-  
-  return 'Unknown';
 };
 
 // Helper function to get generated applications count
@@ -267,10 +271,10 @@ const useApplicationSetRowsDV = (applicationSetsList, namespace, applications, a
         id: getAppSetGeneratorCount(appSet).toString(),
         cell: getAppSetGeneratorCount(appSet).toString(),
       },
-      {
-        id: 'generator-type-' + index,
-        cell: getGeneratorType(appSet),
-      },
+             {
+         id: 'created-at-' + index,
+         cell: formatCreationTimestamp(appSet.metadata.creationTimestamp),
+       },
       {
         id: 'actions-' + index,
         cell: <ApplicationSetActionsCell appSet={appSet} />,
@@ -339,16 +343,16 @@ const useColumnsDV = (namespace, getSortParams) => {
         sort: getSortParams('generators', 3 + i),
       },
     },
-    {
-      id: 'generator-type',
-      cell: 'Generator Type',
-      props: {
-        key: 'generator-type',
-        'aria-label': 'generator type',
-        className: 'pf-m-width-20',
-        sort: getSortParams('generator-type', 4 + i),
-      },
-    },
+         {
+       id: 'created-at',
+       cell: 'Created At',
+       props: {
+         key: 'created-at',
+         'aria-label': 'created at',
+         className: 'pf-m-width-15',
+         sort: getSortParams('created-at', 4 + i),
+       },
+     },
     {
       id: 'actions',
       cell: '',
@@ -410,10 +414,10 @@ export const sortData = (
         aValue = getAppSetGeneratorCount(a);
         bValue = getAppSetGeneratorCount(b);
         break;
-      case 'generator-type':
-        aValue = getGeneratorType(a);
-        bValue = getGeneratorType(b);
-        break;
+             case 'created-at':
+         aValue = new Date(a.metadata?.creationTimestamp || 0).getTime();
+         bValue = new Date(b.metadata?.creationTimestamp || 0).getTime();
+         break;
       default:
         return 0;
     }
