@@ -146,8 +146,8 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
 
   const columnsDV = useColumnsDV(namespace, getSortParams);
   const sortedApplicationSets = React.useMemo(() => {
-    return sortData(applicationSets as ApplicationSetKind[], sortBy, direction);
-  }, [applicationSets, sortBy, direction]);
+    return sortData(applicationSets as ApplicationSetKind[], sortBy, direction, applications, appsLoaded);
+  }, [applicationSets, sortBy, direction, applications, appsLoaded]);
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, filters);
   const rows = useApplicationSetRowsDV(filteredData, namespace, applications, appsLoaded);
 
@@ -264,11 +264,11 @@ const useApplicationSetRowsDV = (applicationSetsList, namespace, applications, a
         ),
       },
       {
-        id: getGeneratedAppsCount(appSet, applications, appsLoaded).toString(),
+        id: 'generated-apps-' + index,
         cell: getGeneratedAppsCount(appSet, applications, appsLoaded).toString(),
       },
       {
-        id: getAppSetGeneratorCount(appSet).toString(),
+        id: 'generators-' + index,
         cell: getAppSetGeneratorCount(appSet).toString(),
       },
              {
@@ -386,6 +386,8 @@ export const sortData = (
   data: ApplicationSetKind[],
   sortBy: string | undefined,
   direction: 'asc' | 'desc' | undefined,
+  applications: any[] = [],
+  appsLoaded: boolean = false,
 ) => {
   if (!sortBy || !direction) return data;
 
@@ -406,8 +408,8 @@ export const sortData = (
         bValue = getAppSetStatus(b);
         break;
       case 'generated-apps':
-        aValue = getGeneratedAppsCount(a, [], false);
-        bValue = getGeneratedAppsCount(b, [], false);
+        aValue = getGeneratedAppsCount(a, applications, appsLoaded);
+        bValue = getGeneratedAppsCount(b, applications, appsLoaded);
         break;
 
       case 'generators':
