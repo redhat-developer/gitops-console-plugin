@@ -63,5 +63,13 @@
   "Edit Application": "Edit Application",
   "Delete Application": "Delete Application",
   "Actions": "Actions",
-  "You don't have permission to perform this action": "You don't have permission to perform this action"
+  "You don't have permission to perform this action": "You don't have permission to perform this action",
+  "ApplicationSets": "Argo CD ApplicationSets",
+  "Create ApplicationSet": "Create ApplicationSet",
+  "No ApplicationSets found": "No ApplicationSets found",
+  "Edit ApplicationSet": "Edit ApplicationSet",
+  "Delete ApplicationSet": "Delete ApplicationSet",
+  "Generators": "Generators",
+  "Healthy": "Healthy",
+  "Error": "Error"
 }
