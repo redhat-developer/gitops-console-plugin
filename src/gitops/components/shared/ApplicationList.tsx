@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom-v5-compat';
+import DevPreviewBadge from 'src/components/import/badges/DevPreviewBadge';
 
 import {
   Action,
@@ -141,7 +142,11 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   return (
     <div>
       {showTitle == undefined && (project == undefined || appset == undefined) && (
-        <ListPageHeader title={t('plugin__gitops-plugin~Applications')}>
+        <ListPageHeader
+          title={t('plugin__gitops-plugin~Applications')}
+          badge={<DevPreviewBadge />}
+          hideFavoriteButton={false}
+        >
           <ListPageCreate groupVersionKind={modelToRef(ApplicationModel)}>
             Create Application
           </ListPageCreate>
