@@ -32,7 +32,6 @@ import { getAppSetStatus, getAppSetGeneratorCount } from '../../utils/gitops';
 import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
 
-
 // Import status icons for consistency with ApplicationList
 import {
   HealthDegradedIcon,
