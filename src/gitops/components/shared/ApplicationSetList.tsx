@@ -31,6 +31,7 @@ import { ApplicationSetKind, ApplicationSetModel } from '../../models/Applicatio
 import { getAppSetStatus, getAppSetGeneratorCount } from '../../utils/gitops';
 import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
+import DevPreviewBadge from '../../../components/import/badges/DevPreviewBadge';
 
 // Import status icons for consistency with ApplicationList
 import {
@@ -188,7 +189,11 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   return (
     <div>
       {showTitle == undefined && (
-        <ListPageHeader title={t('plugin__gitops-plugin~ApplicationSets')}>
+        <ListPageHeader
+          title={t('plugin__gitops-plugin~ApplicationSets')}
+          badge={<DevPreviewBadge />}
+          hideFavoriteButton={false}
+        >
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>
             Create ApplicationSet
           </ListPageCreate>
