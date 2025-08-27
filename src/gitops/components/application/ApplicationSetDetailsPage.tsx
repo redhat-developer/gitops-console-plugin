@@ -16,12 +16,14 @@ import {
   Tab,
   TabTitleText,
   Button,
-  ButtonVariant
 } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import * as _ from 'lodash';
 import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
 import ApplicationDetailsTitle from './ApplicationDetailsTitle';
+import { useLabelsModal } from '@openshift-console/dynamic-plugin-sdk';
+
+import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 
 const ApplicationSetDetailsPage: React.FC = () => {
   const { name, ns } = useParams<{ name: string; ns: string }>();
@@ -38,6 +40,7 @@ const ApplicationSetDetailsPage: React.FC = () => {
   });
 
   const [actions] = useApplicationSetActionsProvider(appSet);
+  const launchLabelsModal = useLabelsModal(appSet);
 
   if (loadError) return <div>Error loading ApplicationSet details.</div>;
   if (!loaded || !appSet) return <Spinner />;
@@ -98,7 +101,7 @@ const ApplicationSetDetailsPage: React.FC = () => {
                             <dd className="pf-v6-c-description-list__description">
                               <div className="pf-v6-l-split pf-v6-u-w-100">
                                 <div className="pf-v6-l-split__item pf-m-fill">
-                                  <Badge isRead color="green">NS</Badge> {metadata.namespace}
+                                  <ResourceLink kind="Namespace" name={metadata.namespace} />
                                 </div>
                               </div>
                             </dd>
@@ -108,28 +111,53 @@ const ApplicationSetDetailsPage: React.FC = () => {
                             <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Labels">
                               <div className="pf-v6-l-split pf-v6-u-w-100">
                                 <div className="pf-v6-l-split__item pf-m-fill">Labels</div>
+                                <div className="pf-v6-l-split__item">
+                                  <Button
+                                    variant="link"
+                                    icon={<PencilAltIcon />}
+                                    onClick={launchLabelsModal}
+                                    style={{ padding: 0 }}
+                                    aria-label="Edit labels"
+                                  >
+                                    Edit
+                                  </Button>
+                                </div>
                               </div>
                             </dt>
                             <dd className="pf-v6-c-description-list__description">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">
-                                  {_.isEmpty(labelItems) ? (
-                                    <span className="text-muted">No labels</span>
-                                  ) : (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                      <LabelGroup>
-                                        {Object.entries(labelItems).map(([key, value]) => (
-                                          <Label key={key} color="grey">
-                                            {key}={value}
-                                          </Label>
-                                        ))}
-                                      </LabelGroup>
-                                      <Button variant={ButtonVariant.link} icon={<PencilAltIcon />}>
-                                        Edit
-                                      </Button>
-                                    </div>
-                                  )}
-                                </div>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  background: 'var(--pf-v6-global--BackgroundColor--200, #212427)',
+                                  border: '1px solid var(--pf-v6-global--BorderColor--200, #383f45)',
+                                  borderRadius: 'var(--pf-v6-global--BorderRadius--sm, 3px)',
+                                  padding: '16px',
+                                  minHeight: '60px',
+                                  marginTop: '8px',
+                                  width: 'fit-content',
+                                  maxWidth: '100%',
+                                }}
+                              >
+                                {_.isEmpty(labelItems) ? (
+                                  <span className="text-muted">No labels</span>
+                                ) : (
+                                  <LabelGroup
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      gap: '8px',
+                                      margin: 0,
+                                      width: '100%',
+                                    }}
+                                  >
+                                    {Object.entries(labelItems).map(([key, value]) => (
+                                      <Label key={key} color="grey">
+                                        {key}={value}
+                                      </Label>
+                                    ))}
+                                  </LabelGroup>
+                                )}
                               </div>
                             </dd>
                           </div>
