@@ -1,4 +1,18 @@
 // Application Details Title Styles
+.argocd-application-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background-color: #E9654B;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: var(--pf-v6-global--spacer--md);
+}
+
 .co-resource-item__resource-name {
   font-size: var(--pf-v6-global--font-size--2xl);
   font-weight: var(--pf-v6-global--font-weight--bold);

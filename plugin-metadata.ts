@@ -16,6 +16,7 @@ const metadata: ConsolePluginBuildMetadata = {
     ApplicationList: "./gitops/components/application/ApplicationListTab.tsx",
     ApplicationDetails: "./gitops/components/application/ApplicationNavPage.tsx",
     ApplicationSetList: "./gitops/components/application/ApplicationSetListTab.tsx",
+    ApplicationSetDetailsPage: "./gitops/components/application/ApplicationSetDetailsPage.tsx",
     yamlApplicationTemplates: "./gitops/components/application/templates/index.ts"
   }
 };

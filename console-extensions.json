@@ -406,5 +406,23 @@
             "$codeRef": "yamlApplicationTemplates.defaultApplicationSetYamlTemplate"
         }
     }
+  },
+  {
+    "type": "console.page/resource/details",
+    "flags": {
+        "required": [
+            "APPLICATIONSET"
+        ]
+    },
+    "properties": {
+        "model": {
+            "group": "argoproj.io",
+            "kind": "ApplicationSet",
+            "version": "v1alpha1"
+        },
+        "component": {
+            "$codeRef": "ApplicationSetDetailsPage"
+        }
+    }
   }
 ]
