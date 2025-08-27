@@ -189,7 +189,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   return (
     <div>
       {showTitle == undefined && (
-         <ListPageHeader title={t('plugin__gitops-plugin~ApplicationSets')} badge={<DevPreviewBadge />}>
+        <ListPageHeader title={t('plugin__gitops-plugin~ApplicationSets')} badge={<DevPreviewBadge />}>
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>
             Create ApplicationSet
           </ListPageCreate>
