@@ -32,6 +32,7 @@ import { getAppSetStatus, getAppSetGeneratorCount } from '../../utils/gitops';
 import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
 
+
 // Import status icons for consistency with ApplicationList
 import {
   HealthDegradedIcon,
@@ -188,19 +189,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   return (
     <div>
       {showTitle == undefined && (
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <ListPageHeader title={t('plugin__gitops-plugin~ApplicationSets')} badge={<DevPreviewBadge />}>
-=======
-        <ListPageHeader
-          title={t('plugin__gitops-plugin~ApplicationSets')}
-          badge={<DevPreviewBadge />}
-          hideFavoriteButton={false}
-        >
->>>>>>> 6904ad1 (Show an Argo CD Application Set as Details page in Dev Console)
-=======
         <ListPageHeader title={t('plugin__gitops-plugin~ApplicationSets')}>
->>>>>>> 596bd1a (use the merged fav icon and badge)
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>
             Create ApplicationSet
           </ListPageCreate>
