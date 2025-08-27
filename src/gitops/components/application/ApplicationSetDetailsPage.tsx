@@ -108,56 +108,70 @@ const ApplicationSetDetailsPage: React.FC = () => {
                           </div>
 
                           <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Labels">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">Labels</div>
-                                <div className="pf-v6-l-split__item">
-                                  <Button
-                                    variant="link"
-                                    icon={<PencilAltIcon />}
+                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Labels" style={{ margin: 0 }}>
+                              <span>Labels</span>
+                            </dt>
+                            <dd className="pf-v6-c-description-list__description" style={{ padding: 0, marginTop: 0 }}>
+                              <div style={{ display: 'inline-block' }}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 4, width: '100%' }}>
+                                  <button
                                     onClick={launchLabelsModal}
-                                    style={{ padding: 0 }}
+                                    style={{
+                                      padding: 0,
+                                      fontSize: 13,
+                                      fontWeight: 400,
+                                      color: '#fff',
+                                      background: 'none',
+                                      border: 'none',
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      cursor: 'pointer',
+                                    }}
+                                    className="co-resource-item__action-edit custom-edit-link"
                                     aria-label="Edit labels"
                                   >
-                                    Edit
-                                  </Button>
+                                    Edit <PencilAltIcon style={{ marginLeft: 4, fontSize: 13, color: '#fff' }} />
+                                  </button>
+                                  <style>{`
+                                    .custom-edit-link:hover {
+                                      text-decoration: underline;
+                                    }
+                                  `}</style>
                                 </div>
-                              </div>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description">
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  background: 'var(--pf-v6-global--BackgroundColor--200, #212427)',
-                                  border: '1px solid var(--pf-v6-global--BorderColor--200, #383f45)',
-                                  borderRadius: 'var(--pf-v6-global--BorderRadius--sm, 3px)',
-                                  padding: '16px',
-                                  minHeight: '60px',
-                                  marginTop: '8px',
-                                  width: 'fit-content',
-                                  maxWidth: '100%',
-                                }}
-                              >
-                                {_.isEmpty(labelItems) ? (
-                                  <span className="text-muted">No labels</span>
-                                ) : (
-                                  <LabelGroup
-                                    style={{
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                      gap: '8px',
-                                      margin: 0,
-                                      width: '100%',
-                                    }}
-                                  >
-                                    {Object.entries(labelItems).map(([key, value]) => (
-                                      <Label key={key} color="grey">
-                                        {key}={value}
-                                      </Label>
-                                    ))}
-                                  </LabelGroup>
-                                )}
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    border: '1px solid #8a8d90',
+                                    borderRadius: 8,
+                                    padding: '6px 10px',
+                                    background: 'none',
+                                    boxSizing: 'border-box',
+                                    width: 'fit-content',
+                                    maxWidth: '100%',
+                                    gap: 8,
+                                  }}
+                                >
+                                  {_.isEmpty(labelItems) ? (
+                                    <span className="text-muted">No labels</span>
+                                  ) : (
+                                    <LabelGroup
+                                      style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        gap: '8px',
+                                        margin: 0,
+                                      }}
+                                    >
+                                      {Object.entries(labelItems).map(([key, value]) => (
+                                        <Label key={key} color="grey">
+                                          {key}={value}
+                                        </Label>
+                                      ))}
+                                    </LabelGroup>
+                                  )}
+                                </div>
                               </div>
                             </dd>
                           </div>
@@ -165,6 +179,21 @@ const ApplicationSetDetailsPage: React.FC = () => {
                           <div className="pf-v6-c-description-list__group">
                             <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Created">
                               <div className="pf-v6-l-split pf-v6-u-w-100">
+                                      <Button
+                                        variant="link"
+                                        icon={<PencilAltIcon />}
+                                        onClick={launchLabelsModal}
+                                        style={{
+                                          padding: 0,
+                                          position: 'absolute',
+                                          top: -24,
+                                          right: 0,
+                                          fontSize: 13,
+                                        }}
+                                        aria-label="Edit labels"
+                                      >
+                                        Edit
+                                      </Button>
                                 <div className="pf-v6-l-split__item pf-m-fill">Created at</div>
                               </div>
                             </dt>
@@ -210,24 +239,10 @@ const ApplicationSetDetailsPage: React.FC = () => {
                           <div className="pf-v6-c-description-list__group">
                             <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Generators">
                               <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">Generators</div>
-                              </div>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">
-                                  <Badge isRead color="blue">1 generators</Badge>
-                                </div>
-                              </div>
-                            </dd>
-                          </div>
-
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_AppProject">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
                                 <div className="pf-v6-l-split__item pf-m-fill">App Project</div>
                               </div>
                             </dt>
+                              <div className="pf-v6-l-split__item pf-m-fill">Created at</div>
                             <dd className="pf-v6-c-description-list__description">
                               <div className="pf-v6-l-split pf-v6-u-w-100">
                                 <div className="pf-v6-l-split__item pf-m-fill">
