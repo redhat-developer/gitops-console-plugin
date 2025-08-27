@@ -189,7 +189,15 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   return (
     <div>
       {showTitle == undefined && (
+<<<<<<< HEAD
         <ListPageHeader title={t('plugin__gitops-plugin~ApplicationSets')} badge={<DevPreviewBadge />}>
+=======
+        <ListPageHeader
+          title={t('plugin__gitops-plugin~ApplicationSets')}
+          badge={<DevPreviewBadge />}
+          hideFavoriteButton={false}
+        >
+>>>>>>> 6904ad1 (Show an Argo CD Application Set as Details page in Dev Console)
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>
             Create ApplicationSet
           </ListPageCreate>
