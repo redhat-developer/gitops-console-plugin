@@ -27,7 +27,7 @@ const ApplicationDetailsTitle: React.FC<ApplicationPageTitleProps> = ({
 }) => {
   const { t } = useGitOpsTranslation();
   
-  // Determine if this is an ApplicationSet based on the model kind
+  // Determine the correct icon text and styling based on the model
   const isApplicationSet = model.kind === 'ApplicationSet';
   const iconText = isApplicationSet ? 'AS' : 'A';
   const iconTitle = isApplicationSet ? 'Argo CD ApplicationSet' : 'Argo CD Application';
@@ -54,7 +54,7 @@ const ApplicationDetailsTitle: React.FC<ApplicationPageTitleProps> = ({
           <PaneHeading>
             <Title headingLevel="h1">
               <span
-                className="argocd-application-icon co-m-resource-icon co-m-resource-icon--lg"
+                className="co-m-resource-icon co-m-resource-icon--lg"
                 title={iconTitle}
               >
                 {iconText}

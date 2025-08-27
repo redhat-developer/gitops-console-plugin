@@ -1,18 +1,4 @@
 // Application Details Title Styles
-.argocd-application-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  background-color: #E9654B;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  margin-right: var(--pf-v6-global--spacer--md);
-}
-
 .co-resource-item__resource-name {
   font-size: var(--pf-v6-global--font-size--2xl);
   font-weight: var(--pf-v6-global--font-weight--bold);
@@ -30,4 +16,13 @@
   padding: var(--pf-v6-global--spacer--md) var(--pf-v6-global--spacer--lg);
   background-color: var(--pf-v6-global--BackgroundColor--100);
   border-bottom: 1px solid var(--pf-v6-global--BorderColor--100);
+}
+
+// Ensure AS icon matches ApplicationSet list page color
+.co-m-resource-icon {
+  &.co-m-resource-icon--lg {
+    // Force the ApplicationSet color from console-extensions.json
+    background-color: #E9654B !important;
+    color: white !important;
+  }
 }
