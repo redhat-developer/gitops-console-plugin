@@ -14,6 +14,7 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import { ResourceLink, Timestamp, useAccessReview } from '@openshift-console/dynamic-plugin-sdk';
 import { useLabelsModal, useAnnotationsModal } from '@openshift-console/dynamic-plugin-sdk';
 import * as _ from 'lodash';
+import { getAppSetGeneratorCount } from '../../../utils/gitops';
 
 interface ResourceDetailsAttributesProps {
   metadata: {
@@ -59,6 +60,9 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
     name: metadata.name,
     namespace: metadata.namespace,
   });
+
+  // Calculate the total number of generators (including sub-generators in matrix/union/merge)
+  const totalGenerators = showGenerators ? getAppSetGeneratorCount(resource) : 0;
 
   const labelItems = metadata.labels || {};
   const annotationItems = metadata.annotations || {};
@@ -407,7 +411,7 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
             </Popover>
           </DescriptionListTermHelpText>
           <DescriptionListDescription>
-            <Badge isRead color="grey">1 generators</Badge>
+            <Badge isRead color="grey">{totalGenerators} generator{totalGenerators !== 1 ? 's' : ''}</Badge>
           </DescriptionListDescription>
         </DescriptionListGroup>
       )}
