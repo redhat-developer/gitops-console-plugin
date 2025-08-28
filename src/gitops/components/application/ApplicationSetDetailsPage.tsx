@@ -20,7 +20,7 @@ import {
 import { PencilAltIcon } from '@patternfly/react-icons';
 import * as _ from 'lodash';
 import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
-import ApplicationDetailsTitle from './ApplicationDetailsTitle';
+import ResourceDetailsTitle from '../../utils/components/DetailsPageTitle/ResourceDetailsTitle';
 import { useLabelsModal, useAnnotationsModal } from '@openshift-console/dynamic-plugin-sdk';
 
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
@@ -61,12 +61,15 @@ const ApplicationSetDetailsPage: React.FC = () => {
 
   return (
     <div className="pf-v6-c-page__main-section pf-m-no-padding pf-m-fill pf-v6-c-page__main-section--no-gap pf-v6-u-flex-shrink-1">
-      <ApplicationDetailsTitle
+      <ResourceDetailsTitle
         obj={appSet}
         model={ApplicationSetModel}
         name={name}
         namespace={ns}
         actions={actions}
+        iconText="AS"
+        iconTitle="Argo CD ApplicationSet"
+        resourcePrefix="Argo CD"
       />
 
       {/* Main Content */}
