@@ -1,0 +1,219 @@
+.application-set-details-page {
+  &__main-section {
+    // PatternFly page main section styles
+  }
+
+  &__body {
+    // PatternFly flex layout styles
+  }
+
+  &__pane-body {
+    // Console pane body styles
+  }
+
+  &__grid {
+    // PatternFly grid styles
+  }
+
+  &__grid-item {
+    // PatternFly grid item styles
+  }
+
+  &__header {
+    margin-bottom: 24px;
+    padding-left: 24px;
+    padding-top: 24px;
+
+    &-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+  }
+
+  &__content {
+    padding-left: 24px;
+  }
+
+  &__conditions {
+    margin-top: 32px;
+
+    &-title {
+      font-weight: 700;
+      font-size: 24px;
+      margin-bottom: 20px;
+      margin-top: 8px;
+    }
+
+    &-table {
+      width: 100%;
+      border-top: 1px solid #393F44;
+      margin-bottom: 0;
+
+      &-header {
+        display: flex;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 16px 0 8px 0;
+
+        &-cell {
+          text-align: left;
+
+          &--type {
+            flex: 2;
+            padding-left: 0;
+          }
+
+          &--status {
+            flex: 1;
+          }
+
+          &--updated {
+            flex: 2;
+          }
+
+          &--reason {
+            flex: 2;
+          }
+
+          &--message {
+            flex: 4;
+          }
+        }
+      }
+
+      &-row {
+        display: flex;
+        font-size: 15px;
+        padding: 16px 0;
+        align-items: flex-start;
+        border-top: 1px solid #393F44;
+
+        &:first-child {
+          border-top: none;
+        }
+
+        &-cell {
+          text-align: left;
+
+          &--type {
+            flex: 2;
+            padding-left: 0;
+          }
+
+          &--status {
+            flex: 1;
+          }
+
+          &--updated {
+            flex: 2;
+            display: flex;
+            align-items: center;
+          }
+
+          &--reason {
+            flex: 2;
+          }
+
+          &--message {
+            flex: 4;
+          }
+        }
+      }
+    }
+  }
+
+  &__generators {
+    &-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    &-item {
+      border: 1px solid #393F44;
+      border-radius: 8px;
+      padding: 16px;
+      background-color: #212427;
+
+      &-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+
+        &-icon {
+          width: 24px;
+          height: 24px;
+          background-color: #73bcf7;
+          border-radius: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 8px;
+          font-size: 12px;
+          font-weight: bold;
+          color: #003a70;
+        }
+
+        &-title {
+          font-weight: 600;
+          font-size: 16px;
+        }
+      }
+
+      &-content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        &-row {
+          display: flex;
+          align-items: center;
+
+          &-label {
+            font-weight: 500;
+            min-width: 80px;
+            color: #8a8d90;
+          }
+
+          &-value {
+            color: #73bcf7;
+            text-decoration: underline;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+  &__yaml-editor {
+    &-header {
+      &-buttons {
+        // YAML editor header buttons styles
+      }
+
+      &-shortcuts {
+        // YAML editor shortcuts styles
+
+        &-link {
+          // YAML editor shortcuts link styles
+        }
+      }
+    }
+
+    &-content {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      font-family: monospace;
+      font-size: 14px;
+      border-radius: 4px;
+      padding: 0;
+
+      pre {
+        margin: 0;
+        padding: 16px;
+        overflow: auto;
+      }
+    }
+  }
+} 
