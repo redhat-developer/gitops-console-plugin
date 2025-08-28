@@ -24,6 +24,7 @@ import ApplicationDetailsTitle from './ApplicationDetailsTitle';
 import { useLabelsModal, useAnnotationsModal } from '@openshift-console/dynamic-plugin-sdk';
 
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
+import ApplicationList from '../shared/ApplicationList';
 
 const ApplicationSetDetailsPage: React.FC = () => {
   const { name, ns } = useParams<{ name: string; ns: string }>();
@@ -376,6 +377,251 @@ const ApplicationSetDetailsPage: React.FC = () => {
                   </div>
                   <div className="co-yaml-editor__content" style={{ background: '#1e1e1e', color: '#d4d4d4', fontFamily: 'monospace', fontSize: 14, borderRadius: 4, padding: 0 }}>
                     <pre style={{ margin: 0, padding: 16, overflow: 'auto' }}>{JSON.stringify(appSet, null, 2)}</pre>
+                  </div>
+                </div>
+              </div>
+            </Tab>
+
+            <Tab eventKey={2} title={<TabTitleText>Generators</TabTitleText>} className="pf-v6-c-tab-content">
+              <div className="co-m-pane__body">
+                <div className="pf-v6-l-grid pf-m-gutter">
+                  <div className="pf-v6-l-grid__item pf-m-12-col-on-md">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Generators</CardTitle>
+                      </CardHeader>
+                      <CardBody>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                          {appSet.spec?.generators?.map((generator: any, index: number) => {
+                            const generatorType = Object.keys(generator)[0];
+                            const generatorData = generator[generatorType];
+                            
+                            return (
+                              <div key={index} style={{ 
+                                border: '1px solid #393F44', 
+                                borderRadius: '8px', 
+                                padding: '16px',
+                                backgroundColor: '#212427'
+                              }}>
+                                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+                                  <div style={{ 
+                                    width: '24px', 
+                                    height: '24px', 
+                                    backgroundColor: '#73bcf7', 
+                                    borderRadius: '4px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginRight: '8px',
+                                    fontSize: '12px',
+                                    fontWeight: 'bold',
+                                    color: '#003a70'
+                                  }}>
+                                    {generatorType.charAt(0).toUpperCase()}
+                                  </div>
+                                  <span style={{ fontWeight: '600', fontSize: '16px' }}>{generatorType}</span>
+                                </div>
+                                
+                                {/* Render different generator types */}
+                                {generatorType === 'git' && (
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    {generatorData.repoURL && (
+                                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: '500', minWidth: '80px', color: '#8a8d90' }}>Repository:</span>
+                                        <span style={{ color: '#73bcf7', textDecoration: 'underline', cursor: 'pointer' }}>
+                                          {generatorData.repoURL}
+                                        </span>
+                                      </div>
+                                    )}
+                                    {generatorData.revision && (
+                                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: '500', minWidth: '80px', color: '#8a8d90' }}>Revision:</span>
+                                        <span>{generatorData.revision}</span>
+                                      </div>
+                                    )}
+                                    {generatorData.directories && (
+                                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: '500', minWidth: '80px', color: '#8a8d90' }}>Directories:</span>
+                                        <span>{generatorData.directories.length} directory(ies)</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                                
+                                {generatorType === 'clusterDecisionResource' && (
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    {generatorData.configMapRef && (
+                                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: '500', minWidth: '80px', color: '#8a8d90' }}>ConfigMap:</span>
+                                        <span>{generatorData.configMapRef.name}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                                
+                                {generatorType === 'matrix' && (
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    <div style={{ color: '#8a8d90', fontSize: '14px' }}>
+                                      Matrix generator with {Object.keys(generatorData).length} generators
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                {generatorType === 'clusters' && (
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    {generatorData.selector && (
+                                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: '500', minWidth: '80px', color: '#8a8d90' }}>Selector:</span>
+                                        <span style={{ fontFamily: 'Monaco, Menlo, Ubuntu Mono, monospace', fontSize: '12px' }}>
+                                          {JSON.stringify(generatorData.selector)}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                          
+                          {(!appSet.spec?.generators || appSet.spec.generators.length === 0) && (
+                            <div style={{ 
+                              display: 'flex', 
+                              flexDirection: 'column', 
+                              alignItems: 'center', 
+                              justifyContent: 'center',
+                              padding: '40px 20px',
+                              color: '#8a8d90',
+                              fontSize: '16px'
+                            }}>
+                              <div style={{ 
+                                width: '48px', 
+                                height: '48px', 
+                                backgroundColor: '#393F44', 
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginBottom: '16px',
+                                fontSize: '24px'
+                              }}>
+                                ⚙️
+                              </div>
+                              <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontWeight: '600', marginBottom: '8px' }}>No Generators</div>
+                                <div style={{ fontSize: '14px' }}>
+                                  This ApplicationSet has no generators configured.
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </div>
+                </div>
+              </div>
+            </Tab>
+
+            <Tab eventKey={3} title={<TabTitleText>Applications</TabTitleText>} className="pf-v6-c-tab-content">
+              <div className="co-m-pane__body">
+                <div style={{ padding: '0' }}>
+                  <ApplicationList 
+                    namespace={ns}
+                    hideNameLabelFilters={false}
+                    showTitle={false}
+                    appset={appSet}
+                  />
+                </div>
+              </div>
+            </Tab>
+
+            <Tab eventKey={4} title={<TabTitleText>Events</TabTitleText>} className="pf-v6-c-tab-content">
+              <div className="co-m-pane__body">
+                <div className="pf-v6-l-grid pf-m-gutter">
+                  <div className="pf-v6-l-grid__item pf-m-12-col-on-md">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Events</CardTitle>
+                      </CardHeader>
+                      <CardBody>
+                        {status.conditions && status.conditions.length > 0 ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            {status.conditions.map((condition: any, index: number) => (
+                              <div key={index} style={{ 
+                                border: '1px solid #393F44', 
+                                borderRadius: '8px', 
+                                padding: '16px',
+                                backgroundColor: '#212427'
+                              }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={{ 
+                                      width: '24px', 
+                                      height: '24px', 
+                                      backgroundColor: condition.status === 'True' ? '#3e8635' : '#c9190b', 
+                                      borderRadius: '4px',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      marginRight: '8px',
+                                      fontSize: '12px',
+                                      fontWeight: 'bold',
+                                      color: 'white'
+                                    }}>
+                                      {condition.status === 'True' ? '✓' : '✗'}
+                                    </div>
+                                    <span style={{ fontWeight: '600', fontSize: '16px' }}>
+                                      {condition.type}
+                                    </span>
+                                  </div>
+                                  <Badge isRead color={condition.status === 'True' ? 'green' : 'red'}>
+                                    {condition.status}
+                                  </Badge>
+                                </div>
+                                <div style={{ fontSize: '14px', color: '#8a8d90', marginBottom: '8px' }}>
+                                  {condition.message || 'No message available'}
+                                </div>
+                                {condition.lastTransitionTime && (
+                                  <div style={{ fontSize: '12px', color: '#8a8d90' }}>
+                                    Last updated: {new Date(condition.lastTransitionTime).toLocaleString()}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            padding: '40px 20px',
+                            color: '#8a8d90',
+                            fontSize: '16px'
+                          }}>
+                            <div style={{ 
+                              width: '48px', 
+                              height: '48px', 
+                              backgroundColor: '#393F44', 
+                              borderRadius: '50%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              marginBottom: '16px',
+                              fontSize: '24px'
+                            }}>
+                              📊
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                              <div style={{ fontWeight: '600', marginBottom: '8px' }}>No Events</div>
+                              <div style={{ fontSize: '14px' }}>
+                                No events have been recorded for this ApplicationSet.
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </CardBody>
+                    </Card>
                   </div>
                 </div>
               </div>
