@@ -107,7 +107,9 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   }, [applications, sortBy, direction]);
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
-  const rows = useApplicationRowsDV(filteredData, namespace);
+  // Filter applications by project or appset before rendering rows
+  const filteredByOwner = React.useMemo(() => filteredData.filter(filterApp(project, appset)), [filteredData, project, appset]);
+  const rows = useApplicationRowsDV(filteredByOwner, namespace);
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
@@ -136,7 +138,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   let currentActiveState = null;
   if (loadError) {
     currentActiveState = DataViewState.error;
-  } else if (applications.length === 0) {
+  } else if (filteredByOwner.length === 0) {
     currentActiveState = DataViewState.empty;
   }
   return (
