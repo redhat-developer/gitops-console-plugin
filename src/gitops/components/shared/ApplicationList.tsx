@@ -1,3 +1,10 @@
+import {
+  DataViewTable,
+  DataViewTh,
+  DataViewTr,
+} from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
+import { useDataViewSort } from '@patternfly/react-data-view/dist/dynamic/Hooks';
+import { Spinner, Flex, FlexItem } from '@patternfly/react-core';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom-v5-compat';
@@ -15,17 +22,6 @@ import {
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody, Flex, FlexItem, Spinner } from '@patternfly/react-core';
-import {
-  DataViewTable,
-  DataViewTh,
-  DataViewTr,
-} from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
-import { useDataViewSort } from '@patternfly/react-data-view/dist/dynamic/Hooks';
-import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
-import { CubesIcon } from '@patternfly/react-icons';
-import { Tbody, Td, Tr } from '@patternfly/react-table';
 
 import { useApplicationActionsProvider } from '../..//hooks/useApplicationActionsProvider';
 import RevisionFragment from '../..//Revision/Revision';
@@ -74,7 +70,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   hideNameLabelFilters,
   showTitle,
 }) => {
-  const [applications, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
+  const [applications, loaded] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     groupVersionKind: {
       group: 'argoproj.io',
@@ -106,39 +102,10 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     return sortData(applications, sortBy, direction);
   }, [applications, sortBy, direction]);
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
-  const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
-  const rows = useApplicationRowsDV(filteredData, namespace);
-  const empty = (
-    <Tbody>
-      <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No Argo CD Applications">
-            <EmptyStateBody>
-              There are no Argo CD Applications in {namespace ? 'this project' : 'all projects'}.
-            </EmptyStateBody>
-          </EmptyState>
-        </Td>
-      </Tr>
-    </Tbody>
-  );
-  const error = loadError && (
-    <Tbody>
-      <Tr key="loading" ouiaId={'table-tr-loading'}>
-        <Td colSpan={columnsDV.length}>
-          <ErrorState
-            titleText="Unable to load data"
-            bodyText="There was an error retrieving applications. Check your connection and reload the page."
-          />
-        </Td>
-      </Tr>
-    </Tbody>
-  );
-  let currentActiveState = null;
-  if (loadError) {
-    currentActiveState = DataViewState.error;
-  } else if (applications.length === 0) {
-    currentActiveState = DataViewState.empty;
-  }
+  const [, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
+  // Filter applications by project or appset before rendering rows
+  const filteredByOwner = React.useMemo(() => filteredData.filter(filterApp(project, appset)), [filteredData, project, appset]);
+  const rows = useApplicationRowsDV(filteredByOwner, namespace);
   return (
     <div>
       {showTitle == undefined && (project == undefined || appset == undefined) && (
@@ -155,19 +122,16 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       <ListPageBody>
         {!hideNameLabelFilters && (
           <ListPageFilter
-            data={data.filter(filterApp(project, appset))}
+            data={filteredByOwner}
             loaded={loaded}
             rowFilters={filters}
             onFilterChange={onFilterChange}
           />
         )}
-        <DataView activeState={currentActiveState}>
-          <DataViewTable
-            rows={rows}
-            columns={columnsDV}
-            bodyStates={loadError ? { error } : { empty }}
-          />
-        </DataView>
+        <DataViewTable
+          columns={columnsDV}
+          rows={rows}
+        />
       </ListPageBody>
     </div>
   );
