@@ -77,10 +77,10 @@ const ApplicationSetDetailsPage: React.FC = () => {
               <div className="co-m-pane__body">
                 <div className="pf-v6-l-grid pf-m-gutter">
                   <div className="pf-v6-l-grid__item pf-m-12-col-on-md">
-                    <div style={{ marginBottom: '24px' }}>
-                      <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>ApplicationSet details</h2>
+                    <div style={{ marginBottom: '24px', paddingLeft: '24px', paddingTop: '24px' }}>
+                      <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>Argo CD ApplicationSet details</h2>
                     </div>
-                    <div>
+                    <div style={{ paddingLeft: '24px' }}>
                         <DescriptionList data-test-id="resource-summary">
                           <div className="pf-v6-c-description-list__group">
                             <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Name">
@@ -382,10 +382,10 @@ const ApplicationSetDetailsPage: React.FC = () => {
             <Tab eventKey={2} title={<TabTitleText>Generators</TabTitleText>} className="pf-v6-c-tab-content">
               <div className="pf-v6-l-grid pf-m-gutter">
                 <div className="pf-v6-l-grid__item pf-m-12-col-on-md">
-                  <div style={{ marginBottom: '24px' }}>
+                  <div style={{ marginBottom: '24px', paddingLeft: '24px', paddingTop: '24px' }}>
                     <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>Generators</h2>
                   </div>
-                  <div>
+                  <div style={{ paddingLeft: '24px' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                           {appSet.spec?.generators?.map((generator: any, index: number) => {
                             const generatorType = Object.keys(generator)[0];
@@ -532,10 +532,10 @@ const ApplicationSetDetailsPage: React.FC = () => {
               <div className="co-m-pane__body">
                 <div className="pf-v6-l-grid pf-m-gutter">
                   <div className="pf-v6-l-grid__item pf-m-12-col-on-md">
-                    <div style={{ marginBottom: '24px' }}>
+                    <div style={{ marginBottom: '24px', paddingLeft: '24px', paddingTop: '24px' }}>
                       <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>Events</h2>
                     </div>
-                    <div>
+                    <div style={{ paddingLeft: '24px' }}>
                         {status.conditions && status.conditions.length > 0 ? (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {status.conditions.map((condition: any, index: number) => (
