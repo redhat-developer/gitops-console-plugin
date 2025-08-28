@@ -5,22 +5,14 @@ import { ApplicationSetKind, ApplicationSetModel } from '../../models/Applicatio
 import {
   Spinner,
   Badge,
-  Label,
-  LabelGroup,
-  DescriptionList,
   Tabs,
   Tab,
   TabTitleText,
-  Button,
 } from '@patternfly/react-core';
-import { PencilAltIcon } from '@patternfly/react-icons';
-import * as _ from 'lodash';
 import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
 import ResourceDetailsTitle from '../../utils/components/DetailsPageTitle/ResourceDetailsTitle';
-import { useLabelsModal, useAnnotationsModal } from '@openshift-console/dynamic-plugin-sdk';
-
-import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import ApplicationList from '../shared/ApplicationList';
+import ResourceDetailsAttributes from '../../utils/components/ResourceDetails/ResourceDetailsAttributes';
 
 const ApplicationSetDetailsPage: React.FC = () => {
   const { name, ns } = useParams<{ name: string; ns: string }>();
@@ -37,8 +29,6 @@ const ApplicationSetDetailsPage: React.FC = () => {
   });
 
   const [actions] = useApplicationSetActionsProvider(appSet);
-  const launchLabelsModal = useLabelsModal(appSet);
-  const launchAnnotationsModal = useAnnotationsModal(appSet);
 
   if (loadError) return <div>Error loading ApplicationSet details.</div>;
   if (!loaded || !appSet) return <Spinner />;
@@ -49,11 +39,6 @@ const ApplicationSetDetailsPage: React.FC = () => {
   const handleTabClick = (event: React.MouseEvent<HTMLElement, MouseEvent>, tabIndex: string | number) => {
     setActiveTabKey(tabIndex);
   };
-
-  const labelItems = metadata.labels || {};
-  const annotationItems = metadata.annotations || {};
-  // Helper to count object keys
-  const countAnnotations = Object.keys(annotationItems).length;
 
   return (
     <div className="pf-v6-c-page__main-section pf-m-no-padding pf-m-fill pf-v6-c-page__main-section--no-gap pf-v6-u-flex-shrink-1">
@@ -81,238 +66,16 @@ const ApplicationSetDetailsPage: React.FC = () => {
                       <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>Argo CD ApplicationSet details</h2>
                     </div>
                     <div style={{ paddingLeft: '24px' }}>
-                        <DescriptionList data-test-id="resource-summary">
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Name">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">Name</div>
-                              </div>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">{metadata.name}</div>
-                              </div>
-                            </dd>
-                          </div>
-
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Namespace">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">Namespace</div>
-                              </div>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">
-                                  <ResourceLink kind="Namespace" name={metadata.namespace} />
-                                </div>
-                              </div>
-                            </dd>
-                          </div>
-
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Labels" style={{ margin: 0 }}>
-                              <span>Labels</span>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description" style={{ padding: 0, marginTop: 0 }}>
-                              <div style={{ display: 'inline-block' }}>
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 4, width: '100%' }}>
-                                  <a
-                                    style={{
-                                      fontSize: 13,
-                                      color: '#73bcf7',
-                                      textDecoration: 'underline',
-                                      cursor: 'pointer',
-                                      display: 'inline-flex',
-                                      alignItems: 'center',
-                                    }}
-                                    tabIndex={0}
-                                    role="button"
-                                    onClick={launchLabelsModal}
-                                    onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') launchLabelsModal(); }}
-                                    aria-label="Edit labels"
-                                  >
-                                    Edit <PencilAltIcon style={{ marginLeft: 4, fontSize: 13, color: '#73bcf7' }} />
-                                  </a>
-                                </div>
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    border: '1px solid #8a8d90',
-                                    borderRadius: 8,
-                                    padding: '6px 10px',
-                                    background: 'none',
-                                    boxSizing: 'border-box',
-                                    width: 'fit-content',
-                                    maxWidth: '100%',
-                                    gap: 8,
-                                  }}
-                                >
-                                  {_.isEmpty(labelItems) ? (
-                                    <span className="text-muted">No labels</span>
-                                  ) : (
-                                    <LabelGroup
-                                      style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        gap: '8px',
-                                        margin: 0,
-                                      }}
-                                    >
-                                      {Object.entries(labelItems).map(([key, value]) => (
-                                        <Label key={key} color="grey">
-                                          {key}={value}
-                                        </Label>
-                                      ))}
-                                    </LabelGroup>
-                                  )}
-                                </div>
-                              </div>
-                            </dd>
-                          </div>
-
-                          {/* Annotations Section - matches Console style */}
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Annotations" style={{ margin: 0 }}>
-                              <span>Annotations</span>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description" style={{ padding: 0, marginTop: 0 }}>
-                              <div style={{ display: 'inline-block' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4, width: '100%' }}>
-                                  <a
-                                    style={{
-                                      fontSize: 15,
-                                      color: '#73bcf7',
-                                      textDecoration: 'underline',
-                                      cursor: 'pointer',
-                                      display: 'inline-flex',
-                                      alignItems: 'center',
-                                    }}
-                                    tabIndex={0}
-                                    role="button"
-                                    onClick={launchAnnotationsModal}
-                                    onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') launchAnnotationsModal(); }}
-                                    aria-label="Edit annotations"
-                                  >
-                                    {countAnnotations} annotation{countAnnotations !== 1 ? 's' : ''}
-                                    <PencilAltIcon style={{ marginLeft: 6, fontSize: 15, color: '#73bcf7' }} />
-                                  </a>
-                                </div>
-                              </div>
-                            </dd>
-                          </div>
-
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Created">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                      <Button
-                                        variant="link"
-                                        icon={<PencilAltIcon />}
-                                        onClick={launchLabelsModal}
-                                        style={{
-                                          padding: 0,
-                                          position: 'absolute',
-                                          top: -24,
-                                          right: 0,
-                                          fontSize: 13,
-                                        }}
-                                        aria-label="Edit labels"
-                                      >
-                                        Edit
-                                      </Button>
-                                <div className="pf-v6-l-split__item pf-m-fill">Created at</div>
-                              </div>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">
-                                  <Timestamp timestamp={metadata.creationTimestamp} />
-                                </div>
-                              </div>
-                            </dd>
-                          </div>
-
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Status">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">Status</div>
-                              </div>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">
-                                  <Badge isRead color="green">Healthy</Badge>
-                                </div>
-                              </div>
-                            </dd>
-                          </div>
-
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_GeneratedApps">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">Generated Apps</div>
-                              </div>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">
-                                  <Badge isRead color="blue">3 applications</Badge>
-                                </div>
-                              </div>
-                            </dd>
-                          </div>
-
-                          {/* Generators Section */}
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Generators">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">Generators</div>
-                              </div>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">
-                                  <Badge isRead color="grey">1 generators</Badge>
-                                </div>
-                              </div>
-                            </dd>
-                          </div>
-
-                          {/* App Project Section (blue badge, no extra Created at) */}
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_AppProject">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">App Project</div>
-                              </div>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">
-                                  <Badge isRead color="blue" style={{ backgroundColor: '#73bcf7', color: '#003a70' }}>AP</Badge> default
-                                </div>
-                              </div>
-                            </dd>
-                          </div>
-
-                          <div className="pf-v6-c-description-list__group">
-                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Repository">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">Repository</div>
-                              </div>
-                            </dt>
-                            <dd className="pf-v6-c-description-list__description">
-                              <div className="pf-v6-l-split pf-v6-u-w-100">
-                                <div className="pf-v6-l-split__item pf-m-fill">
-                                  <a href="https://github.com/aal/309/argocd-test-nested.git" target="_blank" rel="noopener noreferrer">
-                                    https://github.com/aal/309/argocd-test-nested.git
-                                  </a>
-                                </div>
-                              </div>
-                            </dd>
-                          </div>
-                        </DescriptionList>
+                      <ResourceDetailsAttributes
+                        metadata={metadata}
+                        resource={appSet}
+                        showOwner={true}
+                        showStatus={true}
+                        showGeneratedApps={true}
+                        showGenerators={true}
+                        showAppProject={true}
+                        showRepository={true}
+                      />
 
                         {/* Conditions Section */}
                         {status.conditions && status.conditions.length > 0 && (
