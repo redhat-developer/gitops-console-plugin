@@ -198,9 +198,122 @@ const ApplicationSetDetailsPage: React.FC = () => {
                                 
                                 {generatorType === 'matrix' && (
                                   <div className="application-set-details-page__generators-item-content">
-                                    <div style={{ color: '#8a8d90', fontSize: '14px' }}>
-                                      Matrix generator with {Object.keys(generatorData).length} generators
+                                    <div style={{ color: '#8a8d90', fontSize: '14px', marginBottom: '12px' }}>
+                                      Matrix generator with {generatorData.generators?.length || 0} generators
                                     </div>
+                                    {generatorData.generators?.map((subGenerator: any, subIndex: number) => {
+                                      const subGeneratorType = Object.keys(subGenerator)[0];
+                                      const subGeneratorData = subGenerator[subGeneratorType];
+                                      
+                                      return (
+                                        <div key={subIndex} style={{ 
+                                          border: '1px solid #393F44', 
+                                          borderRadius: '6px', 
+                                          padding: '12px',
+                                          marginBottom: '8px',
+                                          backgroundColor: '#1a1d21'
+                                        }}>
+                                          <div style={{ 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            marginBottom: '8px',
+                                            fontSize: '13px',
+                                            fontWeight: '500',
+                                            color: '#ffffff'
+                                          }}>
+                                            <div style={{ 
+                                              width: '20px', 
+                                              height: '20px', 
+                                              backgroundColor: '#0066cc', 
+                                              borderRadius: '4px',
+                                              display: 'flex',
+                                              alignItems: 'center',
+                                              justifyContent: 'center',
+                                              marginRight: '8px',
+                                              fontSize: '11px',
+                                              fontWeight: '600'
+                                            }}>
+                                              {subGeneratorType.charAt(0).toUpperCase()}
+                                            </div>
+                                            {subGeneratorType} Generator
+                                          </div>
+                                          
+                                          {/* Render sub-generator details */}
+                                          {subGeneratorType === 'git' && (
+                                            <div>
+                                              {subGeneratorData.repoURL && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Repository:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.repoURL}
+                                                  </span>
+                                                </div>
+                                              )}
+                                              {subGeneratorData.revision && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Revision:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.revision}
+                                                  </span>
+                                                </div>
+                                              )}
+                                              {subGeneratorData.directories && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Directories:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.directories.length} directory(ies)
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                          
+                                          {subGeneratorType === 'list' && (
+                                            <div>
+                                              {subGeneratorData.elements && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Elements:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.elements.length} element(s)
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                          
+                                          {subGeneratorType === 'clusters' && (
+                                            <div>
+                                              {subGeneratorData.selector && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Selector:</span>
+                                                  <span style={{ 
+                                                    marginLeft: '8px', 
+                                                    color: '#ffffff',
+                                                    fontFamily: 'Monaco, Menlo, Ubuntu Mono, monospace',
+                                                    fontSize: '11px'
+                                                  }}>
+                                                    {JSON.stringify(subGeneratorData.selector)}
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                          
+                                          {subGeneratorType === 'clusterDecisionResource' && (
+                                            <div>
+                                              {subGeneratorData.configMapRef && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>ConfigMap:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.configMapRef.name}
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 )}
                                 
@@ -214,6 +327,256 @@ const ApplicationSetDetailsPage: React.FC = () => {
                                         </span>
                                       </div>
                                     )}
+                                  </div>
+                                )}
+                                
+                                {generatorType === 'union' && (
+                                  <div className="application-set-details-page__generators-item-content">
+                                    <div style={{ color: '#8a8d90', fontSize: '14px', marginBottom: '12px' }}>
+                                      Union generator with {generatorData.generators?.length || 0} generators
+                                    </div>
+                                    {generatorData.generators?.map((subGenerator: any, subIndex: number) => {
+                                      const subGeneratorType = Object.keys(subGenerator)[0];
+                                      const subGeneratorData = subGenerator[subGeneratorType];
+                                      
+                                      return (
+                                        <div key={subIndex} style={{ 
+                                          border: '1px solid #393F44', 
+                                          borderRadius: '6px', 
+                                          padding: '12px',
+                                          marginBottom: '8px',
+                                          backgroundColor: '#1a1d21'
+                                        }}>
+                                          <div style={{ 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            marginBottom: '8px',
+                                            fontSize: '13px',
+                                            fontWeight: '500',
+                                            color: '#ffffff'
+                                          }}>
+                                            <div style={{ 
+                                              width: '20px', 
+                                              height: '20px', 
+                                              backgroundColor: '#0066cc', 
+                                              borderRadius: '4px',
+                                              display: 'flex',
+                                              alignItems: 'center',
+                                              justifyContent: 'center',
+                                              marginRight: '8px',
+                                              fontSize: '11px',
+                                              fontWeight: '600'
+                                            }}>
+                                              {subGeneratorType.charAt(0).toUpperCase()}
+                                            </div>
+                                            {subGeneratorType} Generator
+                                          </div>
+                                          
+                                          {/* Render sub-generator details (same as matrix) */}
+                                          {subGeneratorType === 'git' && (
+                                            <div>
+                                              {subGeneratorData.repoURL && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Repository:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.repoURL}
+                                                  </span>
+                                                </div>
+                                              )}
+                                              {subGeneratorData.revision && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Revision:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.revision}
+                                                  </span>
+                                                </div>
+                                              )}
+                                              {subGeneratorData.directories && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Directories:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.directories.length} directory(ies)
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                          
+                                          {subGeneratorType === 'list' && (
+                                            <div>
+                                              {subGeneratorData.elements && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Elements:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.elements.length} element(s)
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                          
+                                          {subGeneratorType === 'clusters' && (
+                                            <div>
+                                              {subGeneratorData.selector && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Selector:</span>
+                                                  <span style={{ 
+                                                    marginLeft: '8px', 
+                                                    color: '#ffffff',
+                                                    fontFamily: 'Monaco, Menlo, Ubuntu Mono, monospace',
+                                                    fontSize: '11px'
+                                                  }}>
+                                                    {JSON.stringify(subGeneratorData.selector)}
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                          
+                                          {subGeneratorType === 'clusterDecisionResource' && (
+                                            <div>
+                                              {subGeneratorData.configMapRef && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>ConfigMap:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.configMapRef.name}
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                )}
+                                
+                                {generatorType === 'merge' && (
+                                  <div className="application-set-details-page__generators-item-content">
+                                    <div style={{ color: '#8a8d90', fontSize: '14px', marginBottom: '12px' }}>
+                                      Merge generator with {generatorData.generators?.length || 0} generators
+                                    </div>
+                                    {generatorData.mergeKeys && (
+                                      <div style={{ fontSize: '12px', marginBottom: '8px' }}>
+                                        <span style={{ color: '#8a8d90' }}>Merge Keys:</span>
+                                        <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                          {generatorData.mergeKeys.join(', ')}
+                                        </span>
+                                      </div>
+                                    )}
+                                    {generatorData.generators?.map((subGenerator: any, subIndex: number) => {
+                                      const subGeneratorType = Object.keys(subGenerator)[0];
+                                      const subGeneratorData = subGenerator[subGeneratorType];
+                                      
+                                      return (
+                                        <div key={subIndex} style={{ 
+                                          border: '1px solid #393F44', 
+                                          borderRadius: '6px', 
+                                          padding: '12px',
+                                          marginBottom: '8px',
+                                          backgroundColor: '#1a1d21'
+                                        }}>
+                                          <div style={{ 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            marginBottom: '8px',
+                                            fontSize: '13px',
+                                            fontWeight: '500',
+                                            color: '#ffffff'
+                                          }}>
+                                            <div style={{ 
+                                              width: '20px', 
+                                              height: '20px', 
+                                              backgroundColor: '#0066cc', 
+                                              borderRadius: '4px',
+                                              display: 'flex',
+                                              alignItems: 'center',
+                                              justifyContent: 'center',
+                                              marginRight: '8px',
+                                              fontSize: '11px',
+                                              fontWeight: '600'
+                                            }}>
+                                              {subGeneratorType.charAt(0).toUpperCase()}
+                                            </div>
+                                            {subGeneratorType} Generator
+                                          </div>
+                                          
+                                          {/* Render sub-generator details (same as matrix) */}
+                                          {subGeneratorType === 'git' && (
+                                            <div>
+                                              {subGeneratorData.repoURL && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Repository:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.repoURL}
+                                                  </span>
+                                                </div>
+                                              )}
+                                              {subGeneratorData.revision && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Revision:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.revision}
+                                                  </span>
+                                                </div>
+                                              )}
+                                              {subGeneratorData.directories && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Directories:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.directories.length} directory(ies)
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                          
+                                          {subGeneratorType === 'list' && (
+                                            <div>
+                                              {subGeneratorData.elements && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Elements:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.elements.length} element(s)
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                          
+                                          {subGeneratorType === 'clusters' && (
+                                            <div>
+                                              {subGeneratorData.selector && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>Selector:</span>
+                                                  <span style={{ 
+                                                    marginLeft: '8px', 
+                                                    color: '#ffffff',
+                                                    fontFamily: 'Monaco, Menlo, Ubuntu Mono, monospace',
+                                                    fontSize: '11px'
+                                                  }}>
+                                                    {JSON.stringify(subGeneratorData.selector)}
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                          
+                                          {subGeneratorType === 'clusterDecisionResource' && (
+                                            <div>
+                                              {subGeneratorData.configMapRef && (
+                                                <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                                                  <span style={{ color: '#8a8d90' }}>ConfigMap:</span>
+                                                  <span style={{ marginLeft: '8px', color: '#ffffff' }}>
+                                                    {subGeneratorData.configMapRef.name}
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 )}
                               </div>
