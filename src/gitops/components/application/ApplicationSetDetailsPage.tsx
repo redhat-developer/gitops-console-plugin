@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useK8sWatchResource, Timestamp } from '@openshift-console/dynamic-plugin-sdk';
 import { useParams } from 'react-router-dom-v5-compat';
 import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
-import { 
-  Card, 
-  CardBody, 
+import {
+  Card,
+  CardBody,
   CardTitle,
   CardHeader,
-  Spinner, 
+  Spinner,
   Badge,
   Label,
   LabelGroup,
@@ -21,7 +21,7 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import * as _ from 'lodash';
 import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
 import ApplicationDetailsTitle from './ApplicationDetailsTitle';
-import { useLabelsModal } from '@openshift-console/dynamic-plugin-sdk';
+import { useLabelsModal, useAnnotationsModal } from '@openshift-console/dynamic-plugin-sdk';
 
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 
@@ -41,6 +41,7 @@ const ApplicationSetDetailsPage: React.FC = () => {
 
   const [actions] = useApplicationSetActionsProvider(appSet);
   const launchLabelsModal = useLabelsModal(appSet);
+  const launchAnnotationsModal = useAnnotationsModal(appSet);
 
   if (loadError) return <div>Error loading ApplicationSet details.</div>;
   if (!loaded || !appSet) return <Spinner />;
@@ -53,6 +54,9 @@ const ApplicationSetDetailsPage: React.FC = () => {
   };
 
   const labelItems = metadata.labels || {};
+  const annotationItems = metadata.annotations || {};
+  // Helper to count object keys
+  const countAnnotations = Object.keys(annotationItems).length;
 
   return (
     <div className="pf-v6-c-page__main-section pf-m-no-padding pf-m-fill pf-v6-c-page__main-section--no-gap pf-v6-u-flex-shrink-1">
@@ -114,29 +118,23 @@ const ApplicationSetDetailsPage: React.FC = () => {
                             <dd className="pf-v6-c-description-list__description" style={{ padding: 0, marginTop: 0 }}>
                               <div style={{ display: 'inline-block' }}>
                                 <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 4, width: '100%' }}>
-                                  <button
-                                    onClick={launchLabelsModal}
+                                  <a
                                     style={{
-                                      padding: 0,
                                       fontSize: 13,
-                                      fontWeight: 400,
-                                      color: '#fff',
-                                      background: 'none',
-                                      border: 'none',
+                                      color: '#73bcf7',
+                                      textDecoration: 'underline',
+                                      cursor: 'pointer',
                                       display: 'inline-flex',
                                       alignItems: 'center',
-                                      cursor: 'pointer',
                                     }}
-                                    className="co-resource-item__action-edit custom-edit-link"
+                                    tabIndex={0}
+                                    role="button"
+                                    onClick={launchLabelsModal}
+                                    onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') launchLabelsModal(); }}
                                     aria-label="Edit labels"
                                   >
-                                    Edit <PencilAltIcon style={{ marginLeft: 4, fontSize: 13, color: '#fff' }} />
-                                  </button>
-                                  <style>{`
-                                    .custom-edit-link:hover {
-                                      text-decoration: underline;
-                                    }
-                                  `}</style>
+                                    Edit <PencilAltIcon style={{ marginLeft: 4, fontSize: 13, color: '#73bcf7' }} />
+                                  </a>
                                 </div>
                                 <div
                                   style={{
@@ -171,6 +169,37 @@ const ApplicationSetDetailsPage: React.FC = () => {
                                       ))}
                                     </LabelGroup>
                                   )}
+                                </div>
+                              </div>
+                            </dd>
+                          </div>
+
+                          {/* Annotations Section - matches Console style */}
+                          <div className="pf-v6-c-description-list__group">
+                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Annotations" style={{ margin: 0 }}>
+                              <span>Annotations</span>
+                            </dt>
+                            <dd className="pf-v6-c-description-list__description" style={{ padding: 0, marginTop: 0 }}>
+                              <div style={{ display: 'inline-block' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4, width: '100%' }}>
+                                  <a
+                                    style={{
+                                      fontSize: 15,
+                                      color: '#73bcf7',
+                                      textDecoration: 'underline',
+                                      cursor: 'pointer',
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                    }}
+                                    tabIndex={0}
+                                    role="button"
+                                    onClick={launchAnnotationsModal}
+                                    onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') launchAnnotationsModal(); }}
+                                    aria-label="Edit annotations"
+                                  >
+                                    {countAnnotations} annotation{countAnnotations !== 1 ? 's' : ''}
+                                    <PencilAltIcon style={{ marginLeft: 6, fontSize: 15, color: '#73bcf7' }} />
+                                  </a>
                                 </div>
                               </div>
                             </dd>
@@ -236,17 +265,33 @@ const ApplicationSetDetailsPage: React.FC = () => {
                             </dd>
                           </div>
 
+                          {/* Generators Section */}
                           <div className="pf-v6-c-description-list__group">
                             <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Generators">
+                              <div className="pf-v6-l-split pf-v6-u-w-100">
+                                <div className="pf-v6-l-split__item pf-m-fill">Generators</div>
+                              </div>
+                            </dt>
+                            <dd className="pf-v6-c-description-list__description">
+                              <div className="pf-v6-l-split pf-v6-u-w-100">
+                                <div className="pf-v6-l-split__item pf-m-fill">
+                                  <Badge isRead color="grey">1 generators</Badge>
+                                </div>
+                              </div>
+                            </dd>
+                          </div>
+
+                          {/* App Project Section (blue badge, no extra Created at) */}
+                          <div className="pf-v6-c-description-list__group">
+                            <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_AppProject">
                               <div className="pf-v6-l-split pf-v6-u-w-100">
                                 <div className="pf-v6-l-split__item pf-m-fill">App Project</div>
                               </div>
                             </dt>
-                              <div className="pf-v6-l-split__item pf-m-fill">Created at</div>
                             <dd className="pf-v6-c-description-list__description">
                               <div className="pf-v6-l-split pf-v6-u-w-100">
                                 <div className="pf-v6-l-split__item pf-m-fill">
-                                  <Badge isRead color="blue">AP</Badge> default
+                                  <Badge isRead color="blue" style={{ backgroundColor: '#73bcf7', color: '#003a70' }}>AP</Badge> default
                                 </div>
                               </div>
                             </dd>
@@ -272,38 +317,35 @@ const ApplicationSetDetailsPage: React.FC = () => {
 
                         {/* Conditions Section */}
                         {status.conditions && status.conditions.length > 0 && (
-                          <div className="co-m-pane__body">
-                            <h2 data-test-section-heading="Conditions" className="pf-v6-c-title pf-m-h2 co-section-heading">
-                              <span>Conditions</span>
-                            </h2>
-                            <table role="grid" className="pf-v6-c-table">
-                              <thead>
-                                <tr>
-                                  <th>Type</th>
-                                  <th>Status</th>
-                                  <th>Updated</th>
-                                  <th>Reason</th>
-                                  <th>Message</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {status.conditions.map((condition: any, index: number) => (
-                                  <tr key={index}>
-                                    <td>{condition.type}</td>
-                                    <td>
-                                      <Badge isRead color={condition.status === 'True' ? 'green' : 'grey'}>
-                                        {condition.status}
-                                      </Badge>
-                                    </td>
-                                    <td>
+                          <div className="co-m-pane__body" style={{ marginTop: 32 }}>
+                            <div style={{ fontWeight: 700, fontSize: 24, marginBottom: 20, marginTop: 8 }}>Conditions</div>
+                            <div style={{ borderTop: '1px solid #393F44', marginBottom: 0 }} />
+                            <div style={{ width: '100%' }}>
+                              <div style={{ display: 'flex', fontWeight: 600, fontSize: 16, padding: '16px 0 8px 0' }}>
+                                <div style={{ flex: 2, textAlign: 'left', paddingLeft: 0 }}>Type</div>
+                                <div style={{ flex: 1, textAlign: 'left' }}>Status</div>
+                                <div style={{ flex: 2, textAlign: 'left' }}>Updated</div>
+                                <div style={{ flex: 2, textAlign: 'left' }}>Reason</div>
+                                <div style={{ flex: 4, textAlign: 'left' }}>Message</div>
+                              </div>
+                              <div style={{ borderTop: '1px solid #393F44' }} />
+                              {status.conditions.map((condition: any, index: number) => (
+                                <React.Fragment key={index}>
+                                  <div style={{ display: 'flex', fontSize: 15, padding: '16px 0', alignItems: 'flex-start' }}>
+                                    <div style={{ flex: 2, textAlign: 'left', paddingLeft: 0 }}>{condition.type}</div>
+                                    <div style={{ flex: 1, textAlign: 'left' }}>{condition.status}</div>
+                                    <div style={{ flex: 2, textAlign: 'left', display: 'flex', alignItems: 'center' }}>
                                       <Timestamp timestamp={condition.lastTransitionTime} />
-                                    </td>
-                                    <td>{condition.reason || ''}</td>
-                                    <td>{condition.message || ''}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
+                                    </div>
+                                    <div style={{ flex: 2, textAlign: 'left' }}>{condition.reason || ''}</div>
+                                    <div style={{ flex: 4, textAlign: 'left' }}>{condition.message || ''}</div>
+                                  </div>
+                                  {index !== status.conditions.length - 1 && (
+                                    <div style={{ borderTop: '1px solid #393F44' }} />
+                                  )}
+                                </React.Fragment>
+                              ))}
+                            </div>
                           </div>
                         )}
                       </CardBody>
