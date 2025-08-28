@@ -3,10 +3,6 @@ import { useK8sWatchResource, Timestamp } from '@openshift-console/dynamic-plugi
 import { useParams } from 'react-router-dom-v5-compat';
 import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
 import {
-  Card,
-  CardBody,
-  CardTitle,
-  CardHeader,
   Spinner,
   Badge,
   Label,
@@ -20,7 +16,7 @@ import {
 import { PencilAltIcon } from '@patternfly/react-icons';
 import * as _ from 'lodash';
 import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
-import ApplicationDetailsTitle from './ApplicationDetailsTitle';
+import ResourceDetailsTitle from '../../utils/components/DetailsPageTitle/ResourceDetailsTitle';
 import { useLabelsModal, useAnnotationsModal } from '@openshift-console/dynamic-plugin-sdk';
 
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
@@ -61,12 +57,15 @@ const ApplicationSetDetailsPage: React.FC = () => {
 
   return (
     <div className="pf-v6-c-page__main-section pf-m-no-padding pf-m-fill pf-v6-c-page__main-section--no-gap pf-v6-u-flex-shrink-1">
-      <ApplicationDetailsTitle
+      <ResourceDetailsTitle
         obj={appSet}
         model={ApplicationSetModel}
         name={name}
         namespace={ns}
         actions={actions}
+        iconText="AS"
+        iconTitle="Argo CD ApplicationSet"
+        resourcePrefix="Argo CD"
       />
 
       {/* Main Content */}
@@ -78,11 +77,10 @@ const ApplicationSetDetailsPage: React.FC = () => {
               <div className="co-m-pane__body">
                 <div className="pf-v6-l-grid pf-m-gutter">
                   <div className="pf-v6-l-grid__item pf-m-12-col-on-md">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>ApplicationSet details</CardTitle>
-                      </CardHeader>
-                      <CardBody>
+                    <div style={{ marginBottom: '24px', paddingLeft: '24px', paddingTop: '24px' }}>
+                      <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>Argo CD ApplicationSet details</h2>
+                    </div>
+                    <div style={{ paddingLeft: '24px' }}>
                         <DescriptionList data-test-id="resource-summary">
                           <div className="pf-v6-c-description-list__group">
                             <dt className="pf-v6-c-description-list__term" data-test-selector="details-item-label_Name">
@@ -349,8 +347,7 @@ const ApplicationSetDetailsPage: React.FC = () => {
                             </div>
                           </div>
                         )}
-                      </CardBody>
-                    </Card>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -383,14 +380,12 @@ const ApplicationSetDetailsPage: React.FC = () => {
             </Tab>
 
             <Tab eventKey={2} title={<TabTitleText>Generators</TabTitleText>} className="pf-v6-c-tab-content">
-              <div className="co-m-pane__body">
-                <div className="pf-v6-l-grid pf-m-gutter">
-                  <div className="pf-v6-l-grid__item pf-m-12-col-on-md">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Generators</CardTitle>
-                      </CardHeader>
-                      <CardBody>
+              <div className="pf-v6-l-grid pf-m-gutter">
+                <div className="pf-v6-l-grid__item pf-m-12-col-on-md">
+                  <div style={{ marginBottom: '24px', paddingLeft: '24px', paddingTop: '24px' }}>
+                    <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>Generators</h2>
+                  </div>
+                  <div style={{ paddingLeft: '24px' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                           {appSet.spec?.generators?.map((generator: any, index: number) => {
                             const generatorType = Object.keys(generator)[0];
@@ -515,11 +510,9 @@ const ApplicationSetDetailsPage: React.FC = () => {
                             </div>
                           )}
                         </div>
-                      </CardBody>
-                    </Card>
+                    </div>
                   </div>
                 </div>
-              </div>
             </Tab>
 
             <Tab eventKey={3} title={<TabTitleText>Applications</TabTitleText>} className="pf-v6-c-tab-content">
@@ -539,11 +532,10 @@ const ApplicationSetDetailsPage: React.FC = () => {
               <div className="co-m-pane__body">
                 <div className="pf-v6-l-grid pf-m-gutter">
                   <div className="pf-v6-l-grid__item pf-m-12-col-on-md">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Events</CardTitle>
-                      </CardHeader>
-                      <CardBody>
+                    <div style={{ marginBottom: '24px', paddingLeft: '24px', paddingTop: '24px' }}>
+                      <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>Events</h2>
+                    </div>
+                    <div style={{ paddingLeft: '24px' }}>
                         {status.conditions && status.conditions.length > 0 ? (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {status.conditions.map((condition: any, index: number) => (
@@ -620,8 +612,7 @@ const ApplicationSetDetailsPage: React.FC = () => {
                             </div>
                           </div>
                         )}
-                      </CardBody>
-                    </Card>
+                    </div>
                   </div>
                 </div>
               </div>

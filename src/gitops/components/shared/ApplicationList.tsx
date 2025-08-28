@@ -1,3 +1,13 @@
+import {
+  DataViewTable,
+  DataViewTh,
+  DataViewTr,
+} from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
+import { useDataViewSort } from '@patternfly/react-data-view/dist/dynamic/Hooks';
+import { Spinner, Flex, FlexItem, EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import { CubesIcon } from '@patternfly/react-icons';
+import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
+import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom-v5-compat';
@@ -15,17 +25,6 @@ import {
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody, Flex, FlexItem, Spinner } from '@patternfly/react-core';
-import {
-  DataViewTable,
-  DataViewTh,
-  DataViewTr,
-} from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
-import { useDataViewSort } from '@patternfly/react-data-view/dist/dynamic/Hooks';
-import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
-import { CubesIcon } from '@patternfly/react-icons';
-import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
 import { useApplicationActionsProvider } from '../..//hooks/useApplicationActionsProvider';
 import RevisionFragment from '../..//Revision/Revision';
@@ -126,7 +125,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     return sortData(applications, sortBy, direction);
   }, [applications, sortBy, direction]);
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
-  const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
+  const [, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
   // Filter applications by project or appset before rendering rows
   const filteredByOwner = React.useMemo(
     () => filteredData.filter(filterApp(project, appset)),
@@ -150,10 +149,11 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     <Tbody>
       <Tr key="loading" ouiaId={'table-tr-loading'}>
         <Td colSpan={columnsDV.length}>
-          <ErrorState
-            titleText="Unable to load data"
-            bodyText="There was an error retrieving applications. Check your connection and reload the page."
-          />
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="Unable to load data">
+            <EmptyStateBody>
+              There was an error retrieving applications. Check your connection and reload the page.
+            </EmptyStateBody>
+          </EmptyState>
         </Td>
       </Tr>
     </Tbody>
@@ -180,7 +180,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       <ListPageBody>
         {!hideNameLabelFilters && (
           <ListPageFilter
-            data={data.filter(filterApp(project, appset))}
+            data={applications.filter(filterApp(project, appset))}
             loaded={loaded}
             rowFilters={filters}
             onFilterChange={onFilterChange}
