@@ -11,7 +11,7 @@ import {
   Popover
 } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
-import { ResourceLink, Timestamp } from '@openshift-console/dynamic-plugin-sdk';
+import { ResourceLink, Timestamp, useAccessReview } from '@openshift-console/dynamic-plugin-sdk';
 import { useLabelsModal, useAnnotationsModal } from '@openshift-console/dynamic-plugin-sdk';
 import * as _ from 'lodash';
 
@@ -47,8 +47,18 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
   showAppProject = false,
   showRepository = false,
 }) => {
-  const launchLabelsModal = useLabelsModal(resource);
+    const launchLabelsModal = useLabelsModal(resource);
   const launchAnnotationsModal = useAnnotationsModal(resource);
+
+  // Check if user has permission to update the resource
+  // This enables/disables the Labels and Annotations edit buttons based on user permissions
+  const [canUpdate] = useAccessReview({
+    group: 'argoproj.io',
+    verb: 'patch',
+    resource: 'applicationsets',
+    name: metadata.name,
+    namespace: metadata.namespace,
+  });
 
   const labelItems = metadata.labels || {};
   const annotationItems = metadata.annotations || {};
@@ -140,25 +150,27 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
         </DescriptionListTermHelpText>
         <DescriptionListDescription>
           <div style={{ display: 'inline-block' }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 4, width: '100%' }}>
-              <a
-                style={{
-                  fontSize: 13,
-                  color: '#73bcf7',
-                  textDecoration: 'underline',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                }}
-                tabIndex={0}
-                role="button"
-                onClick={launchLabelsModal}
-                onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') launchLabelsModal(); }}
-                aria-label="Edit labels"
-              >
-                Edit <PencilAltIcon style={{ marginLeft: 4, fontSize: 13, color: '#73bcf7' }} />
-              </a>
-            </div>
+            {canUpdate && (
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 4, width: '100%' }}>
+                <a
+                  style={{
+                    fontSize: 13,
+                    color: '#73bcf7',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                  }}
+                  tabIndex={0}
+                  role="button"
+                  onClick={launchLabelsModal}
+                  onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') launchLabelsModal(); }}
+                  aria-label="Edit labels"
+                >
+                  Edit <PencilAltIcon style={{ marginLeft: 4, fontSize: 13, color: '#73bcf7' }} />
+                </a>
+              </div>
+            )}
             <div
               style={{
                 display: 'flex',
@@ -223,26 +235,28 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
         </DescriptionListTermHelpText>
         <DescriptionListDescription>
           <div style={{ display: 'inline-block' }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4, width: '100%' }}>
-              <a
-                style={{
-                  fontSize: 15,
-                  color: '#73bcf7',
-                  textDecoration: 'underline',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                }}
-                tabIndex={0}
-                role="button"
-                onClick={launchAnnotationsModal}
-                onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') launchAnnotationsModal(); }}
-                aria-label="Edit annotations"
-              >
-                {countAnnotations} annotation{countAnnotations !== 1 ? 's' : ''}
-                <PencilAltIcon style={{ marginLeft: 6, fontSize: 15, color: '#73bcf7' }} />
-              </a>
-            </div>
+            {canUpdate && (
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4, width: '100%' }}>
+                <a
+                  style={{
+                    fontSize: 15,
+                    color: '#73bcf7',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                  }}
+                  tabIndex={0}
+                  role="button"
+                  onClick={launchAnnotationsModal}
+                  onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') launchAnnotationsModal(); }}
+                  aria-label="Edit annotations"
+                >
+                  {countAnnotations} annotation{countAnnotations !== 1 ? 's' : ''}
+                  <PencilAltIcon style={{ marginLeft: 6, fontSize: 15, color: '#73bcf7' }} />
+                </a>
+              </div>
+            )}
           </div>
         </DescriptionListDescription>
       </DescriptionListGroup>
