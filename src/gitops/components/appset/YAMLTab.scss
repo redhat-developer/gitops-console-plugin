@@ -1,0 +1,51 @@
+.application-set-details-page {
+  &__yaml-editor {
+    background: #1a1d21;
+    border: 1px solid #393F44;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  &__yaml-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #212427;
+    border-bottom: 1px solid #393F44;
+  }
+
+  &__yaml-editor-header-buttons {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__yaml-editor-header-shortcuts {
+    font-size: 12px;
+  }
+
+  &__yaml-editor-header-shortcuts-link {
+    color: #0066cc;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__yaml-editor-content {
+    padding: 16px;
+    max-height: 600px;
+    overflow-y: auto;
+
+    pre {
+      margin: 0;
+      color: #ffffff;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  }
+}
