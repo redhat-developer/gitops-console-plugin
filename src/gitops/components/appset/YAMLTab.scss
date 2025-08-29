@@ -1,51 +1,44 @@
 .application-set-details-page {
   &__yaml-editor {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     background: #1a1d21;
     border: 1px solid #393F44;
     border-radius: 8px;
     overflow: hidden;
-  }
 
-  &__yaml-editor-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    background: #212427;
-    border-bottom: 1px solid #393F44;
-  }
-
-  &__yaml-editor-header-buttons {
-    display: flex;
-    gap: 8px;
-  }
-
-  &__yaml-editor-header-shortcuts {
-    font-size: 12px;
-  }
-
-  &__yaml-editor-header-shortcuts-link {
-    color: #0066cc;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
+    /* Remove PF CodeEditor focus/bottom accent borders inside the YAML area */
+    .pf-v6-c-code-editor,
+    .pf-c-code-editor {
+      border: 0 !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+    .pf-v6-c-code-editor:focus-within,
+    .pf-c-code-editor:focus-within {
+      box-shadow: none !important;
+      outline: none !important;
     }
   }
 
   &__yaml-editor-content {
-    padding: 16px;
-    max-height: 600px;
-    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden; /* prevent page-level scroll */
 
-    pre {
-      margin: 0;
-      color: #ffffff;
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-      font-size: 12px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-word;
+    /* Force the editor to fill and scroll internally */
+    .pf-v6-c-code-editor,
+    .pf-c-code-editor {
+      height: 100% !important;
+    }
+    .pf-v6-c-code-editor__main,
+    .pf-c-code-editor__main {
+      height: 100% !important;
+    }
+    .monaco-editor,
+    .monaco-editor .overflow-guard {
+      height: 100% !important;
     }
   }
 }

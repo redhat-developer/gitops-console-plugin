@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import { ApplicationSetKind } from '../../models/ApplicationSetModel';
 import {
   Badge,
@@ -7,7 +8,7 @@ import {
 } from '@patternfly/react-core';
 import './EventsTab.scss';
 
-type EventsTabProps = {
+type EventsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: ApplicationSetKind;
   namespace?: string;
   name?: string;

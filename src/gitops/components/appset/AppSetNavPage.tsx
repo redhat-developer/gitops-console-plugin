@@ -25,7 +25,7 @@ type AppSetPageProps = {
 
 const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => {
   const [activeTabKey, setActiveTabKey] = React.useState<string | number>(0);
-  
+
   const [appSet, loaded, loadError] = useK8sWatchResource<ApplicationSetKind>({
     groupVersionKind: {
       group: 'argoproj.io',
@@ -45,9 +45,14 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
     </Bullseye>
   );
 
-  const handleTabClick = (event: React.MouseEvent<HTMLElement, MouseEvent>, tabIndex: string | number) => {
+  const handleTabClick = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    tabIndex: string | number,
+  ) => {
     setActiveTabKey(tabIndex);
   };
+
+  const isYamlTab = activeTabKey === 1;
 
   return (
     <div className="application-set-details-page__main-section">
@@ -57,11 +62,11 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
         name={name}
         namespace={namespace}
         actions={actions}
-        iconText="AS"
+        iconText={isYamlTab ? '' : 'AS'}
         iconTitle="Argo CD ApplicationSet"
         resourcePrefix="Argo CD"
+        showDevPreviewBadge={!isYamlTab}
       />
-      
       <div className="application-set-details-page__body">
         <div className="application-set-details-page__pane-body">
           <Tabs activeKey={activeTabKey} onSelect={handleTabClick} className="pf-v6-c-tabs">
