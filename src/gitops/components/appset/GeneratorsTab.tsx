@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import { ApplicationSetKind } from '../../models/ApplicationSetModel';
 import { PageSection } from '@patternfly/react-core';
 import Generators from './Generators';
 import './GeneratorsTab.scss';
 
-type GeneratorsTabProps = {
+type GeneratorsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: ApplicationSetKind;
   namespace?: string;
   name?: string;

@@ -1,51 +1,61 @@
-.application-set-details-page {
-  &__yaml-editor {
-    background: #1a1d21;
-    border: 1px solid #393F44;
-    border-radius: 8px;
-    overflow: hidden;
+.yaml-tab-container {
+  // Use viewport height to fit the page without scrolling - adjust for header, tabs, and footer
+  height: calc(97vh - 320px); // Slightly reduced to make footer fully visible
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; // Prevent page scrolling for YAML tab only
+
+  // Override parent scrolling behavior for YAML tab
+  .application-set-details-page__pane-body {
+    overflow: hidden !important; // Override parent scrolling for YAML tab
   }
 
-  &__yaml-editor-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    background: #212427;
-    border-bottom: 1px solid #393F44;
+  .pf-v6-c-code-editor:focus-within,
+  .pf-c-code-editor:focus-within {
+    box-shadow: none !important;
+    outline: none !important;
   }
 
-  &__yaml-editor-header-buttons {
-    display: flex;
-    gap: 8px;
+  .monaco-editor .scrollbar .slider {
+    border: 0 !important;
   }
 
-  &__yaml-editor-header-shortcuts {
-    font-size: 12px;
+  .monaco-editor .scrollbar .slider:hover {
+    border: 0 !important;
   }
 
-  &__yaml-editor-header-shortcuts-link {
-    color: #0066cc;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
+  .monaco-editor .scrollbar.vertical {
+    border-left: 0 !important;
   }
 
-  &__yaml-editor-content {
-    padding: 16px;
-    max-height: 600px;
-    overflow-y: auto;
+  .monaco-editor .scrollbar.horizontal {
+    border-top: 0 !important;
+  }
 
-    pre {
-      margin: 0;
-      color: #ffffff;
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-      font-size: 12px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
+  .monaco-editor .margin-view-overlays {
+    border: 0 !important;
+  }
+
+  .monaco-editor .glyph-margin {
+    border: 0 !important;
+  }
+
+  .monaco-editor .monaco-editor-background:focus {
+    outline: none !important;
+    border: 0 !important;
+  }
+
+  .monaco-editor .scrollbar .corner:hover {
+    background: transparent !important;
+    border: 0 !important;
+  }
+
+  .monaco-editor .scrollbar .slider.active:hover {
+    border: 0 !important;
+  }
+
+  .monaco-editor .scrollbar .slider::before,
+  .monaco-editor .scrollbar .slider::after {
+    display: none !important;
   }
 }

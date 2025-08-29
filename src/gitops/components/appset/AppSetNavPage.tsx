@@ -16,6 +16,7 @@ import AppsTab from './AppsTab';
 import EventsTab from './EventsTab';
 import YAMLTab from './YAMLTab';
 import './AppSetNavPage.scss';
+import { useLocation } from 'react-router-dom-v5-compat';
 
 type AppSetPageProps = {
   name: string;
@@ -24,8 +25,9 @@ type AppSetPageProps = {
 };
 
 const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => {
+  const location = useLocation();
   const [activeTabKey, setActiveTabKey] = React.useState<string | number>(0);
-  
+
   const [appSet, loaded, loadError] = useK8sWatchResource<ApplicationSetKind>({
     groupVersionKind: {
       group: 'argoproj.io',
@@ -38,6 +40,15 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
 
   const [actions] = useApplicationSetActionsProvider(appSet);
 
+  // Handle tab query parameter
+  React.useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get('tab');
+    if (tabParam === 'yaml') {
+      setActiveTabKey(1); // YAML tab is at index 1
+    }
+  }, [location.search]);
+
   if (loadError) return <div>Error loading ApplicationSet details.</div>;
   if (!loaded || !appSet) return (
     <Bullseye>
@@ -45,7 +56,10 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
     </Bullseye>
   );
 
-  const handleTabClick = (event: React.MouseEvent<HTMLElement, MouseEvent>, tabIndex: string | number) => {
+  const handleTabClick = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    tabIndex: string | number,
+  ) => {
     setActiveTabKey(tabIndex);
   };
 
@@ -60,8 +74,8 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
         iconText="AS"
         iconTitle="Argo CD ApplicationSet"
         resourcePrefix="Argo CD"
+        showDevPreviewBadge={true}
       />
-      
       <div className="application-set-details-page__body">
         <div className="application-set-details-page__pane-body">
           <Tabs activeKey={activeTabKey} onSelect={handleTabClick} className="pf-v6-c-tabs">
