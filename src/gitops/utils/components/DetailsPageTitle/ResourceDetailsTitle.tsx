@@ -8,6 +8,7 @@ import { Action, K8sModel, K8sResourceCommon } from '@openshift-console/dynamic-
 import { Breadcrumb, BreadcrumbItem, Spinner, Title } from '@patternfly/react-core';
 import ActionsDropdown from '../../../utils/components/ActionDropDown/ActionDropDown';
 import DetailsPageTitle, { PaneHeading } from './DetailsPageTitle';
+import FavoriteButton from '../../../components/appset/FavoriteButton';
 
 type ResourceDetailsTitleProps = {
   obj: K8sResourceCommon;
@@ -74,7 +75,8 @@ const ResourceDetailsTitle: React.FC<ResourceDetailsTitleProps> = ({
                 </span>
               )}
             </Title>
-            <div className="co-actions">
+            <div className="co-actions" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <FavoriteButton defaultName={name ?? obj?.metadata?.name} />
               <ActionsDropdown actions={actions} isKebabToggle={false} />
             </div>
           </PaneHeading>
