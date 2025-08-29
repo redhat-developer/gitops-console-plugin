@@ -1,44 +1,34 @@
-.application-set-details-page {
-  &__yaml-editor {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background: #1a1d21;
-    border: 1px solid #393F44;
-    border-radius: 8px;
-    overflow: hidden;
+.yaml-tab-container {
+  // Remove height constraint to let ResourceYAMLEditor handle its own layout
+  min-height: 500px;
 
-    /* Remove PF CodeEditor focus/bottom accent borders inside the YAML area */
-    .pf-v6-c-code-editor,
-    .pf-c-code-editor {
-      border: 0 !important;
-      box-shadow: none !important;
-      outline: none !important;
-    }
-    .pf-v6-c-code-editor:focus-within,
-    .pf-c-code-editor:focus-within {
-      box-shadow: none !important;
-      outline: none !important;
-    }
+  // Remove blue border from ResourceYAMLEditor
+  .pf-v6-c-code-editor,
+  .pf-c-code-editor {
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
   }
 
-  &__yaml-editor-content {
-    flex: 1;
-    min-height: 0;
-    overflow: hidden; /* prevent page-level scroll */
+  .pf-v6-c-code-editor:focus-within,
+  .pf-c-code-editor:focus-within {
+    box-shadow: none !important;
+    outline: none !important;
+  }
 
-    /* Force the editor to fill and scroll internally */
-    .pf-v6-c-code-editor,
-    .pf-c-code-editor {
-      height: 100% !important;
-    }
-    .pf-v6-c-code-editor__main,
-    .pf-c-code-editor__main {
-      height: 100% !important;
-    }
-    .monaco-editor,
-    .monaco-editor .overflow-guard {
-      height: 100% !important;
-    }
+  // Ensure the editor can expand properly
+  .pf-v6-c-code-editor,
+  .pf-c-code-editor {
+    min-height: 400px !important;
+  }
+
+  .pf-v6-c-code-editor__main,
+  .pf-c-code-editor__main {
+    min-height: 400px !important;
+  }
+
+  .monaco-editor,
+  .monaco-editor .overflow-guard {
+    min-height: 400px !important;
   }
 }
