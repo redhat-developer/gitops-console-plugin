@@ -1,13 +1,13 @@
 .yaml-tab-container {
-  // Remove height constraint to let ResourceYAMLEditor handle its own layout
-  min-height: 500px;
+  // Use viewport height to fit the page without scrolling - adjust for header, tabs, and footer
+  height: calc(97vh - 320px); // Slightly reduced to make footer fully visible
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; // Prevent page scrolling for YAML tab only
 
-  // Remove blue border from ResourceYAMLEditor
-  .pf-v6-c-code-editor,
-  .pf-c-code-editor {
-    border: 0 !important;
-    box-shadow: none !important;
-    outline: none !important;
+  // Override parent scrolling behavior for YAML tab
+  .application-set-details-page__pane-body {
+    overflow: hidden !important; // Override parent scrolling for YAML tab
   }
 
   .pf-v6-c-code-editor:focus-within,
@@ -16,19 +16,46 @@
     outline: none !important;
   }
 
-  // Ensure the editor can expand properly
-  .pf-v6-c-code-editor,
-  .pf-c-code-editor {
-    min-height: 400px !important;
+  .monaco-editor .scrollbar .slider {
+    border: 0 !important;
   }
 
-  .pf-v6-c-code-editor__main,
-  .pf-c-code-editor__main {
-    min-height: 400px !important;
+  .monaco-editor .scrollbar .slider:hover {
+    border: 0 !important;
   }
 
-  .monaco-editor,
-  .monaco-editor .overflow-guard {
-    min-height: 400px !important;
+  .monaco-editor .scrollbar.vertical {
+    border-left: 0 !important;
+  }
+
+  .monaco-editor .scrollbar.horizontal {
+    border-top: 0 !important;
+  }
+
+  .monaco-editor .margin-view-overlays {
+    border: 0 !important;
+  }
+
+  .monaco-editor .glyph-margin {
+    border: 0 !important;
+  }
+
+  .monaco-editor .monaco-editor-background:focus {
+    outline: none !important;
+    border: 0 !important;
+  }
+
+  .monaco-editor .scrollbar .corner:hover {
+    background: transparent !important;
+    border: 0 !important;
+  }
+
+  .monaco-editor .scrollbar .slider.active:hover {
+    border: 0 !important;
+  }
+
+  .monaco-editor .scrollbar .slider::before,
+  .monaco-editor .scrollbar .slider::after {
+    display: none !important;
   }
 }
