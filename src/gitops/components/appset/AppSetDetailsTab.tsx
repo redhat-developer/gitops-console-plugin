@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
 import { ApplicationSetKind } from '../../models/ApplicationSetModel';
 import {
@@ -12,7 +13,7 @@ import {
 import ResourceDetailsAttributes from '../../utils/components/ResourceDetails/ResourceDetailsAttributes';
 import './AppSetDetailsTab.scss';
 
-type AppSetDetailsTabProps = {
+type AppSetDetailsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: ApplicationSetKind;
   namespace?: string;
   name?: string;

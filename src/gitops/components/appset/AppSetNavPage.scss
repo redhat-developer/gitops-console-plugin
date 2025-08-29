@@ -14,6 +14,36 @@
   &__pane-body {
     flex: 1;
     padding: 20px;
+    /* Enable outer scrolling like native resource YAML pages */
     overflow-y: auto;
+
+    /* Make the YAML editor area tall and page-scrolling */
+    .pf-v6-c-code-editor,
+    .pf-c-code-editor {
+      min-height: 70vh;
+      border: 0 !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+    .pf-v6-c-code-editor__main,
+    .pf-c-code-editor__main {
+      min-height: 70vh;
+      border: 0 !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+    .pf-v6-c-code-editor__main::before,
+    .pf-v6-c-code-editor__main::after,
+    .pf-c-code-editor__main::before,
+    .pf-c-code-editor__main::after {
+      content: none !important;
+      display: none !important;
+    }
+    .monaco-editor,
+    .monaco-editor .overflow-guard {
+      min-height: 70vh;
+      height: 100% !important;
+    }
   }
+ 
 }
