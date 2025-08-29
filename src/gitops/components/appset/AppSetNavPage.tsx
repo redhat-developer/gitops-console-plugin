@@ -16,6 +16,7 @@ import AppsTab from './AppsTab';
 import EventsTab from './EventsTab';
 import YAMLTab from './YAMLTab';
 import './AppSetNavPage.scss';
+import { useLocation } from 'react-router-dom-v5-compat';
 
 type AppSetPageProps = {
   name: string;
@@ -24,6 +25,7 @@ type AppSetPageProps = {
 };
 
 const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => {
+  const location = useLocation();
   const [activeTabKey, setActiveTabKey] = React.useState<string | number>(0);
 
   const [appSet, loaded, loadError] = useK8sWatchResource<ApplicationSetKind>({
@@ -37,6 +39,15 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
   });
 
   const [actions] = useApplicationSetActionsProvider(appSet);
+
+  // Handle tab query parameter
+  React.useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get('tab');
+    if (tabParam === 'yaml') {
+      setActiveTabKey(1); // YAML tab is at index 1
+    }
+  }, [location.search]);
 
   if (loadError) return <div>Error loading ApplicationSet details.</div>;
   if (!loaded || !appSet) return (
