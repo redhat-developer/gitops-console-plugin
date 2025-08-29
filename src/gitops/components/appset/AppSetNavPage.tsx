@@ -52,8 +52,6 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
     setActiveTabKey(tabIndex);
   };
 
-  const isYamlTab = activeTabKey === 1;
-
   return (
     <div className="application-set-details-page__main-section">
       <ResourceDetailsTitle
@@ -62,10 +60,10 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
         name={name}
         namespace={namespace}
         actions={actions}
-        iconText={isYamlTab ? '' : 'AS'}
+        iconText="AS"
         iconTitle="Argo CD ApplicationSet"
         resourcePrefix="Argo CD"
-        showDevPreviewBadge={!isYamlTab}
+        showDevPreviewBadge={true}
       />
       <div className="application-set-details-page__body">
         <div className="application-set-details-page__pane-body">
