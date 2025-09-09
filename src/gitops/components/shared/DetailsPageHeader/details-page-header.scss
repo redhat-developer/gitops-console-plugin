@@ -1,0 +1,14 @@
+.argocd-resource-icon {
+    background-color: #E9654B !important;
+    color: white !important;
+}
+
+.co-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--pf-v6-global--spacer--sm);
+}
+
+.details-page-title {
+    padding-block-start: var(--pf-t--global--spacer--sm);
+}
