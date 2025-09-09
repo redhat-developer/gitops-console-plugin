@@ -87,3 +87,6 @@ Each component has its own SCSS file for styling:
 3. **Maintainability**: Easier to maintain and debug individual components
 4. **Consistency**: Follows the same pattern as gitops-admin-plugin
 5. **Scalability**: Easy to add new generator types or modify existing ones
+
+
+
