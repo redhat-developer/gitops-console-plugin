@@ -1,4 +1,10 @@
-import { K8sResourceCommon, K8sVerb, useAccessReview } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  GroupVersionKind,
+  K8sResourceCommon,
+  K8sResourceKindReference,
+  K8sVerb,
+  useAccessReview,
+} from '@openshift-console/dynamic-plugin-sdk';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk/lib/api/common-types';
 
 const modelToRef = (obj: K8sModel) => `${obj.apiGroup}~${obj.apiVersion}~${obj.kind}`;
@@ -90,3 +96,8 @@ export function getSelectorSearchURL(namespace: string, kind: string, selector: 
     return '/search?kind=' + kind + '&q=' + selector;
   }
 }
+
+export const isGroupVersionKind = (ref: GroupVersionKind | string) => ref?.split('~').length === 3;
+
+export const kindForReference = (ref: K8sResourceKindReference) =>
+  isGroupVersionKind(ref) ? ref.split('~')[2] : ref;
