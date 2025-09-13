@@ -9,6 +9,9 @@ import { isApplicationRefreshing } from '@gitops/utils/gitops';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { Action, K8sModel, K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import {
+  ActionList,
+  ActionListGroup,
+  ActionListItem,
   Breadcrumb,
   BreadcrumbItem,
   Flex,
@@ -45,7 +48,7 @@ const DetailsPageTitle: React.FC<DetailsPageTitleProps> = ({ breadcrumb, childre
   </div>
 );
 
-type ApplicationPageTitleProps = {
+type DetailsPageHeaderProps = {
   obj: K8sResourceCommon;
   model: K8sModel;
   name: string;
@@ -55,7 +58,7 @@ type ApplicationPageTitleProps = {
   iconTitle: string;
 };
 
-const DetailsPageHeader: React.FC<ApplicationPageTitleProps> = ({
+const DetailsPageHeader: React.FC<DetailsPageHeaderProps> = ({
   obj,
   model,
   name,
@@ -80,12 +83,12 @@ const DetailsPageHeader: React.FC<ApplicationPageTitleProps> = ({
                   Argo CD {t(model.labelPlural)}
                 </Link>
               </BreadcrumbItem>
-              <BreadcrumbItem>Argo CD {t(model.labelPlural + ' Details')}</BreadcrumbItem>
+              <BreadcrumbItem>Argo CD {t(model.labelPlural + ' details')}</BreadcrumbItem>
             </Breadcrumb>
           }
         >
           <PaneHeading>
-            <Title headingLevel="h1">
+            <Title headingLevel="h1" className="details-page-header">
               <span
                 className="co-m-resource-icon co-m-resource-icon--lg argocd-resource-icon"
                 title={iconTitle}
@@ -96,14 +99,23 @@ const DetailsPageHeader: React.FC<ApplicationPageTitleProps> = ({
                 {name ?? obj?.metadata?.name}{' '}
                 {isApplicationRefreshing(obj) ? <Spinner size="md" /> : <span></span>}
               </span>
-              <span style={{ marginLeft: '10px', marginBottom: '3px' }}>
+              <span
+                className="details-page-header__item"
+                style={{ marginLeft: '10px', marginBottom: '5px' }}
+              >
                 <DevPreviewBadge />
               </span>
             </Title>
-            <div className="co-actions">
-              <FavoriteButton defaultName={name ?? obj?.metadata?.name} />
-              <ActionsDropdown actions={actions} isKebabToggle={false} />
-            </div>
+            <ActionList className="co-actions">
+              <ActionListGroup>
+                <ActionListItem>
+                  <FavoriteButton defaultName={name ?? obj?.metadata?.name} />
+                </ActionListItem>
+                <ActionListItem>
+                  <ActionsDropdown actions={actions} isKebabToggle={false} />
+                </ActionListItem>
+              </ActionListGroup>
+            </ActionList>
           </PaneHeading>
         </DetailsPageTitle>
       </div>
