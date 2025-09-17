@@ -12,12 +12,19 @@ import {
   DescriptionListTermHelpText,
   DescriptionListTermHelpTextButton,
   Popover,
+  Grid,
+  GridItem,
 } from '@patternfly/react-core';
 import BaseDetailsSummary from '../shared/BaseDetailsSummary/BaseDetailsSummary';
 import { getAppSetGeneratorCount, getAppSetStatus } from '../../utils/gitops';
 import { ApplicationSetStatus } from '../../utils/constants';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { ApplicationKind, ApplicationModel } from '../../models/ApplicationModel';
+import {
+  HealthHealthyIcon,
+  HealthDegradedIcon,
+  HealthUnknownIcon,
+} from '../../utils/components/Icons/Icons';
 import './AppSetDetailsTab.scss';
 
 type AppSetDetailsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
@@ -55,12 +62,15 @@ const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj, namespace }) =
   return (
     <>
       <PageSection>
-        <BaseDetailsSummary obj={obj} model={ApplicationSetModel} />
-      </PageSection>
-
-      {/* ApplicationSet-specific details */}
-      <PageSection>
-        <DescriptionList className="pf-c-description-list">
+        <Title headingLevel="h2" className="co-section-heading">
+          Argo CD ApplicationSet details
+        </Title>
+        <Grid hasGutter={true}>
+          <GridItem span={12} sm={12} md={6} lg={6} xl={6} xl2={6}>
+            <BaseDetailsSummary obj={obj} model={ApplicationSetModel} />
+          </GridItem>
+          <GridItem span={12} sm={12} md={6} lg={6} xl={6} xl2={6}>
+            <DescriptionList className="pf-c-description-list">
           {/* Status */}
           <DescriptionListGroup>
             <DescriptionListTermHelpText>
@@ -79,10 +89,13 @@ const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj, namespace }) =
               </Popover>
             </DescriptionListTermHelpText>
             <DescriptionListDescription>
-              <Badge isRead color={appSetStatus === ApplicationSetStatus.HEALTHY ? 'green' : appSetStatus === ApplicationSetStatus.ERROR ? 'red' : 'orange'}>
-                {appSetStatus === ApplicationSetStatus.HEALTHY ? 'Healthy' : 
-                 appSetStatus === ApplicationSetStatus.ERROR ? 'Error' : 'Unknown'}
-              </Badge>
+              <span>
+                {appSetStatus === ApplicationSetStatus.HEALTHY && <HealthHealthyIcon />}
+                {appSetStatus === ApplicationSetStatus.ERROR && <HealthDegradedIcon />}
+                {appSetStatus === ApplicationSetStatus.UNKNOWN && <HealthUnknownIcon />}
+                {' '}{appSetStatus === ApplicationSetStatus.HEALTHY ? 'Healthy' : 
+                       appSetStatus === ApplicationSetStatus.ERROR ? 'Error' : 'Unknown'}
+              </span>
             </DescriptionListDescription>
           </DescriptionListGroup>
 
@@ -177,7 +190,9 @@ const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj, namespace }) =
               </DescriptionListDescription>
             </DescriptionListGroup>
           )}
-        </DescriptionList>
+            </DescriptionList>
+          </GridItem>
+        </Grid>
       </PageSection>
 
       {status.conditions && status.conditions.length > 0 && (
