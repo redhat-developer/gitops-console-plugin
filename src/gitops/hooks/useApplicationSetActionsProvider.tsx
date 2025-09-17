@@ -64,8 +64,9 @@ export const useApplicationSetActionsProvider: UseApplicationSetActionsProvider 
           namespace: applicationSet?.metadata?.namespace,
         },
         cta: () => {
+          // Navigate to the same page with a query parameter to switch to YAML tab
           navigate(
-            `/k8s/ns/${applicationSet.metadata.namespace}/${applicationSetModelRef}/${applicationSet.metadata.name}/yaml`,
+            `/k8s/ns/${applicationSet.metadata.namespace}/${applicationSetModelRef}/${applicationSet.metadata.name}?tab=yaml`,
           );
         },
       },
