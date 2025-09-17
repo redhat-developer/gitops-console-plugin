@@ -15,16 +15,18 @@ const GenericGenerator: React.FC<GenericGeneratorProps> = ({ gentype, generator 
         <DescriptionListGroup>
           <DescriptionListTerm>Configuration</DescriptionListTerm>
           <DescriptionListDescription>
-            <pre style={{ 
-              fontSize: '12px', 
-              backgroundColor: '#f6f6f6', 
-              padding: '8px', 
-              borderRadius: '4px',
-              margin: 0,
-              fontFamily: 'Monaco, Menlo, Ubuntu Mono, monospace'
+            <div style={{ 
+              fontFamily: 'Monaco, Menlo, Ubuntu Mono, monospace',
+              fontSize: '12px',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+              padding: '8px',
+              backgroundColor: 'var(--pf-v5-global--BackgroundColor--200)',
+              border: '1px solid var(--pf-v5-global--BorderColor--200)',
+              borderRadius: '4px'
             }}>
               {JSON.stringify(generator, null, 2)}
-            </pre>
+            </div>
           </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>

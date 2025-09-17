@@ -8,8 +8,8 @@ import {
   Tab,
   TabTitleText,
 } from '@patternfly/react-core';
+import DetailsPageHeader from '../shared/DetailsPageHeader/DetailsPageHeader';
 import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
-import ResourceDetailsTitle from '../../utils/components/DetailsPageTitle/ResourceDetailsTitle';
 import AppSetDetailsTab from './AppSetDetailsTab';
 import GeneratorsTab from './GeneratorsTab';
 import AppsTab from './AppsTab';
@@ -65,7 +65,7 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
 
   return (
     <div className="application-set-details-page__main-section">
-      <ResourceDetailsTitle
+      <DetailsPageHeader
         obj={appSet}
         model={ApplicationSetModel}
         name={name}
@@ -73,8 +73,6 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
         actions={actions}
         iconText="AS"
         iconTitle="Argo CD ApplicationSet"
-        resourcePrefix="Argo CD"
-        showDevPreviewBadge={true}
       />
       <div className="application-set-details-page__body">
         <div className="application-set-details-page__pane-body">

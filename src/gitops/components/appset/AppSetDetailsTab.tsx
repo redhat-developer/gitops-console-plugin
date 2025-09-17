@@ -1,16 +1,30 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
-import { ApplicationSetKind } from '../../models/ApplicationSetModel';
+import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
 import {
   Badge,
   PageSection,
   Title,
   DescriptionList,
+  DescriptionListGroup,
+  DescriptionListDescription,
+  DescriptionListTermHelpText,
+  DescriptionListTermHelpTextButton,
+  Popover,
   Grid,
   GridItem,
 } from '@patternfly/react-core';
-import ResourceDetailsAttributes from '../../utils/components/ResourceDetails/ResourceDetailsAttributes';
+import BaseDetailsSummary from '../shared/BaseDetailsSummary/BaseDetailsSummary';
+import { getAppSetGeneratorCount, getAppSetStatus } from '../../utils/gitops';
+import { ApplicationSetStatus } from '../../utils/constants';
+import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { ApplicationKind, ApplicationModel } from '../../models/ApplicationModel';
+import {
+  HealthHealthyIcon,
+  HealthDegradedIcon,
+  HealthUnknownIcon,
+} from '../../utils/components/Icons/Icons';
+import { Conditions } from '../../utils/components/Conditions/Conditions';
 import './AppSetDetailsTab.scss';
 
 type AppSetDetailsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
@@ -19,69 +33,174 @@ type AppSetDetailsTabProps = RouteComponentProps<{ ns: string; name: string }> &
   name?: string;
 };
 
-const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj }) => {
+const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj, namespace }) => {
   if (!obj) return null;
 
-  const metadata = obj.metadata || {};
   const status = obj.status || {};
+  const spec = obj.spec || {};
+  const totalGenerators = getAppSetGeneratorCount(obj);
+  const appSetStatus = getAppSetStatus(obj);
+  
+  // Get applications to count generated apps
+  const [applications] = useK8sWatchResource<ApplicationKind[]>({
+    groupVersionKind: {
+      group: ApplicationModel.apiGroup,
+      version: ApplicationModel.apiVersion,
+      kind: ApplicationModel.kind,
+    },
+    namespace: namespace || obj.metadata?.namespace,
+    isList: true,
+  });
+
+  // Count applications owned by this ApplicationSet
+  const generatedAppsCount = applications?.filter(app => 
+    app.metadata?.ownerReferences?.some(owner => 
+      owner.kind === obj.kind && owner.name === obj.metadata?.name
+    )
+  ).length || 0;
 
   return (
     <>
       <PageSection>
         <Title headingLevel="h2" className="co-section-heading">
-          ApplicationSet details
+          Argo CD ApplicationSet details
         </Title>
-        <Grid hasGutter={true} span={2} sm={3} md={6} lg={6} xl={6} xl2={6}>
-          <GridItem>
-            <DescriptionList>
-              <ResourceDetailsAttributes
-                metadata={metadata}
-                resource={obj}
-                showOwner={true}
-                showStatus={true}
-                showGeneratedApps={true}
-                showGenerators={true}
-                showAppProject={true}
-                showRepository={true}
-              />
+        <Grid hasGutter={true}>
+          <GridItem span={12} sm={12} md={6} lg={6} xl={6} xl2={6}>
+            <BaseDetailsSummary obj={obj} model={ApplicationSetModel} />
+          </GridItem>
+          <GridItem span={12} sm={12} md={6} lg={6} xl={6} xl2={6}>
+            <DescriptionList className="pf-c-description-list">
+          {/* Status */}
+          <DescriptionListGroup>
+            <DescriptionListTermHelpText>
+              <Popover 
+                headerContent={<div>Status</div>} 
+                bodyContent={
+                  <div>
+                    <div>Current status of the ApplicationSet</div>
+                    <div style={{ fontSize: '14px', color: '#ffffff', borderTop: '1px solid #4f5255', paddingTop: '8px', marginTop: '8px', fontWeight: '500' }}>
+                      ApplicationSet {'>'} status
+                    </div>
+                  </div>
+                }
+              >
+                <DescriptionListTermHelpTextButton>Status</DescriptionListTermHelpTextButton>
+              </Popover>
+            </DescriptionListTermHelpText>
+            <DescriptionListDescription>
+              <span>
+                {appSetStatus === ApplicationSetStatus.HEALTHY && <HealthHealthyIcon />}
+                {appSetStatus === ApplicationSetStatus.ERROR && <HealthDegradedIcon />}
+                {appSetStatus === ApplicationSetStatus.UNKNOWN && <HealthUnknownIcon />}
+                {' '}{appSetStatus === ApplicationSetStatus.HEALTHY ? 'Healthy' : 
+                       appSetStatus === ApplicationSetStatus.ERROR ? 'Error' : 'Unknown'}
+              </span>
+            </DescriptionListDescription>
+          </DescriptionListGroup>
+
+          {/* Generated Apps */}
+          <DescriptionListGroup>
+            <DescriptionListTermHelpText>
+              <Popover 
+                headerContent={<div>Generated Apps</div>} 
+                bodyContent={
+                  <div>
+                    <div>Number of applications generated by this ApplicationSet</div>
+                    <div style={{ fontSize: '14px', color: '#ffffff', borderTop: '1px solid #4f5255', paddingTop: '8px', marginTop: '8px', fontWeight: '500' }}>
+                      ApplicationSet {'>'} status {'>'} applications
+                    </div>
+                  </div>
+                }
+              >
+                <DescriptionListTermHelpTextButton>Generated Apps</DescriptionListTermHelpTextButton>
+              </Popover>
+            </DescriptionListTermHelpText>
+            <DescriptionListDescription>
+              <Badge isRead color="blue">{generatedAppsCount} application{generatedAppsCount !== 1 ? 's' : ''}</Badge>
+            </DescriptionListDescription>
+          </DescriptionListGroup>
+
+          {/* Generators */}
+          <DescriptionListGroup>
+            <DescriptionListTermHelpText>
+              <Popover 
+                headerContent={<div>Generators</div>} 
+                bodyContent={
+                  <div>
+                    <div>Number of generators configured in this ApplicationSet</div>
+                    <div style={{ fontSize: '14px', color: '#ffffff', borderTop: '1px solid #4f5255', paddingTop: '8px', marginTop: '8px', fontWeight: '500' }}>
+                      ApplicationSet {'>'} spec {'>'} generators
+                    </div>
+                  </div>
+                }
+              >
+                <DescriptionListTermHelpTextButton>Generators</DescriptionListTermHelpTextButton>
+              </Popover>
+            </DescriptionListTermHelpText>
+            <DescriptionListDescription>
+              <Badge isRead color="grey">{totalGenerators} generator{totalGenerators !== 1 ? 's' : ''}</Badge>
+            </DescriptionListDescription>
+          </DescriptionListGroup>
+
+          {/* App Project */}
+          <DescriptionListGroup>
+            <DescriptionListTermHelpText>
+              <Popover 
+                headerContent={<div>App Project</div>} 
+                bodyContent={
+                  <div>
+                    <div>Argo CD project that this ApplicationSet belongs to</div>
+                    <div style={{ fontSize: '14px', color: '#ffffff', borderTop: '1px solid #4f5255', paddingTop: '8px', marginTop: '8px', fontWeight: '500' }}>
+                      ApplicationSet {'>'} spec {'>'} template {'>'} spec {'>'} project
+                    </div>
+                  </div>
+                }
+              >
+                <DescriptionListTermHelpTextButton>App Project</DescriptionListTermHelpTextButton>
+              </Popover>
+            </DescriptionListTermHelpText>
+            <DescriptionListDescription>
+              <Badge isRead color="blue" style={{ backgroundColor: '#73bcf7', color: '#003a70' }}>AP</Badge> {spec.template?.spec?.project || 'default'}
+            </DescriptionListDescription>
+          </DescriptionListGroup>
+
+          {/* Repository */}
+          {spec.template?.spec?.source?.repoURL && (
+            <DescriptionListGroup>
+              <DescriptionListTermHelpText>
+                <Popover 
+                  headerContent={<div>Repository</div>} 
+                  bodyContent={
+                    <div>
+                      <div>Git repository URL where the ApplicationSet configuration is stored</div>
+                      <div style={{ fontSize: '14px', color: '#ffffff', borderTop: '1px solid #4f5255', paddingTop: '8px', marginTop: '8px', fontWeight: '500' }}>
+                        ApplicationSet {'>'} spec {'>'} template {'>'} spec {'>'} source {'>'} repoURL
+                      </div>
+                    </div>
+                  }
+                >
+                  <DescriptionListTermHelpTextButton>Repository</DescriptionListTermHelpTextButton>
+                </Popover>
+              </DescriptionListTermHelpText>
+              <DescriptionListDescription>
+                <a href={spec.template.spec.source.repoURL} target="_blank" rel="noopener noreferrer">
+                  {spec.template.spec.source.repoURL}
+                </a>
+              </DescriptionListDescription>
+            </DescriptionListGroup>
+          )}
             </DescriptionList>
           </GridItem>
         </Grid>
       </PageSection>
-      
-      {status.conditions && status.conditions.length > 0 && (
-        <PageSection>
-          <Title headingLevel="h2" className="co-section-heading">
-            Conditions
-          </Title>
-          <div className="application-set-details-page__conditions-table">
-            <div className="application-set-details-page__conditions-table-header">
-              <div className="application-set-details-page__conditions-table-header-cell application-set-details-page__conditions-table-header-cell--type">Type</div>
-              <div className="application-set-details-page__conditions-table-header-cell application-set-details-page__conditions-table-header-cell--status">Status</div>
-              <div className="application-set-details-page__conditions-table-header-cell application-set-details-page__conditions-table-header-cell--updated">Updated</div>
-              <div className="application-set-details-page__conditions-table-header-cell application-set-details-page__conditions-table-header-cell--reason">Reason</div>
-              <div className="application-set-details-page__conditions-table-header-cell application-set-details-page__conditions-table-header-cell--message">Message</div>
-            </div>
-            {status.conditions.map((condition: any, index: number) => (
-              <React.Fragment key={index}>
-                <div className="application-set-details-page__conditions-table-row">
-                  <div className="application-set-details-page__conditions-table-row-cell application-set-details-page__conditions-table-row-cell--type">{condition.type}</div>
-                  <div className="application-set-details-page__conditions-table-row-cell application-set-details-page__conditions-table-row-cell--status">
-                    <Badge isRead color={condition.status === 'True' ? 'green' : 'red'}>
-                      {condition.status}
-                    </Badge>
-                  </div>
-                  <div className="application-set-details-page__conditions-table-row-cell application-set-details-page__conditions-table-row-cell--updated">
-                    <Timestamp timestamp={condition.lastTransitionTime} />
-                  </div>
-                  <div className="application-set-details-page__conditions-table-row-cell application-set-details-page__conditions-table-row-cell--reason">{condition.reason || ''}</div>
-                  <div className="application-set-details-page__conditions-table-row-cell application-set-details-page__conditions-table-row-cell--message">{condition.message || ''}</div>
-                </div>
-              </React.Fragment>
-            ))}
-          </div>
-        </PageSection>
-      )}
+
+      <PageSection>
+        <Title headingLevel="h2" className="co-section-heading">
+          Conditions
+        </Title>
+        <Conditions conditions={status.conditions} />
+      </PageSection>
     </>
   );
 };

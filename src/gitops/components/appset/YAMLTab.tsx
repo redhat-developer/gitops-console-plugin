@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { ApplicationSetKind } from '../../models/ApplicationSetModel';
-import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
-import { Bullseye, Spinner } from '@patternfly/react-core';
-import './YAMLTab.scss';
+import ResourceYAMLTab from '../shared/ResourceYAMLTab/ResourceYAMLTab';
 
 type YAMLTabProps = {
   obj?: ApplicationSetKind;
@@ -10,15 +8,15 @@ type YAMLTabProps = {
   name?: string;
 };
 
-const YAMLTab: React.FC<YAMLTabProps> = ({ obj }) => {
+const YAMLTab: React.FC<YAMLTabProps> = ({ obj, namespace, name }) => {
   if (!obj) return null;
 
   return (
-    <div className="yaml-tab-container">
-      <React.Suspense fallback={<Bullseye><Spinner size="xl" /></Bullseye>}>
-        <ResourceYAMLEditor initialResource={obj} />
-      </React.Suspense>
-    </div>
+    <ResourceYAMLTab 
+      obj={obj} 
+      namespace={namespace} 
+      name={name} 
+    />
   );
 };
 

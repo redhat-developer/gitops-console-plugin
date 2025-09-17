@@ -145,19 +145,6 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       </Tr>
     </Tbody>
   );
-  const error = loadError && (
-    <Tbody>
-      <Tr key="loading" ouiaId={'table-tr-loading'}>
-        <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="Unable to load data">
-            <EmptyStateBody>
-              There was an error retrieving applications. Check your connection and reload the page.
-            </EmptyStateBody>
-          </EmptyState>
-        </Td>
-      </Tr>
-    </Tbody>
-  );
   let currentActiveState = null;
   if (loadError) {
     currentActiveState = DataViewState.error;
@@ -180,7 +167,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       <ListPageBody>
         {!hideNameLabelFilters && (
           <ListPageFilter
-            data={applications.filter(filterApp(project, appset))}
+            data={filteredByOwner}
             loaded={loaded}
             rowFilters={filters}
             onFilterChange={onFilterChange}
@@ -188,9 +175,9 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         )}
         <DataView activeState={currentActiveState}>
           <DataViewTable
-            rows={rows}
             columns={columnsDV}
-            bodyStates={loadError ? { error } : { empty }}
+            rows={rows}
+            bodyStates={empty && { empty }}
           />
         </DataView>
       </ListPageBody>
