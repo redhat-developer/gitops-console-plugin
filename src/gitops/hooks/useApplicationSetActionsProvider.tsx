@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
+
 import {
   ApplicationSetKind,
   ApplicationSetModel,
@@ -16,7 +17,9 @@ import {
 type UseApplicationSetActionsProvider = (applicationSet: ApplicationSetKind) => [actions: Action[]];
 const t = (key: string) => key;
 
-export const useApplicationSetActionsProvider: UseApplicationSetActionsProvider = (applicationSet) => {
+export const useApplicationSetActionsProvider: UseApplicationSetActionsProvider = (
+  applicationSet,
+) => {
   const navigate = useNavigate();
 
   const launchLabelsModal = useLabelsModal(applicationSet);
@@ -64,8 +67,9 @@ export const useApplicationSetActionsProvider: UseApplicationSetActionsProvider 
           namespace: applicationSet?.metadata?.namespace,
         },
         cta: () => {
+          // Navigate to the same page with a query parameter to switch to YAML tab
           navigate(
-            `/k8s/ns/${applicationSet.metadata.namespace}/${applicationSetModelRef}/${applicationSet.metadata.name}/yaml`,
+            `/k8s/ns/${applicationSet.metadata.namespace}/${applicationSetModelRef}/${applicationSet.metadata.name}?tab=yaml`,
           );
         },
       },
@@ -81,7 +85,7 @@ export const useApplicationSetActionsProvider: UseApplicationSetActionsProvider 
         cta: () => launchDeleteModal(),
       },
     ],
-    [t, applicationSet, navigate, launchLabelsModal, launchAnnotationsModal, launchDeleteModal],
+    [applicationSet, navigate, launchLabelsModal, launchAnnotationsModal, launchDeleteModal],
   );
 
   return [actions];

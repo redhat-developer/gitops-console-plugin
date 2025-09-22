@@ -7,18 +7,22 @@ interface RevisionProps {
   repoURL: string;
   revision: string;
   helm: boolean;
+  revisionExtra?: string;
 }
 
-const Revision: React.FC<RevisionProps> = ({ repoURL, revision, helm }) => {
+const Revision: React.FC<RevisionProps> = ({ repoURL, revision, helm, revisionExtra }) => {
   if (revision) {
     return (
       <>
         {!helm && (
-          <ExternalLink href={createRevisionURL(repoURL, revision)}>
-            ({revision.substring(0, 7) || ''})
-          </ExternalLink>
+          <span>
+            <ExternalLink href={createRevisionURL(repoURL, revision)}>
+              ({revision.substring(0, 7) || ''})
+            </ExternalLink>
+            {revisionExtra && revisionExtra}
+          </span>
         )}
-        {helm && <span>{revision}</span>}
+        {helm && <span>({revision.substring(0, 7) || ''})</span>}
       </>
     );
   } else {

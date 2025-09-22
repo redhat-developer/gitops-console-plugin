@@ -73,10 +73,12 @@ export type ApplicationSpec = {
 };
 
 export type ApplicationHistory = {
+  id?: number;
+  initiatedBy?: InitiatedBy;
   deployStartedAt?: string;
   deployedAt?: string;
-  id?: number;
-  revision: string;
+  revision?: string;
+  revisions?: string[];
   source: ApplicationSource;
 };
 

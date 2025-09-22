@@ -114,7 +114,7 @@ export const BaseDetailsSummary: React.FC<BaseDetailsSummaryProps> = ({ obj, mod
             </Popover>
           </DescriptionListTermHelpText>
           <DescriptionListDescription>
-            <Flex>
+            <Flex alignItems={{ default: 'alignItemsCenter' }}>
               <FlexItem>{obj?.metadata?.name}</FlexItem>
               {nameLink && <FlexItem>{nameLink}</FlexItem>}
             </Flex>

@@ -1,0 +1,73 @@
+// Application Details Title Styles
+.co-resource-item__resource-name {
+  font-size: var(--pf-v6-global--font-size--2xl);
+  font-weight: var(--pf-v6-global--font-weight--bold);
+  color: var(--pf-v6-global--Color--100);
+}
+
+.co-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--pf-v6-global--spacer--sm);
+}
+
+// Breadcrumb styles
+.pf-c-breadcrumb.co-breadcrumb {
+  padding: var(--pf-v6-global--spacer--md) var(--pf-v6-global--spacer--lg);
+  background-color: var(--pf-v6-global--BackgroundColor--100);
+  border-bottom: 1px solid var(--pf-v6-global--BorderColor--100);
+}
+
+// Ensure AS icon matches ApplicationSet list page color
+.co-m-resource-icon {
+  &.co-m-resource-icon--lg {
+    // Force the ApplicationSet color from console-extensions.json
+    background-color: #E9654B !important;
+    color: white !important;
+  }
+}
+
+// Ensure NS badge is green
+.pf-v6-c-badge {
+  &.pf-m-green {
+    background-color: var(--pf-v6-global--success-color--100) !important;
+    color: var(--pf-v6-global--Color--100) !important;
+  }
+}
+
+// Labels container styling - ensure it's visible and vertical
+.labels-container {
+  background-color: var(--pf-v6-global--BackgroundColor--200) !important;
+  border: 1px solid var(--pf-v6-global--BorderColor--200) !important;
+  border-radius: var(--pf-v6-global--BorderRadius--sm) !important;
+  padding: var(--pf-v6-global--spacer--md) !important;
+  min-height: 60px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--pf-v6-global--spacer--sm) !important;
+  margin-top: var(--pf-v6-global--spacer--sm) !important;
+}
+
+// Labels styling - force vertical layout
+.labels-container .pf-v6-c-label-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--pf-v6-global--spacer--sm) !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.labels-container .pf-v6-c-label-group .pf-v6-c-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  font-size: var(--pf-v6-global--font-size--sm) !important;
+  font-weight: var(--pf-v6-global--font-weight--normal) !important;
+  line-height: 1.2 !important;
+  padding: var(--pf-v6-global--spacer--xs) var(--pf-v6-global--spacer--sm) !important;
+  border-radius: var(--pf-v6-global--BorderRadius--sm) !important;
+  background-color: var(--pf-v6-global--BackgroundColor--300) !important;
+  color: var(--pf-v6-global--Color--100) !important;
+  border: 1px solid var(--pf-v6-global--BorderColor--300) !important;
+  width: fit-content !important;
+}
