@@ -20,6 +20,7 @@ export const ConditionsPopover: React.FC<ConditionsPopoverProps> = ({ conditions
   return (
     <Popover
       hasAutoWidth={true}
+      maxWidth="25rem"
       headerContent={<div>Application Conditions</div>}
       bodyContent={
         <div>
@@ -48,23 +49,23 @@ export const ConditionsPopover: React.FC<ConditionsPopoverProps> = ({ conditions
         {summary.error > 0 && (
           <div>
             <RedExclamationCircleIcon />
-            <span className="pf-u-pl-sm">
+            <span className="pf-v6-u-ml-sm">
               {summary.error == 1 ? '1 Error' : summary.error + ' Errors'}
             </span>
           </div>
         )}
         {summary.warning > 0 && (
-          <div className={summary.error > 0 ? 'pf-u-pl-sm' : ''}>
+          <div className={summary.error > 0 ? 'pf-v6-u-pl-sm' : ''}>
             <YellowExclamationTriangleIcon />
-            <span className="pf-u-pl-sm">
+            <span className="pf-v6-u-ml-sm">
               {summary.warning == 1 ? '1 Warning' : summary.warning + ' Warnings'}
             </span>
           </div>
         )}
         {summary.info > 0 && (
-          <div className={summary.error > 0 || summary.warning > 0 ? 'pf-u-pl-sm' : ''}>
+          <div className={summary.error > 0 || summary.warning > 0 ? 'pf-v6u-pl-sm' : ''}>
             <BlueInfoCircleIcon />
-            <span className="pf-u-pl-sm">
+            <span className="pf-v6-u-ml-sm">
               {summary.info == 1 ? '1 Notice' : summary.info + ' Notices'}
             </span>
           </div>
