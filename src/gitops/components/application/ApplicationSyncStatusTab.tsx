@@ -133,140 +133,149 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
         <Title headingLevel="h2" className="co-section-heading">
           {t('Sync status')}
         </Title>
-        <div className="row">
-          <div className="col-sm-6">
-            <DescriptionList className="pf-c-description-list">
-              <DetailsDescriptionGroup
-                title={t('Operation')}
-                help={t('The operation that was performed.')}
-              >
-                <Flex>
-                  {obj?.status?.operationState && (
-                    <FlexItem>
-                      <OperationState app={obj} />
-                    </FlexItem>
-                  )}
-                  {obj?.status?.conditions && (
-                    <FlexItem>
-                      <ConditionsPopover conditions={obj.status.conditions} />
-                    </FlexItem>
-                  )}
-                  {!obj?.status?.operationState && !obj?.status?.conditions && '-'}
-                </Flex>
-              </DetailsDescriptionGroup>
-              <DescriptionListGroup className="pf-c-description-list__group">
-                <DescriptionListTermHelpText className="pf-c-description-list__term">
-                  <Popover
-                    headerContent={<div>{t('Phase')}</div>}
-                    bodyContent={<div>{t('The operation phase.')}</div>}
-                  >
-                    <DescriptionListTermHelpTextButton>
-                      {t('Phase')}
-                    </DescriptionListTermHelpTextButton>
-                  </Popover>
-                </DescriptionListTermHelpText>
-                <DescriptionListDescription>
-                  {obj.status?.operationState?.phase ? obj.status?.operationState?.phase : '-'}
-                </DescriptionListDescription>
-              </DescriptionListGroup>
+        <Flex
+          justifyContent={{ default: 'justifyContentSpaceEvenly' }}
+          direction={{ default: 'column', lg: 'row' }}
+        >
+          <Flex flex={{ default: 'flex_2' }}>
+            <FlexItem>
+              <DescriptionList className="pf-c-description-list">
+                <DetailsDescriptionGroup
+                  title={t('Operation')}
+                  help={t('The operation that was performed.')}
+                >
+                  <Flex>
+                    {obj?.status?.operationState && (
+                      <FlexItem>
+                        <OperationState app={obj} />
+                      </FlexItem>
+                    )}
+                    {obj?.status?.conditions && (
+                      <FlexItem>
+                        <ConditionsPopover conditions={obj.status.conditions} />
+                      </FlexItem>
+                    )}
+                    {!obj?.status?.operationState && !obj?.status?.conditions && '-'}
+                  </Flex>
+                </DetailsDescriptionGroup>
+                <DescriptionListGroup className="pf-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                    <Popover
+                      headerContent={<div>{t('Phase')}</div>}
+                      bodyContent={<div>{t('The operation phase.')}</div>}
+                    >
+                      <DescriptionListTermHelpTextButton>
+                        {t('Phase')}
+                      </DescriptionListTermHelpTextButton>
+                    </Popover>
+                  </DescriptionListTermHelpText>
+                  <DescriptionListDescription>
+                    {obj.status?.operationState?.phase ? obj.status?.operationState?.phase : '-'}
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
 
-              <DescriptionListGroup className="pf-c-description-list__group">
-                <DescriptionListTermHelpText className="pf-c-description-list__term">
-                  <Popover
-                    headerContent={<div>{t('Message')}</div>}
-                    bodyContent={<div>{t('The message from the operation.')}</div>}
-                  >
-                    <DescriptionListTermHelpTextButton>
-                      {t('Message')}
-                    </DescriptionListTermHelpTextButton>
-                  </Popover>
-                </DescriptionListTermHelpText>
-                <DescriptionListDescription>
-                  {obj.status?.operationState?.message ? obj.status?.operationState?.message : '-'}
-                </DescriptionListDescription>
-              </DescriptionListGroup>
+                <DescriptionListGroup className="pf-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                    <Popover
+                      headerContent={<div>{t('Message')}</div>}
+                      bodyContent={<div>{t('The message from the operation.')}</div>}
+                    >
+                      <DescriptionListTermHelpTextButton>
+                        {t('Message')}
+                      </DescriptionListTermHelpTextButton>
+                    </Popover>
+                  </DescriptionListTermHelpText>
+                  <DescriptionListDescription>
+                    {obj.status?.operationState?.message
+                      ? obj.status?.operationState?.message
+                      : '-'}
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
 
-              <DescriptionListGroup className="pf-c-description-list__group">
-                <DescriptionListTermHelpText className="pf-c-description-list__term">
-                  <Popover
-                    headerContent={<div>{t('Initiated By')}</div>}
-                    bodyContent={<div>{t('Who initiated the operation.')}</div>}
-                  >
-                    <DescriptionListTermHelpTextButton>
-                      {t('Intiated By')}
-                    </DescriptionListTermHelpTextButton>
-                  </Popover>
-                </DescriptionListTermHelpText>
-                <DescriptionListDescription>
-                  {obj.status?.operationState?.operation?.initiatedBy?.automated
-                    ? t('automated sync policy')
-                    : obj.status?.operationState?.operation?.initiatedBy?.username || '-'}
-                </DescriptionListDescription>
-              </DescriptionListGroup>
-            </DescriptionList>
-          </div>
-          <div className="col-sm-6">
-            <DescriptionList className="pf-c-description-list">
-              <DescriptionListGroup className="pf-c-description-list__group">
-                <DescriptionListTermHelpText className="pf-c-description-list__term">
-                  <Popover
-                    headerContent={<div>{t('Started At')}</div>}
-                    bodyContent={<div>{t('When the operation was started.')}</div>}
-                  >
-                    <DescriptionListTermHelpTextButton>
-                      {t('Started At')}
-                    </DescriptionListTermHelpTextButton>
-                  </Popover>
-                </DescriptionListTermHelpText>
-                <DescriptionListDescription>
-                  <Timestamp timestamp={obj.status?.operationState?.startedAt} />
-                </DescriptionListDescription>
-              </DescriptionListGroup>
+                <DescriptionListGroup className="pf-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                    <Popover
+                      headerContent={<div>{t('Initiated By')}</div>}
+                      bodyContent={<div>{t('Who initiated the operation.')}</div>}
+                    >
+                      <DescriptionListTermHelpTextButton>
+                        {t('Intiated By')}
+                      </DescriptionListTermHelpTextButton>
+                    </Popover>
+                  </DescriptionListTermHelpText>
+                  <DescriptionListDescription>
+                    {obj.status?.operationState?.operation?.initiatedBy?.automated
+                      ? t('automated sync policy')
+                      : obj.status?.operationState?.operation?.initiatedBy?.username || '-'}
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
+              </DescriptionList>
+            </FlexItem>
+          </Flex>
+          <Flex flex={{ default: 'flex_2' }} direction={{ default: 'column' }}>
+            <FlexItem>
+              <DescriptionList className="pf-c-description-list">
+                <DescriptionListGroup className="pf-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                    <Popover
+                      headerContent={<div>{t('Started At')}</div>}
+                      bodyContent={<div>{t('When the operation was started.')}</div>}
+                    >
+                      <DescriptionListTermHelpTextButton>
+                        {t('Started At')}
+                      </DescriptionListTermHelpTextButton>
+                    </Popover>
+                  </DescriptionListTermHelpText>
+                  <DescriptionListDescription>
+                    <Timestamp timestamp={obj.status?.operationState?.startedAt} />
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
 
-              <DescriptionListGroup className="pf-c-description-list__group">
-                <DescriptionListTermHelpText className="pf-c-description-list__term">
-                  <Popover
-                    headerContent={<div>{t('Duration')}</div>}
-                    bodyContent={<div>{t('How long the operation took to complete.')}</div>}
-                  >
-                    <DescriptionListTermHelpTextButton>
-                      {t('Duration')}
-                    </DescriptionListTermHelpTextButton>
-                  </Popover>
-                </DescriptionListTermHelpText>
-                <DescriptionListDescription>
-                  {obj.status?.operationState?.finishedAt ? (
-                    <span>
-                      {getDuration(
-                        obj.status.operationState.startedAt,
-                        obj.status.operationState.finishedAt,
-                      ) / 1000}{' '}
-                      seconds
-                    </span>
-                  ) : (
-                    '-'
-                  )}
-                </DescriptionListDescription>
-              </DescriptionListGroup>
+                <DescriptionListGroup className="pf-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                    <Popover
+                      headerContent={<div>{t('Duration')}</div>}
+                      bodyContent={<div>{t('How long the operation took to complete.')}</div>}
+                    >
+                      <DescriptionListTermHelpTextButton>
+                        {t('Duration')}
+                      </DescriptionListTermHelpTextButton>
+                    </Popover>
+                  </DescriptionListTermHelpText>
+                  <DescriptionListDescription>
+                    {obj.status?.operationState?.finishedAt ? (
+                      <span>
+                        {getDuration(
+                          obj.status.operationState.startedAt,
+                          obj.status.operationState.finishedAt,
+                        ) / 1000}{' '}
+                        seconds
+                      </span>
+                    ) : (
+                      '-'
+                    )}
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
 
-              <DescriptionListGroup className="pf-c-description-list__group">
-                <DescriptionListTermHelpText className="pf-c-description-list__term">
-                  <Popover
-                    headerContent={<div>{t('Finished At')}</div>}
-                    bodyContent={<div>{t('When the operation was finished.')}</div>}
-                  >
-                    <DescriptionListTermHelpTextButton>
-                      {t('Finished At')}
-                    </DescriptionListTermHelpTextButton>
-                  </Popover>
-                </DescriptionListTermHelpText>
-                <DescriptionListDescription>
-                  <Timestamp timestamp={obj.status?.operationState?.finishedAt} />
-                </DescriptionListDescription>
-              </DescriptionListGroup>
-            </DescriptionList>
-          </div>
-        </div>
+                <DescriptionListGroup className="pf-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                    <Popover
+                      headerContent={<div>{t('Finished At')}</div>}
+                      bodyContent={<div>{t('When the operation was finished.')}</div>}
+                    >
+                      <DescriptionListTermHelpTextButton>
+                        {t('Finished At')}
+                      </DescriptionListTermHelpTextButton>
+                    </Popover>
+                  </DescriptionListTermHelpText>
+                  <DescriptionListDescription>
+                    <Timestamp timestamp={obj.status?.operationState?.finishedAt} />
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
+              </DescriptionList>
+            </FlexItem>
+          </Flex>
+        </Flex>
       </PageSection>
       <PageSection variant={PageSectionVariants.default}>
         <Title headingLevel="h2" className="co-section-heading">
