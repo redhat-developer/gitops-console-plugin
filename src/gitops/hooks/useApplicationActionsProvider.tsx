@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
+
 // import { PhaseStatus } from 'src/gitops/utils/constants';
 // import { getAppOperationState } from 'src/gitops/utils/gitops';
 import {
@@ -148,7 +149,7 @@ export const useApplicationActionsProvider: UseApplicationActionsProvider = (app
         cta: () => launchDeleteModal(),
       },
     ],
-    [t, application, history],
+    [application, navigate, launchLabelsModal, launchAnnotationsModal, launchDeleteModal],
   );
 
   return [actions];

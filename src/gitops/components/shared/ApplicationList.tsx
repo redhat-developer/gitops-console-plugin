@@ -31,7 +31,11 @@ import { useApplicationActionsProvider } from '../..//hooks/useApplicationAction
 import RevisionFragment from '../..//Revision/Revision';
 import HealthStatusFragment from '../..//Statuses/HealthStatus';
 import { HealthStatus, SyncStatus } from '../..//utils/constants';
-import { ApplicationKind, ApplicationModel } from '../../models/ApplicationModel';
+import {
+  ApplicationKind,
+  ApplicationModel,
+  ApplicationSource,
+} from '../../models/ApplicationModel';
 import { AppProjectKind } from '../../models/AppProjectModel';
 import { OperationState } from '../../Statuses/OperationState';
 import SyncStatusFragment from '../../Statuses/SyncStatus';
@@ -107,7 +111,12 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   }, [applications, sortBy, direction]);
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
-  const rows = useApplicationRowsDV(filteredData, namespace);
+  // Filter applications by project or appset before rendering rows
+  const filteredByOwner = React.useMemo(
+    () => filteredData.filter(filterApp(project, appset)),
+    [filteredData, project, appset],
+  );
+  const rows = useApplicationRowsDV(filteredByOwner, namespace);
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
@@ -136,7 +145,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   let currentActiveState = null;
   if (loadError) {
     currentActiveState = DataViewState.error;
-  } else if (applications.length === 0) {
+  } else if (filteredByOwner.length === 0) {
     currentActiveState = DataViewState.empty;
   }
   return (
@@ -244,6 +253,19 @@ const ApplicationActionsCell: React.FC<{ app: ApplicationKind }> = ({ app }) => 
 const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
   const rows: DataViewTr[] = [];
   applicationsList.forEach((app, index) => {
+    let sources: ApplicationSource[];
+    let revisions: string[];
+    if (app.spec?.source) {
+      sources = [app.spec?.source];
+      revisions = [app.status?.sync?.revision];
+    } else if (app.spec?.sources) {
+      sources = app.spec.sources;
+      revisions = app.status?.sync?.revisions;
+    } else {
+      //Should never fall here since there always has to be a source or sources
+      sources = [];
+      revisions = [];
+    }
     rows.push([
       {
         cell: (
@@ -295,12 +317,15 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         id: app?.status?.sync?.revision,
         cell: (
           <>
-            {app?.spec?.source?.targetRevision ? app?.spec?.source?.targetRevision : 'HEAD'}&nbsp;
-            <RevisionFragment
-              revision={app.status?.sync?.revision || ''}
-              repoURL={app.spec?.source?.repoURL}
-              helm={app.status?.sourceType == 'Helm'}
-            />
+            {sources[0].targetRevision ? sources[0].targetRevision : 'HEAD'}&nbsp;
+            {!(app.status?.sourceType == 'Helm' && sources[0].chart) && (
+              <RevisionFragment
+                revision={revisions[0] || ''}
+                repoURL={sources[0].repoURL}
+                helm={app.status?.sourceType == 'Helm' && sources[0].chart ? true : false}
+                revisionExtra={revisions.length > 1 && ' and ' + (revisions.length - 1) + ' more'}
+              />
+            )}
           </>
         ),
       },

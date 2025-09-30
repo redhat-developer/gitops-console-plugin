@@ -146,7 +146,7 @@ export const FavoriteButton = ({ defaultName }: FavoriteButtonProps) => {
     'Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.',
     { maxCount: MAX_FAVORITE_COUNT },
   );
-
+  // eslint-disable-next-line no-nested-ternary
   const tooltipText = isDisabled
     ? disabledTooltipText
     : isStarred

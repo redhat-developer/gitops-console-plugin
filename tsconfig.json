@@ -7,12 +7,14 @@
     "jsx": "react-jsx",
     "allowJs": true,
     "strict": false,
+    "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
     "lib": ["dom", "es2017"],
     "paths": {
       "@gitops/*": ["src/gitops/*"],
       "@gitops-models/*": ["src/gitops/models/*"],
       "@gitops-services/*": ["src/gitops/services/*"],
+      "@images/*": ["src/images/*"],
       "@gitops-shared/*": ["src/gitops/components/shared/*"]
     }
   },

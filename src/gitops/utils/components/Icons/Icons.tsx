@@ -132,3 +132,21 @@ export const MeasurementSuccessfulIcon: React.FC<ColoredIconProps> = ({ classNam
 export const MeasurementFailedIcon: React.FC<ColoredIconProps> = ({ className, title }) => (
   <MonitoringIcon color={dangerColor} className={className} title={title} />
 );
+
+export const SpinningIcon = ({
+  color,
+  className,
+  title,
+}: {
+  color?: string;
+  className?: string;
+  title?: string;
+}) => {
+  return (
+    <CircleNotchIcon
+      color={color || blueDefaultColor}
+      className={className + ' fa-spin'}
+      title={title || ''}
+    />
+  );
+};

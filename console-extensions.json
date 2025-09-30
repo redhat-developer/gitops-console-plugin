@@ -334,6 +334,24 @@
     }
   },
   {
+    "type": "console.page/resource/details",
+    "flags": {
+        "required": [
+            "APPLICATION"
+        ]
+    },
+    "properties": {
+        "model": {
+            "group": "argoproj.io",
+            "kind": "Application",
+            "version": "v1alpha1"
+        },
+        "component": {
+            "$codeRef": "ApplicationDetails"
+        }
+    }
+  },
+  {
     "type": "console.page/resource/list",
     "flags": {
         "required": [
