@@ -25,7 +25,7 @@ import {
 import { useDataViewSort } from '@patternfly/react-data-view/dist/dynamic/Hooks';
 import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
 import { CubesIcon } from '@patternfly/react-icons';
-import { Tbody, Td, Tr } from '@patternfly/react-table';
+import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
 import { useApplicationActionsProvider } from '../..//hooks/useApplicationActionsProvider';
 import RevisionFragment from '../..//Revision/Revision';
@@ -90,17 +90,33 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   });
 
   const { t } = useTranslation();
+  const initIndex: number = namespace ? 0 : 1;
+  const COLUMNS_KEYS_INDEXES = React.useMemo(
+    () => [
+      { key: 'name', index: 0 },
+      ...(!namespace ? [{ key: 'namespace', index: 1 }] : []),
+      { key: 'sync-status', index: 1 + initIndex },
+      { key: 'health-status', index: 2 + initIndex },
+      { key: 'revision', index: 3 + initIndex },
+      { key: 'project', index: 4 + initIndex },
+    ],
+    [namespace, initIndex],
+  );
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
-  const getSortParams = (columnId: string, columnIndex: number) => ({
+  const sortByIndex = React.useMemo(
+    () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
+    [COLUMNS_KEYS_INDEXES, sortBy],
+  );
+  const getSortParams = (columnIndex: number): ThProps['sort'] => ({
     sortBy: {
-      index: columnIndex,
+      index: sortByIndex,
       direction,
-      defaultDirection: 'asc' as const,
+      defaultDirection: 'asc',
     },
-    onSort: (_event: any, index: number, dir: 'asc' | 'desc') => {
-      onSort(_event, columnId, dir);
+    onSort: (_event: any, index: number, dir) => {
+      onSort(_event, COLUMNS_KEYS_INDEXES[index].key, dir);
     },
     columnIndex,
   });
@@ -187,7 +203,7 @@ export const sortData = (
   sortBy: string | undefined,
   direction: 'asc' | 'desc' | undefined,
 ) => {
-  if (!sortBy || !direction) return data;
+  if (!(sortBy && direction)) return data;
 
   return [...data].sort((a, b) => {
     let aValue: any, bValue: any;
@@ -196,6 +212,10 @@ export const sortData = (
       case 'name':
         aValue = a.metadata?.name || '';
         bValue = b.metadata?.name || '';
+        break;
+      case 'namespace':
+        aValue = a.metadata?.namespace || '';
+        bValue = b.metadata?.namespace || '';
         break;
       case 'sync-status':
         aValue = a.status?.sync?.status || '';
@@ -218,20 +238,11 @@ export const sortData = (
     }
 
     if (direction === 'asc') {
-      if (aValue < bValue) {
-        return -1;
-      } else if (aValue > bValue) {
-        return 1;
-      }
-      return 0;
-      // return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+      // eslint-disable-next-line no-nested-ternary
+      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
     } else {
-      if (aValue > bValue) {
-        return -1;
-      } else if (aValue < bValue) {
-        return 1;
-      }
-      return 0; // return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      // eslint-disable-next-line no-nested-ternary
+      return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
     }
   });
 };
@@ -348,81 +359,67 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
   return rows;
 };
 
-const useColumnsDV = (namespace, getSortParams) => {
-  const i: number = namespace ? 1 : 0;
+const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
+  const i: number = namespace ? 0 : 1;
   const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
-      id: 'name',
       cell: t('plugin__gitops-plugin~Name'),
       props: {
-        key: 'name',
         'aria-label': 'name',
         className: 'pf-m-width-25',
-        sort: getSortParams('name', 0),
+        sort: getSortParams(0),
       },
     },
     ...(!namespace
       ? [
           {
-            id: 'namespace',
             cell: 'Namespace',
             props: {
-              key: 'namespace',
               'aria-label': 'namespace',
               className: 'pf-m-width-15',
-              sort: getSortParams('namespace', 1),
+              sort: getSortParams(1),
             },
           },
         ]
       : []),
     {
-      id: 'sync-status',
       cell: 'Sync Status',
       props: {
-        key: 'sync-status',
         'aria-label': 'sync status',
         className: 'pf-m-width-15',
-        sort: getSortParams('sync-status', 1 + i),
+        sort: getSortParams(1 + i),
       },
     },
     {
-      id: 'health-status',
       cell: 'Health Status',
       props: {
-        key: 'health-status',
         'aria-label': 'health status',
         className: 'pf-m-width-15',
-        sort: getSortParams('health-status', 2 + i),
+        sort: getSortParams(2 + i),
       },
     },
     {
-      id: 'revision',
       cell: 'Revision',
       props: {
-        key: 'revision',
         'aria-label': 'revision',
         className: 'pf-m-width-12',
-        sort: getSortParams('revision', 3 + i),
+        sort: getSortParams(3 + i),
       },
     },
     {
-      id: 'project',
       cell: 'App Project',
       props: {
-        key: 'project',
         'aria-label': 'project',
         className: 'pf-m-width-20',
-        sort: getSortParams('project', 4 + i),
+        sort: getSortParams(4 + i),
       },
     },
     {
-      id: 'actions',
       cell: '',
       props: { 'aria-label': 'actions' },
     },
   ];
-
   return columns;
 };
 
