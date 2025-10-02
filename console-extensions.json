@@ -424,5 +424,31 @@
             "$codeRef": "ApplicationSetDetailsPage"
         }
     }
+  },
+  {
+    "type": "console.page/resource/search",
+    "properties": {
+      "model": {
+        "group": "argoproj.io",
+        "version": "v1alpha1",
+        "kind": "ApplicationSet"
+      },
+      "component": {
+        "$codeRef": "ApplicationSetList"
+      }
+    }
+  },
+  {
+    "type": "console.page/resource/search",
+    "properties": {
+      "model": {
+        "group": "argoproj.io",
+        "version": "v1alpha1",
+        "kind": "Application"
+      },
+      "component": {
+        "$codeRef": "ApplicationList"
+      }
+    }
   }
 ]

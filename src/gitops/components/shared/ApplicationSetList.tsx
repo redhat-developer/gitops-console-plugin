@@ -133,6 +133,10 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
+  
+  // Get search query from URL parameters
+  const searchQuery = searchParams.get('q') || '';
+  
   const getSortParams = (columnId: string, columnIndex: number) => ({
     sortBy: {
       index: columnIndex,
@@ -149,7 +153,22 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   const sortedApplicationSets = React.useMemo(() => {
     return sortData(applicationSets as ApplicationSetKind[], sortBy, direction, applications, appsLoaded);
   }, [applicationSets, sortBy, direction, applications, appsLoaded]);
-  const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, filters);
+  
+  // Filter by search query if present
+  const filteredBySearch = React.useMemo(() => {
+    if (!searchQuery) return sortedApplicationSets;
+    
+    return sortedApplicationSets.filter((appSet) => {
+      const labels = appSet.metadata?.labels || {};
+      // Check if any label matches the search query
+      return Object.entries(labels).some(([key, value]) => {
+        const labelSelector = `${key}=${value}`;
+        return labelSelector.includes(searchQuery) || key.includes(searchQuery);
+      });
+    });
+  }, [sortedApplicationSets, searchQuery]);
+  
+  const [data, filteredData, onFilterChange] = useListPageFilter(filteredBySearch, filters);
   const rows = useApplicationSetRowsDV(filteredData, namespace, applications, appsLoaded);
 
   const empty = (
@@ -262,24 +281,32 @@ const useApplicationSetRowsDV = (applicationSetsList, namespace, applications, a
         : []),
       {
         id: getAppSetStatus(appSet),
+        cell: <ApplicationSetStatusFragment status={getAppSetStatus(appSet)} />,
+      },
+      {
+        id: 'generated-apps-' + index,
         cell: (
           <div>
-            <ApplicationSetStatusFragment status={getAppSetStatus(appSet)} />
+            {getGeneratedAppsCount(appSet, applications, appsLoaded).toString()}
           </div>
         ),
       },
       {
-        id: 'generated-apps-' + index,
-        cell: getGeneratedAppsCount(appSet, applications, appsLoaded).toString(),
+        id: 'generators-' + index,
+        cell: (
+          <div>
+            {getAppSetGeneratorCount(appSet).toString()}
+          </div>
+        ),
       },
       {
-        id: 'generators-' + index,
-        cell: getAppSetGeneratorCount(appSet).toString(),
+        id: 'created-at-' + index,
+        cell: (
+          <div>
+            {formatCreationTimestamp(appSet.metadata.creationTimestamp)}
+          </div>
+        ),
       },
-             {
-         id: 'created-at-' + index,
-         cell: formatCreationTimestamp(appSet.metadata.creationTimestamp),
-       },
       {
         id: 'actions-' + index,
         cell: <ApplicationSetActionsCell appSet={appSet} />,
@@ -312,7 +339,7 @@ const useColumnsDV = (namespace, getSortParams) => {
             props: {
               key: 'namespace',
               'aria-label': 'namespace',
-              className: 'pf-m-width-12',
+              className: 'pf-m-width-15',
               sort: getSortParams('namespace', 1),
             },
           },
@@ -324,7 +351,7 @@ const useColumnsDV = (namespace, getSortParams) => {
       props: {
         key: 'status',
         'aria-label': 'health status',
-        className: 'pf-m-width-12',
+        className: 'pf-m-width-15',
         sort: getSortParams('status', 1 + i),
       },
     },
@@ -334,7 +361,7 @@ const useColumnsDV = (namespace, getSortParams) => {
       props: {
         key: 'generated-apps',
         'aria-label': 'generated apps',
-        className: 'pf-m-width-12',
+        className: 'pf-m-width-15',
         sort: getSortParams('generated-apps', 2 + i),
       },
     },
@@ -344,7 +371,7 @@ const useColumnsDV = (namespace, getSortParams) => {
       props: {
         key: 'generators',
         'aria-label': 'generators',
-        className: 'pf-m-width-12',
+        className: 'pf-m-width-15',
         sort: getSortParams('generators', 3 + i),
       },
     },

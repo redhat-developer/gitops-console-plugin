@@ -108,6 +108,10 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
     [COLUMNS_KEYS_INDEXES, sortBy],
   );
+  
+  // Get search query from URL parameters
+  const searchQuery = searchParams.get('q') || '';
+  
   const getSortParams = (columnIndex: number): ThProps['sort'] => ({
     sortBy: {
       index: sortByIndex,
@@ -124,8 +128,23 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   const sortedApplications = React.useMemo(() => {
     return sortData(applications, sortBy, direction);
   }, [applications, sortBy, direction]);
+  
+  // Filter by search query if present
+  const filteredBySearch = React.useMemo(() => {
+    if (!searchQuery) return sortedApplications;
+    
+    return sortedApplications.filter((app) => {
+      const labels = app.metadata?.labels || {};
+      // Check if any label matches the search query
+      return Object.entries(labels).some(([key, value]) => {
+        const labelSelector = `${key}=${value}`;
+        return labelSelector.includes(searchQuery) || key.includes(searchQuery);
+      });
+    });
+  }, [sortedApplications, searchQuery]);
+  
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
-  const [, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
+  const [, filteredData, onFilterChange] = useListPageFilter(filteredBySearch, filters);
   // Filter applications by project or appset before rendering rows
   const filteredByOwner = React.useMemo(
     () => filteredData.filter(filterApp(project, appset)),
