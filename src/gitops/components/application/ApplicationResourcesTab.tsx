@@ -72,16 +72,33 @@ const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }
   if (resources.length === 0) {
     currentActiveState = DataViewState.empty;
   }
+
+  const COLUMNS_KEYS_INDEXES = React.useMemo(
+    () => [
+      { key: 'name', index: 0 },
+      { key: 'namespace', index: 1 },
+      { key: 'sync-wave', index: 2 },
+      { key: 'sync-status', index: 3 },
+      { key: 'health-status', index: 4 },
+    ],
+    [],
+  );
+
   const [searchParams, setSearchParams] = useSearchParams();
   const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
-  const getSortParams = (columnId: string, columnIndex: number) => ({
+  const sortByIndex = React.useMemo(
+    () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
+    [COLUMNS_KEYS_INDEXES, sortBy],
+  );
+
+  const getSortParams = (columnIndex: number) => ({
     sortBy: {
-      index: columnIndex,
+      index: sortByIndex,
       direction,
       defaultDirection: 'asc' as const,
     },
     onSort: (_event: any, index: number, dir: 'asc' | 'desc') => {
-      onSort(_event, columnId, dir);
+      onSort(_event, COLUMNS_KEYS_INDEXES[index].key, dir);
     },
     columnIndex,
   });
@@ -185,18 +202,11 @@ const sortData = (
     }
 
     if (direction === 'asc') {
-      if (aValue < bValue) {
-        return -1;
-      } else if (aValue > bValue) {
-        return 1;
-      }
-      return 0;
+      // eslint-disable-next-line no-nested-ternary
+      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
     } else {
-      if (aValue > bValue) {
-        return -1;
-      } else if (aValue < bValue) {
-        return 1;
-      }
+      // eslint-disable-next-line no-nested-ternary
+      return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
     }
   });
 };
@@ -204,57 +214,46 @@ const sortData = (
 export const useResourceColumnsDV = (getSortParams) => {
   const columns: DataViewTh[] = [
     {
-      id: 'name',
       cell: t('plugin__gitops-plugin~Name'),
       props: {
-        key: 'name',
         'aria-label': 'name',
         className: 'pf-m-width-25',
-        sort: getSortParams('name', 0),
+        sort: getSortParams(0),
       },
     },
     {
-      id: 'namespace',
       cell: 'Namespace',
       props: {
-        key: 'namespace',
         'aria-label': 'namespace',
         className: 'pf-m-width-20',
-        sort: getSortParams('namespace', 1),
+        sort: getSortParams(1),
       },
     },
     {
-      id: 'sync-wave',
       cell: 'Sync Wave',
       props: {
-        key: 'sync-wave',
         'aria-label': 'sync wave',
         className: 'pf-m-width-15',
-        sort: getSortParams('sync-wave', 2),
+        sort: getSortParams(2),
       },
     },
     {
-      id: 'sync-status',
       cell: 'Sync Status',
       props: {
-        key: 'sync-status',
         'aria-label': 'sync status',
         className: 'pf-m-width-15',
-        sort: getSortParams('sync-status', 3),
+        sort: getSortParams(3),
       },
     },
     {
-      id: 'health-status',
       cell: 'Health Status',
       props: {
-        key: 'health-status',
         'aria-label': 'health status',
         className: 'pf-m-width-15',
-        sort: getSortParams('health-status', 4),
+        sort: getSortParams(4),
       },
     },
     {
-      id: 'actions',
       cell: '',
       props: { 'aria-label': 'actions' },
     },

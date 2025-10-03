@@ -26,16 +26,31 @@ interface HistoryListProps {
 }
 
 const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
+  const COLUMNS_KEYS_INDEXES = React.useMemo(
+    () => [
+      { key: 'id', index: 0 },
+      { key: 'started-at', index: 1 },
+      { key: 'deployed-at', index: 2 },
+      { key: 'initiated-by', index: 3 },
+      { key: 'revision', index: 4 },
+    ],
+    [],
+  );
+
   const [searchParams, setSearchParams] = useSearchParams();
   const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
-  const getSortParams = (columnId: string, columnIndex: number) => ({
+  const sortByIndex = React.useMemo(
+    () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
+    [COLUMNS_KEYS_INDEXES, sortBy],
+  );
+  const getSortParams = (columnIndex: number) => ({
     sortBy: {
-      index: columnIndex,
+      index: sortByIndex,
       direction,
       defaultDirection: 'asc' as const,
     },
     onSort: (_event: any, index: number, dir: 'asc' | 'desc') => {
-      onSort(_event, columnId, dir);
+      onSort(_event, COLUMNS_KEYS_INDEXES[index].key, dir);
     },
     columnIndex,
   });
@@ -169,12 +184,12 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
       },
       {
         cell: <Timestamp timestamp={obj.deployStartedAt} />,
-        id: 'deployStartedAt',
+        id: 'started-at',
         dataLabel: 'Deployed Started At',
       },
       {
         cell: <Timestamp timestamp={obj.deployedAt} />,
-        id: 'deployedAt',
+        id: 'deployed-at',
         dataLabel: 'Depoyed At',
       },
       {
@@ -195,48 +210,39 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
 const useColumnsDV = (getSortParams) => {
   const columns: DataViewTh[] = [
     {
-      id: 'id',
       cell: 'ID',
       props: {
-        key: 'id',
         'aria-label': 'ID',
-        sort: getSortParams('id', 0),
+        sort: getSortParams(0),
       },
     },
     {
       cell: 'Deploy Started At',
-      id: 'deployStartedAt',
       props: {
-        key: `deployStartedAt`,
         className: 'pf-m-width-15',
-        sort: getSortParams('deployStartedAt', 1),
+        sort: getSortParams(1),
       },
     },
     {
       cell: 'Deployed At',
-      id: 'deployedAt',
       props: {
-        key: 'deployedAt',
         className: 'pf-m-width-15',
-        sort: getSortParams('deployedAt', 2),
+        sort: getSortParams(2),
       },
     },
     {
       cell: 'Initiated By',
-      id: 'initiated-by',
       props: {
-        key: 'initiated-by',
         className: 'pf-m-width-15',
-        sort: getSortParams('initiated-by', 3),
+        sort: getSortParams(3),
       },
     },
     {
       cell: 'Revision(s) and Source Repo URL(s)',
-      id: 'revision',
       props: {
         key: 'revision',
         className: 'gitops-admin-plugin__history-id-column pf-m-width-50',
-        sort: getSortParams('revision', 4),
+        sort: getSortParams(4),
       },
     },
   ];
@@ -259,11 +265,11 @@ const sortData = (
         aValue = a.id || '';
         bValue = b.id || '';
         break;
-      case 'deployStartedAt':
+      case 'started-at':
         aValue = a.deployStartedAt || '';
         bValue = b.deployStartedAt || '';
         break;
-      case 'deployedAt':
+      case 'deployed-at':
         aValue = a.deployedAt || '';
         bValue = b.deployedAt || '';
         break;

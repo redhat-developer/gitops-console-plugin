@@ -80,16 +80,31 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
   if (resources.length === 0) {
     currentActiveState = DataViewState.empty;
   }
+
+  const COLUMNS_KEYS_INDEXES = React.useMemo(
+    () => [
+      { key: 'name', index: 0 },
+      { key: 'namespace', index: 1 },
+      { key: 'status', index: 2 },
+      { key: 'hook', index: 3 },
+      { key: 'message', index: 4 },
+    ],
+    [],
+  );
   const [searchParams, setSearchParams] = useSearchParams();
   const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
-  const getSortParams = (columnId: string, columnIndex: number) => ({
+  const sortByIndex = React.useMemo(
+    () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
+    [COLUMNS_KEYS_INDEXES, sortBy],
+  );
+  const getSortParams = (columnIndex: number) => ({
     sortBy: {
-      index: columnIndex,
+      index: sortByIndex,
       direction,
       defaultDirection: 'asc' as const,
     },
     onSort: (_event: any, index: number, dir: 'asc' | 'desc') => {
-      onSort(_event, columnId, dir);
+      onSort(_event, COLUMNS_KEYS_INDEXES[index].key, dir);
     },
     columnIndex,
   });
@@ -325,20 +340,11 @@ const sortData = (
     }
 
     if (direction === 'asc') {
-      if (aValue < bValue) {
-        return -1;
-      } else if (aValue > bValue) {
-        return 1;
-      }
-      return 0;
-      // return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+      // eslint-disable-next-line no-nested-ternary
+      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
     } else {
-      if (aValue > bValue) {
-        return -1;
-      } else if (aValue < bValue) {
-        return 1;
-      }
-      return 0; // return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      // eslint-disable-next-line no-nested-ternary
+      return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
     }
   });
 };
@@ -346,57 +352,46 @@ const sortData = (
 export const useResourceColumnsDV = (getSortParams) => {
   const columns: DataViewTh[] = [
     {
-      id: 'name',
       cell: t('plugin__gitops-plugin~Name'),
       props: {
-        key: 'name',
         'aria-label': 'name',
         className: 'pf-m-width-25',
-        sort: getSortParams('name', 0),
+        sort: getSortParams(0),
       },
     },
     {
-      id: 'namespace',
       cell: 'Namespace',
       props: {
-        key: 'namespace',
         'aria-label': 'namespace',
         className: 'pf-m-width-20',
-        sort: getSortParams('namespace', 1),
+        sort: getSortParams(1),
       },
     },
     {
-      id: 'status',
       cell: 'Status',
       props: {
-        key: 'status',
         'aria-label': 'status',
         className: 'pf-m-width-15',
-        sort: getSortParams('status', 2),
+        sort: getSortParams(2),
       },
     },
     {
-      id: 'hook',
       cell: 'Hook',
       props: {
-        key: 'hook',
         'aria-label': 'hook',
         className: 'pf-m-width-15',
-        sort: getSortParams('hook', 3),
+        sort: getSortParams(3),
       },
     },
     {
-      id: 'message',
       cell: 'Message',
       props: {
-        key: 'message',
         'aria-label': 'message',
         className: 'pf-m-width-15',
-        sort: getSortParams('message', 4),
+        sort: getSortParams(4),
       },
     },
     {
-      id: 'actions',
       cell: '',
       props: {
         'aria-label': 'actions',
