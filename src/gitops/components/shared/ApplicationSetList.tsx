@@ -133,6 +133,10 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
+  
+  // Get search query from URL parameters
+  const searchQuery = searchParams.get('q') || '';
+  
   const getSortParams = (columnId: string, columnIndex: number) => ({
     sortBy: {
       index: columnIndex,
@@ -149,16 +153,40 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   const sortedApplicationSets = React.useMemo(() => {
     return sortData(applicationSets as ApplicationSetKind[], sortBy, direction, applications, appsLoaded);
   }, [applicationSets, sortBy, direction, applications, appsLoaded]);
+  
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, filters);
-  const rows = useApplicationSetRowsDV(filteredData, namespace, applications, appsLoaded);
+  
+  // Filter by search query if present (after other filters)
+  const filteredBySearch = React.useMemo(() => {
+    if (!searchQuery) return filteredData;
+    
+    return filteredData.filter((appSet) => {
+      const labels = appSet.metadata?.labels || {};
+      // Check if any label matches the search query
+      return Object.entries(labels).some(([key, value]) => {
+        const labelSelector = `${key}=${value}`;
+        return labelSelector.includes(searchQuery) || key.includes(searchQuery);
+      });
+    });
+  }, [filteredData, searchQuery]);
+  
+  const rows = useApplicationSetRowsDV(filteredBySearch, namespace, applications, appsLoaded);
 
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No Argo CD ApplicationSets">
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={searchQuery ? "No matching Argo CD ApplicationSets" : "No Argo CD ApplicationSets"}>
             <EmptyStateBody>
-              There are no Argo CD ApplicationSets in {namespace ? 'this project' : 'all projects'}.
+              {searchQuery ? (
+                <>
+                  No Argo CD ApplicationSets match the label filter <strong>"{searchQuery}"</strong>.
+                  <br />
+                  Try removing the filter or selecting a different label to see more ApplicationSets.
+                </>
+              ) : (
+                `There are no Argo CD ApplicationSets in ${namespace ? 'this project' : 'all projects'}.`
+              )}
             </EmptyStateBody>
           </EmptyState>
         </Td>
@@ -182,14 +210,18 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   let currentActiveState = null;
   if (loadError) {
     currentActiveState = DataViewState.error;
-  } else if (applicationSets.length === 0) {
+  } else if (filteredBySearch.length === 0) {
     currentActiveState = DataViewState.empty;
   }
 
   return (
     <div>
       {showTitle == undefined && (
-        <ListPageHeader title={t('plugin__gitops-plugin~ApplicationSets')} badge={<DevPreviewBadge />}>
+        <ListPageHeader 
+          title={t('plugin__gitops-plugin~ApplicationSets')} 
+          badge={<DevPreviewBadge />}
+          hideFavoriteButton={false}
+        >
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>
             Create ApplicationSet
           </ListPageCreate>
@@ -258,24 +290,32 @@ const useApplicationSetRowsDV = (applicationSetsList, namespace, applications, a
         : []),
       {
         id: getAppSetStatus(appSet),
+        cell: <ApplicationSetStatusFragment status={getAppSetStatus(appSet)} />,
+      },
+      {
+        id: 'generated-apps-' + index,
         cell: (
           <div>
-            <ApplicationSetStatusFragment status={getAppSetStatus(appSet)} />
+            {getGeneratedAppsCount(appSet, applications, appsLoaded).toString()}
           </div>
         ),
       },
       {
-        id: 'generated-apps-' + index,
-        cell: getGeneratedAppsCount(appSet, applications, appsLoaded).toString(),
+        id: 'generators-' + index,
+        cell: (
+          <div>
+            {getAppSetGeneratorCount(appSet).toString()}
+          </div>
+        ),
       },
       {
-        id: 'generators-' + index,
-        cell: getAppSetGeneratorCount(appSet).toString(),
+        id: 'created-at-' + index,
+        cell: (
+          <div>
+            {formatCreationTimestamp(appSet.metadata.creationTimestamp)}
+          </div>
+        ),
       },
-             {
-         id: 'created-at-' + index,
-         cell: formatCreationTimestamp(appSet.metadata.creationTimestamp),
-       },
       {
         id: 'actions-' + index,
         cell: <ApplicationSetActionsCell appSet={appSet} />,
@@ -308,7 +348,7 @@ const useColumnsDV = (namespace, getSortParams) => {
             props: {
               key: 'namespace',
               'aria-label': 'namespace',
-              className: 'pf-m-width-12',
+              className: 'pf-m-width-15',
               sort: getSortParams('namespace', 1),
             },
           },
@@ -320,7 +360,7 @@ const useColumnsDV = (namespace, getSortParams) => {
       props: {
         key: 'status',
         'aria-label': 'health status',
-        className: 'pf-m-width-12',
+        className: 'pf-m-width-15',
         sort: getSortParams('status', 1 + i),
       },
     },
@@ -330,7 +370,7 @@ const useColumnsDV = (namespace, getSortParams) => {
       props: {
         key: 'generated-apps',
         'aria-label': 'generated apps',
-        className: 'pf-m-width-12',
+        className: 'pf-m-width-15',
         sort: getSortParams('generated-apps', 2 + i),
       },
     },
@@ -340,7 +380,7 @@ const useColumnsDV = (namespace, getSortParams) => {
       props: {
         key: 'generators',
         'aria-label': 'generators',
-        className: 'pf-m-width-12',
+        className: 'pf-m-width-15',
         sort: getSortParams('generators', 3 + i),
       },
     },

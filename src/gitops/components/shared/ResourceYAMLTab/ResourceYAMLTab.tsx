@@ -23,7 +23,7 @@ const ResourceYAMLTab: React.FC<ResourceYAMLTabProps> = ({ obj }) => {
           </Bullseye>
         }
       >
-        <ResourceYAMLEditor initialResource={obj} header={obj?.kind} hideHeader={true} />
+        <ResourceYAMLEditor initialResource={obj} />
       </React.Suspense>
     </div>
   );

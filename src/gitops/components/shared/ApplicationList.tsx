@@ -1,3 +1,13 @@
+import {
+  DataViewTable,
+  DataViewTh,
+  DataViewTr,
+} from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
+import { useDataViewSort } from '@patternfly/react-data-view/dist/dynamic/Hooks';
+import { Spinner, Flex, FlexItem, EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import { CubesIcon } from '@patternfly/react-icons';
+import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
+import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom-v5-compat';
@@ -15,17 +25,6 @@ import {
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody, Flex, FlexItem, Spinner } from '@patternfly/react-core';
-import {
-  DataViewTable,
-  DataViewTh,
-  DataViewTr,
-} from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
-import { useDataViewSort } from '@patternfly/react-data-view/dist/dynamic/Hooks';
-import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
-import { CubesIcon } from '@patternfly/react-icons';
-import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
 import { useApplicationActionsProvider } from '../..//hooks/useApplicationActionsProvider';
 import RevisionFragment from '../..//Revision/Revision';
@@ -109,6 +108,10 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
     [COLUMNS_KEYS_INDEXES, sortBy],
   );
+  
+  // Get search query from URL parameters
+  const searchQuery = searchParams.get('q') || '';
+  
   const getSortParams = (columnIndex: number): ThProps['sort'] => ({
     sortBy: {
       index: sortByIndex,
@@ -125,35 +128,47 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   const sortedApplications = React.useMemo(() => {
     return sortData(applications, sortBy, direction);
   }, [applications, sortBy, direction]);
+  
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
-  const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
+  const [, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
+  
   // Filter applications by project or appset before rendering rows
   const filteredByOwner = React.useMemo(
     () => filteredData.filter(filterApp(project, appset)),
     [filteredData, project, appset],
   );
-  const rows = useApplicationRowsDV(filteredByOwner, namespace);
+  
+  // Filter by search query if present (after other filters)
+  const filteredBySearch = React.useMemo(() => {
+    if (!searchQuery) return filteredByOwner;
+    
+    return filteredByOwner.filter((app) => {
+      const labels = app.metadata?.labels || {};
+      // Check if any label matches the search query
+      return Object.entries(labels).some(([key, value]) => {
+        const labelSelector = `${key}=${value}`;
+        return labelSelector.includes(searchQuery) || key.includes(searchQuery);
+      });
+    });
+  }, [filteredByOwner, searchQuery]);
+  const rows = useApplicationRowsDV(filteredBySearch, namespace);
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No Argo CD Applications">
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={searchQuery ? "No matching Argo CD Applications" : "No Argo CD Applications"}>
             <EmptyStateBody>
-              There are no Argo CD Applications in {namespace ? 'this project' : 'all projects'}.
+              {searchQuery ? (
+                <>
+                  No Argo CD Applications match the label filter <strong>"{searchQuery}"</strong>.
+                  <br />
+                  Try removing the filter or selecting a different label to see more applications.
+                </>
+              ) : (
+                `There are no Argo CD Applications in ${namespace ? 'this project' : 'all projects'}.`
+              )}
             </EmptyStateBody>
           </EmptyState>
-        </Td>
-      </Tr>
-    </Tbody>
-  );
-  const error = loadError && (
-    <Tbody>
-      <Tr key="loading" ouiaId={'table-tr-loading'}>
-        <Td colSpan={columnsDV.length}>
-          <ErrorState
-            titleText="Unable to load data"
-            bodyText="There was an error retrieving applications. Check your connection and reload the page."
-          />
         </Td>
       </Tr>
     </Tbody>
@@ -161,7 +176,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   let currentActiveState = null;
   if (loadError) {
     currentActiveState = DataViewState.error;
-  } else if (filteredByOwner.length === 0) {
+  } else if (filteredBySearch.length === 0) {
     currentActiveState = DataViewState.empty;
   }
   return (
@@ -180,7 +195,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       <ListPageBody>
         {!hideNameLabelFilters && (
           <ListPageFilter
-            data={data.filter(filterApp(project, appset))}
+            data={filteredByOwner}
             loaded={loaded}
             rowFilters={filters}
             onFilterChange={onFilterChange}
@@ -188,9 +203,9 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         )}
         <DataView activeState={currentActiveState}>
           <DataViewTable
-            rows={rows}
             columns={columnsDV}
-            bodyStates={loadError ? { error } : { empty }}
+            rows={rows}
+            bodyStates={empty && { empty }}
           />
         </DataView>
       </ListPageBody>
