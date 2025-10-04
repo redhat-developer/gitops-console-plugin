@@ -14,7 +14,7 @@ import { getAppSetGeneratorCount, getAppSetStatus } from '../../utils/gitops';
 import { useK8sWatchResource, ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { ApplicationKind, ApplicationModel } from '../../models/ApplicationModel';
 import { Conditions } from '../../utils/components/Conditions/Conditions';
-import Status from '../shared/Status/Status';
+import HealthStatus from '../../Statuses/HealthStatus';
 import './AppSetDetailsTab.scss';
 
 type AppSetDetailsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
@@ -70,7 +70,7 @@ const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj }) => {
             title="Status"
             help="Current health status of the ApplicationSet."
           >
-            <Status status={appSetStatus} />
+            <HealthStatus status={appSetStatus} />
           </DetailsDescriptionGroup>
 
           <DetailsDescriptionGroup

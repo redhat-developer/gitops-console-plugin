@@ -3,7 +3,6 @@ export { default as AppSetDetailsTab } from './AppSetDetailsTab';
 export { default as GeneratorsTab } from './GeneratorsTab';
 export { default as AppsTab } from './AppsTab';
 export { default as EventsTab } from './EventsTab';
-export { default as YAMLTab } from './YAMLTab';
 export { default as Generators } from './Generators';
 
 // Export generator components
