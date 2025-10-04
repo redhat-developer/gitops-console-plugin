@@ -7,11 +7,10 @@ import './AppsTab.scss';
 
 type AppsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: ApplicationSetKind;
-  namespace?: string;
-  name?: string;
 };
 
-const AppsTab: React.FC<AppsTabProps> = ({ obj, namespace }) => {
+const AppsTab: React.FC<AppsTabProps> = ({ obj }) => {
+  const namespace = obj?.metadata?.namespace;
   if (!obj || !namespace) return null;
 
   return (

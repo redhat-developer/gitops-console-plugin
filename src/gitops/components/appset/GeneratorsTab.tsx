@@ -7,8 +7,6 @@ import './GeneratorsTab.scss';
 
 type GeneratorsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: ApplicationSetKind;
-  namespace?: string;
-  name?: string;
 };
 
 const GeneratorsTab: React.FC<GeneratorsTabProps> = ({ obj }) => {

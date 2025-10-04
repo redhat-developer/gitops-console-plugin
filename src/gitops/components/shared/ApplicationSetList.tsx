@@ -154,11 +154,13 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     return sortData(applicationSets as ApplicationSetKind[], sortBy, direction, applications, appsLoaded);
   }, [applicationSets, sortBy, direction, applications, appsLoaded]);
   
-  // Filter by search query if present
+  const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, filters);
+  
+  // Filter by search query if present (after other filters)
   const filteredBySearch = React.useMemo(() => {
-    if (!searchQuery) return sortedApplicationSets;
+    if (!searchQuery) return filteredData;
     
-    return sortedApplicationSets.filter((appSet) => {
+    return filteredData.filter((appSet) => {
       const labels = appSet.metadata?.labels || {};
       // Check if any label matches the search query
       return Object.entries(labels).some(([key, value]) => {
@@ -166,18 +168,25 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
         return labelSelector.includes(searchQuery) || key.includes(searchQuery);
       });
     });
-  }, [sortedApplicationSets, searchQuery]);
+  }, [filteredData, searchQuery]);
   
-  const [data, filteredData, onFilterChange] = useListPageFilter(filteredBySearch, filters);
-  const rows = useApplicationSetRowsDV(filteredData, namespace, applications, appsLoaded);
+  const rows = useApplicationSetRowsDV(filteredBySearch, namespace, applications, appsLoaded);
 
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No Argo CD ApplicationSets">
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={searchQuery ? "No matching Argo CD ApplicationSets" : "No Argo CD ApplicationSets"}>
             <EmptyStateBody>
-              There are no Argo CD ApplicationSets in {namespace ? 'this project' : 'all projects'}.
+              {searchQuery ? (
+                <>
+                  No Argo CD ApplicationSets match the label filter <strong>"{searchQuery}"</strong>.
+                  <br />
+                  Try removing the filter or selecting a different label to see more ApplicationSets.
+                </>
+              ) : (
+                `There are no Argo CD ApplicationSets in ${namespace ? 'this project' : 'all projects'}.`
+              )}
             </EmptyStateBody>
           </EmptyState>
         </Td>
@@ -201,7 +210,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   let currentActiveState = null;
   if (loadError) {
     currentActiveState = DataViewState.error;
-  } else if (applicationSets.length === 0) {
+  } else if (filteredBySearch.length === 0) {
     currentActiveState = DataViewState.empty;
   }
 

@@ -129,11 +129,20 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     return sortData(applications, sortBy, direction);
   }, [applications, sortBy, direction]);
   
-  // Filter by search query if present
+  // TODO: use alternate filter since it is deprecated. See DataTableView potentially
+  const [, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
+  
+  // Filter applications by project or appset before rendering rows
+  const filteredByOwner = React.useMemo(
+    () => filteredData.filter(filterApp(project, appset)),
+    [filteredData, project, appset],
+  );
+  
+  // Filter by search query if present (after other filters)
   const filteredBySearch = React.useMemo(() => {
-    if (!searchQuery) return sortedApplications;
+    if (!searchQuery) return filteredByOwner;
     
-    return sortedApplications.filter((app) => {
+    return filteredByOwner.filter((app) => {
       const labels = app.metadata?.labels || {};
       // Check if any label matches the search query
       return Object.entries(labels).some(([key, value]) => {
@@ -141,23 +150,23 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         return labelSelector.includes(searchQuery) || key.includes(searchQuery);
       });
     });
-  }, [sortedApplications, searchQuery]);
-  
-  // TODO: use alternate filter since it is deprecated. See DataTableView potentially
-  const [, filteredData, onFilterChange] = useListPageFilter(filteredBySearch, filters);
-  // Filter applications by project or appset before rendering rows
-  const filteredByOwner = React.useMemo(
-    () => filteredData.filter(filterApp(project, appset)),
-    [filteredData, project, appset],
-  );
-  const rows = useApplicationRowsDV(filteredByOwner, namespace);
+  }, [filteredByOwner, searchQuery]);
+  const rows = useApplicationRowsDV(filteredBySearch, namespace);
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No Argo CD Applications">
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={searchQuery ? "No matching Argo CD Applications" : "No Argo CD Applications"}>
             <EmptyStateBody>
-              There are no Argo CD Applications in {namespace ? 'this project' : 'all projects'}.
+              {searchQuery ? (
+                <>
+                  No Argo CD Applications match the label filter <strong>"{searchQuery}"</strong>.
+                  <br />
+                  Try removing the filter or selecting a different label to see more applications.
+                </>
+              ) : (
+                `There are no Argo CD Applications in ${namespace ? 'this project' : 'all projects'}.`
+              )}
             </EmptyStateBody>
           </EmptyState>
         </Td>
@@ -167,7 +176,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   let currentActiveState = null;
   if (loadError) {
     currentActiveState = DataViewState.error;
-  } else if (filteredByOwner.length === 0) {
+  } else if (filteredBySearch.length === 0) {
     currentActiveState = DataViewState.empty;
   }
   return (
