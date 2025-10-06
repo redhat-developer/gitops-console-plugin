@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, GridItem } from '@patternfly/react-core';
 import { Link } from 'react-router-dom-v5-compat';
 import * as _ from 'lodash';
 
 import { PodPhase, ResourceLink, StatusComponent } from '@openshift-console/dynamic-plugin-sdk';
 import { ExtPodKind } from '@openshift-console/dynamic-plugin-sdk-internal/lib/extensions/console-types';
+import { Grid, GridItem } from '@patternfly/react-core';
 
 import { PodTraffic } from './pod-traffic';
 import { ContainerStatus } from './types';

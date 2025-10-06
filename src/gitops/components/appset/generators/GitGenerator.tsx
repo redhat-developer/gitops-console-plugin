@@ -1,6 +1,13 @@
 import * as React from 'react';
-import { DescriptionList, DescriptionListDescription, DescriptionListGroup, DescriptionListTerm } from '@patternfly/react-core';
+
+import {
+  DescriptionList,
+  DescriptionListDescription,
+  DescriptionListGroup,
+  DescriptionListTerm,
+} from '@patternfly/react-core';
 import { GitAltIcon } from '@patternfly/react-icons';
+
 import GeneratorView from './GeneratorView';
 
 interface GitGeneratorProps {
@@ -8,8 +15,8 @@ interface GitGeneratorProps {
 }
 
 const GitGenerator: React.FC<GitGeneratorProps> = ({ generator }) => {
-  const generatorType = generator.files ? "File" : "Directory";
-  
+  const generatorType = generator.files ? 'File' : 'Directory';
+
   return (
     <GeneratorView icon={<GitAltIcon />} title={`git (${generatorType})`}>
       <DescriptionList isHorizontal isCompact>
@@ -28,13 +35,17 @@ const GitGenerator: React.FC<GitGeneratorProps> = ({ generator }) => {
         {generator.directories && (
           <DescriptionListGroup>
             <DescriptionListTerm>Directories</DescriptionListTerm>
-            <DescriptionListDescription>{generator.directories.length} directory(ies)</DescriptionListDescription>
+            <DescriptionListDescription>
+              {generator.directories.length} directory(ies)
+            </DescriptionListDescription>
           </DescriptionListGroup>
         )}
         {generator.files && (
           <DescriptionListGroup>
             <DescriptionListTerm>Files</DescriptionListTerm>
-            <DescriptionListDescription>{generator.files.length} file(s)</DescriptionListDescription>
+            <DescriptionListDescription>
+              {generator.files.length} file(s)
+            </DescriptionListDescription>
           </DescriptionListGroup>
         )}
       </DescriptionList>

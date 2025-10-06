@@ -1,11 +1,12 @@
 import * as React from 'react';
+
+import ClusterGenerator from './generators/ClusterGenerator';
+import GenericGenerator from './generators/GenericGenerator';
 import GitGenerator from './generators/GitGenerator';
 import ListGenerator from './generators/ListGenerator';
 import MatrixGenerator from './generators/MatrixGenerator';
-import UnionGenerator from './generators/UnionGenerator';
 import MergeGenerator from './generators/MergeGenerator';
-import ClusterGenerator from './generators/ClusterGenerator';
-import GenericGenerator from './generators/GenericGenerator';
+import UnionGenerator from './generators/UnionGenerator';
 
 interface GeneratorsProps {
   generators: any[];
@@ -47,5 +48,3 @@ const Generators: React.FC<GeneratorsProps> = ({ generators }) => {
 };
 
 export default Generators;
-
-

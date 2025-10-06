@@ -1,6 +1,15 @@
 import * as React from 'react';
-import { ExpandableSection, DataList, DataListItem, DataListCell, DataListItemRow, DataListItemCells } from '@patternfly/react-core';
+
+import {
+  DataList,
+  DataListCell,
+  DataListItem,
+  DataListItemCells,
+  DataListItemRow,
+  ExpandableSection,
+} from '@patternfly/react-core';
 import { ListIcon } from '@patternfly/react-icons';
+
 import GeneratorView from './GeneratorView';
 
 interface ListGeneratorProps {
@@ -10,21 +19,21 @@ interface ListGeneratorProps {
 const ListGenerator: React.FC<ListGeneratorProps> = ({ generator }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
-  const onToggle = (_event: React.MouseEvent, isExpanded: boolean) => {
-    setIsExpanded(isExpanded);
+  const onToggle = (_event: React.MouseEvent, expanded: boolean) => {
+    setIsExpanded(expanded);
   };
 
   const displayValue = (value: any) => {
-    if (value === undefined) return "null";
-    else if (typeof value === "object") return JSON.stringify(value);
+    if (value === undefined) return 'null';
+    else if (typeof value === 'object') return JSON.stringify(value);
     else return value;
   };
 
   return (
     <GeneratorView icon={<ListIcon />} title="List">
-      <ExpandableSection 
-        toggleText={`${generator.elements.length} element(s) in list`} 
-        onToggle={onToggle} 
+      <ExpandableSection
+        toggleText={`${generator.elements.length} element(s) in list`}
+        onToggle={onToggle}
         isExpanded={isExpanded}
       >
         {generator.elements && generator.elements.length > 0 && (
@@ -33,11 +42,13 @@ const ListGenerator: React.FC<ListGeneratorProps> = ({ generator }) => {
               <DataListItem key={rowIndex}>
                 <DataListItemRow>
                   <DataListItemCells
-                    dataListCells={Object.entries(item).map(([key, val]: [string, any], colIndex: number) => (
-                      <DataListCell key={colIndex}>
-                        <strong>{key}:</strong> {displayValue(val)}
-                      </DataListCell>
-                    ))}
+                    dataListCells={Object.entries(item).map(
+                      ([key, val]: [string, any], colIndex: number) => (
+                        <DataListCell key={colIndex}>
+                          <strong>{key}:</strong> {displayValue(val)}
+                        </DataListCell>
+                      ),
+                    )}
                   />
                 </DataListItemRow>
               </DataListItem>

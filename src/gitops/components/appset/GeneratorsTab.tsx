@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { ApplicationSetKind } from '../../models/ApplicationSetModel';
+
 import { PageSection } from '@patternfly/react-core';
+
+import { ApplicationSetKind } from '../../models/ApplicationSetModel';
+
 import Generators from './Generators';
+
 import './GeneratorsTab.scss';
 
 type GeneratorsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
@@ -17,26 +21,30 @@ const GeneratorsTab: React.FC<GeneratorsTabProps> = ({ obj }) => {
       {obj.spec?.generators && obj.spec.generators.length > 0 ? (
         <Generators generators={obj.spec.generators} />
       ) : (
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          padding: '40px 20px',
-          color: '#8a8d90',
-          fontSize: '16px'
-        }}>
-          <div style={{ 
-            width: '48px', 
-            height: '48px', 
-            backgroundColor: '#393F44', 
-            borderRadius: '50%',
+        <div
+          style={{
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: '16px',
-            fontSize: '24px'
-          }}>
+            padding: '40px 20px',
+            color: '#8a8d90',
+            fontSize: '16px',
+          }}
+        >
+          <div
+            style={{
+              width: '48px',
+              height: '48px',
+              backgroundColor: '#393F44',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '16px',
+              fontSize: '24px',
+            }}
+          >
             ⚙️
           </div>
           <div style={{ textAlign: 'center' }}>

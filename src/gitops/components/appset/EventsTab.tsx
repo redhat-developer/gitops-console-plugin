@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+
 import { ApplicationSetKind } from '../../models/ApplicationSetModel';
 import EventsTab from '../shared/EventsTab/EventsTab';
 

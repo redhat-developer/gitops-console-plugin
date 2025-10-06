@@ -1,15 +1,18 @@
 import * as React from 'react';
-import { useK8sWatchResource, HorizontalNav } from '@openshift-console/dynamic-plugin-sdk';
-import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
-import { Spinner, Bullseye } from '@patternfly/react-core';
-import DetailsPageHeader from '../shared/DetailsPageHeader/DetailsPageHeader';
+
+import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { Bullseye, Spinner } from '@patternfly/react-core';
+
 import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
+import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
+import DetailsPageHeader from '../shared/DetailsPageHeader/DetailsPageHeader';
+import ResourceYAMLTab from '../shared/ResourceYAMLTab/ResourceYAMLTab';
+
 import AppSetDetailsTab from './AppSetDetailsTab';
-import GeneratorsTab from './GeneratorsTab';
 import AppsTab from './AppsTab';
 import ApplicationSetEventsTab from './EventsTab';
-import ResourceYAMLTab from '../shared/ResourceYAMLTab/ResourceYAMLTab';
+import GeneratorsTab from './GeneratorsTab';
 
 type AppSetPageProps = {
   name: string;
@@ -39,11 +42,11 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
         name: t('Details'),
         component: AppSetDetailsTab,
       },
-          {
-            href: 'yaml',
-            name: t('YAML'),
-            component: ResourceYAMLTab,
-          },
+      {
+        href: 'yaml',
+        name: t('YAML'),
+        component: ResourceYAMLTab,
+      },
       {
         href: 'generators',
         name: t('Generators'),
@@ -54,11 +57,11 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
         name: t('Applications'),
         component: AppsTab,
       },
-          {
-            href: 'events',
-            name: t('Events'),
-            component: ApplicationSetEventsTab,
-          },
+      {
+        href: 'events',
+        name: t('Events'),
+        component: ApplicationSetEventsTab,
+      },
     ],
     [t],
   );

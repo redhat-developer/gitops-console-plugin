@@ -3,7 +3,11 @@ import classNames from 'classnames';
 
 import { OwnerReferences } from '@gitops/utils/components/OwnerReferences/owner-references';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
-import { kindForReference, useObjectModifyPermissions, getSelectorSearchURL } from '@gitops/utils/utils';
+import {
+  getSelectorSearchURL,
+  kindForReference,
+  useObjectModifyPermissions,
+} from '@gitops/utils/utils';
 import {
   K8sModel,
   K8sResourceKind,

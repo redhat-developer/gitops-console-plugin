@@ -1,7 +1,10 @@
 import * as React from 'react';
+
 import { ThIcon } from '@patternfly/react-icons';
-import GeneratorView from './GeneratorView';
+
 import Generators from '../Generators';
+
+import GeneratorView from './GeneratorView';
 
 interface UnionGeneratorProps {
   generator: any;
@@ -12,7 +15,7 @@ const UnionGenerator: React.FC<UnionGeneratorProps> = ({ generator }) => {
     <>
       <GeneratorView icon={<ThIcon />} title="Union" />
       <br />
-      <div style={{ marginLeft: "32px" }}>
+      <div style={{ marginLeft: '32px' }}>
         <Generators generators={generator.generators} />
       </div>
     </>

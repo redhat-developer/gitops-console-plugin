@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { ApplicationSetKind } from '../../models/ApplicationSetModel';
+
 import { PageSection } from '@patternfly/react-core';
+
+import { ApplicationSetKind } from '../../models/ApplicationSetModel';
 import ApplicationList from '../shared/ApplicationList';
+
 import './AppsTab.scss';
 
 type AppsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
@@ -15,7 +18,7 @@ const AppsTab: React.FC<AppsTabProps> = ({ obj }) => {
 
   return (
     <PageSection>
-      <ApplicationList 
+      <ApplicationList
         namespace={namespace}
         hideNameLabelFilters={false}
         showTitle={false}

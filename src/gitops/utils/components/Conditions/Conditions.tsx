@@ -1,11 +1,10 @@
 import * as React from 'react';
+
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { CamelCaseWrap, Timestamp } from '@openshift-console/dynamic-plugin-sdk';
-import { Table, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
+import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 
-export const Conditions: React.FC<ConditionsProps> = ({
-  conditions
-}) => {
+export const Conditions: React.FC<ConditionsProps> = ({ conditions }) => {
   const { t } = useGitOpsTranslation();
 
   const getStatusLabel = (status: string) => {
@@ -22,10 +21,7 @@ export const Conditions: React.FC<ConditionsProps> = ({
   return (
     <>
       {conditions?.length ? (
-        <Table
-          aria-label="Conditions table"
-          borders
-        >
+        <Table aria-label="Conditions table" borders>
           <Thead>
             <Tr>
               <Th>{t('public~Type')}</Th>
@@ -36,30 +32,28 @@ export const Conditions: React.FC<ConditionsProps> = ({
             </Tr>
           </Thead>
           <Tbody>
-            {conditions?.map?.(
-              (condition: any, i: number) => (
-                <Tr
-                  data-test={condition.type}
-                  key={i}
+            {conditions?.map?.((condition: any, i: number) => (
+              <Tr data-test={condition.type} key={i}>
+                <Td dataLabel={t('public~Type')} data-test={`condition[${i}].type`}>
+                  <CamelCaseWrap value={condition.type} />
+                </Td>
+                <Td dataLabel={t('public~Status')} data-test={`condition[${i}].status`}>
+                  {getStatusLabel(condition.status)}
+                </Td>
+                <Td
+                  dataLabel={t('public~Updated')}
+                  data-test={`condition[${i}].lastTransitionTime`}
                 >
-                  <Td dataLabel={t('public~Type')} data-test={`condition[${i}].type`}>
-                    <CamelCaseWrap value={condition.type} />
-                  </Td>
-                  <Td dataLabel={t('public~Status')} data-test={`condition[${i}].status`}>
-                    {getStatusLabel(condition.status)}
-                  </Td>
-                  <Td dataLabel={t('public~Updated')} data-test={`condition[${i}].lastTransitionTime`}>
-                    <Timestamp timestamp={condition.lastTransitionTime} />
-                  </Td>
-                  <Td dataLabel={t('public~Reason')} data-test={`condition[${i}].reason`}>
-                    <CamelCaseWrap value={condition.reason} />
-                  </Td>
-                  <Td dataLabel={t('public~Message')} data-test={`condition[${i}].message`}>
-                    {condition.message?.trim() || '-'}
-                  </Td>
-                </Tr>
-              ),
-            )}
+                  <Timestamp timestamp={condition.lastTransitionTime} />
+                </Td>
+                <Td dataLabel={t('public~Reason')} data-test={`condition[${i}].reason`}>
+                  <CamelCaseWrap value={condition.reason} />
+                </Td>
+                <Td dataLabel={t('public~Message')} data-test={`condition[${i}].message`}>
+                  {condition.message?.trim() || '-'}
+                </Td>
+              </Tr>
+            ))}
           </Tbody>
         </Table>
       ) : (
