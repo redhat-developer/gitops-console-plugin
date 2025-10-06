@@ -41,20 +41,6 @@ export function getFriendlyClusterName(cluster: string) {
   }
 }
 
-export function getIconForSourceType(sourceType: string) {
-  switch (sourceType) {
-    case 'Helm': {
-      return '../../../../images/helm.png';
-    }
-    case 'Kustomize': {
-      return '../../../../images/kustomize.png';
-    }
-    default: {
-      return '../../../../images/git.png';
-    }
-  }
-}
-
 export function getDuration(startAt: string, finishAt: string) {
   try {
     const start: Date = new Date(startAt);
