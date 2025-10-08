@@ -7,11 +7,11 @@ import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetA
 import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
 import DetailsPageHeader from '../shared/DetailsPageHeader/DetailsPageHeader';
+import EventsTab from '../shared/EventsTab/EventsTab';
 import ResourceYAMLTab from '../shared/ResourceYAMLTab/ResourceYAMLTab';
 
 import AppSetDetailsTab from './AppSetDetailsTab';
 import AppsTab from './AppsTab';
-import ApplicationSetEventsTab from './EventsTab';
 import GeneratorsTab from './GeneratorsTab';
 
 type AppSetPageProps = {
@@ -60,7 +60,7 @@ const AppSetNavPage: React.FC<AppSetPageProps> = ({ name, namespace, kind }) => 
       {
         href: 'events',
         name: t('Events'),
-        component: ApplicationSetEventsTab,
+        component: EventsTab,
       },
     ],
     [t],

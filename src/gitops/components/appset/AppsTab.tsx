@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { PageSection } from '@patternfly/react-core';
-
 import { ApplicationSetKind } from '../../models/ApplicationSetModel';
 import ApplicationList from '../shared/ApplicationList';
 
@@ -17,14 +15,12 @@ const AppsTab: React.FC<AppsTabProps> = ({ obj }) => {
   if (!obj || !namespace) return null;
 
   return (
-    <PageSection>
-      <ApplicationList
-        namespace={namespace}
-        hideNameLabelFilters={false}
-        showTitle={false}
-        appset={obj}
-      />
-    </PageSection>
+    <ApplicationList
+      namespace={namespace}
+      hideNameLabelFilters={false}
+      showTitle={false}
+      appset={obj}
+    />
   );
 };
 

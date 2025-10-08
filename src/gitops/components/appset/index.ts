@@ -1,7 +1,6 @@
 export { default as AppSetDetailsTab } from './AppSetDetailsTab';
 export { default as AppSetNavPage } from './AppSetNavPage';
 export { default as AppsTab } from './AppsTab';
-export { default as EventsTab } from './EventsTab';
 export { default as Generators } from './Generators';
 export { default as GeneratorsTab } from './GeneratorsTab';
 
