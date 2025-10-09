@@ -7,6 +7,10 @@ import * as GitUrlParse from 'git-url-parse';
 import { GitUrl } from 'git-url-parse';
 
 export const isSHA = (revision: string) => {
+  if (revision.startsWith('sha256:')) {
+    const hashOnly = revision.replace('sha256:', '');
+    return hashOnly.match(/^[a-f0-9]{8,69}$/) !== null;
+  }
   // https://stackoverflow.com/questions/468370/a-regex-to-match-a-sha1
   return revision.match(/^[a-f0-9]{5,40}$/) !== null;
 };
