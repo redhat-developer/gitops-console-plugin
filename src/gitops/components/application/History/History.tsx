@@ -132,6 +132,7 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
       ? 'Automated'
       : '' + (initBy.username ? initBy.username : '-');
 
+    const isOci = obj.source?.repoURL?.startsWith('oci://');
     let revisionValue = <>-</>;
     if (obj.revision) {
       revisionValue = (
@@ -141,8 +142,19 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
             repoURL={obj.source.repoURL || ''}
             helm={obj.source.helm ? true : false}
           />
-          {' , '}
-          <ExternalLink href={obj.source.repoURL}>{repoUrl(obj.source.repoURL)}</ExternalLink>
+          {!isOci ? (
+            <span style={{ marginLeft: '5px' }}>
+              {'('}
+              <ExternalLink href={obj.source.repoURL}>{repoUrl(obj.source.repoURL)}</ExternalLink>
+              {')'}
+            </span>
+          ) : (
+            <span style={{ marginLeft: '5px' }}>
+              {'('}
+              {obj.source.repoURL}
+              {')'}
+            </span>
+          )}
         </>
       );
     } else if (obj.revisions && app.spec.sources) {

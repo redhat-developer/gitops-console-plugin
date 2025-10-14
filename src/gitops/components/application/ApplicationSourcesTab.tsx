@@ -2,13 +2,13 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import ExternalLink from 'src/components/utils/ExternalLink/ExternalLink';
 
-// import { getReferenceForModel } from 'src/components/utils/useClusterVersion';
 import { ApplicationKind, ApplicationSource } from '@gitops/models/ApplicationModel';
+import { GitIcon } from '@gitops/utils/components/Icons/GitIcon';
+import { HelmIcon } from '@gitops/utils/components/Icons/HelmIcon';
+import { OciIcon } from '@gitops/utils/components/Icons/OciIcon';
 import { ArgoServer, getArgoServer } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { repoUrl, revisionUrl } from '@gitops/utils/urls';
-import gitImage from '@images/git.png';
-import helmImage from '@images/helm.png';
 import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import {
   EmptyState,
@@ -23,7 +23,7 @@ import DataViewTable, {
   DataViewTh,
   DataViewTr,
 } from '@patternfly/react-data-view/dist/esm/DataViewTable';
-import { CubesIcon } from '@patternfly/react-icons';
+import { CubesIcon, GithubIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
 
 import ArgoCDLink from '../shared/ArgoCDLink/ArgoCDLink';
@@ -74,7 +74,7 @@ export const useColumnsDV = () => {
       },
     },
     {
-      cell: 'Path',
+      cell: 'Path / Chart',
       id: 'path',
       props: {
         key: 'path',
@@ -92,25 +92,31 @@ export const useColumnsDV = () => {
   return columns;
 };
 
+function processPath(path: string) {
+  if (path !== null && path !== undefined) {
+    if (path === '.') {
+      return '(root)';
+    }
+    return path;
+  }
+  return '';
+}
+
 export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
   const rows: DataViewTr[] = [];
+
   sources.forEach((source, index) => {
+    const isOci = source?.repoURL?.startsWith('oci://');
     rows.push([
       {
         id: index + '-type',
         cell: (
-          <Tooltip content={source.chart ? 'Helm' : 'Git'}>
-            <img
-              loading="lazy"
-              src={
-                source.chart
-                  ? helmImage //require('@images/helm.png').default || require('@images/helm.png')
-                  : gitImage //require('@images/git.png').default || require('@images/git.png')
-              }
-              alt={source.chart ? 'Helm' : 'Git'}
-              width="19px"
-              height="24px"
-            />
+          // eslint-disable-next-line no-nested-ternary
+          <Tooltip content={source.chart ? 'Helm' : isOci ? 'OCI' : 'Git'}>
+            <div>
+              {/* eslint-disable-next-line no-nested-ternary */}
+              {source.chart ? <HelmIcon /> : isOci ? <OciIcon /> : <GitIcon />}
+            </div>
           </Tooltip>
         ),
         dataLabel: 'Type',
@@ -119,7 +125,17 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
         id: index + '-repository',
         cell: (
           <div>
-            <ExternalLink href={source.repoURL}>{repoUrl(source.repoURL)}</ExternalLink>
+            {/* eslint-disable-next-line no-nested-ternary */}
+            {source.chart ? (
+              <ExternalLink href={source.repoURL}>{source.repoURL}</ExternalLink>
+            ) : isOci ? (
+              <div>{source.repoURL}</div>
+            ) : (
+              <ExternalLink href={source.repoURL}>
+                {source.repoURL.indexOf('github') > 0 && <GithubIcon />}
+                {repoUrl(source.repoURL)}
+              </ExternalLink>
+            )}
           </div>
         ),
         dataLabel: 'Repository',
@@ -129,7 +145,6 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
         cell: <div>{source.targetRevision}</div>,
         dataLabel: 'TargetRevision',
       },
-
       {
         id: index + '-path',
         cell: (
@@ -137,18 +152,25 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
             {/* eslint-disable-next-line no-nested-ternary */}
             {source.chart ? (
               source.chart
-            ) : source.path ? (
-              <ExternalLink
-                href={revisionUrl(source.repoURL, source.targetRevision, true) + '/' + source.path}
-              >
-                {source.path}
-              </ExternalLink>
+            ) : // eslint-disable-next-line no-nested-ternary
+            source.path ? (
+              !isOci ? (
+                <ExternalLink
+                  href={
+                    revisionUrl(source.repoURL, source.targetRevision, true) + '/' + source.path
+                  }
+                >
+                  {source.path}
+                </ExternalLink>
+              ) : (
+                <div>{processPath(source.path)}</div>
+              )
             ) : (
               '-'
             )}
           </div>
         ),
-        dataLabel: 'Path',
+        dataLabel: 'Chart / Path',
       },
       {
         id: index + '-ref',
