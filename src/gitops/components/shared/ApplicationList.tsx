@@ -130,7 +130,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   }, [applications, sortBy, direction]);
 
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
-  const [, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
+  const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
 
   // Filter applications by project or appset before rendering rows
   const filteredByOwner = React.useMemo(
@@ -152,6 +152,11 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     });
   }, [filteredByOwner, searchQuery]);
   const rows = useApplicationRowsDV(filteredBySearch, namespace);
+
+  // Check if there are applications owned by this ApplicationSet initially (before search)
+  const hasOwnedApplications = React.useMemo(() => {
+    return sortedApplications.some(filterApp(project, appset));
+  }, [sortedApplications, project, appset]);
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
@@ -200,12 +205,13 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         </ListPageHeader>
       )}
       <ListPageBody>
-        {!hideNameLabelFilters && (
+        {!hideNameLabelFilters && hasOwnedApplications && (
           <ListPageFilter
-            data={filteredByOwner}
+            data={data}
             loaded={loaded}
             rowFilters={filters}
             onFilterChange={onFilterChange}
+            nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
           />
         )}
         <DataView activeState={currentActiveState}>

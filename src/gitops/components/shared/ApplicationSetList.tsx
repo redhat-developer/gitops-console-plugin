@@ -23,7 +23,7 @@ import {
 import { useDataViewSort } from '@patternfly/react-data-view/dist/dynamic/Hooks';
 import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
 import { CubesIcon } from '@patternfly/react-icons';
-import { Tbody, Td, Tr } from '@patternfly/react-table';
+import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
 import DevPreviewBadge from '../../../components/import/badges/DevPreviewBadge';
 import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
@@ -132,20 +132,37 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
 
   const { t } = useTranslation('plugin__gitops-plugin');
 
+  const initIndex: number = namespace ? 0 : 1;
+  const COLUMNS_KEYS_INDEXES = React.useMemo(
+    () => [
+      { key: 'name', index: 0 },
+      ...(!namespace ? [{ key: 'namespace', index: 1 }] : []),
+      { key: 'status', index: 1 + initIndex },
+      { key: 'generated-apps', index: 2 + initIndex },
+      { key: 'generators', index: 3 + initIndex },
+      { key: 'created-at', index: 4 + initIndex },
+    ],
+    [namespace, initIndex],
+  );
+
   const [searchParams, setSearchParams] = useSearchParams();
   const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
+  const sortByIndex = React.useMemo(
+    () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
+    [COLUMNS_KEYS_INDEXES, sortBy],
+  );
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
 
-  const getSortParams = (columnId: string, columnIndex: number) => ({
+  const getSortParams = (columnIndex: number): ThProps['sort'] => ({
     sortBy: {
-      index: columnIndex,
+      index: sortByIndex,
       direction,
-      defaultDirection: 'asc' as const,
+      defaultDirection: 'asc',
     },
-    onSort: (_event: any, index: number, dir: 'asc' | 'desc') => {
-      onSort(_event, columnId, dir);
+    onSort: (_event: any, index: number, dir) => {
+      onSort(_event, COLUMNS_KEYS_INDEXES[index].key, dir);
     },
     columnIndex,
   });
@@ -178,6 +195,11 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   }, [filteredData, searchQuery]);
 
   const rows = useApplicationSetRowsDV(filteredBySearch, namespace, applications, appsLoaded);
+
+  // Check if there are ApplicationSets initially (before search)
+  const hasApplicationSets = React.useMemo(() => {
+    return sortedApplicationSets.length > 0;
+  }, [sortedApplicationSets]);
 
   const empty = (
     <Tbody>
@@ -246,7 +268,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
         </ListPageHeader>
       )}
       <ListPageBody>
-        {!hideNameLabelFilters && (
+        {!hideNameLabelFilters && hasApplicationSets && (
           <ListPageFilter
             data={data}
             loaded={loaded}
@@ -333,76 +355,63 @@ const useApplicationSetRowsDV = (
   return rows;
 };
 
-const useColumnsDV = (namespace, getSortParams) => {
-  const i: number = namespace ? 1 : 0;
+const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
+  const i: number = namespace ? 0 : 1;
   const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
-      id: 'name',
       cell: t('plugin__gitops-plugin~Name'),
       props: {
-        key: 'name',
         'aria-label': 'name',
-        className: 'pf-m-width-20',
-        sort: getSortParams('name', 0),
+        className: 'pf-m-width-25',
+        sort: getSortParams(0),
       },
     },
     ...(!namespace
       ? [
           {
-            id: 'namespace',
             cell: 'Namespace',
             props: {
-              key: 'namespace',
               'aria-label': 'namespace',
               className: 'pf-m-width-15',
-              sort: getSortParams('namespace', 1),
+              sort: getSortParams(1),
             },
           },
         ]
       : []),
     {
-      id: 'status',
       cell: 'Health Status',
       props: {
-        key: 'status',
         'aria-label': 'health status',
         className: 'pf-m-width-15',
-        sort: getSortParams('status', 1 + i),
+        sort: getSortParams(1 + i),
       },
     },
     {
-      id: 'generated-apps',
       cell: 'Generated Apps',
       props: {
-        key: 'generated-apps',
         'aria-label': 'generated apps',
         className: 'pf-m-width-15',
-        sort: getSortParams('generated-apps', 2 + i),
+        sort: getSortParams(2 + i),
       },
     },
     {
-      id: 'generators',
       cell: 'Generators',
       props: {
-        key: 'generators',
         'aria-label': 'generators',
         className: 'pf-m-width-15',
-        sort: getSortParams('generators', 3 + i),
+        sort: getSortParams(3 + i),
       },
     },
     {
-      id: 'created-at',
       cell: 'Created At',
       props: {
-        key: 'created-at',
         'aria-label': 'created at',
         className: 'pf-m-width-15',
-        sort: getSortParams('created-at', 4 + i),
+        sort: getSortParams(4 + i),
       },
     },
     {
-      id: 'actions',
       cell: '',
       props: { 'aria-label': 'actions' },
     },
