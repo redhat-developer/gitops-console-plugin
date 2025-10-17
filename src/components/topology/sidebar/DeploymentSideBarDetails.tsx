@@ -205,7 +205,6 @@ type DeploymentSideBarDetailsProps = {
 
 export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> = ({
   rollout: d,
-  rolloutKind: rolloutKind,
 }) => {
   const { t } = useTranslation();
   const model = getK8sModel(d);

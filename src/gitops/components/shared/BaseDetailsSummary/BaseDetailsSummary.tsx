@@ -3,7 +3,11 @@ import classNames from 'classnames';
 
 import { OwnerReferences } from '@gitops/utils/components/OwnerReferences/owner-references';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
-import { kindForReference, useObjectModifyPermissions } from '@gitops/utils/utils';
+import {
+  getSelectorSearchURL,
+  kindForReference,
+  useObjectModifyPermissions,
+} from '@gitops/utils/utils';
 import {
   K8sModel,
   K8sResourceKind,
@@ -58,7 +62,8 @@ type LabelProps = {
 };
 
 const LabelL: React.SFC<LabelProps> = ({ kind, name, value, expand }) => {
-  const href = `/search?kind=${kind}&q=${value ? encodeURIComponent(`${name}=${value}`) : name}`;
+  const selector = value ? `${name}=${value}` : name;
+  const href = getSelectorSearchURL('', kind, selector);
   const kindOf = `co-m-${kindForReference(kind.toLowerCase())}`;
   const klass = classNames(kindOf, { 'co-m-expand': expand }, 'co-label');
   return (

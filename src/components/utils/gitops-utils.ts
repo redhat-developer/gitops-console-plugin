@@ -41,8 +41,8 @@ export const getApplicationsListBaseURI = () => {
 export class RetryError extends Error {}
 
 export class TimeoutError extends Error {
-  constructor(url: any, ms: any, ...params: any[]) {
-    super(`Call to ${url} timed out after ${ms}ms.`); //å ...params);
+  constructor(url: any, ms: any) {
+    super(`Call to ${url} timed out after ${ms}ms.`);
     // Dumb hack to fix `instanceof TimeoutError`
     Object.setPrototypeOf(this, TimeoutError.prototype);
   }
@@ -64,7 +64,7 @@ const getCSRFToken = () =>
     .map((c) => c.slice(cookiePrefix.length))
     .pop();
 
-export const validateStatus = async (response: Response, url, method, retry) => {
+export const validateStatus = async (response: Response, url, method) => {
   console.log('VALIDATE STATUS - RESPONSE STATUS IS ' + response.status);
   console.log('VALIDATE STATUS - RESPONSE TEXT IS ' + response.text);
   console.log('VALIDATE STATUS - RESPONSE BODY IS ' + response.body);
@@ -101,7 +101,6 @@ export const validateStatus = async (response: Response, url, method, retry) => 
     // retry 409 conflict errors due to ClustResourceQuota / ResourceQuota
     // https://bugzilla.redhat.com/show_bug.cgi?id=1920699
     if (
-      retry &&
       method === 'POST' &&
       response.status === 409 &&
       ['resourcequotas', 'clusterresourcequotas'].includes(json.details?.kind)
@@ -129,7 +128,7 @@ export const validateStatus = async (response: Response, url, method, retry) => 
   });
 };
 
-export const coFetchInternal = async (url, options, timeout, retry) => {
+export const coFetchInternal = async (url, options, timeout) => {
   const allOptions = _.defaultsDeep({}, initDefaults, options);
   if (allOptions.method !== 'GET') {
     allOptions.headers['X-CSRFToken'] = getCSRFToken();

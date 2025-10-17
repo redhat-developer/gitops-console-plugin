@@ -15,7 +15,6 @@ import {
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { ErrorState } from '@patternfly/react-component-groups';
 import { EmptyState, EmptyStateBody, Flex, FlexItem, Spinner } from '@patternfly/react-core';
 import {
   DataViewTable,
@@ -109,6 +108,10 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
     [COLUMNS_KEYS_INDEXES, sortBy],
   );
+
+  // Get search query from URL parameters
+  const searchQuery = searchParams.get('q') || '';
+
   const getSortParams = (columnIndex: number): ThProps['sort'] => ({
     sortBy: {
       index: sortByIndex,
@@ -125,35 +128,59 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   const sortedApplications = React.useMemo(() => {
     return sortData(applications, sortBy, direction);
   }, [applications, sortBy, direction]);
+
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
+
   // Filter applications by project or appset before rendering rows
   const filteredByOwner = React.useMemo(
     () => filteredData.filter(filterApp(project, appset)),
     [filteredData, project, appset],
   );
-  const rows = useApplicationRowsDV(filteredByOwner, namespace);
+
+  // Filter by search query if present (after other filters)
+  const filteredBySearch = React.useMemo(() => {
+    if (!searchQuery) return filteredByOwner;
+
+    return filteredByOwner.filter((app) => {
+      const labels = app.metadata?.labels || {};
+      // Check if any label matches the search query
+      return Object.entries(labels).some(([key, value]) => {
+        const labelSelector = `${key}=${value}`;
+        return labelSelector.includes(searchQuery) || key.includes(searchQuery);
+      });
+    });
+  }, [filteredByOwner, searchQuery]);
+  const rows = useApplicationRowsDV(filteredBySearch, namespace);
+
+  // Check if there are applications owned by this ApplicationSet initially (before search)
+  const hasOwnedApplications = React.useMemo(() => {
+    return sortedApplications.some(filterApp(project, appset));
+  }, [sortedApplications, project, appset]);
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No Argo CD Applications">
+          <EmptyState
+            headingLevel="h4"
+            icon={CubesIcon}
+            titleText={searchQuery ? 'No matching Argo CD Applications' : 'No Argo CD Applications'}
+          >
             <EmptyStateBody>
-              There are no Argo CD Applications in {namespace ? 'this project' : 'all projects'}.
+              {searchQuery ? (
+                <>
+                  No Argo CD Applications match the label filter{' '}
+                  <strong>&quot;{searchQuery}&quot;</strong>.
+                  <br />
+                  Try removing the filter or selecting a different label to see more applications.
+                </>
+              ) : (
+                `There are no Argo CD Applications in ${
+                  namespace ? 'this project' : 'all projects'
+                }.`
+              )}
             </EmptyStateBody>
           </EmptyState>
-        </Td>
-      </Tr>
-    </Tbody>
-  );
-  const error = loadError && (
-    <Tbody>
-      <Tr key="loading" ouiaId={'table-tr-loading'}>
-        <Td colSpan={columnsDV.length}>
-          <ErrorState
-            titleText="Unable to load data"
-            bodyText="There was an error retrieving applications. Check your connection and reload the page."
-          />
         </Td>
       </Tr>
     </Tbody>
@@ -161,7 +188,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   let currentActiveState = null;
   if (loadError) {
     currentActiveState = DataViewState.error;
-  } else if (filteredByOwner.length === 0) {
+  } else if (filteredBySearch.length === 0) {
     currentActiveState = DataViewState.empty;
   }
   return (
@@ -178,20 +205,17 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         </ListPageHeader>
       )}
       <ListPageBody>
-        {!hideNameLabelFilters && (
+        {!hideNameLabelFilters && hasOwnedApplications && (
           <ListPageFilter
-            data={data.filter(filterApp(project, appset))}
+            data={data}
             loaded={loaded}
             rowFilters={filters}
             onFilterChange={onFilterChange}
+            nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
           />
         )}
         <DataView activeState={currentActiveState}>
-          <DataViewTable
-            rows={rows}
-            columns={columnsDV}
-            bodyStates={loadError ? { error } : { empty }}
-          />
+          <DataViewTable columns={columnsDV} rows={rows} bodyStates={empty && { empty }} />
         </DataView>
       </ListPageBody>
     </div>
