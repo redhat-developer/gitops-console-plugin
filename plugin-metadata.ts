@@ -15,9 +15,10 @@ const metadata: ConsolePluginBuildMetadata = {
     "topology": "./components/topology",
     ApplicationList: "./gitops/components/application/ApplicationListTab.tsx",
     ApplicationDetails: "./gitops/components/application/ApplicationNavPage.tsx",
+    RolloutList: "./gitops/components/rollout/RolloutListTab.tsx",
     ApplicationSetList: "./gitops/components/application/ApplicationSetListTab.tsx",
     ApplicationSetDetailsPage: "./gitops/components/appset/ApplicationSetDetailsPage.tsx",
-    yamlApplicationTemplates: "./gitops/components/application/templates/index.ts"
+    yamlTemplates: "./gitops/templates/index.ts"
   }
 };
 

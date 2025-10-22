@@ -316,6 +316,20 @@
     }
   },
   {
+    "type": "console.navigation/resource-ns",
+    "properties": {
+        "id": "rollout",
+        "name": "Rollouts",
+        "perspective": "admin",
+        "section": "gitops-navigation-section",
+        "model": {
+            "group": "argoproj.io",
+            "kind": "Rollout",
+            "version": "v1alpha1"
+        }
+    }
+  },
+  {
     "type": "console.page/resource/list",
     "flags": {
         "required": [
@@ -330,6 +344,24 @@
         },
         "component": {
             "$codeRef": "ApplicationList"
+        }
+    }
+  },
+  {
+    "type": "console.page/resource/list",
+    "flags": {
+        "required": [
+            "ARGO_ROLLOUT"
+        ]
+    },
+    "properties": {
+        "model": {
+            "group": "argoproj.io",
+            "kind": "Rollout",
+            "version": "v1alpha1"
+        },
+        "component": {
+            "$codeRef": "RolloutList"
         }
     }
   },
@@ -384,7 +416,7 @@
             "version": "v1alpha1"
         },
         "template": {
-            "$codeRef": "yamlApplicationTemplates.defaultApplicationYamlTemplate"
+            "$codeRef": "yamlTemplates.defaultApplicationYamlTemplate"
         }
     }
   },
@@ -403,10 +435,30 @@
             "version": "v1alpha1"
         },
         "template": {
-            "$codeRef": "yamlApplicationTemplates.defaultApplicationSetYamlTemplate"
+            "$codeRef": "yamlTemplates.defaultApplicationSetYamlTemplate"
         }
     }
   },
+  {
+    "type": "console.yaml-template",
+    "flags": {
+        "required": [
+            "ARGO_ROLLOUT"
+        ]
+    },
+    "properties": {
+        "name": "default",
+        "model": {
+            "group": "argoproj.io",
+            "kind": "Rollout",
+            "version": "v1alpha1"
+        },
+        "template": {
+            "$codeRef": "yamlTemplates.defaultRolloutYamlTemplate"
+        }
+    }
+  },
+
   {
     "type": "console.page/resource/details",
     "flags": {
