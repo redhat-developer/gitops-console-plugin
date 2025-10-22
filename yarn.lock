@@ -265,9 +265,7 @@
     webpack "^5.75.0"
 
 "@openshift-console/dynamic-plugin-sdk@^4.19.0-prerelease.2":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@openshift-console/dynamic-plugin-sdk/-/dynamic-plugin-sdk-4.19.0.tgz#c9b6c1338b14c174520bff827f4e2be5ab2290a4"
-  integrity sha512-v1pNt2eDCyXwRZX+66QDnaYtrwbLapRMtCQql65pgePsE5/5aoOSGIsTjIB812j+oagAB1yk4r7OUlopA2F8kw==
+  version "4.19.1"
   dependencies:
     "@patternfly/react-topology" "^6.2.0"
     classnames "2.x"
