@@ -259,7 +259,9 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
       {showTitle == undefined && (
         <ListPageHeader
           title={t('plugin__gitops-plugin~ApplicationSets')}
-          badge={<DevPreviewBadge />}
+          badge={
+            location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
+          }
           hideFavoriteButton={false}
         >
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>

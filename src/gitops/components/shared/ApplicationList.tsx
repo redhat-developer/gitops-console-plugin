@@ -196,7 +196,9 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       {showTitle == undefined && (project == undefined || appset == undefined) && (
         <ListPageHeader
           title={t('plugin__gitops-plugin~Applications')}
-          badge={<DevPreviewBadge />}
+          badge={
+            location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
+          }
           hideFavoriteButton={false}
         >
           <ListPageCreate groupVersionKind={modelToRef(ApplicationModel)}>
