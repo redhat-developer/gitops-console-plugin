@@ -15,7 +15,7 @@ export const OwnerReferences: React.FC<OwnerReferencesProps> = ({ resource }) =>
   const owners = (_.get(resource.metadata, 'ownerReferences') || []).map((o: OwnerReference) => {
     if (o.kind === 'ApplicationSet') {
       return (
-        <Tooltip key={o.uid} content={<div>Back to ApplicationSet</div>} position="top">
+        <Tooltip key={o.uid} content={<div>View ApplicationSet</div>} position="top">
           <ResourceLink
             namespace={resource.metadata.namespace}
             groupVersionKind={{
