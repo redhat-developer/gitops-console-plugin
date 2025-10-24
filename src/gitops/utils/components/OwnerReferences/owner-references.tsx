@@ -9,19 +9,12 @@ import {
   OwnerReference,
   ResourceLink,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { getK8sModel } from '@openshift-console/dynamic-plugin-sdk/lib/utils/k8s/hooks/useK8sModel';
 import { Tooltip } from '@patternfly/react-core';
 
 import { useGitOpsTranslation } from '../../hooks/useGitOpsTranslation';
 
 const getModel = (ownerRef: OwnerReference): K8sModel | null => {
-  // Try to get the model from the console's registry first
-  const model = getK8sModel(ownerRef.apiVersion);
-  if (model) {
-    return model;
-  }
-
-  // Fallback for Argo CD resources
+  // Handle Argo CD resources
   const argoApiGroup = 'argoproj.io';
   if (ownerRef.apiVersion.includes(argoApiGroup)) {
     if (ownerRef.kind === 'ApplicationSet') {
