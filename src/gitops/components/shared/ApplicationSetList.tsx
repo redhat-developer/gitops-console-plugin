@@ -25,29 +25,26 @@ import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/Da
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
 
-import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
-import { ApplicationSetStatus } from '../../utils/constants';
-import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
-import { getAppSetStatus, getAppSetGeneratorCount } from '../../utils/gitops';
-import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
-import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
 import DevPreviewBadge from '../../../components/import/badges/DevPreviewBadge';
-
+import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
+import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
+import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
 // Import status icons for consistency with ApplicationList
 import {
   HealthDegradedIcon,
   HealthHealthyIcon,
   HealthUnknownIcon,
 } from '../../utils/components/Icons/Icons';
-
-
+import { ApplicationSetStatus } from '../../utils/constants';
+import { getAppSetGeneratorCount, getAppSetStatus } from '../../utils/gitops';
+import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
 
 const formatCreationTimestamp = (timestamp: string): string => {
   if (!timestamp) return '-';
   const date = new Date(timestamp);
   const now = new Date();
   const diffInMinutes = (now.getTime() - date.getTime()) / (1000 * 60);
-  
+
   if (diffInMinutes < 60) {
     return `${Math.floor(diffInMinutes)}m ago`;
   } else if (diffInMinutes < 60 * 24) {
@@ -63,20 +60,24 @@ const formatCreationTimestamp = (timestamp: string): string => {
 };
 
 // Helper function to get generated applications count
-const getGeneratedAppsCount = (appSet: ApplicationSetKind, applications: any[], appsLoaded: boolean): number => {
+const getGeneratedAppsCount = (
+  appSet: ApplicationSetKind,
+  applications: any[],
+  appsLoaded: boolean,
+): number => {
   if (!applications || !appsLoaded) return 0;
-  
+
   return applications.filter((app: any) => {
     if (!app.metadata?.ownerReferences) return false;
-    return app.metadata.ownerReferences.some((owner: any) => 
-      owner.kind === 'ApplicationSet' && owner.name === appSet.metadata.name
+    return app.metadata.ownerReferences.some(
+      (owner: any) => owner.kind === 'ApplicationSet' && owner.name === appSet.metadata.name,
     );
   }).length;
 };
 
 const ApplicationSetStatusFragment: React.FC<{ status: string }> = ({ status }) => {
   let targetIcon: React.ReactNode;
-  
+
   switch (status) {
     case ApplicationSetStatus.HEALTHY:
       targetIcon = <HealthHealthyIcon />;
@@ -147,7 +148,13 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
 
   const columnsDV = useColumnsDV(namespace, getSortParams);
   const sortedApplicationSets = React.useMemo(() => {
-    return sortData(applicationSets as ApplicationSetKind[], sortBy, direction, applications, appsLoaded);
+    return sortData(
+      applicationSets as ApplicationSetKind[],
+      sortBy,
+      direction,
+      applications,
+      appsLoaded,
+    );
   }, [applicationSets, sortBy, direction, applications, appsLoaded]);
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, filters);
   const rows = useApplicationSetRowsDV(filteredData, namespace, applications, appsLoaded);
@@ -189,7 +196,12 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   return (
     <div>
       {showTitle == undefined && (
-        <ListPageHeader title={t('plugin__gitops-plugin~ApplicationSets')} badge={<DevPreviewBadge />}>
+        <ListPageHeader
+          title={t('plugin__gitops-plugin~ApplicationSets')}
+          badge={
+            location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
+          }
+        >
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>
             Create ApplicationSet
           </ListPageCreate>
@@ -220,16 +232,17 @@ const ApplicationSetActionsCell: React.FC<{ appSet: ApplicationSetKind }> = ({ a
   const [actions] = useApplicationSetActionsProvider(appSet);
   return (
     <div style={{ textAlign: 'right' }}>
-      <ActionsDropdown
-        actions={actions}
-        id="gitops-applicationset-actions"
-        isKebabToggle={true}
-      />
+      <ActionsDropdown actions={actions} id="gitops-applicationset-actions" isKebabToggle={true} />
     </div>
   );
 };
 
-const useApplicationSetRowsDV = (applicationSetsList, namespace, applications, appsLoaded): DataViewTr[] => {
+const useApplicationSetRowsDV = (
+  applicationSetsList,
+  namespace,
+  applications,
+  appsLoaded,
+): DataViewTr[] => {
   const rows: DataViewTr[] = [];
   applicationSetsList.forEach((appSet: ApplicationSetKind, index: number) => {
     rows.push([
@@ -272,10 +285,10 @@ const useApplicationSetRowsDV = (applicationSetsList, namespace, applications, a
         id: 'generators-' + index,
         cell: getAppSetGeneratorCount(appSet).toString(),
       },
-             {
-         id: 'created-at-' + index,
-         cell: formatCreationTimestamp(appSet.metadata.creationTimestamp),
-       },
+      {
+        id: 'created-at-' + index,
+        cell: formatCreationTimestamp(appSet.metadata.creationTimestamp),
+      },
       {
         id: 'actions-' + index,
         cell: <ApplicationSetActionsCell appSet={appSet} />,
@@ -344,16 +357,16 @@ const useColumnsDV = (namespace, getSortParams) => {
         sort: getSortParams('generators', 3 + i),
       },
     },
-         {
-       id: 'created-at',
-       cell: 'Created At',
-       props: {
-         key: 'created-at',
-         'aria-label': 'created at',
-         className: 'pf-m-width-15',
-         sort: getSortParams('created-at', 4 + i),
-       },
-     },
+    {
+      id: 'created-at',
+      cell: 'Created At',
+      props: {
+        key: 'created-at',
+        'aria-label': 'created at',
+        className: 'pf-m-width-15',
+        sort: getSortParams('created-at', 4 + i),
+      },
+    },
     {
       id: 'actions',
       cell: '',
@@ -388,7 +401,7 @@ export const sortData = (
   sortBy: string | undefined,
   direction: 'asc' | 'desc' | undefined,
   applications: any[] = [],
-  appsLoaded: boolean = false,
+  appsLoaded = false,
 ) => {
   if (!sortBy || !direction) return data;
 
@@ -417,10 +430,10 @@ export const sortData = (
         aValue = getAppSetGeneratorCount(a);
         bValue = getAppSetGeneratorCount(b);
         break;
-             case 'created-at':
-         aValue = new Date(a.metadata?.creationTimestamp || 0).getTime();
-         bValue = new Date(b.metadata?.creationTimestamp || 0).getTime();
-         break;
+      case 'created-at':
+        aValue = new Date(a.metadata?.creationTimestamp || 0).getTime();
+        bValue = new Date(b.metadata?.creationTimestamp || 0).getTime();
+        break;
       default:
         return 0;
     }
