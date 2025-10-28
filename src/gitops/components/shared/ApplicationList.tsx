@@ -164,21 +164,28 @@ const ApplicationList: React.FC<ApplicationProps> = ({
           <EmptyState
             headingLevel="h4"
             icon={CubesIcon}
-            titleText={searchQuery ? 'No matching Argo CD Applications' : 'No Argo CD Applications'}
+            titleText={
+              searchQuery ? t('No matching Argo CD Applications') : t('No Argo CD Applications')
+            }
           >
             <EmptyStateBody>
-              {searchQuery ? (
-                <>
-                  No Argo CD Applications match the label filter{' '}
-                  <strong>&quot;{searchQuery}&quot;</strong>.
-                  <br />
-                  Try removing the filter or selecting a different label to see more applications.
-                </>
-              ) : (
-                `There are no Argo CD Applications in ${
-                  namespace ? 'this project' : 'all projects'
-                }.`
-              )}
+              {(() => {
+                if (searchQuery) {
+                  return (
+                    <>
+                      {t('No Argo CD Applications match the label filter')}{' '}
+                      <strong>&quot;{searchQuery}&quot;</strong>.
+                      <br />
+                      {t(
+                        'Try removing the filter or selecting a different label to see more applications.',
+                      )}
+                    </>
+                  );
+                }
+                return namespace
+                  ? t('There are no Argo CD Applications in this project.')
+                  : t('There are no Argo CD Applications in all projects.');
+              })()}
             </EmptyStateBody>
           </EmptyState>
         </Td>

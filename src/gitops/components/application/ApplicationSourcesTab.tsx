@@ -189,9 +189,9 @@ export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columns.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No source">
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No source')}>
             <EmptyStateBody>
-              Error. There must at least one source in the application..
+              {t('Error. There must at least one source in the application.')}
             </EmptyStateBody>
           </EmptyState>
         </Td>

@@ -129,9 +129,9 @@ const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No resources">
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No resources')}>
             <EmptyStateBody>
-              There are no resources asssociated with the application.
+              {t('There are no resources associated with the application.')}
             </EmptyStateBody>
           </EmptyState>
         </Td>

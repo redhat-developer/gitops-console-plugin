@@ -157,9 +157,11 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={'No Argo Rollouts'}>
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No Argo Rollouts')}>
             <EmptyStateBody>
-              There are no Argo Rollouts in {namespace ? 'this project' : 'all projects'}.
+              {namespace
+                ? t('There are no Argo Rollouts in this project.')
+                : t('There are no Argo Rollouts in all projects.')}
             </EmptyStateBody>
           </EmptyState>
         </Td>
@@ -171,8 +173,10 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
       <Tr key="loading" ouiaId={'table-tr-loading'}>
         <Td colSpan={columnsDV.length}>
           <ErrorState
-            titleText="Unable to load data"
-            bodyText="There was an error retrieving applications. Check your connection and reload the page."
+            titleText={t('Unable to load data')}
+            bodyText={t(
+              'There was an error retrieving applications. Check your connection and reload the page.',
+            )}
           />
         </Td>
       </Tr>

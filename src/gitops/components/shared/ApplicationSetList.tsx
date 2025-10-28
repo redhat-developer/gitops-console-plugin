@@ -239,8 +239,10 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
       <Tr key="loading" ouiaId={'table-tr-loading'}>
         <Td colSpan={columnsDV.length}>
           <ErrorState
-            titleText="Unable to load data"
-            bodyText="There was an error retrieving applicationsets. Check your connection and reload the page."
+            titleText={t('Unable to load data')}
+            bodyText={t(
+              'There was an error retrieving applicationsets. Check your connection and reload the page.',
+            )}
           />
         </Td>
       </Tr>
