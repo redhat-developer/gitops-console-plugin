@@ -45,7 +45,7 @@ export const useColumnsDV = () => {
   const columns: DataViewTh[] = [
     {
       id: 'type',
-      cell: 'Type',
+      cell: t('Type'),
       props: {
         key: 'type',
         'aria-label': 'type',
@@ -54,7 +54,7 @@ export const useColumnsDV = () => {
       },
     },
     {
-      cell: 'Repository',
+      cell: t('Repository'),
       id: 'repository',
       props: {
         key: 'repository',
@@ -64,7 +64,7 @@ export const useColumnsDV = () => {
       },
     },
     {
-      cell: 'Target Revision',
+      cell: t('Target Revision'),
       id: 'targetRevision',
       props: {
         key: 'targetRevision',
@@ -74,7 +74,7 @@ export const useColumnsDV = () => {
       },
     },
     {
-      cell: 'Path / Chart',
+      cell: t('Path / Chart'),
       id: 'path',
       props: {
         key: 'path',
@@ -84,7 +84,7 @@ export const useColumnsDV = () => {
       },
     },
     {
-      cell: 'Ref',
+      cell: t('Ref'),
       id: 'ref',
     },
   ];

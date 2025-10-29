@@ -360,7 +360,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Namespace',
+      cell: t('Namespace'),
       props: {
         'aria-label': 'namespace',
         className: 'pf-m-width-20',
@@ -368,7 +368,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Status',
+      cell: t('Status'),
       props: {
         'aria-label': 'status',
         className: 'pf-m-width-15',
@@ -376,7 +376,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Hook',
+      cell: t('Hook'),
       props: {
         'aria-label': 'hook',
         className: 'pf-m-width-15',
@@ -384,7 +384,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Message',
+      cell: t('Message'),
       props: {
         'aria-label': 'message',
         className: 'pf-m-width-15',

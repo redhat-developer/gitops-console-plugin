@@ -9,12 +9,13 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 
+import { useGitOpsTranslation } from '../../../utils/hooks/useGitOpsTranslation';
 import { RolloutKind, RolloutModel, rolloutModelRef } from '../model/RolloutModel';
 
 type UseRolloutActionsProvider = (rollout: RolloutKind) => [actions: Action[]];
-const t = (key: string) => key;
 
 export const useRolloutActionsProvider: UseRolloutActionsProvider = (rollout) => {
+  const { t } = useGitOpsTranslation();
   const navigate = useNavigate();
   const launchLabelsModal = useLabelsModal(rollout);
   const launchAnnotationsModal = useAnnotationsModal(rollout);
@@ -153,7 +154,7 @@ export const useRolloutActionsProvider: UseRolloutActionsProvider = (rollout) =>
         cta: () => launchDeleteModal(),
       },
     ],
-    [rollout, launchLabelsModal, launchAnnotationsModal, launchDeleteModal, navigate],
+    [rollout, launchLabelsModal, launchAnnotationsModal, launchDeleteModal, navigate, t],
   );
 
   return [actions];

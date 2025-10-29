@@ -224,37 +224,38 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
 };
 
 const useColumnsDV = (getSortParams) => {
+  const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
-      cell: 'ID',
+      cell: t('ID'),
       props: {
         'aria-label': 'ID',
         sort: getSortParams(0),
       },
     },
     {
-      cell: 'Deploy Started At',
+      cell: t('Deploy Started At'),
       props: {
         className: 'pf-m-width-15',
         sort: getSortParams(1),
       },
     },
     {
-      cell: 'Deployed At',
+      cell: t('Deployed At'),
       props: {
         className: 'pf-m-width-15',
         sort: getSortParams(2),
       },
     },
     {
-      cell: 'Initiated By',
+      cell: t('Initiated By'),
       props: {
         className: 'pf-m-width-15',
         sort: getSortParams(3),
       },
     },
     {
-      cell: 'Revision(s) and Source Repo URL(s)',
+      cell: t('Revision(s) and Source Repo URL(s)'),
       props: {
         key: 'revision',
         className: 'gitops-plugin__history-id-column pf-m-width-50',

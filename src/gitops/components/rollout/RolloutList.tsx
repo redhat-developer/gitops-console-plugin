@@ -135,6 +135,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
     return sortData(rollouts, sortBy, direction);
   }, [rollouts, sortBy, direction]);
 
+  const filters = getFilters(t);
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedRollouts, filters);
 
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
@@ -196,13 +197,13 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
     <>
       {showTitle == undefined && (
         <ListPageHeader
-          title={'Rollouts'}
+          title={t('Rollouts')}
           badge={
             location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
           }
         >
           <ListPageCreate groupVersionKind={modelToRef(RolloutModel)}>
-            Create Rollout
+            {t('Create Rollout')}
           </ListPageCreate>
         </ListPageHeader>
       )}
@@ -219,13 +220,13 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
             </span>
             {rows.length > 0 && !loadError && (
               <span className="rollout-list-page__topology-link pf-m-mb-sm">
-                <Tooltip position="top" content={'Topology view'}>
+                <Tooltip position="top" content={t('Topology view')}>
                   <Link
                     className="pf-v5-c-content"
                     rel="noopener noreferrer"
                     to={topologyUrl}
                     role="button"
-                    aria-label={'Graph view'}
+                    aria-label={t('Graph view')}
                   >
                     <Button
                       icon={
@@ -234,7 +235,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
                         </Icon>
                       }
                       variant="plain"
-                      aria-label={'Topology view'}
+                      aria-label={t('Topology view')}
                       className="pf-m-plain odc-topology__view-switcher"
                       data-test-id="topology-switcher-view"
                       onClick={() => console.log('Topology view')}
@@ -325,7 +326,7 @@ export const useColumnsDV = (namespace, getSortParams) => {
     ...(!namespace
       ? [
           {
-            cell: 'Namespace',
+            cell: t('Namespace'),
             props: {
               'aria-label': 'namespace',
               className: 'pf-m-width-15',
@@ -335,7 +336,7 @@ export const useColumnsDV = (namespace, getSortParams) => {
         ]
       : []),
     {
-      cell: 'Status',
+      cell: t('Status'),
       props: {
         'aria-label': 'status',
         className: 'pf-m-width-10',
@@ -343,7 +344,7 @@ export const useColumnsDV = (namespace, getSortParams) => {
       },
     },
     {
-      cell: 'Pods',
+      cell: t('Pods'),
       props: {
         'aria-label': 'pods',
         className: 'pf-m-width-10',
@@ -351,14 +352,14 @@ export const useColumnsDV = (namespace, getSortParams) => {
       },
     },
     {
-      cell: 'Labels',
+      cell: t('Labels'),
       props: {
         'aria-label': 'labels',
         className: 'pf-m-width-15',
       },
     },
     {
-      cell: 'Selector',
+      cell: t('Selector'),
       props: {
         'aria-label': 'selector',
         className: 'pf-m-width-15',
@@ -366,7 +367,7 @@ export const useColumnsDV = (namespace, getSortParams) => {
       },
     },
     {
-      cell: 'Last Updated',
+      cell: t('Last Updated'),
       props: {
         'aria-label': 'last updated',
         className: 'pf-m-width-15',
@@ -388,6 +389,7 @@ type MetadataLabelsProps = {
 };
 
 const MetadataLabels: React.FC<MetadataLabelsProps> = ({ kind, labels }) => {
+  const { t } = useGitOpsTranslation();
   return labels && Object.keys(labels).length > 0 ? (
     <LabelGroup numLabels={10} className="co-label-group metadata-labels-group">
       {Object.keys(labels || {})?.map((key) => {
@@ -399,7 +401,7 @@ const MetadataLabels: React.FC<MetadataLabelsProps> = ({ kind, labels }) => {
       })}
     </LabelGroup>
   ) : (
-    <span className="metadata-labels-no-labels">No labels</span>
+    <span className="metadata-labels-no-labels">{t('No labels')}</span>
   );
 };
 
@@ -545,9 +547,9 @@ const RolloutActionsCell: React.FC<{
   );
 };
 
-const filters: RowFilter[] = [
+const getFilters = (t: (key: string) => string): RowFilter[] => [
   {
-    filterGroupName: 'Rollout Status',
+    filterGroupName: t('Rollout Status'),
     type: 'rollout-status',
     reducer: (rollout) => rollout.status?.phase,
     filter: (input, rollout) => {

@@ -214,7 +214,7 @@ const sortData = (
 export const useResourceColumnsDV = (getSortParams) => {
   const columns: DataViewTh[] = [
     {
-      cell: t('plugin__gitops-plugin~Name'),
+      cell: t('Name'),
       props: {
         'aria-label': 'name',
         className: 'pf-m-width-25',
@@ -222,7 +222,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Namespace',
+      cell: t('Namespace'),
       props: {
         'aria-label': 'namespace',
         className: 'pf-m-width-20',
@@ -230,7 +230,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Sync Wave',
+      cell: t('Sync Wave'),
       props: {
         'aria-label': 'sync wave',
         className: 'pf-m-width-15',
@@ -238,7 +238,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Sync Status',
+      cell: t('Sync Status'),
       props: {
         'aria-label': 'sync status',
         className: 'pf-m-width-15',
@@ -246,7 +246,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Health Status',
+      cell: t('Health Status'),
       props: {
         'aria-label': 'health status',
         className: 'pf-m-width-15',
@@ -345,7 +345,7 @@ const ResourceActionsCell: React.FC<{
 const filters = (resources: ApplicationResourceStatus[]): RowFilter[] => {
   return [
     {
-      filterGroupName: 'Sync Status',
+      filterGroupName: t('Sync Status'),
       type: 'resource-sync',
       reducer: (resource) => (resource.status ? resource.status : 'No Sync Status'),
       filter: (input, resource) => {
@@ -373,7 +373,7 @@ const filters = (resources: ApplicationResourceStatus[]): RowFilter[] => {
         }, []),
     },
     {
-      filterGroupName: 'Health Status',
+      filterGroupName: t('Health Status'),
       type: 'resource-health',
       reducer: (resource) => (resource.health ? resource.health.status : 'None'),
       filter: (input, resource) => {
@@ -402,7 +402,7 @@ const filters = (resources: ApplicationResourceStatus[]): RowFilter[] => {
         }, []),
     },
     {
-      filterGroupName: 'Kind',
+      filterGroupName: t('Kind'),
       type: 'resource-kind',
       reducer: (resource) => resource.kind,
       filter: (input, resource) => {
