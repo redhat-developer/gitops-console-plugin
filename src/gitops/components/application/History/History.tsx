@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom-v5-compat';
 import ExternalLink from 'src/components/utils/ExternalLink/ExternalLink';
 
@@ -26,6 +27,7 @@ interface HistoryListProps {
 }
 
 const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
+  const { t } = useTranslation('plugin__gitops-plugin');
   const COLUMNS_KEYS_INDEXES = React.useMemo(
     () => [
       { key: 'id', index: 0 },
@@ -86,8 +88,10 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No history">
-            <EmptyStateBody>There is no history asssociated with the application.</EmptyStateBody>
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No history')}>
+            <EmptyStateBody>
+              {t('There is no history associated with the application.')}
+            </EmptyStateBody>
           </EmptyState>
         </Td>
       </Tr>
@@ -220,40 +224,41 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
 };
 
 const useColumnsDV = (getSortParams) => {
+  const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
-      cell: 'ID',
+      cell: t('ID'),
       props: {
         'aria-label': 'ID',
         sort: getSortParams(0),
       },
     },
     {
-      cell: 'Deploy Started At',
+      cell: t('Deploy Started At'),
       props: {
         className: 'pf-m-width-15',
         sort: getSortParams(1),
       },
     },
     {
-      cell: 'Deployed At',
+      cell: t('Deployed At'),
       props: {
         className: 'pf-m-width-15',
         sort: getSortParams(2),
       },
     },
     {
-      cell: 'Initiated By',
+      cell: t('Initiated By'),
       props: {
         className: 'pf-m-width-15',
         sort: getSortParams(3),
       },
     },
     {
-      cell: 'Revision(s) and Source Repo URL(s)',
+      cell: t('Revision(s) and Source Repo URL(s)'),
       props: {
         key: 'revision',
-        className: 'gitops-admin-plugin__history-id-column pf-m-width-50',
+        className: 'gitops-plugin__history-id-column pf-m-width-50',
         sort: getSortParams(4),
       },
     },

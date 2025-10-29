@@ -88,7 +88,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     namespace,
   });
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
   const initIndex: number = namespace ? 0 : 1;
   const COLUMNS_KEYS_INDEXES = React.useMemo(
     () => [
@@ -130,6 +130,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   }, [applications, sortBy, direction]);
 
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
+  const filters = getFilters(t);
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
 
   // Filter applications by project or appset before rendering rows
@@ -164,21 +165,28 @@ const ApplicationList: React.FC<ApplicationProps> = ({
           <EmptyState
             headingLevel="h4"
             icon={CubesIcon}
-            titleText={searchQuery ? 'No matching Argo CD Applications' : 'No Argo CD Applications'}
+            titleText={
+              searchQuery ? t('No matching Argo CD Applications') : t('No Argo CD Applications')
+            }
           >
             <EmptyStateBody>
-              {searchQuery ? (
-                <>
-                  No Argo CD Applications match the label filter{' '}
-                  <strong>&quot;{searchQuery}&quot;</strong>.
-                  <br />
-                  Try removing the filter or selecting a different label to see more applications.
-                </>
-              ) : (
-                `There are no Argo CD Applications in ${
-                  namespace ? 'this project' : 'all projects'
-                }.`
-              )}
+              {(() => {
+                if (searchQuery) {
+                  return (
+                    <>
+                      {t('No Argo CD Applications match the label filter')}{' '}
+                      <strong>&quot;{searchQuery}&quot;</strong>.
+                      <br />
+                      {t(
+                        'Try removing the filter or selecting a different label to see more applications.',
+                      )}
+                    </>
+                  );
+                }
+                return namespace
+                  ? t('There are no Argo CD Applications in this project.')
+                  : t('There are no Argo CD Applications in all projects.');
+              })()}
             </EmptyStateBody>
           </EmptyState>
         </Td>
@@ -390,7 +398,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
   const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
-      cell: t('plugin__gitops-plugin~Name'),
+      cell: t('Name'),
       props: {
         'aria-label': 'name',
         className: 'pf-m-width-25',
@@ -400,7 +408,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
     ...(!namespace
       ? [
           {
-            cell: 'Namespace',
+            cell: t('Namespace'),
             props: {
               'aria-label': 'namespace',
               className: 'pf-m-width-15',
@@ -410,7 +418,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
         ]
       : []),
     {
-      cell: 'Sync Status',
+      cell: t('Sync Status'),
       props: {
         'aria-label': 'sync status',
         className: 'pf-m-width-15',
@@ -418,7 +426,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
       },
     },
     {
-      cell: 'Health Status',
+      cell: t('Health Status'),
       props: {
         'aria-label': 'health status',
         className: 'pf-m-width-15',
@@ -426,7 +434,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
       },
     },
     {
-      cell: 'Revision',
+      cell: t('Revision'),
       props: {
         'aria-label': 'revision',
         className: 'pf-m-width-12',
@@ -434,7 +442,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
       },
     },
     {
-      cell: 'App Project',
+      cell: t('App Project'),
       props: {
         'aria-label': 'project',
         className: 'pf-m-width-20',
@@ -451,9 +459,9 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
 
 const FilterUnknownStatus: string = 'Sync.' + SyncStatus.UNKNOWN;
 
-export const filters: RowFilter[] = [
+const getFilters = (t: (key: string) => string): RowFilter[] => [
   {
-    filterGroupName: 'Sync Status',
+    filterGroupName: t('Sync Status'),
     type: 'app-sync',
     reducer: (application) =>
       application.status?.sync?.status == SyncStatus.UNKNOWN ||
@@ -481,7 +489,7 @@ export const filters: RowFilter[] = [
     ],
   },
   {
-    filterGroupName: 'Health Status',
+    filterGroupName: t('Health Status'),
     type: 'app-health',
     reducer: (application) => application.status?.health?.status,
     filter: (input, application) => {

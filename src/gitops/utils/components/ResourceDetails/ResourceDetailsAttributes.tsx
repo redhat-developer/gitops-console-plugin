@@ -17,6 +17,7 @@ import {
 import { PencilAltIcon } from '@patternfly/react-icons';
 
 import { getAppSetGeneratorCount } from '../../../utils/gitops';
+import { useGitOpsTranslation } from '../../../utils/hooks/useGitOpsTranslation';
 
 interface ResourceDetailsAttributesProps {
   metadata: {
@@ -50,6 +51,7 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
   showAppProject = false,
   showRepository = false,
 }) => {
+  const { t } = useGitOpsTranslation();
   const launchLabelsModal = useLabelsModal(resource);
   const launchAnnotationsModal = useAnnotationsModal(resource);
 
@@ -235,9 +237,10 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
                   onKeyPress={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') launchLabelsModal();
                   }}
-                  aria-label="Edit labels"
+                  aria-label={t('Edit labels')}
                 >
-                  Edit <PencilAltIcon style={{ marginLeft: 4, fontSize: 13, color: '#73bcf7' }} />
+                  {t('Edit')}{' '}
+                  <PencilAltIcon style={{ marginLeft: 4, fontSize: 13, color: '#73bcf7' }} />
                 </a>
               </div>
             )}
@@ -257,7 +260,7 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
               }}
             >
               {_.isEmpty(labelItems) ? (
-                <span className="text-muted">No labels</span>
+                <span className="text-muted">{t('No labels')}</span>
               ) : (
                 <LabelGroup
                   style={{
@@ -342,9 +345,9 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
                   onKeyPress={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') launchAnnotationsModal();
                   }}
-                  aria-label="Edit annotations"
+                  aria-label={t('Edit annotations')}
                 >
-                  {countAnnotations} annotation{countAnnotations !== 1 ? 's' : ''}
+                  {countAnnotations} {countAnnotations !== 1 ? t('annotations') : t('annotation')}
                   <PencilAltIcon style={{ marginLeft: 6, fontSize: 15, color: '#73bcf7' }} />
                 </a>
               </div>
@@ -445,7 +448,7 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
                 name={metadata.ownerReferences[0].name}
               />
             ) : (
-              'No owner'
+              t('No owner')
             )}
           </DescriptionListDescription>
         </DescriptionListGroup>

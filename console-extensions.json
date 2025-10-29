@@ -13,7 +13,7 @@
       "section": "resources",
       "insertAfter": "pipelines",
       "insertBefore": "helm",
-      "name": "%plugin__gitops-plugin~Environments%",
+      "name": "Environments",
       "href": "/envdynamic",
       "dataAttributes": {
         "data-test-id": "envdynamic-header"
@@ -209,7 +209,7 @@
         "id": "gitops-navigation-section",
         "insertAfter": "workloads",
         "perspective": "admin",
-        "name": "%plugin__gitops-plugin~GitOps%"
+        "name": "GitOps"
     }
   },
   {
