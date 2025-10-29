@@ -153,7 +153,7 @@ export const useRolloutActionsProvider: UseRolloutActionsProvider = (rollout) =>
         cta: () => launchDeleteModal(),
       },
     ],
-    [rollout, launchLabelsModal, launchAnnotationsModal, launchDeleteModal],
+    [rollout, launchLabelsModal, launchAnnotationsModal, launchDeleteModal, navigate],
   );
 
   return [actions];

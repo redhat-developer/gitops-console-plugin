@@ -18,5 +18,14 @@
   "ReplicaSet": "ReplicaSet",
   "ReplicaSets": "ReplicaSets",
   "ClusterVersion": "ClusterVersion",
-  "ClusterVersions": "ClusterVersions"
+  "ClusterVersions": "ClusterVersions",
+  "True": "True",
+  "False": "False",
+  "Type": "Type",
+  "Status": "Status",
+  "Updated": "Updated",
+  "Reason": "Reason",
+  "Message": "Message",
+  "No conditions found": "No conditions found",
+  "No owner": "No owner"
 }

@@ -6,7 +6,7 @@ import DevPreviewBadge from 'src/components/import/badges/DevPreviewBadge';
 import { AppProjectKind } from '@gitops/models/AppProjectModel';
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
 import { isApplicationRefreshing } from '@gitops/utils/gitops';
-import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
+import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import {
   getSelectorSearchURL,
   kindForReference,
@@ -80,7 +80,6 @@ export function filterApp(project: AppProjectKind, rollout: K8sResourceCommon) {
 
 const RolloutList: React.FC<RolloutListTabProps> = ({
   namespace,
-  project,
   hideNameLabelFilters,
   showTitle,
 }) => {
@@ -117,6 +116,8 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
+
+  const { t } = useGitOpsTranslation();
 
   const getSortParams = (columnIndex: number): ThProps['sort'] => ({
     sortBy: {
@@ -311,9 +312,10 @@ export const sortData = (
 
 export const useColumnsDV = (namespace, getSortParams) => {
   const i: number = namespace ? 0 : 1;
+  const { t } = useGitOpsTranslation();
   const columns: DataViewTh[] = [
     {
-      cell: t('plugin__gitops-plugin~Name'),
+      cell: t('Name'),
       props: {
         'aria-label': 'name',
         className: 'pf-m-width-25',
