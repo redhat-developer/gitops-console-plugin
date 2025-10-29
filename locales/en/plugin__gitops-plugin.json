@@ -1,5 +1,6 @@
 {
   "Environments": "Environments",
+  "GitOps": "GitOps",
   "Select an application to view the environment it's deployed in.": "Select an application to view the environment it's deployed in.",
   "Error cannot retrieve environments": "Cannot retrieve environments. Ensure the Argo CD applications are available and check the log for the 'cluster' pod created by the GitOps Operator.",
   "Compatibility Issue": "Compatibility Issue",

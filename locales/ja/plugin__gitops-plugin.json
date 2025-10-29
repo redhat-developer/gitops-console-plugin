@@ -1,5 +1,6 @@
 {
   "Environments": "環境",
+  "GitOps": "GitOps",
   "Select an application to view the environment it's deployed in.": "アプリケーションを選択して、デプロイされている環境を表示します。",
   "Error cannot retrieve environments": "エラー、環境を取得できません",
   "Compatibility Issue": "互換性の問題",

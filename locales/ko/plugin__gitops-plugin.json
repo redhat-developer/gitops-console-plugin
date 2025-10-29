@@ -1,5 +1,6 @@
 {
   "Environments": "환경",
+  "GitOps": "GitOps",
   "Select an application to view the environment it's deployed in.": "배포된 환경을 보려면 애플리케이션을 선택하십시오.",
   "Error cannot retrieve environments": "오류로 인해 환경을 검색할 수 없습니다",
   "Compatibility Issue": "호환성 문제",

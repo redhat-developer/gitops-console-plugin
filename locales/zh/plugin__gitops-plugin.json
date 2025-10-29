@@ -1,5 +1,6 @@
 {
   "Environments": "环境",
+  "GitOps": "GitOps",
   "Select an application to view the environment it's deployed in.": "选择一个应用程序来查看它部署到的环境。",
   "Error cannot retrieve environments": "错误，无法检索环境",
   "Compatibility Issue": "兼容性问题",
