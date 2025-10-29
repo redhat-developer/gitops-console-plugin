@@ -88,7 +88,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     namespace,
   });
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('plugin__gitops-plugin');
   const initIndex: number = namespace ? 0 : 1;
   const COLUMNS_KEYS_INDEXES = React.useMemo(
     () => [

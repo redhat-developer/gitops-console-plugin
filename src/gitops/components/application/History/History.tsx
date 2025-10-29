@@ -257,7 +257,7 @@ const useColumnsDV = (getSortParams) => {
       cell: 'Revision(s) and Source Repo URL(s)',
       props: {
         key: 'revision',
-        className: 'gitops-admin-plugin__history-id-column pf-m-width-50',
+        className: 'gitops-plugin__history-id-column pf-m-width-50',
         sort: getSortParams(4),
       },
     },
