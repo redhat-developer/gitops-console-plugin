@@ -85,6 +85,7 @@ type MetadataLabelsProps = {
 };
 
 const MetadataLabels: React.FC<MetadataLabelsProps> = ({ kind, labels }) => {
+  const { t } = useGitOpsTranslation();
   return labels && Object.keys(labels).length > 0 ? (
     <LabelGroup numLabels={10} className="co-label-group metadata-labels-group">
       {Object.keys(labels || {})?.map((key) => {
@@ -96,7 +97,7 @@ const MetadataLabels: React.FC<MetadataLabelsProps> = ({ kind, labels }) => {
       })}
     </LabelGroup>
   ) : (
-    <span className="metadata-labels-no-labels">No labels</span>
+    <span className="metadata-labels-no-labels">{t('No labels')}</span>
   );
 };
 
@@ -160,7 +161,7 @@ export const BaseDetailsSummary: React.FC<BaseDetailsSummaryProps> = ({ obj, mod
                 iconPosition={'right'}
                 onClick={launchLabelsModal}
               >
-                {t(' Edit')}
+                {t('Edit')}
               </Button>
             </SplitItem>
           </Split>
@@ -204,7 +205,8 @@ export const BaseDetailsSummary: React.FC<BaseDetailsSummaryProps> = ({ obj, mod
                 onClick={launchAnnotationsModal}
               >
                 {(obj.metadata?.annotations ? Object.keys(obj.metadata.annotations).length : 0) +
-                  t(' Annotations')}
+                  ' ' +
+                  t('Annotations')}
               </Button>
             </div>
           </DescriptionListDescription>

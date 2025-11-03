@@ -178,6 +178,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     );
   }, [applicationSets, sortBy, direction, applications, appsLoaded]);
 
+  const filters = getFilters(t);
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, filters);
 
   // Filter by search query if present (after other filters)
@@ -201,6 +202,22 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     return sortedApplicationSets.length > 0;
   }, [sortedApplicationSets]);
 
+  const getEmptyStateBody = () => {
+    if (searchQuery) {
+      return (
+        <>
+          {t('No Argo CD ApplicationSets match the label filter')}{' '}
+          <strong>&quot;{searchQuery}&quot;</strong>.
+          <br />
+          {t('Try removing the filter or selecting a different label to see more ApplicationSets.')}
+        </>
+      );
+    }
+    return namespace
+      ? t('There are no Argo CD ApplicationSets in this project.')
+      : t('There are no Argo CD ApplicationSets in all projects.');
+  };
+
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
@@ -209,25 +226,12 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
             headingLevel="h4"
             icon={CubesIcon}
             titleText={
-              searchQuery ? 'No matching Argo CD ApplicationSets' : 'No Argo CD ApplicationSets'
+              searchQuery
+                ? t('No matching Argo CD ApplicationSets')
+                : t('No Argo CD ApplicationSets')
             }
           >
-            <EmptyStateBody>
-              {searchQuery ? (
-                <>
-                  No Argo CD ApplicationSets match the label filter{' '}
-                  <strong>&quot;{searchQuery}&quot;</strong>
-                  .
-                  <br />
-                  Try removing the filter or selecting a different label to see more
-                  ApplicationSets.
-                </>
-              ) : (
-                `There are no Argo CD ApplicationSets in ${
-                  namespace ? 'this project' : 'all projects'
-                }.`
-              )}
-            </EmptyStateBody>
+            <EmptyStateBody>{getEmptyStateBody()}</EmptyStateBody>
           </EmptyState>
         </Td>
       </Tr>
@@ -239,8 +243,10 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
       <Tr key="loading" ouiaId={'table-tr-loading'}>
         <Td colSpan={columnsDV.length}>
           <ErrorState
-            titleText="Unable to load data"
-            bodyText="There was an error retrieving applicationsets. Check your connection and reload the page."
+            titleText={t('Unable to load data')}
+            bodyText={t(
+              'There was an error retrieving applicationsets. Check your connection and reload the page.',
+            )}
           />
         </Td>
       </Tr>
@@ -258,14 +264,14 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     <div>
       {showTitle == undefined && (
         <ListPageHeader
-          title={t('plugin__gitops-plugin~ApplicationSets')}
+          title={t('ApplicationSets')}
           badge={
             location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
           }
           hideFavoriteButton={false}
         >
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>
-            Create ApplicationSet
+            {t('Create ApplicationSet')}
           </ListPageCreate>
         </ListPageHeader>
       )}
@@ -362,7 +368,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
   const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
-      cell: t('plugin__gitops-plugin~Name'),
+      cell: t('Name'),
       props: {
         'aria-label': 'name',
         className: 'pf-m-width-25',
@@ -372,7 +378,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
     ...(!namespace
       ? [
           {
-            cell: 'Namespace',
+            cell: t('Namespace'),
             props: {
               'aria-label': 'namespace',
               className: 'pf-m-width-15',
@@ -382,7 +388,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
         ]
       : []),
     {
-      cell: 'Health Status',
+      cell: t('Health Status'),
       props: {
         'aria-label': 'health status',
         className: 'pf-m-width-15',
@@ -390,7 +396,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
       },
     },
     {
-      cell: 'Generated Apps',
+      cell: t('Generated Apps'),
       props: {
         'aria-label': 'generated apps',
         className: 'pf-m-width-15',
@@ -398,7 +404,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
       },
     },
     {
-      cell: 'Generators',
+      cell: t('Generators'),
       props: {
         'aria-label': 'generators',
         className: 'pf-m-width-15',
@@ -406,7 +412,7 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
       },
     },
     {
-      cell: 'Created At',
+      cell: t('Created At'),
       props: {
         'aria-label': 'created at',
         className: 'pf-m-width-15',
@@ -421,9 +427,9 @@ const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
   return columns;
 };
 
-export const filters: RowFilter[] = [
+const getFilters = (t: (key: string) => string): RowFilter[] => [
   {
-    filterGroupName: 'Health Status',
+    filterGroupName: t('Health Status'),
     type: 'application-set-status',
     reducer: (applicationSet) => getAppSetStatus(applicationSet),
     filter: (input, applicationSet) => {

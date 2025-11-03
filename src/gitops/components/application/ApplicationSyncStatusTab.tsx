@@ -129,9 +129,9 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText="No resources">
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No resources')}>
             <EmptyStateBody>
-              There are no resources asssociated with the application.
+              {t('There are no resources associated with the application.')}
             </EmptyStateBody>
           </EmptyState>
         </Td>
@@ -214,7 +214,7 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                       bodyContent={<div>{t('Who initiated the operation.')}</div>}
                     >
                       <DescriptionListTermHelpTextButton>
-                        {t('Intiated By')}
+                        {t('Initiated By')}
                       </DescriptionListTermHelpTextButton>
                     </Popover>
                   </DescriptionListTermHelpText>
@@ -360,7 +360,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Namespace',
+      cell: t('Namespace'),
       props: {
         'aria-label': 'namespace',
         className: 'pf-m-width-20',
@@ -368,7 +368,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Status',
+      cell: t('Status'),
       props: {
         'aria-label': 'status',
         className: 'pf-m-width-15',
@@ -376,7 +376,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Hook',
+      cell: t('Hook'),
       props: {
         'aria-label': 'hook',
         className: 'pf-m-width-15',
@@ -384,7 +384,7 @@ export const useResourceColumnsDV = (getSortParams) => {
       },
     },
     {
-      cell: 'Message',
+      cell: t('Message'),
       props: {
         'aria-label': 'message',
         className: 'pf-m-width-15',
