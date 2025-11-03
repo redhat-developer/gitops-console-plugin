@@ -214,7 +214,7 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                       bodyContent={<div>{t('Who initiated the operation.')}</div>}
                     >
                       <DescriptionListTermHelpTextButton>
-                        {t('Intiated By')}
+                        {t('Initiated By')}
                       </DescriptionListTermHelpTextButton>
                     </Popover>
                   </DescriptionListTermHelpText>

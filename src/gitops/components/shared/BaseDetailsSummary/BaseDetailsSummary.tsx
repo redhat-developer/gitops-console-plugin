@@ -161,7 +161,7 @@ export const BaseDetailsSummary: React.FC<BaseDetailsSummaryProps> = ({ obj, mod
                 iconPosition={'right'}
                 onClick={launchLabelsModal}
               >
-                {t(' Edit')}
+                {t('Edit')}
               </Button>
             </SplitItem>
           </Split>
@@ -205,7 +205,8 @@ export const BaseDetailsSummary: React.FC<BaseDetailsSummaryProps> = ({ obj, mod
                 onClick={launchAnnotationsModal}
               >
                 {(obj.metadata?.annotations ? Object.keys(obj.metadata.annotations).length : 0) +
-                  t(' Annotations')}
+                  ' ' +
+                  t('Annotations')}
               </Button>
             </div>
           </DescriptionListDescription>
