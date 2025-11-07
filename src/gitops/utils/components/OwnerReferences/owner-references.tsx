@@ -45,23 +45,44 @@ export const OwnerReferences: React.FC<OwnerReferencesProps> = ({ resource }) =>
     }
 
     return (
-      <Tooltip key={o.uid} content={<div>View {model.kind}</div>} position="top">
-        <ResourceLink
-          namespace={resource.metadata.namespace}
-          groupVersionKind={{
-            group: model.apiGroup,
-            version: model.apiVersion,
-            kind: model.kind,
-          }}
-          name={o.name}
-        />
-      </Tooltip>
+      <OwnerReferenceLink
+        key={o.uid}
+        owner={o}
+        model={model}
+        namespace={resource.metadata.namespace}
+      />
     );
   });
   return owners.length ? (
     <>{owners}</>
   ) : (
     <span className="pf-v6-u-text-color-subtle">{t('public~No owner')}</span>
+  );
+};
+
+type OwnerReferenceLinkProps = {
+  owner: OwnerReference;
+  model: K8sModel;
+  namespace: string;
+};
+
+const OwnerReferenceLink: React.FC<OwnerReferenceLinkProps> = ({ owner, model, namespace }) => {
+  const { t } = useGitOpsTranslation();
+
+  return (
+    <Tooltip content={<div>{t('public~View {{kind}}', { kind: model.kind })}</div>} position="top">
+      <span className="pf-v6-u-display-inline-block">
+        <ResourceLink
+          namespace={namespace}
+          groupVersionKind={{
+            group: model.apiGroup,
+            version: model.apiVersion,
+            kind: model.kind,
+          }}
+          name={owner.name}
+        />
+      </span>
+    </Tooltip>
   );
 };
 

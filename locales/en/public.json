@@ -27,5 +27,6 @@
   "Reason": "Reason",
   "Message": "Message",
   "No conditions found": "No conditions found",
-  "No owner": "No owner"
+  "No owner": "No owner",
+  "View {{kind}}": "View {{kind}}"
 }
