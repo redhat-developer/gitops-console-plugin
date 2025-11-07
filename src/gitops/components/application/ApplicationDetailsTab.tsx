@@ -175,7 +175,7 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
           direction={{ default: 'column', lg: 'row' }}
         >
           <Flex flex={{ default: 'flex_2' }}>
-            <FlexItem>
+            <FlexItem fullWidth={{ default: 'fullWidth' }}>
               <BaseDetailsSummary
                 obj={obj}
                 model={ApplicationModel}

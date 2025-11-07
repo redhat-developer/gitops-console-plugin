@@ -61,7 +61,7 @@ const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj }) => {
           direction={{ default: 'column', lg: 'row' }}
         >
           <Flex flex={{ default: 'flex_2' }}>
-            <FlexItem>
+            <FlexItem fullWidth={{ default: 'fullWidth' }}>
               <BaseDetailsSummary obj={obj} model={ApplicationSetModel} />
             </FlexItem>
           </Flex>
