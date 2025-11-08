@@ -26,7 +26,7 @@
     "@patternfly/react-icons": "^6.2.0",
     "@patternfly/react-table": "^6.2.0",
     "@patternfly/react-data-view": "^6.2.0",
-    "@patternfly/react-tokens": "6.2.0",
+    "@patternfly/react-tokens": "6.4.0",
     "@patternfly/react-topology": "^6.2.0",
     "@types/classnames": "^2.3.1",
     "@types/git-url-parse": "^9.0.0",
