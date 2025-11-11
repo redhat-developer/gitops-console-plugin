@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom-v5-compat';
 
 import {
   K8sResourceCommon,
@@ -15,13 +14,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
 import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
-import {
-  DataViewTable,
-  DataViewTh,
-  DataViewTr,
-} from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
-import { useDataViewSort } from '@patternfly/react-data-view/dist/dynamic/Hooks';
-import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
+import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
@@ -38,6 +31,8 @@ import {
 import { ApplicationSetStatus } from '../../utils/constants';
 import { getAppSetGeneratorCount, getAppSetStatus } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
+
+import { GitOpsDataViewTable, useGitOpsDataViewSort } from './DataView';
 
 const formatCreationTimestamp = (timestamp: string): string => {
   if (!timestamp) return '-';
@@ -132,40 +127,25 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
 
   const { t } = useTranslation('plugin__gitops-plugin');
 
-  const initIndex: number = namespace ? 0 : 1;
-  const COLUMNS_KEYS_INDEXES = React.useMemo(
-    () => [
-      { key: 'name', index: 0 },
-      ...(!namespace ? [{ key: 'namespace', index: 1 }] : []),
-      { key: 'status', index: 1 + initIndex },
-      { key: 'generated-apps', index: 2 + initIndex },
-      { key: 'generators', index: 3 + initIndex },
-      { key: 'created-at', index: 4 + initIndex },
-    ],
-    [namespace, initIndex],
+  const columnSortConfig = React.useMemo(
+    () =>
+      [
+        'name',
+        ...(!namespace ? ['namespace'] : []),
+        'status',
+        'generated-apps',
+        'generators',
+        'created-at',
+        'actions',
+      ].map((key) => ({ key })),
+    [namespace],
   );
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
-  const sortByIndex = React.useMemo(
-    () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
-    [COLUMNS_KEYS_INDEXES, sortBy],
-  );
+  const { searchParams, sortBy, direction, getSortParams } =
+    useGitOpsDataViewSort(columnSortConfig);
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
-
-  const getSortParams = (columnIndex: number): ThProps['sort'] => ({
-    sortBy: {
-      index: sortByIndex,
-      direction,
-      defaultDirection: 'asc',
-    },
-    onSort: (_event: any, index: number, dir) => {
-      onSort(_event, COLUMNS_KEYS_INDEXES[index].key, dir);
-    },
-    columnIndex,
-  });
 
   const columnsDV = useColumnsDV(namespace, getSortParams);
   const sortedApplicationSets = React.useMemo(() => {
@@ -253,12 +233,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     </Tbody>
   );
 
-  let currentActiveState = null;
-  if (loadError) {
-    currentActiveState = DataViewState.error;
-  } else if (filteredBySearch.length === 0) {
-    currentActiveState = DataViewState.empty;
-  }
+  const isEmptyState = !loadError && filteredBySearch.length === 0;
 
   return (
     <div>
@@ -284,13 +259,14 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
             onFilterChange={onFilterChange}
           />
         )}
-        <DataView activeState={currentActiveState}>
-          <DataViewTable
-            rows={rows}
-            columns={columnsDV}
-            bodyStates={loadError ? { error } : { empty }}
-          />
-        </DataView>
+        <GitOpsDataViewTable
+          rows={rows}
+          columns={columnsDV}
+          isEmpty={isEmptyState}
+          emptyState={empty}
+          isError={!!loadError}
+          errorState={error}
+        />
       </ListPageBody>
     </div>
   );
@@ -363,7 +339,10 @@ const useApplicationSetRowsDV = (
   return rows;
 };
 
-const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
+const useColumnsDV = (
+  namespace: string,
+  getSortParams: (columnIndex: number) => ThProps['sort'],
+): DataViewTh[] => {
   const i: number = namespace ? 0 : 1;
   const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
