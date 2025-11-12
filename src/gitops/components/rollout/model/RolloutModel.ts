@@ -20,7 +20,21 @@ export type RolloutStrategyBlueGreen = {
   autoPromotionEnabled: boolean;
 };
 
+export type AnalysisTemplates = {
+  templateName: string;
+  clusterScope: boolean;
+};
+
+export type Steps = {
+  analysis?: {
+    setWeight: number;
+    templates?: AnalysisTemplates[];
+    experiment?: string;
+  };
+};
+
 export type RolloutStrategyCanary = {
+  steps?: Steps[];
   canaryService: string;
   stableService: string;
   autoPromotionEnabled: boolean;
