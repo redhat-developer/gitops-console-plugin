@@ -54,7 +54,7 @@ const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj }) => {
     <>
       <PageSection>
         <Title headingLevel="h2" className="co-section-heading">
-          Argo CD ApplicationSet details
+          {t('ApplicationSet details')}
         </Title>
         <Flex
           justifyContent={{ default: 'justifyContentSpaceEvenly' }}

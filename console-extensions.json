@@ -266,6 +266,42 @@
     }
   },
   {
+    "type": "console.model-metadata",
+    "properties": {
+      "model": {
+        "group": "argoproj.io",
+        "version": "v1alpha1",
+        "kind": "AnalysisTemplate"
+      },
+      "badge": "dev",
+      "color": "#E9654B",
+      "label": "Analysis Template",
+      "labelPlural": "Application Templates",
+      "abbr": "AT"
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT"]
+    }
+  },
+  {
+    "type": "console.model-metadata",
+    "properties": {
+      "model": {
+        "group": "argoproj.io",
+        "version": "v1alpha1",
+        "kind": "ClusterAnalysisTemplate"
+      },
+      "badge": "dev",
+      "color": "#E9654B",
+      "label": "Cluster Analysis Template",
+      "labelPlural": "Cluster Application Templates",
+      "abbr": "CAT"
+    },
+    "flags": {
+      "required": ["ARGO_ROLLOUT"]
+    }
+  },
+  {
     "type": "console.flag/model",
     "properties": {
         "flag": "APPLICATION",
@@ -380,6 +416,24 @@
         },
         "component": {
             "$codeRef": "ApplicationDetails"
+        }
+    }
+  },
+  {
+    "type": "console.page/resource/details",
+    "flags": {
+        "required": [
+            "ARGO_ROLLOUT"
+        ]
+    },
+    "properties": {
+        "model": {
+            "group": "argoproj.io",
+            "kind": "Rollout",
+            "version": "v1alpha1"
+        },
+        "component": {
+            "$codeRef": "RolloutDetails"
         }
     }
   },
