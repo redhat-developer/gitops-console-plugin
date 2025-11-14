@@ -109,21 +109,21 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     return sortData(applications, sortBy, direction);
   }, [applications, sortBy, direction]);
 
+  // Filter applications by project or appset BEFORE calculating filter counts
+  const filteredByOwner = React.useMemo(
+    () => sortedApplications.filter(filterApp(project, appset)),
+    [sortedApplications, project, appset],
+  );
+
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
   const filters = getFilters(t);
-  const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
-
-  // Filter applications by project or appset before rendering rows
-  const filteredByOwner = React.useMemo(
-    () => filteredData.filter(filterApp(project, appset)),
-    [filteredData, project, appset],
-  );
+  const [data, filteredData, onFilterChange] = useListPageFilter(filteredByOwner, filters);
 
   // Filter by search query if present (after other filters)
   const filteredBySearch = React.useMemo(() => {
-    if (!searchQuery) return filteredByOwner;
+    if (!searchQuery) return filteredData;
 
-    return filteredByOwner.filter((app) => {
+    return filteredData.filter((app) => {
       const labels = app.metadata?.labels || {};
       // Check if any label matches the search query
       return Object.entries(labels).some(([key, value]) => {
@@ -131,13 +131,13 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         return labelSelector.includes(searchQuery) || key.includes(searchQuery);
       });
     });
-  }, [filteredByOwner, searchQuery]);
+  }, [filteredData, searchQuery]);
   const rows = useApplicationRowsDV(filteredBySearch, namespace);
 
   // Check if there are applications owned by this ApplicationSet initially (before search)
   const hasOwnedApplications = React.useMemo(() => {
-    return sortedApplications.some(filterApp(project, appset));
-  }, [sortedApplications, project, appset]);
+    return filteredByOwner.length > 0;
+  }, [filteredByOwner]);
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
