@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom-v5-compat';
 import ExternalLink from 'src/components/utils/ExternalLink/ExternalLink';
 
 import ArgoCDLink from '@gitops/components/shared/ArgoCDLink/ArgoCDLink';
@@ -10,14 +9,11 @@ import { repoUrl } from '@gitops/utils/urls';
 import { ApplicationHistory, ApplicationKind } from '@gitops-models/ApplicationModel';
 import { Timestamp, useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
-import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
-import DataViewTable, {
-  DataViewTh,
-  DataViewTr,
-} from '@patternfly/react-data-view/dist/esm/DataViewTable';
-import { useDataViewSort } from '@patternfly/react-data-view/dist/esm/Hooks';
+import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
-import { Tbody, Td, Tr } from '@patternfly/react-table';
+import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
+
+import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../../shared/DataView';
 
 import './History.scss';
 
@@ -28,34 +24,12 @@ interface HistoryListProps {
 
 const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
   const { t } = useTranslation('plugin__gitops-plugin');
-  const COLUMNS_KEYS_INDEXES = React.useMemo(
-    () => [
-      { key: 'id', index: 0 },
-      { key: 'started-at', index: 1 },
-      { key: 'deployed-at', index: 2 },
-      { key: 'initiated-by', index: 3 },
-      { key: 'revision', index: 4 },
-    ],
+  const columnSortConfig = React.useMemo(
+    () => ['id', 'started-at', 'deployed-at', 'initiated-by', 'revision'].map((key) => ({ key })),
     [],
   );
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
-  const sortByIndex = React.useMemo(
-    () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
-    [COLUMNS_KEYS_INDEXES, sortBy],
-  );
-  const getSortParams = (columnIndex: number) => ({
-    sortBy: {
-      index: sortByIndex,
-      direction,
-      defaultDirection: 'asc' as const,
-    },
-    onSort: (_event: any, index: number, dir: 'asc' | 'desc') => {
-      onSort(_event, COLUMNS_KEYS_INDEXES[index].key, dir);
-    },
-    columnIndex,
-  });
+  const { sortBy, direction, getSortParams } = useGitOpsDataViewSort(columnSortConfig);
   const columnsDV = useColumnsDV(getSortParams);
 
   const sortedHistory = React.useMemo(() => {
@@ -63,11 +37,6 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
   }, [history, sortBy, direction]);
 
   const rows = useRowsDV(sortedHistory, obj);
-
-  let currentActiveState = null;
-  if (rows.length === 0) {
-    currentActiveState = DataViewState.empty;
-  }
 
   const [model] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
   const [argoServer, setArgoServer] = React.useState<ArgoServer>({ host: '', protocol: '' });
@@ -117,9 +86,12 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
           '&view=tree&resource=&operation=false&rollback=0'
         }
       />
-      <DataView activeState={currentActiveState}>
-        <DataViewTable rows={rows} columns={columnsDV} bodyStates={empty && { empty }} />
-      </DataView>
+      <GitOpsDataViewTable
+        rows={rows}
+        columns={columnsDV}
+        emptyState={empty}
+        isEmpty={rows.length === 0}
+      />
     </div>
   );
 };
@@ -223,7 +195,7 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
   return rows.reverse();
 };
 
-const useColumnsDV = (getSortParams) => {
+const useColumnsDV = (getSortParams: (columnIndex: number) => ThProps['sort']) => {
   const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {

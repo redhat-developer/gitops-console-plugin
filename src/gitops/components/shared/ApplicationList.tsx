@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom-v5-compat';
 import DevPreviewBadge from 'src/components/import/badges/DevPreviewBadge';
 
 import {
@@ -16,13 +15,7 @@ import {
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { EmptyState, EmptyStateBody, Flex, FlexItem, Spinner } from '@patternfly/react-core';
-import {
-  DataViewTable,
-  DataViewTh,
-  DataViewTr,
-} from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
-import { useDataViewSort } from '@patternfly/react-data-view/dist/dynamic/Hooks';
-import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
+import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
@@ -41,6 +34,8 @@ import SyncStatusFragment from '../../Statuses/SyncStatus';
 import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
 import { isApplicationRefreshing } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
+
+import { GitOpsDataViewTable, useGitOpsDataViewSort } from './DataView';
 
 interface ApplicationProps {
   namespace: string;
@@ -89,40 +84,25 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   });
 
   const { t } = useTranslation('plugin__gitops-plugin');
-  const initIndex: number = namespace ? 0 : 1;
-  const COLUMNS_KEYS_INDEXES = React.useMemo(
-    () => [
-      { key: 'name', index: 0 },
-      ...(!namespace ? [{ key: 'namespace', index: 1 }] : []),
-      { key: 'sync-status', index: 1 + initIndex },
-      { key: 'health-status', index: 2 + initIndex },
-      { key: 'revision', index: 3 + initIndex },
-      { key: 'project', index: 4 + initIndex },
-    ],
-    [namespace, initIndex],
+  const columnSortConfig = React.useMemo(
+    () =>
+      [
+        'name',
+        ...(!namespace ? ['namespace'] : []),
+        'sync-status',
+        'health-status',
+        'revision',
+        'project',
+        'actions',
+      ].map((key) => ({ key })),
+    [namespace],
   );
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
-  const sortByIndex = React.useMemo(
-    () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
-    [COLUMNS_KEYS_INDEXES, sortBy],
-  );
+  const { searchParams, sortBy, direction, getSortParams } =
+    useGitOpsDataViewSort(columnSortConfig);
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
-
-  const getSortParams = (columnIndex: number): ThProps['sort'] => ({
-    sortBy: {
-      index: sortByIndex,
-      direction,
-      defaultDirection: 'asc',
-    },
-    onSort: (_event: any, index: number, dir) => {
-      onSort(_event, COLUMNS_KEYS_INDEXES[index].key, dir);
-    },
-    columnIndex,
-  });
 
   const columnsDV = useColumnsDV(namespace, getSortParams);
   const sortedApplications = React.useMemo(() => {
@@ -193,12 +173,6 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       </Tr>
     </Tbody>
   );
-  let currentActiveState = null;
-  if (loadError) {
-    currentActiveState = DataViewState.error;
-  } else if (filteredBySearch.length === 0) {
-    currentActiveState = DataViewState.empty;
-  }
   return (
     <div>
       {showTitle == undefined && (project == undefined || appset == undefined) && (
@@ -224,9 +198,13 @@ const ApplicationList: React.FC<ApplicationProps> = ({
             nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
           />
         )}
-        <DataView activeState={currentActiveState}>
-          <DataViewTable columns={columnsDV} rows={rows} bodyStates={empty && { empty }} />
-        </DataView>
+        <GitOpsDataViewTable
+          columns={columnsDV}
+          rows={rows}
+          isEmpty={filteredBySearch.length === 0}
+          emptyState={empty}
+          isError={!!loadError}
+        />
       </ListPageBody>
     </div>
   );
@@ -393,7 +371,10 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
   return rows;
 };
 
-const useColumnsDV = (namespace, getSortParams): DataViewTh[] => {
+const useColumnsDV = (
+  namespace: string,
+  getSortParams: (columnIndex: number) => ThProps['sort'],
+): DataViewTh[] => {
   const i: number = namespace ? 0 : 1;
   const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [

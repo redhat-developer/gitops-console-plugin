@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { useSearchParams } from 'react-router-dom-v5-compat';
 import classNames from 'classnames';
 
 import { useResourceActionsProvider } from '@gitops/hooks/useResourceActionsProvider';
@@ -32,16 +31,13 @@ import {
   Popover,
   Title,
 } from '@patternfly/react-core';
-import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
-import DataViewTable, {
-  DataViewTh,
-  DataViewTr,
-} from '@patternfly/react-data-view/dist/esm/DataViewTable';
-import { useDataViewSort } from '@patternfly/react-data-view/dist/esm/Hooks';
+import { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
+import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
-import { Tbody, Td, Tr } from '@patternfly/react-table';
+import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
 import { DetailsDescriptionGroup } from '../shared/BaseDetailsSummary/BaseDetailsSummary';
+import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
 
 import { ConditionsPopover } from './Conditions/ConditionsPopover';
 
@@ -76,38 +72,12 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
     resources = [];
   }
 
-  let currentActiveState = null;
-  if (resources.length === 0) {
-    currentActiveState = DataViewState.empty;
-  }
-
-  const COLUMNS_KEYS_INDEXES = React.useMemo(
-    () => [
-      { key: 'name', index: 0 },
-      { key: 'namespace', index: 1 },
-      { key: 'status', index: 2 },
-      { key: 'hook', index: 3 },
-      { key: 'message', index: 4 },
-    ],
+  const columnSortConfig = React.useMemo(
+    () => ['name', 'namespace', 'status', 'hook', 'message', 'actions'].map((key) => ({ key })),
     [],
   );
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
-  const sortByIndex = React.useMemo(
-    () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
-    [COLUMNS_KEYS_INDEXES, sortBy],
-  );
-  const getSortParams = (columnIndex: number) => ({
-    sortBy: {
-      index: sortByIndex,
-      direction,
-      defaultDirection: 'asc' as const,
-    },
-    onSort: (_event: any, index: number, dir: 'asc' | 'desc') => {
-      onSort(_event, COLUMNS_KEYS_INDEXES[index].key, dir);
-    },
-    columnIndex,
-  });
+
+  const { sortBy, direction, getSortParams } = useGitOpsDataViewSort(columnSortConfig);
   const columnsDV = useResourceColumnsDV(getSortParams);
   const sortedResources = React.useMemo(() => {
     return sortData(resources, sortBy, direction);
@@ -296,9 +266,13 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
         <Title headingLevel="h2" className="co-section-heading">
           {t('Resources Last Synced')}
         </Title>
-        <DataView activeState={currentActiveState}>
-          <DataViewTable rows={rows} columns={columnsDV} bodyStates={empty && { empty }} />
-        </DataView>
+        <GitOpsDataViewTable
+          rows={rows}
+          columns={columnsDV}
+          emptyState={empty}
+          isEmpty={sortedResources.length === 0}
+          activeState={resources.length === 0 ? DataViewState.empty : null}
+        />
       </PageSection>
     </div>
   );
@@ -349,7 +323,7 @@ const sortData = (
   });
 };
 
-export const useResourceColumnsDV = (getSortParams) => {
+export const useResourceColumnsDV = (getSortParams: (columnIndex: number) => ThProps['sort']) => {
   const columns: DataViewTh[] = [
     {
       cell: t('plugin__gitops-plugin~Name'),

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, useSearchParams } from 'react-router-dom-v5-compat';
+import { Link } from 'react-router-dom-v5-compat';
 import classNames from 'classnames';
 import DevPreviewBadge from 'src/components/import/badges/DevPreviewBadge';
 
@@ -38,14 +38,11 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { Label as PfLabel } from '@patternfly/react-core';
-import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
-import DataViewTable, {
-  DataViewTh,
-  DataViewTr,
-} from '@patternfly/react-data-view/dist/esm/DataViewTable';
-import { useDataViewSort } from '@patternfly/react-data-view/dist/esm/Hooks';
+import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon, SearchIcon, TopologyIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
+
+import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
 
 import { useRolloutActionsProvider } from './hooks/useRolloutActionsProvider';
 import { RolloutKind, RolloutModel } from './model/RolloutModel';
@@ -93,43 +90,29 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
     namespaced: true,
     namespace,
   });
-  const initIndex: number = namespace ? 0 : 1;
-  const COLUMNS_KEYS_INDEXES = React.useMemo(
-    () => [
-      { key: 'name', index: 0 },
-      ...(!namespace ? [{ key: 'namespace', index: 1 }] : []),
-      { key: 'status', index: 1 + initIndex },
-      { key: 'pods', index: 2 + initIndex },
-      { key: 'labels', index: 3 + initIndex },
-      { key: 'selector', index: 4 + initIndex },
-      { key: 'last-updated', index: 5 + initIndex },
-    ],
-    [namespace, initIndex],
+  const columnSortConfig = React.useMemo(
+    () =>
+      [
+        'name',
+        ...(!namespace ? ['namespace'] : []),
+        'status',
+        'pods',
+        'labels',
+        'selector',
+        'last-updated',
+        'actions',
+      ].map((key) => ({ key })),
+    [namespace],
   );
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
-  const sortByIndex = React.useMemo(
-    () => COLUMNS_KEYS_INDEXES.findIndex((item) => item.key === sortBy),
-    [COLUMNS_KEYS_INDEXES, sortBy],
-  );
+  const { searchParams, sortBy, direction, getSortParams } =
+    useGitOpsDataViewSort(columnSortConfig);
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
 
   const { t } = useGitOpsTranslation();
 
-  const getSortParams = (columnIndex: number): ThProps['sort'] => ({
-    sortBy: {
-      index: sortByIndex,
-      direction,
-      defaultDirection: 'asc',
-    },
-    onSort: (_event: any, index: number, dir: 'asc' | 'desc') => {
-      onSort(_event, COLUMNS_KEYS_INDEXES[index].key, dir);
-    },
-    columnIndex,
-  });
   const columnsDV = useColumnsDV(namespace, getSortParams);
   const sortedRollouts = React.useMemo(() => {
     return sortData(rollouts, sortBy, direction);
@@ -184,12 +167,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
       </Tr>
     </Tbody>
   );
-  let currentActiveState = null;
-  if (loadError) {
-    currentActiveState = DataViewState.error;
-  } else if (rows.length === 0) {
-    currentActiveState = DataViewState.empty;
-  }
+  const isEmptyState = !loadError && rows.length === 0;
   const topologyUrl = namespace
     ? '/topology/ns/' + namespace + '?view=graph'
     : '/topology/all-namespaces?view=graph';
@@ -246,15 +224,14 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
             )}
           </span>
         )}
-        {
-          <DataView activeState={currentActiveState}>
-            <DataViewTable
-              columns={columnsDV}
-              rows={rows}
-              bodyStates={loadError ? { error } : { empty }}
-            />
-          </DataView>
-        }
+        <GitOpsDataViewTable
+          columns={columnsDV}
+          rows={rows}
+          isEmpty={isEmptyState}
+          emptyState={empty}
+          isError={!!loadError}
+          errorState={error || undefined}
+        />
       </ListPageBody>
     </>
   );
@@ -311,7 +288,10 @@ export const sortData = (
   });
 };
 
-export const useColumnsDV = (namespace, getSortParams) => {
+export const useColumnsDV = (
+  namespace: string,
+  getSortParams: (columnIndex: number) => ThProps['sort'],
+) => {
   const i: number = namespace ? 0 : 1;
   const { t } = useGitOpsTranslation();
   const columns: DataViewTh[] = [
