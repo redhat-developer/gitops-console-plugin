@@ -129,15 +129,17 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     return sortData(applications, sortBy, direction);
   }, [applications, sortBy, direction]);
 
-  // Filter applications by project or appset BEFORE calculating filter counts
-  const filteredByOwner = React.useMemo(
+  // Filter applications by project or appset FIRST - before PatternFly filters
+  // This ensures PF filters work on the correct dataset (owned apps only)
+  const ownedApps = React.useMemo(
     () => sortedApplications.filter(filterApp(project, appset)),
     [sortedApplications, project, appset],
   );
 
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
+  // PatternFly filters work on owned apps only (the dataset that will be displayed)
   const filters = getFilters(t);
-  const [data, filteredData, onFilterChange] = useListPageFilter(filteredByOwner, filters);
+  const [data, filteredData, onFilterChange] = useListPageFilter(ownedApps, filters);
 
   // Filter by search query if present (after other filters)
   const filteredBySearch = React.useMemo(() => {
@@ -154,10 +156,8 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   }, [filteredData, searchQuery]);
   const rows = useApplicationRowsDV(filteredBySearch, namespace);
 
-  // Check if there are applications owned by this ApplicationSet initially (before search)
-  const hasOwnedApplications = React.useMemo(() => {
-    return filteredByOwner.length > 0;
-  }, [filteredByOwner]);
+  // Check if there are applications owned by this ApplicationSet initially (before filters/search)
+  const hasOwnedApplications = ownedApps.length > 0;
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
