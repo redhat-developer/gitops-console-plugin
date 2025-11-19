@@ -18,15 +18,12 @@ import {
   Title,
   Tooltip,
 } from '@patternfly/react-core';
-import DataView, { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
-import DataViewTable, {
-  DataViewTh,
-  DataViewTr,
-} from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon, GithubIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
 
 import ArgoCDLink from '../shared/ArgoCDLink/ArgoCDLink';
+import { GitOpsDataViewTable } from '../shared/DataView';
 
 type ApplicationDetailsTabProps = RouteComponentProps<{
   ns: string;
@@ -198,7 +195,6 @@ export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer
       </Tr>
     </Tbody>
   );
-  const currentActiveState = rows.length === 0 ? DataViewState.empty : null;
   return (
     <>
       <ArgoCDLink
@@ -218,9 +214,12 @@ export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer
           '&tab=parameters'
         }
       />
-      <DataView activeState={currentActiveState}>
-        <DataViewTable rows={rows} columns={columns} bodyStates={empty && { empty }} />
-      </DataView>
+      <GitOpsDataViewTable
+        rows={rows}
+        columns={columns}
+        emptyState={empty}
+        isEmpty={rows.length === 0}
+      />
     </>
   );
 };
