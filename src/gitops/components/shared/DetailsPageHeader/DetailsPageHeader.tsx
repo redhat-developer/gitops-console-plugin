@@ -80,10 +80,10 @@ const DetailsPageHeader: React.FC<DetailsPageHeaderProps> = ({
                     model.apiGroup + '~' + model.apiVersion + '~' + model.kind
                   }`}
                 >
-                  Argo CD {t(model.labelPlural)}
+                  {t(model.labelPlural)}
                 </Link>
               </BreadcrumbItem>
-              <BreadcrumbItem>Argo CD {t(model.labelPlural + ' details')}</BreadcrumbItem>
+              <BreadcrumbItem>{t(model.label + ' details')}</BreadcrumbItem>
             </Breadcrumb>
           }
         >
