@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { ErrorState } from '@patternfly/react-component-groups';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 
 import DetailsPageHeader from '../shared/DetailsPageHeader/DetailsPageHeader';
@@ -20,7 +21,7 @@ type RolloutPageProps = {
 
 const RolloutNavPage: React.FC<RolloutPageProps> = ({ name, namespace, kind }) => {
   const { t } = useGitOpsTranslation();
-  const [rollout, loaded] = useK8sWatchResource<RolloutKind>({
+  const [rollout, loaded, loadError] = useK8sWatchResource<RolloutKind>({
     groupVersionKind: {
       group: 'argoproj.io',
       kind: 'Rollout',
@@ -65,10 +66,18 @@ const RolloutNavPage: React.FC<RolloutPageProps> = ({ name, namespace, kind }) =
         iconText="AR"
         iconTitle="Argo Rollout"
       />
-      {loaded ? (
+      {/* eslint-disable-next-line no-nested-ternary */}
+      {loaded && !loadError ? (
         <div>
           <HorizontalNav pages={pages} resource={rollout} />
         </div>
+      ) : loadError ? (
+        <ErrorState
+          titleText={t('Unable to load data')}
+          bodyText={t(
+            'There was an error retrieving the rollout. Check your connection and reload the page.',
+          )}
+        />
       ) : (
         <Bullseye>
           <Spinner size="xl" />

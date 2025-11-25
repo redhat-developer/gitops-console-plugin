@@ -26,10 +26,10 @@ export type AnalysisTemplates = {
 };
 
 export type Steps = {
+  setWeight: number;
+  experiment?: string;
   analysis?: {
-    setWeight: number;
     templates?: AnalysisTemplates[];
-    experiment?: string;
   };
 };
 
