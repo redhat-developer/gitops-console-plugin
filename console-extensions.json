@@ -366,6 +366,20 @@
     }
   },
   {
+    "type": "console.navigation/resource-ns",
+    "properties": {
+        "id": "appproject",
+        "name": "App Projects",
+        "perspective": "admin",
+        "section": "gitops-navigation-section",
+        "model": {
+            "group": "argoproj.io",
+            "kind": "AppProject",
+            "version": "v1alpha1"
+        }
+    }
+  },
+  {
     "type": "console.page/resource/list",
     "flags": {
         "required": [
@@ -398,6 +412,24 @@
         },
         "component": {
             "$codeRef": "RolloutList"
+        }
+    }
+  },
+  {
+    "type": "console.page/resource/list",
+    "flags": {
+        "required": [
+            "APPLICATION"
+        ]
+    },
+    "properties": {
+        "model": {
+            "group": "argoproj.io",
+            "kind": "AppProject",
+            "version": "v1alpha1"
+        },
+        "component": {
+            "$codeRef": "ProjectList"
         }
     }
   },
@@ -512,7 +544,25 @@
         }
     }
   },
-
+  {
+    "type": "console.yaml-template",
+    "flags": {
+        "required": [
+            "APPLICATION"
+        ]
+    },
+    "properties": {
+        "name": "default",
+        "model": {
+            "group": "argoproj.io",
+            "kind": "AppProject",
+            "version": "v1alpha1"
+        },
+        "template": {
+            "$codeRef": "yamlTemplates.defaultAppProjectYamlTemplate"
+        }
+    }
+  },
   {
     "type": "console.page/resource/details",
     "flags": {
