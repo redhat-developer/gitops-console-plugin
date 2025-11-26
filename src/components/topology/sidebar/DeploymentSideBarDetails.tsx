@@ -237,7 +237,7 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
       expand={true}
     />
   ));
-  const strategy = d.spec?.strategy?.blueGreen ? 'Blue Green' : 'Canary';
+  const strategy = d.spec?.strategy?.blueGreen ? 'Blue-Green' : 'Canary';
   return (
     <>
       <div className="ocs-sidebar-tabsection">
