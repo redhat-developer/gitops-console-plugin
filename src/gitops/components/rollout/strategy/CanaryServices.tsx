@@ -16,8 +16,7 @@ type CanaryServicesProps = {
 
 const getAnalysisTemplates = (steps, namespace: string, t: TFunction) => {
   const analysisTemplateUrl = '/k8s/ns/' + namespace + '/argoproj.io~v1alpha1~AnalysisTemplate/';
-  const clusterAnalysisTemplateUrl =
-    '/k8s/cluster/argoproj.io~v1alpha1~ClusterAnalysisTemplate/';
+  const clusterAnalysisTemplateUrl = '/k8s/cluster/argoproj.io~v1alpha1~ClusterAnalysisTemplate/';
   const classes = css('co-resource-item', {
     'co-resource-item--inline': true,
     'co-resource-item--truncate': true,

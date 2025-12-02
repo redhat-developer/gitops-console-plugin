@@ -1,13 +1,20 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom-v5-compat';
+import classNames from 'classnames';
 import DevPreviewBadge from 'src/components/import/badges/DevPreviewBadge';
 
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
-import { modelToGroupVersionKind, modelToRef } from '@gitops/utils/utils';
+import {
+  getSelectorSearchURL,
+  kindForReference,
+  modelToGroupVersionKind,
+  modelToRef,
+} from '@gitops/utils/utils';
 import {
   Action,
   K8sResourceCommon,
+  K8sResourceKindReference,
   ListPageBody,
   ListPageCreate,
   ListPageFilter,
@@ -19,7 +26,8 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import { EmptyState, EmptyStateBody, LabelGroup } from '@patternfly/react-core';
+import { Label as PfLabel } from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { ThProps } from '@patternfly/react-table';
@@ -75,6 +83,7 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
       ...(showNamespace ? ['namespace'] : []),
       'description',
       'applications',
+      'labels',
       'last-updated',
       'actions',
     ].map((key) => ({ key }));
@@ -182,7 +191,7 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
     <div>
       {showTitle == undefined && (
         <ListPageHeader
-          title={t('App Projects')}
+          title={t('AppProjects')}
           badge={
             location?.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
           }
@@ -275,6 +284,10 @@ export const sortData = (
         aValue = getApplicationsCount(a, applications, appsLoaded);
         bValue = getApplicationsCount(b, applications, appsLoaded);
         break;
+      case 'labels':
+        aValue = a.metadata?.labels || {};
+        bValue = b.metadata?.labels || {};
+        break;
       case 'last-updated':
         aValue = getLastUpdateTimestamp(a);
         bValue = getLastUpdateTimestamp(b);
@@ -338,6 +351,13 @@ export const useColumnsDV = (
       },
     },
     {
+      cell: t('Labels'),
+      props: {
+        'aria-label': 'labels',
+        className: 'pf-m-width-15',
+      },
+    },
+    {
       cell: t('Last Updated'),
       props: {
         'aria-label': 'last updated',
@@ -352,6 +372,53 @@ export const useColumnsDV = (
   ];
 
   return columns;
+};
+
+type MetadataLabelsProps = {
+  kind: K8sResourceKindReference;
+  labels?: { [key: string]: string };
+};
+
+const MetadataLabels: React.FC<MetadataLabelsProps> = ({ kind, labels }) => {
+  const { t } = useTranslation('plugin__gitops-plugin');
+  return labels && Object.keys(labels).length > 0 ? (
+    <LabelGroup numLabels={10} className="co-label-group metadata-labels-group">
+      {Object.keys(labels || {})?.map((key) => {
+        return (
+          <LabelL key={key} kind={kind} name={key} value={labels[key]} expand={true}>
+            {labels[key] ? `${key}=${labels[key]}` : key}
+          </LabelL>
+        );
+      })}
+    </LabelGroup>
+  ) : (
+    <span className="metadata-labels-no-labels">{t('No labels')}</span>
+  );
+};
+
+type LabelProps = {
+  kind: K8sResourceKindReference;
+  name: string;
+  value: string;
+  expand: boolean;
+};
+
+const LabelL: React.FC<LabelProps> = ({ kind, name, value, expand }) => {
+  const selector = value ? `${name}=${value}` : name;
+  const href = getSelectorSearchURL('', kind, selector);
+  const kindOf = `co-m-${kindForReference(kind.toLowerCase())}`;
+  const klass = classNames(kindOf, { 'co-m-expand': expand }, 'co-label');
+  return (
+    <>
+      <PfLabel className={klass} color={'blue'} href={href}>
+        <span className="co-label__key" data-test="label-key">
+          {name}
+        </span>
+        {value && <span className="co-label__eq">=</span>}
+        {value && <span className="co-label__value">{value}</span>}
+      </PfLabel>
+    </>
+  );
 };
 
 export const useProjectsRowsDV = (
@@ -399,6 +466,23 @@ export const useProjectsRowsDV = (
       {
         id: 'applications',
         cell: appsLoaded ? appsCount.toString() : '-',
+      },
+      {
+        id: 'labels',
+        cell: (
+          <div className="pf-m-width-40">
+            <MetadataLabels
+              kind={
+                AppProjectModel.apiGroup +
+                '~' +
+                AppProjectModel.apiVersion +
+                '~' +
+                AppProjectModel.kind
+              }
+              labels={obj?.metadata?.labels}
+            />
+          </div>
+        ),
       },
       {
         id: 'last-updated',

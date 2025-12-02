@@ -354,6 +354,29 @@
   {
     "type": "console.navigation/resource-ns",
     "properties": {
+        "id": "appproject",
+        "name": "AppProjects",
+        "perspective": "admin",
+        "section": "gitops-navigation-section",
+        "model": {
+            "group": "argoproj.io",
+            "kind": "AppProject",
+            "version": "v1alpha1"
+        }
+    }
+  },
+  {
+    "type": "console.navigation/separator",
+    "properties": {
+        "perspective": "admin",
+        "section": "gitops-navigation-section",
+        "id": "argocd-separator",
+        "insertAfter": "appproject"
+    }
+  },
+  {
+    "type": "console.navigation/resource-ns",
+    "properties": {
         "id": "rollout",
         "name": "Rollouts",
         "perspective": "admin",
@@ -361,20 +384,6 @@
         "model": {
             "group": "argoproj.io",
             "kind": "Rollout",
-            "version": "v1alpha1"
-        }
-    }
-  },
-  {
-    "type": "console.navigation/resource-ns",
-    "properties": {
-        "id": "appproject",
-        "name": "App Projects",
-        "perspective": "admin",
-        "section": "gitops-navigation-section",
-        "model": {
-            "group": "argoproj.io",
-            "kind": "AppProject",
             "version": "v1alpha1"
         }
     }
