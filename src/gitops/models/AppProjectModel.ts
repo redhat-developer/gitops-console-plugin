@@ -56,7 +56,7 @@ export type AppProjectKind = K8sResourceCommon & {
     namespaceResourceWhitelist?: ResourceAllowDeny[];
     namespaceResourceBlacklist?: ResourceAllowDeny[];
     roles?: Role[];
-    syncWindows: SyncWindow[];
+    syncWindows?: SyncWindow[];
   };
   status?: { [key: string]: any };
 };
