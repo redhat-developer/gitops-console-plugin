@@ -58,7 +58,7 @@ export const useProjectActionsProvider: UseProjectActionsProvider = (project) =>
       {
         id: 'gitops-action-edit-project',
         disabled: !project?.metadata?.namespace || !project?.metadata?.name,
-        label: t('Edit App Project'),
+        label: t('Edit AppProject'),
         accessReview: {
           group: AppProjectModel.apiGroup,
           verb: 'update' as K8sVerb,
