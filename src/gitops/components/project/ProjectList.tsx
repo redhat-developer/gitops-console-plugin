@@ -288,16 +288,10 @@ export const sortData = (
         aValue = a.metadata?.labels || {};
         bValue = b.metadata?.labels || {};
         break;
-      case 'last-updated': {
-        const aTimestamp = getLastUpdateTimestamp(a);
-        const bTimestamp = getLastUpdateTimestamp(b);
-        aValue = new Date(aTimestamp || 0).getTime();
-        bValue = new Date(bTimestamp || 0).getTime();
-        // Handle NaN values (invalid dates) - treat as 0 (epoch)
-        if (isNaN(aValue)) aValue = 0;
-        if (isNaN(bValue)) bValue = 0;
+      case 'last-updated':
+        aValue = getLastUpdateTimestamp(a) || '';
+        bValue = getLastUpdateTimestamp(b) || '';
         break;
-      }
       default:
         return 0;
     }
