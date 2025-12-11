@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Link } from 'react-router-dom-v5-compat';
 import classNames from 'classnames';
 
 import Conditions from '@gitops/utils/components/Conditions/Conditions';
@@ -8,18 +7,14 @@ import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { useObjectModifyPermissions } from '@gitops/utils/utils';
 import { k8sUpdate } from '@openshift-console/dynamic-plugin-sdk';
 import {
-  Button,
   DescriptionList,
   Flex,
   FlexItem,
-  Icon,
   NumberInput,
   PageSection,
   PageSectionVariants,
   Title,
-  Tooltip,
 } from '@patternfly/react-core';
-import { TopologyIcon } from '@patternfly/react-icons';
 
 import BaseDetailsSummary, {
   DetailsDescriptionGroup,
@@ -28,6 +23,7 @@ import BaseDetailsSummary, {
 import { RolloutModel } from './model/RolloutModel';
 import BlueGreenServices from './strategy/BlueGreenServices';
 import CanaryServices from './strategy/CanaryServices';
+import { topologyLink } from './utils/TopologyLink';
 import { RolloutStatusFragment } from './RolloutStatus';
 
 type RolloutDetailsTabProps = RouteComponentProps<{
@@ -90,31 +86,7 @@ const RolloutDetailsTab: React.FC<RolloutDetailsTabProps> = ({ obj }) => {
               <BaseDetailsSummary
                 obj={obj}
                 model={RolloutModel}
-                nameLink={
-                  <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                    <Tooltip position="top" content={'Topology view'}>
-                      <Link
-                        className="pf-v5-c-content"
-                        rel="noopener noreferrer"
-                        to={topologyUrl}
-                        role="button"
-                        aria-label={t('Topology view')}
-                      >
-                        <Button
-                          icon={
-                            <Icon size="md">
-                              <TopologyIcon />
-                            </Icon>
-                          }
-                          variant="plain"
-                          aria-label={t('Topology view')}
-                          className="pf-m-plain odc-topology__view-switcher"
-                          data-test-id="topology-switcher-view"
-                        ></Button>
-                      </Link>
-                    </Tooltip>
-                  </span>
-                }
+                nameLink={topologyLink(topologyUrl, t)}
               />
             </FlexItem>
           </Flex>

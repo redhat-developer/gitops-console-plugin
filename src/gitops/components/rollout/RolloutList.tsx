@@ -28,18 +28,10 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
-import {
-  Button,
-  EmptyState,
-  EmptyStateBody,
-  Icon,
-  LabelGroup,
-  Spinner,
-  Tooltip,
-} from '@patternfly/react-core';
+import { EmptyState, EmptyStateBody, LabelGroup, Spinner } from '@patternfly/react-core';
 import { Label as PfLabel } from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
-import { CubesIcon, SearchIcon, TopologyIcon } from '@patternfly/react-icons';
+import { CubesIcon, SearchIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
@@ -47,6 +39,7 @@ import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
 import { useRolloutActionsProvider } from './hooks/useRolloutActionsProvider';
 import { RolloutKind, RolloutModel } from './model/RolloutModel';
 import { RolloutStatus } from './utils/rollout-utils';
+import { topologyLink } from './utils/TopologyLink';
 import { RolloutStatusFragment } from './RolloutStatus';
 
 import './rollout-list.scss';
@@ -198,28 +191,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
             </span>
             {rows.length > 0 && !loadError && (
               <span className="rollout-list-page__topology-link pf-m-mb-sm">
-                <Tooltip position="top" content={t('Topology view')}>
-                  <Link
-                    className="pf-v5-c-content"
-                    rel="noopener noreferrer"
-                    to={topologyUrl}
-                    role="button"
-                    aria-label={t('Graph view')}
-                  >
-                    <Button
-                      icon={
-                        <Icon size="md">
-                          <TopologyIcon />
-                        </Icon>
-                      }
-                      variant="plain"
-                      aria-label={t('Topology view')}
-                      className="pf-m-plain odc-topology__view-switcher"
-                      data-test-id="topology-switcher-view"
-                      onClick={() => console.log('Topology view')}
-                    ></Button>
-                  </Link>
-                </Tooltip>
+                {topologyLink(topologyUrl, t)}
               </span>
             )}
           </span>
