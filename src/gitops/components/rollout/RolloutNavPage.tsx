@@ -13,6 +13,7 @@ import { useRolloutActionsProvider } from './hooks/useRolloutActionsProvider';
 import { RolloutKind, RolloutModel } from './model/RolloutModel';
 import RolloutDetailsTab from './RolloutDetailsTab';
 import RolloutPodsTab from './RolloutPodsTab';
+import RolloutRevisionsTab from './RolloutRevisionsTab';
 
 type RolloutPageProps = {
   name: string;
@@ -46,6 +47,11 @@ const RolloutNavPage: React.FC<RolloutPageProps> = ({ name, namespace, kind }) =
         href: 'yaml',
         name: t('YAML'),
         component: ResourceYAMLTab,
+      },
+      {
+        href: 'revisions',
+        name: t('Revisions'),
+        component: RolloutRevisionsTab,
       },
       {
         href: 'pods',

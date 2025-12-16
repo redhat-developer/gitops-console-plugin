@@ -1,3 +1,5 @@
+import { DeploymentCondition, PodTemplate } from 'src/components/topology/console/types';
+
 import { modelToRef } from '@gitops/utils/utils';
 import { K8sModel, K8sResourceCommon, Selector } from '@openshift-console/dynamic-plugin-sdk';
 
@@ -61,6 +63,23 @@ export type PauseConditions = {
   startTime: string;
 };
 
+export type ReplicationControllerKind = {
+  spec?: {
+    minReadySeconds?: number;
+    replicas?: number;
+    selector: Selector;
+    template: PodTemplate;
+  };
+  status: {
+    availableReplicas?: number;
+    conditions?: DeploymentCondition[];
+    fullyLabeledReplicas?: number;
+    observedGeneration?: number;
+    readyReplicas?: number;
+    replicas: number;
+  };
+} & K8sResourceCommon;
+
 export type RolloutStatus = {
   blueGreen?: {
     activeSelector?: string;
@@ -88,5 +107,7 @@ export type RolloutKind = K8sResourceCommon & {
   spec?: RolloutSpec;
   status?: RolloutStatus;
 };
+
+export type ReplicaSetKind = NonNullable<unknown> & ReplicationControllerKind;
 
 export const rolloutModelRef = modelToRef(RolloutModel);
