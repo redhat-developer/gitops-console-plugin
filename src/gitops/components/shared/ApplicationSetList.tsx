@@ -32,6 +32,10 @@ import { ApplicationSetStatus } from '../../utils/constants';
 import { getAppSetGeneratorCount, getAppSetStatus } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
 
+import {
+  ShowOperandsInAllNamespacesRadioGroup,
+  useShowOperandsInAllNamespaces,
+} from './AllNamespaces';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from './DataView';
 
 const formatCreationTimestamp = (timestamp: string): string => {
@@ -102,6 +106,13 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   hideNameLabelFilters,
   showTitle,
 }) => {
+  const [showOperandsInAllNamespaces] = useShowOperandsInAllNamespaces();
+  const listAllNamespaces =
+    location.pathname?.includes('openshift-gitops-operator') && showOperandsInAllNamespaces;
+  if (listAllNamespaces) {
+    namespace = null;
+  }
+
   const [applicationSets, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     groupVersionKind: {
@@ -109,7 +120,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
       kind: 'ApplicationSet',
       version: 'v1alpha1',
     },
-    namespaced: true,
+    namespaced: !listAllNamespaces,
     namespace,
   });
 
@@ -131,14 +142,14 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     () =>
       [
         'name',
-        ...(!namespace ? ['namespace'] : []),
+        ...(!listAllNamespaces || !namespace ? ['namespace'] : []),
         'status',
         'generated-apps',
         'generators',
         'created-at',
         'actions',
       ].map((key) => ({ key })),
-    [namespace],
+    [listAllNamespaces, namespace],
   );
 
   const { searchParams, sortBy, direction, getSortParams } =
@@ -242,6 +253,11 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
           title={t('ApplicationSets')}
           badge={
             location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
+          }
+          helpText={
+            location.pathname?.includes('openshift-gitops-operator') ? (
+              <ShowOperandsInAllNamespacesRadioGroup />
+            ) : null
           }
           hideFavoriteButton={false}
         >

@@ -101,11 +101,7 @@ const Metrics: React.FC<MetricsProps> = ({ arInfo }) => {
   }
   return (
     <>
-      <DescriptionList
-        isHorizontal
-        isCompact
-        className="gitops_plugin__tight_description_list"
-      >
+      <DescriptionList isHorizontal isCompact className="gitops_plugin__tight_description_list">
         <DescriptionListGroup>
           <DescriptionListTerm>Started At:</DescriptionListTerm>
           <DescriptionListDescription>
