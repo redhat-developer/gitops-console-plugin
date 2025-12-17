@@ -34,8 +34,8 @@ export type AnalysisRunInfo = {
 };
 
 export type PodInfo = {
-  readyReplicas: number;
-  replicas: number;
+  readyReplicas?: number;
+  replicas?: number;
   pods: PodKind[];
   ownerReferences: OwnerReference[];
 };
@@ -142,7 +142,7 @@ export const getReplicaSetInfo = async (
     [revision: string]: any;
   };
 
-  const revisions: RevisionsMap = [];
+  const revisions: RevisionsMap = {};
 
   // Go through each replicaset and add to list
   replicaSets.forEach((rs) => {

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 import { PodKind } from 'src/components/topology/console/types';
 
@@ -12,10 +11,7 @@ import { Flex, FlexItem, PageSection, PageSectionVariants, Title } from '@patter
 import { ReplicaSetKind, RolloutKind } from './model/RolloutModel';
 import { Revisions } from './revisions/Revisions';
 
-type RolloutRevisionsTabProps = RouteComponentProps<{
-  ns: string;
-  name: string;
-}> & {
+type RolloutRevisionsTabProps = {
   obj?: RolloutKind;
 };
 

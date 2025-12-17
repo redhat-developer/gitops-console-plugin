@@ -47,7 +47,8 @@ export const AnalysisRunStatusFragment: React.FC<AnalysisRunStatusProps> = ({
       color = 'green';
       break;
     }
-    case (AnalysisRunStatus.Failed, AnalysisRunStatus.Error): {
+    case AnalysisRunStatus.Failed:
+    case AnalysisRunStatus.Error: {
       icon = <AnalysisRunStatusFailureIcon />;
       color = 'red';
       break;
@@ -103,7 +104,7 @@ const Metrics: React.FC<MetricsProps> = ({ arInfo }) => {
       <DescriptionList
         isHorizontal
         isCompact
-        className="gitops_admin_plugin__tight_description_list"
+        className="gitops_plugin__tight_description_list"
       >
         <DescriptionListGroup>
           <DescriptionListTerm>Started At:</DescriptionListTerm>
@@ -256,7 +257,7 @@ function getMeasurementTooltip(measurement: Measurement) {
       <tr>
         <th style={{ whiteSpace: 'nowrap' }}>Finished At: </th>
         <td>
-          <Timestamp simple timestamp={measurement.startedAt} />
+          <Timestamp simple timestamp={measurement.finishedAt} />
         </td>
       </tr>
       {measurement.value && (
