@@ -88,7 +88,7 @@ const ProjectNavPage: React.FC<ProjectPageProps> = ({ name, namespace, kind }) =
         name={name}
         actions={actions}
         iconText="AP"
-        iconTitle="Argo CD App Project"
+        iconTitle={t('ArgoCD AppProject')}
       />
       {/* eslint-disable-next-line no-nested-ternary */}
       {loaded && !loadError ? (

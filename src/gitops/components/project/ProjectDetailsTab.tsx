@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { Link, useLocation } from 'react-router-dom-v5-compat';
 import classNames from 'classnames';
 
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
@@ -25,9 +26,38 @@ type ProjectDetailsTabProps = RouteComponentProps<{ ns: string; name: string }> 
   obj?: AppProjectKind;
 };
 
-const ProjectDetailsTab: React.FC<ProjectDetailsTabProps> = ({ obj }) => {
+const ProjectDetailsTab: React.FC<ProjectDetailsTabProps> = ({ obj, match }) => {
   const { t } = useGitOpsTranslation();
+  const location = useLocation();
   const namespace = obj?.metadata?.namespace;
+
+  const getTabUrl = (tab: string) => {
+    const knownTabs = new Set([
+      'yaml',
+      'allowdeny',
+      'applications',
+      'roles',
+      'syncWindows',
+      'events',
+    ]);
+
+    let baseUrl = match?.url;
+
+    if (baseUrl) {
+      const segments = baseUrl.split('/');
+      const lastSegment = segments.at(-1) || '';
+      if (knownTabs.has(lastSegment)) {
+        baseUrl = segments.slice(0, -1).join('/');
+      }
+      return `${baseUrl}/${tab}`;
+    }
+
+    const currentPath = location.pathname;
+    const segments = currentPath.split('/');
+    const lastSegment = segments.at(-1) || '';
+    const isOnTab = knownTabs.has(lastSegment);
+    return isOnTab ? `../${tab}` : tab;
+  };
 
   const [applications] = useK8sWatchResource<ApplicationKind[]>({
     groupVersionKind: {
@@ -101,61 +131,56 @@ const ProjectDetailsTab: React.FC<ProjectDetailsTabProps> = ({ obj }) => {
                   title={t('Applications')}
                   help={t('Number of applications using this AppProject.')}
                 >
-                  <Badge isRead color="blue">
+                  <Link to={getTabUrl('applications')}>
                     {applicationsCount}{' '}
-                    {applicationsCount !== 1 ? t('applications') : t('application')}
-                  </Badge>
+                    {applicationsCount === 1 ? t('application') : t('applications')}
+                  </Link>
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
                   title={t('Destinations')}
                   help={t(
-                    'Number of allowed destinations (clusters/namespaces) for this AppProject.',
+                    'Number of clusters and namespaces where applications are allowed to be deployed.',
                   )}
                 >
-                  <Badge isRead color="grey">
+                  <Link to={getTabUrl('allowdeny')}>
                     {destinationsCount}{' '}
-                    {destinationsCount !== 1 ? t('destinations') : t('destination')}
-                  </Badge>
+                    {destinationsCount === 1 ? t('destination') : t('destinations')}
+                  </Link>
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
                   title={t('Source Repositories')}
                   help={t('Number of allowed source repositories for this AppProject.')}
                 >
-                  <Badge isRead color="grey">
-                    {sourceReposCount}{' '}
-                    {sourceReposCount !== 1 ? t('repositories') : t('repository')}
-                  </Badge>
+                  {sourceReposCount} {sourceReposCount === 1 ? t('repository') : t('repositories')}
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
                   title={t('Source Namespaces')}
                   help={t('Number of allowed source namespaces for this AppProject.')}
                 >
-                  <Badge isRead color="grey">
-                    {sourceNamespacesCount}{' '}
-                    {sourceNamespacesCount !== 1 ? t('namespaces') : t('namespace')}
-                  </Badge>
+                  {sourceNamespacesCount}{' '}
+                  {sourceNamespacesCount === 1 ? t('namespace') : t('namespaces')}
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
                   title={t('Roles')}
                   help={t('Number of roles configured in this AppProject.')}
                 >
-                  <Badge isRead color="grey">
-                    {rolesCount} {rolesCount !== 1 ? t('roles') : t('role')}
-                  </Badge>
+                  <Link to={getTabUrl('roles')}>
+                    {rolesCount} {rolesCount === 1 ? t('role') : t('roles')}
+                  </Link>
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
                   title={t('Sync Windows')}
                   help={t('Number of sync windows configured in this AppProject.')}
                 >
-                  <Badge isRead color="grey">
+                  <Link to={getTabUrl('syncWindows')}>
                     {syncWindowsCount}{' '}
-                    {syncWindowsCount !== 1 ? t('sync windows') : t('sync window')}
-                  </Badge>
+                    {syncWindowsCount === 1 ? t('sync window') : t('sync windows')}
+                  </Link>
                 </DetailsDescriptionGroup>
 
                 {spec.permitOnlyProjectScopedClusters !== undefined && (

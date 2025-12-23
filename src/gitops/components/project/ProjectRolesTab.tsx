@@ -1,14 +1,25 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { Badge, EmptyState, EmptyStateBody, PageSection, Title } from '@patternfly/react-core';
+import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  Badge,
+  EmptyState,
+  EmptyStateBody,
+  Flex,
+  FlexItem,
+  PageSection,
+  Title,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { ThProps } from '@patternfly/react-table';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
 
 import { AppProjectKind, Role } from '../../models/AppProjectModel';
+import { ArgoServer, getArgoServerForProject } from '../../utils/gitops';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
+import { ArgoCDLink } from '../shared/ArgoCDLink/ArgoCDLink';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
 
 type ProjectRolesTabProps = RouteComponentProps<{ ns: string; name: string }> & {
@@ -17,6 +28,20 @@ type ProjectRolesTabProps = RouteComponentProps<{ ns: string; name: string }> & 
 
 const ProjectRolesTab: React.FC<ProjectRolesTabProps> = ({ obj }) => {
   const { t } = useGitOpsTranslation();
+  const [model] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
+  const [argoServer, setArgoServer] = React.useState<ArgoServer>({ host: '', protocol: '' });
+
+  React.useEffect(() => {
+    if (!obj || !model) return;
+    (async () => {
+      try {
+        const server = await getArgoServerForProject(model, obj);
+        setArgoServer(server);
+      } catch (err) {
+        console.warn('Error while fetching Argo CD Server url:', err);
+      }
+    })();
+  }, [model, obj]);
 
   const roles = React.useMemo(() => obj?.spec?.roles || [], [obj?.spec?.roles]);
 
@@ -49,11 +74,28 @@ const ProjectRolesTab: React.FC<ProjectRolesTabProps> = ({ obj }) => {
     </Tbody>
   );
 
+  const projectName = obj?.metadata?.name;
+  const argoCDUrl = argoServer.host
+    ? `${argoServer.protocol}://${argoServer.host}/settings/projects/${projectName}?tab=roles`
+    : '';
+
   return (
     <PageSection>
-      <Title headingLevel="h2" className="co-section-heading">
-        {t('Roles')}
-      </Title>
+      <Flex
+        justifyContent={{ default: 'justifyContentSpaceBetween' }}
+        alignItems={{ default: 'alignItemsCenter' }}
+      >
+        <FlexItem>
+          <Title headingLevel="h2" className="co-section-heading">
+            {t('Roles')}
+          </Title>
+        </FlexItem>
+        {argoCDUrl && (
+          <FlexItem>
+            <ArgoCDLink href={argoCDUrl} />
+          </FlexItem>
+        )}
+      </Flex>
       <GitOpsDataViewTable
         columns={columnsDV}
         rows={rows}
