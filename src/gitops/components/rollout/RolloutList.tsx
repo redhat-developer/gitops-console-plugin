@@ -34,6 +34,10 @@ import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/Dat
 import { CubesIcon, SearchIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
+import {
+  ShowOperandsInAllNamespacesRadioGroup,
+  useShowOperandsInAllNamespaces,
+} from '../shared/AllNamespaces';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
 
 import { useRolloutActionsProvider } from './hooks/useRolloutActionsProvider';
@@ -73,6 +77,12 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
   hideNameLabelFilters,
   showTitle,
 }) => {
+  const [showOperandsInAllNamespaces] = useShowOperandsInAllNamespaces();
+  const listAllNamespaces =
+    location.pathname?.includes('openshift-gitops-operator') && showOperandsInAllNamespaces;
+  if (listAllNamespaces) {
+    namespace = null;
+  }
   const [rollouts, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     groupVersionKind: {
@@ -80,14 +90,14 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
       kind: 'Rollout',
       version: 'v1alpha1',
     },
-    namespaced: true,
+    namespaced: !listAllNamespaces,
     namespace,
   });
   const columnSortConfig = React.useMemo(
     () =>
       [
         'name',
-        ...(!namespace ? ['namespace'] : []),
+        ...(!listAllNamespaces || !namespace ? ['namespace'] : []),
         'status',
         'pods',
         'labels',
@@ -95,7 +105,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
         'last-updated',
         'actions',
       ].map((key) => ({ key })),
-    [namespace],
+    [listAllNamespaces, namespace],
   );
 
   const { searchParams, sortBy, direction, getSortParams } =
@@ -153,7 +163,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
           <ErrorState
             titleText={t('Unable to load data')}
             bodyText={t(
-              'There was an error retrieving applications. Check your connection and reload the page.',
+              'There was an error retrieving rollouts. Check your connection and reload the page.',
             )}
           />
         </Td>
@@ -164,6 +174,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
   const topologyUrl = namespace
     ? '/topology/ns/' + namespace + '?view=graph'
     : '/topology/all-namespaces?view=graph';
+
   return (
     <>
       {showTitle == undefined && (
@@ -171,6 +182,11 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
           title={t('Argo Rollouts')}
           badge={
             location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
+          }
+          helpText={
+            location.pathname?.includes('openshift-gitops-operator') ? (
+              <ShowOperandsInAllNamespacesRadioGroup />
+            ) : null
           }
         >
           <ListPageCreate groupVersionKind={modelToRef(RolloutModel)}>
