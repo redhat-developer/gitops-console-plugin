@@ -42,6 +42,11 @@ import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDow
 import { isApplicationRefreshing } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
 
+import {
+  ShowOperandsInAllNamespacesRadioGroup,
+  useShowOperandsInAllNamespaces,
+} from './AllNamespaces';
+
 interface ApplicationProps {
   namespace: string;
   // Here to support plugging in view in Projects (i.e. show list of apps that belong to project)
@@ -77,6 +82,12 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   hideNameLabelFilters,
   showTitle,
 }) => {
+  const [showOperandsInAllNamespaces] = useShowOperandsInAllNamespaces();
+  const listAllNamespaces =
+    location.pathname?.includes('openshift-gitops-operator') && showOperandsInAllNamespaces;
+  if (listAllNamespaces) {
+    namespace = null;
+  }
   const [applications, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     groupVersionKind: {
@@ -84,7 +95,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       kind: 'Application',
       version: 'v1alpha1',
     },
-    namespaced: true,
+    namespaced: !listAllNamespaces,
     namespace,
   });
 
@@ -93,13 +104,13 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   const COLUMNS_KEYS_INDEXES = React.useMemo(
     () => [
       { key: 'name', index: 0 },
-      ...(!namespace ? [{ key: 'namespace', index: 1 }] : []),
+      ...(!listAllNamespaces || !namespace ? [{ key: 'namespace', index: 1 }] : []),
       { key: 'sync-status', index: 1 + initIndex },
       { key: 'health-status', index: 2 + initIndex },
       { key: 'revision', index: 3 + initIndex },
       { key: 'project', index: 4 + initIndex },
     ],
-    [namespace, initIndex],
+    [namespace, initIndex, listAllNamespaces],
   );
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -206,6 +217,11 @@ const ApplicationList: React.FC<ApplicationProps> = ({
           title={t('plugin__gitops-plugin~Applications')}
           badge={
             location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
+          }
+          helpText={
+            location.pathname?.includes('openshift-gitops-operator') ? (
+              <ShowOperandsInAllNamespacesRadioGroup />
+            ) : null
           }
           hideFavoriteButton={false}
         >
