@@ -38,6 +38,10 @@ import {
 import { ApplicationSetStatus } from '../../utils/constants';
 import { getAppSetGeneratorCount, getAppSetStatus } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
+import {
+  ShowOperandsInAllNamespacesRadioGroup,
+  useShowOperandsInAllNamespaces,
+} from './AllNamespaces';
 
 const formatCreationTimestamp = (timestamp: string): string => {
   if (!timestamp) return '-';
@@ -107,6 +111,12 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   hideNameLabelFilters,
   showTitle,
 }) => {
+  const [showOperandsInAllNamespaces] = useShowOperandsInAllNamespaces();
+  const listAllNamespaces =
+    location.pathname?.includes('openshift-gitops-operator') && showOperandsInAllNamespaces;
+  if (listAllNamespaces) {
+    namespace = null;
+  }
   const [applicationSets, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     groupVersionKind: {
@@ -114,7 +124,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
       kind: 'ApplicationSet',
       version: 'v1alpha1',
     },
-    namespaced: true,
+    namespaced: !listAllNamespaces,
     namespace,
   });
 
@@ -146,7 +156,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     columnIndex,
   });
 
-  const columnsDV = useColumnsDV(namespace, getSortParams);
+  const columnsDV = useColumnsDV(listAllNamespaces, namespace, getSortParams);
   const sortedApplicationSets = React.useMemo(() => {
     return sortData(
       applicationSets as ApplicationSetKind[],
@@ -157,7 +167,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     );
   }, [applicationSets, sortBy, direction, applications, appsLoaded]);
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, filters);
-  const rows = useApplicationSetRowsDV(filteredData, namespace, applications, appsLoaded);
+  const rows = useApplicationSetRowsDV(filteredData, listAllNamespaces, namespace, applications, appsLoaded);
 
   const empty = (
     <Tbody>
@@ -196,10 +206,15 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   return (
     <div>
       {showTitle == undefined && (
-        <ListPageHeader
+        <ListPageHeader 
           title={t('plugin__gitops-plugin~ApplicationSets')}
           badge={
             location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
+          }
+          helpText={
+            location.pathname?.includes('openshift-gitops-operator') ? (
+              <ShowOperandsInAllNamespacesRadioGroup />
+            ) : null
           }
         >
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>
@@ -239,6 +254,7 @@ const ApplicationSetActionsCell: React.FC<{ appSet: ApplicationSetKind }> = ({ a
 
 const useApplicationSetRowsDV = (
   applicationSetsList,
+  listAllNamespaces,
   namespace,
   applications,
   appsLoaded,
@@ -260,7 +276,7 @@ const useApplicationSetRowsDV = (
         id: appSet.metadata?.name,
         dataLabel: 'Name',
       },
-      ...(!namespace
+      ...(listAllNamespaces || !namespace
         ? [
             {
               cell: <ResourceLink kind="Namespace" name={appSet.metadata.namespace} />,
@@ -299,8 +315,8 @@ const useApplicationSetRowsDV = (
   return rows;
 };
 
-const useColumnsDV = (namespace, getSortParams) => {
-  const i: number = namespace ? 1 : 0;
+const useColumnsDV = (listAllNamespaces, namespace, getSortParams) => {
+  const i: number = namespace || listAllNamespaces ? 1 : 0;
   const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
@@ -313,7 +329,7 @@ const useColumnsDV = (namespace, getSortParams) => {
         sort: getSortParams('name', 0),
       },
     },
-    ...(!namespace
+    ...(listAllNamespaces || !namespace
       ? [
           {
             id: 'namespace',

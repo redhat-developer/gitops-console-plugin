@@ -39,6 +39,11 @@ import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDow
 import { isApplicationRefreshing } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
 
+import {
+  ShowOperandsInAllNamespacesRadioGroup,
+  useShowOperandsInAllNamespaces,
+} from './AllNamespaces';
+
 interface ApplicationProps {
   namespace: string;
   // Here to support plugging in view in Projects (i.e. show list of apps that belong to project)
@@ -74,6 +79,12 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   hideNameLabelFilters,
   showTitle,
 }) => {
+  const [showOperandsInAllNamespaces] = useShowOperandsInAllNamespaces();
+  const listAllNamespaces =
+    location.pathname?.includes('openshift-gitops-operator') && showOperandsInAllNamespaces;
+  if (listAllNamespaces) {
+    namespace = null;
+  }
   const [applications, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     groupVersionKind: {
@@ -81,7 +92,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       kind: 'Application',
       version: 'v1alpha1',
     },
-    namespaced: true,
+    namespaced: !listAllNamespaces,
     namespace,
   });
 
@@ -101,13 +112,13 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     columnIndex,
   });
 
-  const columnsDV = useColumnsDV(namespace, getSortParams);
+  const columnsDV = useColumnsDV(listAllNamespaces, namespace, getSortParams);
   const sortedApplications = React.useMemo(() => {
     return sortData(applications, sortBy, direction);
   }, [applications, sortBy, direction]);
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplications, filters);
-  const rows = useApplicationRowsDV(filteredData, namespace);
+  const rows = useApplicationRowsDV(filteredData, listAllNamespaces, namespace);
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
@@ -146,6 +157,11 @@ const ApplicationList: React.FC<ApplicationProps> = ({
           title={t('plugin__gitops-plugin~Applications')}
           badge={
             location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
+          }
+          helpText={
+            location.pathname?.includes('openshift-gitops-operator') ? (
+              <ShowOperandsInAllNamespacesRadioGroup />
+            ) : null
           }
           hideFavoriteButton={false}
         >
@@ -243,7 +259,7 @@ const ApplicationActionsCell: React.FC<{ app: ApplicationKind }> = ({ app }) => 
   );
 };
 
-const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
+const useApplicationRowsDV = (applicationsList, listAllNamespaces, namespace): DataViewTr[] => {
   const rows: DataViewTr[] = [];
   applicationsList.forEach((app, index) => {
     rows.push([
@@ -265,7 +281,7 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         id: app.metadata?.name,
         dataLabel: 'Name',
       },
-      ...(!namespace
+      ...(!namespace || listAllNamespaces
         ? [
             {
               cell: <ResourceLink kind="Namespace" name={app.metadata.namespace} />,
@@ -325,8 +341,8 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
   return rows;
 };
 
-const useColumnsDV = (namespace, getSortParams) => {
-  const i: number = namespace ? 1 : 0;
+const useColumnsDV = (listAllNamespaces, namespace, getSortParams) => {
+  const i: number = namespace || listAllNamespaces ? 1 : 0;
   const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
@@ -339,7 +355,7 @@ const useColumnsDV = (namespace, getSortParams) => {
         sort: getSortParams('name', 0),
       },
     },
-    ...(!namespace
+    ...(listAllNamespaces || !namespace
       ? [
           {
             id: 'namespace',
