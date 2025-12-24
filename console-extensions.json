@@ -591,6 +591,24 @@
     }
   },
   {
+    "type": "console.page/resource/details",
+    "flags": {
+        "required": [
+            "APPLICATION"
+        ]
+    },
+    "properties": {
+        "model": {
+            "group": "argoproj.io",
+            "kind": "AppProject",
+            "version": "v1alpha1"
+        },
+        "component": {
+            "$codeRef": "ProjectDetailsPage"
+        }
+    }
+  },
+  {
     "type": "console.page/resource/search",
     "properties": {
       "model": {

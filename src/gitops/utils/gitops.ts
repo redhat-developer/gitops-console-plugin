@@ -88,7 +88,52 @@ export const getArgoServer = async (model, app: ApplicationKind): Promise<ArgoSe
     if (argoServerURL) {
       info.host = argoServerURL['spec']['host'];
     } else {
-      info.host = 'argocd-server-' + ns() + location.host.substring(location.host.indexOf('.apps'));
+      const appsIndex = location.host.indexOf('.apps');
+      info.host =
+        'argocd-server-' + ns() + (appsIndex !== -1 ? location.host.substring(appsIndex) : '');
+    }
+    return info;
+  } catch (e) {
+    console.warn('Error while fetching Argo CD Server url:', e);
+    return info;
+  }
+};
+
+export const getArgoServerForProject = async (
+  model,
+  project: { metadata?: { namespace?: string; labels?: Record<string, string> } },
+): Promise<ArgoServer> => {
+  const info: ArgoServer = {
+    host: '',
+    protocol: '',
+  };
+
+  const ns = (): string => {
+    if (project.metadata?.labels && project.metadata.labels[labelControllerNamespaceKey])
+      return project.metadata.labels[labelControllerNamespaceKey];
+    else return project.metadata?.namespace || '';
+  };
+
+  try {
+    const [argoServerURL] = await k8sListItems<K8sResourceCommon>({
+      model: model,
+      queryParams: {
+        ns: ns(),
+        labelSelector: {
+          matchLabels: {
+            'app.kubernetes.io/part-of': 'argocd',
+          },
+        },
+      },
+    });
+    info.protocol = 'https';
+    if (argoServerURL && argoServerURL['spec']?.['host']) {
+      info.host = argoServerURL['spec']['host'];
+    } else {
+      const appsIndex = location.host.indexOf('.apps');
+      if (appsIndex !== -1) {
+        info.host = 'argocd-server-' + ns() + location.host.substring(appsIndex);
+      }
     }
     return info;
   } catch (e) {
