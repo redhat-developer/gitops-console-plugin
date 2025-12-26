@@ -238,9 +238,9 @@
     fastq "^1.6.0"
 
 "@openshift-console/dynamic-plugin-sdk-internal@^4.19.0-prerelease.2":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@openshift-console/dynamic-plugin-sdk-internal/-/dynamic-plugin-sdk-internal-4.19.0.tgz#df9ec5191d002f57250064c40bda6b8f0528bad9"
-  integrity sha512-OnC/2CV/oejtOzXQujYk/0JGSPuFjR6F51KsKKPelX9KqF+A2G2GW/yESR3n/FkGMtXxl6ZCUXUBCDMLXVRH/g==
+  version "4.20.0"
+  resolved "https://registry.yarnpkg.com/@openshift-console/dynamic-plugin-sdk-internal/-/dynamic-plugin-sdk-internal-4.20.0.tgz#938702cf6e79dbf732dddb98a24c22680a0b049c"
+  integrity sha512-QEV0XiydJBA33gtVz1g92HLTvG1n99igQ3FR+UBr+ufzl3DvW0hwXH+EZgskff3WBVnEHWlOAI2SGy8ujdfdjg==
   dependencies:
     "@patternfly/react-topology" "^6.2.0"
     immutable "3.x"
