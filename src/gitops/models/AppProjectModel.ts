@@ -57,6 +57,7 @@ export type AppProjectKind = K8sResourceCommon & {
     namespaceResourceBlacklist?: ResourceAllowDeny[];
     roles?: Role[];
     syncWindows?: SyncWindow[];
+    permitOnlyProjectScopedClusters?: boolean;
   };
   status?: { [key: string]: any };
 };

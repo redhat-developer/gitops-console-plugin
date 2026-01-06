@@ -1,0 +1,22 @@
+// Prevent vertical text wrapping in Name and Namespace columns
+.pf-c-table tbody td[data-label='Name'],
+.pf-c-table tbody td[data-label='Namespace'] {
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  a,
+  .co-resource-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100%;
+  }
+}
+
+// Description column text truncation
+.pf-c-table tbody td[data-label='Description'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

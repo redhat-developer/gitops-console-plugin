@@ -20,6 +20,7 @@ const metadata: ConsolePluginBuildMetadata = {
     ApplicationSetList: "./gitops/components/application/ApplicationSetListTab.tsx",
     ApplicationSetDetailsPage: "./gitops/components/appset/ApplicationSetDetailsPage.tsx",
     ProjectList: "./gitops/components/project/ProjectListTab.tsx",
+    ProjectDetailsPage: "./gitops/components/project/ProjectDetailsPage.tsx",
     yamlTemplates: "./gitops/templates/index.ts"
   }
 };
