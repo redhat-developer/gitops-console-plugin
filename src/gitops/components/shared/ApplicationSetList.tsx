@@ -39,6 +39,11 @@ import { ApplicationSetStatus } from '../../utils/constants';
 import { getAppSetGeneratorCount, getAppSetStatus } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
 
+import {
+  ShowOperandsInAllNamespacesRadioGroup,
+  useShowOperandsInAllNamespaces,
+} from './AllNamespaces';
+
 const formatCreationTimestamp = (timestamp: string): string => {
   if (!timestamp) return '-';
   const date = new Date(timestamp);
@@ -107,6 +112,12 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   hideNameLabelFilters,
   showTitle,
 }) => {
+  const [showOperandsInAllNamespaces] = useShowOperandsInAllNamespaces();
+  const listAllNamespaces =
+    location.pathname?.includes('openshift-gitops-operator') && showOperandsInAllNamespaces;
+  if (listAllNamespaces) {
+    namespace = null;
+  }
   const [applicationSets, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     groupVersionKind: {
@@ -114,7 +125,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
       kind: 'ApplicationSet',
       version: 'v1alpha1',
     },
-    namespaced: true,
+    namespaced: !listAllNamespaces,
     namespace,
   });
 
@@ -136,13 +147,13 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   const COLUMNS_KEYS_INDEXES = React.useMemo(
     () => [
       { key: 'name', index: 0 },
-      ...(!namespace ? [{ key: 'namespace', index: 1 }] : []),
+      ...(!listAllNamespaces || !namespace ? [{ key: 'namespace', index: 1 }] : []),
       { key: 'status', index: 1 + initIndex },
       { key: 'generated-apps', index: 2 + initIndex },
       { key: 'generators', index: 3 + initIndex },
       { key: 'created-at', index: 4 + initIndex },
     ],
-    [namespace, initIndex],
+    [namespace, initIndex, listAllNamespaces],
   );
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -267,6 +278,11 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
           title={t('ApplicationSets')}
           badge={
             location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
+          }
+          helpText={
+            location.pathname?.includes('openshift-gitops-operator') ? (
+              <ShowOperandsInAllNamespacesRadioGroup />
+            ) : null
           }
           hideFavoriteButton={false}
         >
