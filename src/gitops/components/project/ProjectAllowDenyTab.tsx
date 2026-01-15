@@ -7,8 +7,6 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Flex,
-  FlexItem,
   Grid,
   GridItem,
   List,
@@ -16,16 +14,15 @@ import {
   PageSection,
   PageSectionVariants,
   Panel,
-  Popover,
   Title,
 } from '@patternfly/react-core';
-import { QuestionCircleIcon } from '@patternfly/react-icons';
 
 import { AppProjectKind } from '../../models/AppProjectModel';
 import { ArgoServer, getArgoServerForProject } from '../../utils/gitops';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
 import { getDisplayValue, isDenyRule } from '../../utils/project-utils';
 import { ArgoCDLink } from '../shared/ArgoCDLink/ArgoCDLink';
+import { FieldLevelHelp } from '../shared/FieldLevelHelp';
 
 import DestinationsList from './DestinationsList';
 import ResourceAllowDenyList from './ResourceAllowDenyList';
@@ -98,40 +95,17 @@ const ProjectAllowDenyTab: React.FC<ProjectAllowDenyTabProps> = ({ obj }) => {
 
   return (
     <>
-      <PageSection variant={PageSectionVariants.default} hasShadowTop={true}>
-        <Flex
-          justifyContent={{ default: 'justifyContentSpaceBetween' }}
-          alignItems={{ default: 'alignItemsCenter' }}
-        >
-          <FlexItem>
-            <Flex alignItems={{ default: 'alignItemsCenter' }}>
-              <FlexItem>
-                <Title headingLevel="h2" className="co-section-heading">
-                  {t('Allowed Sources')}
-                </Title>
-              </FlexItem>
-              <FlexItem>
-                <Popover
-                  headerContent={<div>{t('Allowed Sources')}</div>}
-                  bodyContent={<div>{t('Allowed Sources help')}</div>}
-                >
-                  <QuestionCircleIcon
-                    style={{
-                      marginLeft: '8px',
-                      cursor: 'pointer',
-                      color: 'var(--pf-v5-global--Color--200)',
-                    }}
-                  />
-                </Popover>
-              </FlexItem>
-            </Flex>
-          </FlexItem>
-          {argoCDUrl && (
-            <FlexItem>
-              <ArgoCDLink href={argoCDUrl} />
-            </FlexItem>
-          )}
-        </Flex>
+      <PageSection
+        variant={PageSectionVariants.default}
+        className="co-m-pane__body co-m-pane__body--section-heading"
+        hasShadowTop={true}
+      >
+        <FieldLevelHelp title={t('Allowed Sources')} helpText={t('Allowed Sources help')} />
+        {argoCDUrl && (
+          <div style={{ marginTop: '8px' }}>
+            <ArgoCDLink href={argoCDUrl} />
+          </div>
+        )}
         <Panel className="pf-v5-u-background-color-200 pf-v5-u-p-md">
           <Grid hasGutter>
             <GridItem span={12} md={6}>
@@ -154,28 +128,15 @@ const ProjectAllowDenyTab: React.FC<ProjectAllowDenyTabProps> = ({ obj }) => {
         </Panel>
       </PageSection>
 
-      <PageSection variant={PageSectionVariants.default} hasShadowTop={true}>
-        <Flex alignItems={{ default: 'alignItemsCenter' }}>
-          <FlexItem>
-            <Title headingLevel="h2" className="co-section-heading">
-              {t('Allowed Destinations')}
-            </Title>
-          </FlexItem>
-          <FlexItem>
-            <Popover
-              headerContent={<div>{t('Allowed Destinations')}</div>}
-              bodyContent={<div>{t('Allowed Destinations help')}</div>}
-            >
-              <QuestionCircleIcon
-                style={{
-                  marginLeft: '8px',
-                  cursor: 'pointer',
-                  color: 'var(--pf-v5-global--Color--200)',
-                }}
-              />
-            </Popover>
-          </FlexItem>
-        </Flex>
+      <PageSection
+        variant={PageSectionVariants.default}
+        className="co-m-pane__body co-m-pane__body--section-heading"
+        hasShadowTop={true}
+      >
+        <FieldLevelHelp
+          title={t('Allowed Destinations')}
+          helpText={t('Allowed Destinations help')}
+        />
         <Panel className="pf-v5-u-background-color-200 pf-v5-u-p-md">
           <Grid hasGutter>
             <GridItem>
@@ -189,28 +150,15 @@ const ProjectAllowDenyTab: React.FC<ProjectAllowDenyTabProps> = ({ obj }) => {
         </Panel>
       </PageSection>
 
-      <PageSection hasShadowTop={true} variant={PageSectionVariants.default}>
-        <Flex alignItems={{ default: 'alignItemsCenter' }}>
-          <FlexItem>
-            <Title headingLevel="h2" className="co-section-heading">
-              {t('Resource Allow/Deny Lists')}
-            </Title>
-          </FlexItem>
-          <FlexItem>
-            <Popover
-              headerContent={<div>{t('Resource Allow/Deny Lists')}</div>}
-              bodyContent={<div>{t('Resource Allow/Deny Lists help')}</div>}
-            >
-              <QuestionCircleIcon
-                style={{
-                  marginLeft: '8px',
-                  cursor: 'pointer',
-                  color: 'var(--pf-v5-global--Color--200)',
-                }}
-              />
-            </Popover>
-          </FlexItem>
-        </Flex>
+      <PageSection
+        hasShadowTop={true}
+        variant={PageSectionVariants.default}
+        className="co-m-pane__body co-m-pane__body--section-heading"
+      >
+        <FieldLevelHelp
+          title={t('Resource Allow/Deny Lists')}
+          helpText={t('Resource Allow/Deny Lists help')}
+        />
         <Panel className="pf-v5-u-background-color-200 pf-v5-u-p-md">
           <Grid hasGutter>
             <GridItem span={12} md={6} lg={3}>

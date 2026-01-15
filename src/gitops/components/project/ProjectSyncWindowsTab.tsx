@@ -2,15 +2,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  Badge,
-  EmptyState,
-  EmptyStateBody,
-  Flex,
-  FlexItem,
-  PageSection,
-  Title,
-} from '@patternfly/react-core';
+import { Badge, EmptyState, EmptyStateBody, PageSection, Title } from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { ThProps } from '@patternfly/react-table';
@@ -95,21 +87,10 @@ const ProjectSyncWindowsTab: React.FC<ProjectSyncWindowsTabProps> = ({ obj }) =>
 
   return (
     <PageSection>
-      <Flex
-        justifyContent={{ default: 'justifyContentSpaceBetween' }}
-        alignItems={{ default: 'alignItemsCenter' }}
-      >
-        <FlexItem>
-          <Title headingLevel="h2" className="co-section-heading">
-            {t('Sync Windows')}
-          </Title>
-        </FlexItem>
-        {argoCDUrl && (
-          <FlexItem>
-            <ArgoCDLink href={argoCDUrl} />
-          </FlexItem>
-        )}
-      </Flex>
+      <Title headingLevel="h2" className="co-section-heading">
+        {t('Sync Windows')}
+      </Title>
+      {argoCDUrl && <ArgoCDLink href={argoCDUrl} />}
       <GitOpsDataViewTable
         columns={columnsDV}
         rows={rows}
