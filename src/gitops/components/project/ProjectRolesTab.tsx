@@ -6,10 +6,9 @@ import {
   Badge,
   EmptyState,
   EmptyStateBody,
-  Flex,
-  FlexItem,
   PageSection,
   Title,
+  Tooltip,
 } from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
@@ -21,6 +20,43 @@ import { ArgoServer, getArgoServerForProject } from '../../utils/gitops';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
 import { ArgoCDLink } from '../shared/ArgoCDLink/ArgoCDLink';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+
+/**
+ * Parses an Argo CD policy string and returns a formatted React element for tooltip
+ * Policy format: p, <subject>, <resource>, <action>, <object>, <effect>
+ * Example: "p, proj:myproject:myrole, applications, get, myproject/*, allow"
+ */
+const formatPolicyDescription = (policy: string, t: (key: string) => string): React.ReactNode => {
+  const parts = policy.split(',').map((p) => p.trim());
+
+  // If it doesn't follow the standard format, return as-is
+  if (parts.length < 6 || parts[0] !== 'p') {
+    return <div>{policy}</div>;
+  }
+
+  const [, subject, resource, action, object, effect] = parts;
+
+  return (
+    <div style={{ textAlign: 'left', maxWidth: '350px' }}>
+      <div style={{ marginBottom: '4px' }}>
+        <strong>{t('Policy Role')}:</strong> {subject}
+      </div>
+      <div style={{ marginBottom: '4px' }}>
+        <strong>{t('Policy Resource Type')}:</strong> {resource}
+      </div>
+      <div style={{ marginBottom: '4px' }}>
+        <strong>{t('Policy Permission')}:</strong> {action}
+      </div>
+      <div style={{ marginBottom: '4px' }}>
+        <strong>{t('Policy Object')}:</strong> {object}
+      </div>
+      <div>
+        <strong>{t('Policy Effect')}:</strong>{' '}
+        {effect === 'allow' ? `✅ ${t('Allow')}` : `❌ ${t('Deny')}`}
+      </div>
+    </div>
+  );
+};
 
 type ProjectRolesTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: AppProjectKind;
@@ -81,21 +117,10 @@ const ProjectRolesTab: React.FC<ProjectRolesTabProps> = ({ obj }) => {
 
   return (
     <PageSection>
-      <Flex
-        justifyContent={{ default: 'justifyContentSpaceBetween' }}
-        alignItems={{ default: 'alignItemsCenter' }}
-      >
-        <FlexItem>
-          <Title headingLevel="h2" className="co-section-heading">
-            {t('Roles')}
-          </Title>
-        </FlexItem>
-        {argoCDUrl && (
-          <FlexItem>
-            <ArgoCDLink href={argoCDUrl} />
-          </FlexItem>
-        )}
-      </Flex>
+      <Title headingLevel="h2" className="co-section-heading">
+        {t('Roles')}
+      </Title>
+      {argoCDUrl && <ArgoCDLink href={argoCDUrl} />}
       <GitOpsDataViewTable
         columns={columnsDV}
         rows={rows}
@@ -242,11 +267,16 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
         cell:
           role.policies && role.policies.length > 0 ? (
             <div>
-              {role.policies.map((policy, idx) => (
-                <Badge key={idx} isRead color="grey" className="pf-u-mr-sm pf-u-mb-sm">
-                  {policy}
-                </Badge>
-              ))}
+              {role.policies.map((policy, idx) => {
+                const formattedDescription = formatPolicyDescription(policy, t);
+                return (
+                  <Tooltip key={idx} content={formattedDescription}>
+                    <Badge isRead color="grey" className="pf-u-mr-sm pf-u-mb-sm">
+                      {policy}
+                    </Badge>
+                  </Tooltip>
+                );
+              })}
             </div>
           ) : (
             '-'
