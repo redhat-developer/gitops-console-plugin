@@ -52,7 +52,23 @@ const formatPolicyDescription = (policy: string, t: (key: string) => string): Re
       </div>
       <div>
         <strong>{t('Policy Effect')}:</strong>{' '}
-        {effect === 'allow' ? `✅ ${t('Allow')}` : `❌ ${t('Deny')}`}
+        {effect === 'allow' ? (
+          <>
+            <i
+              className="fas fa-check-circle"
+              style={{ color: 'var(--pf-v5-global--success-color--100)' }}
+            />{' '}
+            {t('Allow')}
+          </>
+        ) : (
+          <>
+            <i
+              className="fas fa-times-circle"
+              style={{ color: 'var(--pf-v5-global--danger-color--100)' }}
+            />{' '}
+            {t('Deny')}
+          </>
+        )}
       </div>
     </div>
   );
