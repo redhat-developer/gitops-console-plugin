@@ -439,7 +439,7 @@
     react-dropzone "^14.3.5"
     tslib "^2.8.1"
 
-"@patternfly/react-core@^6.2.0", "@patternfly/react-core@^6.2.2":
+"@patternfly/react-core@^6.2.0", "@patternfly/react-core@^6.4.0":
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-6.4.0.tgz#a2c0b60c1a4f34f708d079e92e86b007b0c88c3c"
   integrity sha512-zMgJmcFohp2FqgAoZHg7EXZS7gnaFESquk0qIavemYI0FsqspVlzV2/PUru7w+86+jXfqebRhgubPRsv1eJwEg==
@@ -480,7 +480,7 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-6.1.0.tgz#4f982f2b8dc0b9366acca1170fcd52fa8c16b85f"
   integrity sha512-V1w/j19YmOgvh72IRRf1p07k+u4M5+9P+o/IxunlF0fWzLDX4Hf+utBI11A8cRfUzpQN7eLw/vZIS3BLM8Ge3Q==
 
-"@patternfly/react-icons@^6.2.0", "@patternfly/react-icons@^6.2.2":
+"@patternfly/react-icons@^6.2.0":
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-6.2.2.tgz#6b19359df7618ea4ec6aa6da3af2a9a287666f23"
   integrity sha512-XkBwzuV/uiolX+T6QgB3RIqphM1m+vAZjAe3McYtyY22j1rsOdlWDE4RtRrJ1q7EoIZwyZHj0h8T9vMfUsLn4Q==
@@ -499,11 +499,6 @@
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-6.1.0.tgz#e8aa12c6b1417ba1a739ea435bc02f7f8d516132"
   integrity sha512-JQ3zIl5SFiSB0YWVYibcUwgZdsp6Wn8hkfZ7KhtCjHFccSDdJexPOXVV1O9f2h4PfxTlY3YntZ81ZsguBx/Q7A==
-
-"@patternfly/react-styles@^6.2.2":
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-6.2.2.tgz#ff6d31266ba03df9be8095f189d1399a8cc3b66d"
-  integrity sha512-rncRDq66H8VnLyb9DrHHlZtPddlpNL9+W0XuQC0L7F6p78hOwSZmoGTW2Vq8/wJplDj8h/61qRpfRF9VEYPW0g==
 
 "@patternfly/react-styles@^6.3.0":
   version "6.3.0"
@@ -528,14 +523,14 @@
     tslib "^2.8.1"
 
 "@patternfly/react-table@^6.2.0":
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-6.2.2.tgz#9ca4f1b4e5558cafd712c66a599b097a475acb30"
-  integrity sha512-7CxVKhnpA+f8dLJ0hVvzZOe4Djx/nE+w70ipeAHf4Yi5JwfDWmbK97YvjYPfamp/bsXTLtPcK2n4AoY5DQX6Pg==
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-6.4.0.tgz#5bfa35f97000920749e38bbdd0a4108679860877"
+  integrity sha512-yv0sFOLGts8a2q9C1xUegjp50ayYyVRe0wKjMf+aMSNIK8sVYu8qu0yfBsCDybsUCldue7+qsYKRLFZosTllWQ==
   dependencies:
-    "@patternfly/react-core" "^6.2.2"
-    "@patternfly/react-icons" "^6.2.2"
-    "@patternfly/react-styles" "^6.2.2"
-    "@patternfly/react-tokens" "^6.2.2"
+    "@patternfly/react-core" "^6.4.0"
+    "@patternfly/react-icons" "^6.4.0"
+    "@patternfly/react-styles" "^6.4.0"
+    "@patternfly/react-tokens" "^6.4.0"
     lodash "^4.17.21"
     tslib "^2.8.1"
 
@@ -548,11 +543,6 @@
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-6.1.0.tgz#c2a64e68568bde81e56f4b5a8f9ac3ad8cd06e8a"
   integrity sha512-t1UcHbOa4txczTR5UlnG4XcAAdnDSfSlCaOddw/HTqRF59pn2ks2JUu9sfnFRZ8SiAAxKRiYdX5bT7Mf4R24+w==
-
-"@patternfly/react-tokens@^6.2.2":
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-6.2.2.tgz#4ab12cf77fab60a730f52aed2433dbf892d47509"
-  integrity sha512-2GRWDPBTrcTlGNFc5NPJjrjEVU90RpgcGX/CIe2MplLgM32tpVIkeUtqIoJPLRk5GrbhyFuHJYRU+O93gU4o3Q==
 
 "@patternfly/react-tokens@^6.3.0":
   version "6.3.0"
@@ -6332,10 +6322,15 @@ lodash.truncate@^4.4.2:
   resolved "https://registry.yarnpkg.com/lodash.truncate/-/lodash.truncate-4.4.2.tgz#5a350da0b1113b837ecfffd5812cbe58d6eae193"
   integrity sha512-jttmRe7bRse52OsWIMDLaXxWqRAmtIUccAQ3garviCqJjafXOfNMO0yMfNpdD6zbGaTU0P5Nz7e7gAT6cKmJRw==
 
-lodash@^4.17.14, lodash@^4.17.21, lodash@^4.17.4:
+lodash@^4.17.14, lodash@^4.17.4:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
+lodash@^4.17.21:
+  version "4.17.23"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.23.tgz#f113b0378386103be4f6893388c73d0bde7f2c5a"
+  integrity sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==
 
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.2.0, loose-envify@^1.3.1, loose-envify@^1.4.0:
   version "1.4.0"
@@ -8923,9 +8918,9 @@ synckit@^0.9.1:
     tslib "^2.6.2"
 
 tabbable@^6.2.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-6.3.0.tgz#2e0e6163935387cdeacd44e9334616ca0115a8d3"
-  integrity sha512-EIHvdY5bPLuWForiR/AN2Bxngzpuwn1is4asboytXtpTgsArc+WmSJKVLlhdh71u7jFcryDqB2A8lQvj78MkyQ==
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-6.4.0.tgz#36eb7a06d80b3924a22095daf45740dea3bf5581"
+  integrity sha512-05PUHKSNE8ou2dwIxTngl4EzcnsCDZGJ/iCLtDflR/SHB/ny14rXc+qU5P4mG9JkusiV7EivzY9Mhm55AzAvCg==
 
 table@^6.0.9:
   version "6.9.0"
