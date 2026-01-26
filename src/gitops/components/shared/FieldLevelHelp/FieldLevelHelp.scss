@@ -1,0 +1,24 @@
+.co-field-level-help {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  min-width: auto !important;
+  color: var(--pf-v5-global--Color--100) !important;
+  
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: transparent !important;
+    border: none !important;
+    color: var(--pf-v5-global--Color--100) !important;
+  }
+  
+  .pf-v6-c-button__icon {
+    margin: 0 !important;
+  }
+  
+  .co-field-level-help_icon {
+    color: #73bcf7 !important;
+    fill: #73bcf7 !important;
+  }
+}
