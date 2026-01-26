@@ -135,7 +135,7 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
       );
     } else if (obj.revisions && app.spec.sources) {
       const rv: React.ReactNode[] = [];
-      obj.revisions.forEach((revision, index) => {
+      obj.revisions?.forEach((revision, index) => {
         rv.push(
           <>
             <Revision
