@@ -406,9 +406,7 @@
     history "^5.0.0"
 
 "@patternfly/react-charts@^8.2.0":
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-charts/-/react-charts-8.4.0.tgz#2671542c91c714ecbec03798cfb2adab81bd44af"
-  integrity sha512-lxfH2gVDg4Pd+D6TQ2SSqc5fQPk1UvhHbuP+7YZJdPhk2PzhhbaT3CE+kp5ZEU2y/lJb8L5kZ5lOk8tvPn6PQw==
+  version "8.4.1"
   dependencies:
     "@patternfly/react-styles" "^6.4.0"
     "@patternfly/react-tokens" "^6.4.0"
