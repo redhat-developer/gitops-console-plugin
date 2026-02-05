@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { K8sResourceCommon, ResourceEventStream } from '@openshift-console/dynamic-plugin-sdk';
+import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { PageSection, Title } from '@patternfly/react-core';
+import { FleetResourceEventStream } from '@stolostron/multicluster-sdk';
 
 type EventsTabProps = RouteComponentProps<{
   ns: string;
@@ -17,7 +18,7 @@ const EventsTab: React.FC<EventsTabProps> = ({ obj }) => {
       <PageSection>
         <Title headingLevel="h2">{obj.kind} events</Title>
       </PageSection>
-      {obj && <ResourceEventStream resource={obj} />}
+      {obj && <FleetResourceEventStream resource={obj} />}
     </>
   );
 };

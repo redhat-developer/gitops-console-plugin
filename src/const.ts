@@ -10,3 +10,5 @@ export const fetchDataFrequency = 30;
 export const FLAG_GITOPS_DYNAMIC = 'GITOPS_DYNAMIC';
 
 export const FLAG_GITOPS_ENABLE_TOPOLOGY = 'GITOPS_ENABLE_TOPOLOGY';
+
+export const FLAG_GITOPS_MULTICLUSTER = 'GITOPS_MULTICLUSTER';
