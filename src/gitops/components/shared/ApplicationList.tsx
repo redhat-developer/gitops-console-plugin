@@ -308,13 +308,13 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
   const rows: DataViewTr[] = [];
   applicationsList.forEach((app, index) => {
     let sources: ApplicationSource[];
-    let revisions: string[];
+    let revisions: string[] = [];
     if (app.spec?.source) {
       sources = [app.spec?.source];
       revisions = [app.status?.sync?.revision];
     } else if (app.spec?.sources) {
-      sources = app.spec.sources;
-      revisions = app.status?.sync?.revisions;
+      sources = app.spec.sources || [];
+      revisions = app.status?.sync?.revisions || [];
     } else {
       //Should never fall here since there always has to be a source or sources
       sources = [];
@@ -371,11 +371,11 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         id: app?.status?.sync?.revision,
         cell: (
           <>
-            {sources[0].targetRevision ? sources[0].targetRevision : 'HEAD'}&nbsp;
+            {sources[0]?.targetRevision ? sources[0].targetRevision : 'HEAD'}&nbsp;
             {!(app.status?.sourceType == 'Helm' && sources[0].chart) && (
               <RevisionFragment
                 revision={revisions[0] || ''}
-                repoURL={sources[0].repoURL}
+                repoURL={sources[0]?.repoURL || ''}
                 helm={app.status?.sourceType == 'Helm' && sources[0].chart ? true : false}
                 revisionExtra={revisions.length > 1 && ' and ' + (revisions.length - 1) + ' more'}
               />
