@@ -217,18 +217,22 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
                     <FlexItem>
                       <SyncStatus status={obj.status?.sync?.status || ''} />
                     </FlexItem>
-                    <FlexItem>
-                      <PfLabel>
-                        <Revision
-                          revision={revisions[0] || ''}
-                          repoURL={sources[0].repoURL}
-                          helm={obj.status?.sourceType == 'Helm' && sources[0].chart ? true : false}
-                          revisionExtra={
-                            revisions.length > 1 && ' and ' + (revisions.length - 1) + ' more'
-                          }
-                        />
-                      </PfLabel>
-                    </FlexItem>
+                    {sources && sources.length && revisions && revisions.length && (
+                      <FlexItem>
+                        <PfLabel>
+                          <Revision
+                            revision={revisions[0] || ''}
+                            repoURL={sources[0].repoURL}
+                            helm={
+                              obj.status?.sourceType == 'Helm' && sources[0].chart ? true : false
+                            }
+                            revisionExtra={
+                              revisions.length > 1 && ' and ' + (revisions.length - 1) + ' more'
+                            }
+                          />
+                        </PfLabel>
+                      </FlexItem>
+                    )}
                   </Flex>
                 </DetailsDescriptionGroup>
 
@@ -254,7 +258,9 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
                   title={t('Target Revision')}
                   help={t('The specified revision for the Application.')}
                 >
-                  {sources[0].targetRevision ? sources[0].targetRevision : 'HEAD'}
+                  {sources && sources.length && sources[0].targetRevision
+                    ? sources[0].targetRevision
+                    : 'HEAD'}
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup

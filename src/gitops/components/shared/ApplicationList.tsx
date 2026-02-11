@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom-v5-compat';
 import DevPreviewBadge from 'src/components/import/badges/DevPreviewBadge';
 
+import { useMulticlusterK8sWatchResource } from '@gitops/hooks/useMuticlusterK8sWatchResource';
 import {
   Action,
   K8sResourceCommon,
@@ -11,7 +13,6 @@ import {
   ListPageHeader,
   ResourceLink,
   RowFilter,
-  useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
@@ -19,6 +20,11 @@ import { EmptyState, EmptyStateBody, Flex, FlexItem, Spinner } from '@patternfly
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
+import {
+  FleetResourceLink,
+  useHubClusterName,
+  useIsFleetAvailable,
+} from '@stolostron/multicluster-sdk';
 
 import { useApplicationActionsProvider } from '../..//hooks/useApplicationActionsProvider';
 import RevisionFragment from '../..//Revision/Revision';
@@ -83,7 +89,8 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   if (listAllNamespaces) {
     namespace = null;
   }
-  const [applications, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
+
+  const [applications, loaded, loadError] = useMulticlusterK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     groupVersionKind: {
       group: 'argoproj.io',
@@ -305,6 +312,8 @@ const ApplicationActionsCell: React.FC<{ app: ApplicationKind }> = ({ app }) => 
 };
 
 const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
+  const isFleetAvailable = useIsFleetAvailable();
+  const [hubClusterName] = useHubClusterName();
   const rows: DataViewTr[] = [];
   applicationsList.forEach((app, index) => {
     let sources: ApplicationSource[];
@@ -324,21 +333,47 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
       {
         cell: (
           <div>
-            <ResourceLink
-              groupVersionKind={modelToGroupVersionKind(ApplicationModel)}
-              name={app.metadata.name}
-              namespace={app.metadata.namespace}
-              inline={true}
-            >
-              <span className="pf-u-pl-sm">
-                {isApplicationRefreshing(app) && <Spinner size="sm" />}
-              </span>
-            </ResourceLink>
+            {app.cluster !== hubClusterName ? (
+              <Link
+                to={`/k8s/cluster/${app.cluster}/ns/${app.metadata.namespace}/argoproj.io~v1alpha1~Application/${app.metadata.name}`}
+              >
+                {app.metadata.name}
+              </Link>
+            ) : (
+              <ResourceLink
+                groupVersionKind={modelToGroupVersionKind(ApplicationModel)}
+                name={app.metadata.name}
+                namespace={app.metadata.namespace}
+                // cluster={app.cluster}
+                inline={true}
+              >
+                <span className="pf-u-pl-sm">
+                  {isApplicationRefreshing(app) && <Spinner size="sm" />}
+                </span>
+              </ResourceLink>
+            )}
           </div>
         ),
         id: app.metadata?.name,
         dataLabel: 'Name',
       },
+      ...(isFleetAvailable
+        ? [
+            {
+              cell: (
+                <FleetResourceLink
+                  groupVersionKind={{
+                    kind: 'ManagedCluster',
+                    group: 'cluster.open-cluster-management.io',
+                    version: 'v1',
+                  }}
+                  name={app.cluster}
+                />
+              ),
+              dataLabel: 'Cluster',
+            },
+          ]
+        : []),
       ...(!namespace
         ? [
             {
@@ -371,15 +406,23 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         id: app?.status?.sync?.revision,
         cell: (
           <>
-            {sources[0].targetRevision ? sources[0].targetRevision : 'HEAD'}&nbsp;
-            {!(app.status?.sourceType == 'Helm' && sources[0].chart) && (
-              <RevisionFragment
-                revision={revisions[0] || ''}
-                repoURL={sources[0].repoURL}
-                helm={app.status?.sourceType == 'Helm' && sources[0].chart ? true : false}
-                revisionExtra={revisions.length > 1 && ' and ' + (revisions.length - 1) + ' more'}
-              />
-            )}
+            {/* Extra guard code added here - ACM search will not have all of this information */}
+            {sources && !!sources.length && sources[0].targetRevision
+              ? sources[0].targetRevision
+              : 'HEAD'}
+            &nbsp;
+            {sources &&
+              !!sources.length &&
+              !(app.status?.sourceType == 'Helm' && sources[0].chart) &&
+              revisions &&
+              !!revisions.length && (
+                <RevisionFragment
+                  revision={revisions[0] || ''}
+                  repoURL={sources[0].repoURL}
+                  helm={app.status?.sourceType == 'Helm' && sources[0].chart ? true : false}
+                  revisionExtra={revisions.length > 1 && ' and ' + (revisions.length - 1) + ' more'}
+                />
+              )}
           </>
         ),
       },
@@ -406,7 +449,8 @@ const useColumnsDV = (
   namespace: string,
   getSortParams: (columnIndex: number) => ThProps['sort'],
 ): DataViewTh[] => {
-  const i: number = namespace ? 0 : 1;
+  const isFleetAvailable = useIsFleetAvailable();
+  const i: number = (namespace ? 0 : 1) + (isFleetAvailable ? 1 : 0);
   const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
@@ -417,6 +461,18 @@ const useColumnsDV = (
         sort: getSortParams(0),
       },
     },
+    ...(isFleetAvailable
+      ? [
+          {
+            cell: t('Cluster'),
+            props: {
+              'aria-label': 'cluster',
+              className: 'pf-m-width-15',
+              sort: getSortParams(1),
+            },
+          },
+        ]
+      : []),
     ...(!namespace
       ? [
           {
@@ -424,7 +480,7 @@ const useColumnsDV = (
             props: {
               'aria-label': 'namespace',
               className: 'pf-m-width-15',
-              sort: getSortParams(1),
+              sort: getSortParams(isFleetAvailable ? 2 : 1),
             },
           },
         ]

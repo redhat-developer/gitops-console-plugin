@@ -6,6 +6,10 @@
     "type": "console.flag"
   },
   {
+    "properties": { "handler": { "$codeRef": "gitopsFlags.useGitOpsMulticlusterFlag" } },
+    "type": "console.flag/hookProvider"
+  },
+  {
     "type": "console.navigation/href",
     "properties": {
       "id": "gitops-environment",
@@ -459,6 +463,20 @@
             "$codeRef": "ApplicationDetails"
         }
     }
+  },
+  {
+    "flags": {
+      "required": ["GITOPS_MULTICLUSTER"]
+    },
+    "properties": {
+      "component": {
+        "$codeRef": "ApplicationDetails"
+      },
+      "path": [
+        "/k8s/cluster/:cluster/ns/:ns/argoproj.io~v1alpha1~Application/:name"
+      ]
+    },
+    "type": "console.page/route"
   },
   {
     "type": "console.page/resource/details",

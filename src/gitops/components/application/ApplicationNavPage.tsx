@@ -1,10 +1,12 @@
 import * as React from 'react';
+import { useParams } from 'react-router-dom-v5-compat';
 
 import { useApplicationActionsProvider } from '@gitops/hooks/useApplicationActionsProvider';
 import { ApplicationKind, ApplicationModel } from '@gitops/models/ApplicationModel';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
-import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { HorizontalNav } from '@openshift-console/dynamic-plugin-sdk';
 import { Bullseye, Spinner } from '@patternfly/react-core';
+import { useFleetK8sWatchResource } from '@stolostron/multicluster-sdk';
 
 import DetailsPageHeader from '../shared/DetailsPageHeader/DetailsPageHeader';
 import EventsTab from '../shared/EventsTab/EventsTab';
@@ -16,21 +18,24 @@ import ApplicationResourcesTab from './ApplicationResourcesTab';
 import ApplicationSourcesTab from './ApplicationSourcesTab';
 import ApplicationSyncStatusTab from './ApplicationSyncStatusTab';
 
-type ApplicationPageProps = {
-  name: string;
-  namespace: string;
-  kind: string;
-};
-
-const ApplicationNavPage: React.FC<ApplicationPageProps> = ({ name, namespace, kind }) => {
+const ApplicationNavPage: React.FC = () => {
   const { t } = useGitOpsTranslation();
-  const [application, loaded] = useK8sWatchResource<ApplicationKind>({
+  const {
+    cluster,
+    name,
+    ns: namespace,
+  } = useParams<{
+    cluster?: string;
+    name: string;
+    ns: string;
+  }>();
+  const [application, loaded] = useFleetK8sWatchResource<ApplicationKind>({
     groupVersionKind: {
       group: 'argoproj.io',
       kind: 'Application',
       version: 'v1alpha1',
     },
-    kind,
+    cluster,
     name,
     namespace,
   });
