@@ -440,9 +440,9 @@
     tslib "^2.8.1"
 
 "@patternfly/react-core@^6.2.0", "@patternfly/react-core@^6.2.2":
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-6.4.0.tgz#a2c0b60c1a4f34f708d079e92e86b007b0c88c3c"
-  integrity sha512-zMgJmcFohp2FqgAoZHg7EXZS7gnaFESquk0qIavemYI0FsqspVlzV2/PUru7w+86+jXfqebRhgubPRsv1eJwEg==
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-6.4.1.tgz#219afce931b49804903f2e12156f9bb4d46f91b7"
+  integrity sha512-EUSV76Eifkt4R3q2JIaiB6/FHeQqOCttK1DQMXNoOCNa3ODkZ7H+KlMdminufMDfRzhwAgTVihZ62K9PFfc8Vg==
   dependencies:
     "@patternfly/react-icons" "^6.4.0"
     "@patternfly/react-styles" "^6.4.0"
@@ -6332,7 +6332,7 @@ lodash.truncate@^4.4.2:
   resolved "https://registry.yarnpkg.com/lodash.truncate/-/lodash.truncate-4.4.2.tgz#5a350da0b1113b837ecfffd5812cbe58d6eae193"
   integrity sha512-jttmRe7bRse52OsWIMDLaXxWqRAmtIUccAQ3garviCqJjafXOfNMO0yMfNpdD6zbGaTU0P5Nz7e7gAT6cKmJRw==
 
-lodash@^4.17.14, lodash@^4.17.21, lodash@^4.17.23, lodash@^4.17.4:
+lodash@^4.17.14, lodash@^4.17.21, lodash@^4.17.4:
   version "4.17.23"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.23.tgz#f113b0378386103be4f6893388c73d0bde7f2c5a"
   integrity sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==
@@ -7548,9 +7548,9 @@ react-dom@17.0.2:
     scheduler "^0.20.2"
 
 react-dropzone@^14.3.5:
-  version "14.3.8"
-  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-14.3.8.tgz#a7eab118f8a452fe3f8b162d64454e81ba830582"
-  integrity sha512-sBgODnq+lcA4P296DY4wacOZz3JFpD99fp+hb//iBO2HHnyeZU3FwWyXJ6salNpqQdsZrgMrotuko/BdJMV8Ug==
+  version "14.4.1"
+  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-14.4.1.tgz#a33b5c348365bfc73d5fec69c91cb32c350cb9d4"
+  integrity sha512-QDuV76v3uKbHiH34SpwifZ+gOLi1+RdsCO1kl5vxMT4wW8R82+sthjvBw4th3NHF/XX6FBsqDYZVNN+pnhaw0g==
   dependencies:
     attr-accept "^2.2.4"
     file-selector "^2.1.0"
@@ -8923,9 +8923,9 @@ synckit@^0.9.1:
     tslib "^2.6.2"
 
 tabbable@^6.2.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-6.3.0.tgz#2e0e6163935387cdeacd44e9334616ca0115a8d3"
-  integrity sha512-EIHvdY5bPLuWForiR/AN2Bxngzpuwn1is4asboytXtpTgsArc+WmSJKVLlhdh71u7jFcryDqB2A8lQvj78MkyQ==
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-6.4.0.tgz#36eb7a06d80b3924a22095daf45740dea3bf5581"
+  integrity sha512-05PUHKSNE8ou2dwIxTngl4EzcnsCDZGJ/iCLtDflR/SHB/ny14rXc+qU5P4mG9JkusiV7EivzY9Mhm55AzAvCg==
 
 table@^6.0.9:
   version "6.9.0"
