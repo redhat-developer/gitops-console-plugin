@@ -51,7 +51,7 @@ COPY --from=builder /usr/src/app/dist /var/www/html/plugin
 CMD run-httpd
 
 LABEL \
-    name="openshift-gitops-1/gitops-console-plugin-rhel8" \
+    name="openshift-gitops-1/gitops-console-plugin-ubi10" \
     License="Apache 2.0" \
     com.redhat.component="openshift-gitops-console-plugin-container" \
     com.redhat.delivery.appregistry="false" \
