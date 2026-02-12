@@ -73,7 +73,20 @@ const config: Configuration = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg|woff2?|ttf|eot|otf)(\?.*$|$)/,
+        test: /\.svg$/,
+        issuer: /\.[jt]sx?$/,
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              typescript: true,
+              ext: 'tsx',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif|woff2?|ttf|eot|otf)(\?.*$|$)/,
         loader: 'file-loader',
         options: {
           name: 'assets/[name].[ext]',

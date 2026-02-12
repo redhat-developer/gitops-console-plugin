@@ -17,10 +17,13 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 
-type UseApplicationActionsProvider = (application: ApplicationKind) => [actions: Action[]];
+type UseApplicationActionsProvider = (
+  application: ApplicationKind,
+  href?: string,
+) => [actions: Action[]];
 const t = (key: string) => key;
 
-export const useApplicationActionsProvider: UseApplicationActionsProvider = (application) => {
+export const useApplicationActionsProvider: UseApplicationActionsProvider = (application, href) => {
   const navigate = useNavigate();
 
   const launchLabelsModal = useLabelsModal(application);
@@ -148,8 +151,22 @@ export const useApplicationActionsProvider: UseApplicationActionsProvider = (app
         },
         cta: () => launchDeleteModal(),
       },
+      {
+        id: 'gitops-action-view-in-argocd',
+        disabled: href === undefined,
+        label: t('View in Argo CD'),
+        accessReview: {
+          group: ApplicationModel.apiGroup,
+          verb: 'get' as K8sVerb,
+          resource: ApplicationModel.plural,
+          namespace: application?.metadata?.namespace,
+        },
+        cta: () => {
+          window.open(href, '_blank');
+        },
+      },
     ],
-    [application, navigate, launchLabelsModal, launchAnnotationsModal, launchDeleteModal],
+    [application, navigate, launchLabelsModal, launchAnnotationsModal, launchDeleteModal, href],
   );
 
   return [actions];

@@ -51,9 +51,9 @@ export const useResourceActionsProvider: UseResourceActionsProvider = (
   const actions = React.useMemo(
     () => [
       {
-        id: 'gitops-action-edit-labels-application',
+        id: 'gitops-action-view-in-argocd',
         disabled: false,
-        label: t('Details'),
+        label: t('View in Argo CD'),
         accessReview: {
           group: ApplicationModel.apiGroup,
           verb: 'patch' as K8sVerb,

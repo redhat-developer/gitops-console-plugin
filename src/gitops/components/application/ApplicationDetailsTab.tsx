@@ -14,23 +14,8 @@ import SyncStatus from '@gitops/Statuses/SyncStatus';
 import { ArgoServer, getArgoServer, getFriendlyClusterName } from '@gitops/utils/gitops';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { useObjectModifyPermissions } from '@gitops/utils/utils';
-import {
-  k8sUpdate,
-  ResourceLink,
-  useK8sModel,
-  useModal,
-} from '@openshift-console/dynamic-plugin-sdk';
-import { ModalComponent } from '@openshift-console/dynamic-plugin-sdk/lib/app/modal-support/ModalProvider';
-import {
-  Button,
-  Label as PfLabel,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  ToggleGroup,
-  ToggleGroupItem,
-} from '@patternfly/react-core';
+import { k8sUpdate, ResourceLink, useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import { Label as PfLabel, ToggleGroup, ToggleGroupItem } from '@patternfly/react-core';
 import {
   DescriptionList,
   Flex,
@@ -62,7 +47,6 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
   const [canPatch, canUpdate] = useObjectModifyPermissions(obj, ApplicationModel);
 
   const [argoServer, setArgoServer] = React.useState<ArgoServer>({ host: '', protocol: '' });
-  const launchModal = useModal();
   React.useEffect(() => {
     (async () => {
       getArgoServer(model, obj)
@@ -74,37 +58,6 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
         });
     })();
   }, [model, obj]);
-
-  const modalStyle: React.CSSProperties = {
-    padding: '1rem 1rem',
-    textAlign: 'left',
-    zIndex: 9999,
-    width: '500px',
-  };
-
-  const syncErrorModal: ModalComponent = (props) => {
-    return (
-      <Modal
-        isOpen
-        onClose={props?.closeModal}
-        style={modalStyle}
-        aria-describedby="modal-title-icon-description"
-        aria-labelledby="title-icon-modal-title"
-      >
-        <ModalHeader title="Error" titleIconVariant="danger" labelId="title-icon-modal-title" />
-        <ModalBody>
-          <span id="modal-title-icon-description">
-            Sync policy change failed. Check your application/logs and try again.
-          </span>
-        </ModalBody>
-        <ModalFooter>
-          <Button key="cancel" variant="primary" onClick={props?.closeModal}>
-            Close
-          </Button>
-        </ModalFooter>
-      </Modal>
-    );
-  };
 
   const onChangeAutomated = (event: React.MouseEvent<any> | React.KeyboardEvent | MouseEvent) => {
     const id = event.currentTarget.id;
@@ -145,7 +98,7 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
         // ignore
       })
       .catch((e) => {
-        launchModal(syncErrorModal, { errorMessage: e.message });
+        console.log('GitOps error updating application:' + e);
       });
   };
 

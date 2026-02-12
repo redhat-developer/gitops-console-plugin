@@ -1,0 +1,72 @@
+export const RESOURCE_COLORS = new Map<string, string>([
+  ['color-alertmanager-dark', '#773d00'],
+  ['color-application-dark', '#3e8635'],
+  ['color-application', '#E9654B'],
+  ['color-appproject', '#E9654B'],
+  ['color-configmap-dark', '#40199a'],
+  ['color-container-dark', '#2b9af3'],
+  ['color-ingress-dark', '#40199a'],
+  ['color-namespace-dark', '#1e4f18'],
+  ['color-node-dark', '#8476d1'],
+  ['color-pod-dark', '#009596'],
+  ['color-pod-overlord', '#004080'],
+  ['color-rbac-binding-dark', '#008bad'],
+  ['color-rbac-role-dark', '#795600'],
+  ['color-secret-dark', '#c46100'],
+  ['color-service-dark', '#6ca100'],
+]);
+
+export const COLOR_MAP = new Map<string, string>([
+  ['$color-alert-dark', '$color-container-dark'],
+  ['$color-alertrule-dark', '$color-configmap-dark'],
+  ['$color-controller-dark', '$color-pod-overlord'],
+  ['$color-deployment-dark', '$color-controller-dark'],
+  ['$color-deploymentconfig-dark', '$color-controller-dark'],
+  ['$color-job-dark', '$color-controller-dark'],
+  ['$color-petset-dark', '$color-controller-dark'],
+  ['$color-replicaset-dark', '$color-controller-dark'],
+  ['$color-serviceaccount-dark', '$color-configmap-dark'],
+]);
+
+export const RESOURCE_BADGE_COLORS = new Map<string, string>([
+  ['.co-m-resource-application', 'color-application'],
+  ['.co-m-resource-appproject', 'color-appproject'],
+  ['.co-m-resource-clusterrole', 'color-rbac-role-dark'],
+  ['.co-m-resource-role', 'color-rbac-role-dark'],
+  ['.co-m-resource-clusterrolebinding', 'color-rbac-binding-dark'],
+  ['.co-m-resource-rolebinding', 'color-rbac-binding-dark'],
+
+  ['.co-m-resource-daemonset', 'color-pod-overlord'],
+  ['.co-m-resource-deployment', 'color-pod-overlord'],
+  ['.co-m-resource-deploymentconfig', 'color-pod-overlord'],
+  ['.co-m-resource-job', 'color-pod-overlord'],
+  ['.co-m-resource-petset', 'color-pod-overlord'],
+  ['.co-m-resource-replicaset', 'color-pod-overlord'],
+  ['.co-m-resource-replicationcontroller', 'color-pod-overlord'],
+
+  ['.co-m-resource-machine', 'color-node-dark'],
+  ['.co-m-resource-machineautoscaler', 'color-node-dark'],
+  ['.co-m-resource-machineclass', 'color-node-dark'],
+  ['.co-m-resource-machineconfig', 'color-node-dark'],
+  ['.co-m-resource-machineconfigpool', 'color-node-dark'],
+  ['.co-m-resource-machinedeployment', 'color-node-dark'],
+  ['.co-m-resource-machinehealthcheck', 'color-node-dark'],
+  ['.co-m-resource-machineset', 'color-node-dark'],
+  ['.co-m-resource-node', 'color-node-dark'],
+  ['.co-m-resource-policy', 'color-node-dark'],
+
+  ['.co-m-resource-alertrule', 'color-configmap-dark'],
+  ['.co-m-resource-configmap', 'color-configmap-dark'],
+
+  ['.co-m-resource-alert', 'color-container-dark'],
+  ['.co-m-resource-container', 'color-container-dark'],
+
+  ['.co-m-resource-pod', 'color-pod-dark'],
+  ['.co-m-resource-namespace', 'color-namespace-dark'],
+  ['.co-m-resource-project', 'color-namespace-dark'],
+  ['.co-m-resource-secret', 'color-secret-dark'],
+  ['.co-m-resource-alertmanager', 'color-alertmanager-dark'],
+  ['.co-m-resource-service', 'color-service-dark'],
+  ['.co-m-resource-serviceaccount', 'color-configmap-dark'],
+  ['.co-m-resource-ingress', 'color-ingress-dark'],
+]);
