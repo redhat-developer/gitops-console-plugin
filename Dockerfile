@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 RUN yarn config set network-timeout 600000 -g
 RUN yarn install && yarn build
 
-FROM --platform=linux/amd64 registry.redhat.io/rhel8/httpd-24
+FROM --platform=linux/amd64 registry.access.redhat.com/ubi10/httpd-24:10.1
 
 USER root
 RUN chown -R 1001:0 /opt/app-root/src
