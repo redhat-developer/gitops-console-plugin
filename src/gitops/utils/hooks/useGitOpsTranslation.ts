@@ -10,4 +10,5 @@ export const useGitOpsTranslation = () => useTranslation('plugin__gitops-plugin'
  * @param value string to translate
  */
 // skipcq: JS-C1002
-export const t = (value: string) => getI18n().t(value, { ns: 'plugin__gitops-plugin' });
+export const t = (value: string, options?: { x: any }) =>
+  getI18n().t(value, { ns: 'plugin__gitops-plugin', ...options });

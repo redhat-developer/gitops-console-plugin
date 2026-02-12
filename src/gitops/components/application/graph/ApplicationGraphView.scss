@@ -1,0 +1,29 @@
+// GraphView Topology Styles
+.gitops-topology-view {
+  height: 100%;
+  width: 100%;
+  
+  // Background grid
+  .pf-topology-content
+  {
+    background-image: radial-gradient( var(--pf-t--global--text--color--regular) 0.5px, transparent 0.5px) !important;
+    background-size: 24px 24px !important;
+  }
+
+  // Toolbar - move to the top left corner and override Patternfly's style
+  // Argo CD toolbar is in the top left corner
+  .pf-topology-control-bar {
+    position: absolute;
+    top: 0;
+    left: var(--pf-t--global--spacer--lg);
+    height: 40px !important;
+    border-radius: 4px;
+    padding: 8px;
+  }
+
+  // Not the same as in the Topology view, but seems like a border is better for more visibility,
+  // especially when in dark mode. Remove this if we want to be consistent with the Topology view.
+  .pf-topology-control-bar__button.pf-v6-c-button.pf-m-tertiary {
+    border: 1px solid darkgray;
+  }
+}
