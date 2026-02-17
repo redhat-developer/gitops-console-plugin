@@ -198,8 +198,14 @@ const customComponentFactory =
             } else if (label === t('Delete Application')) {
               launchDeleteModal();
             } else if (
-              label === 'Show ' + graphElement.getData().kindPlural ||
-              label === 'Hide ' + graphElement.getData().kindPlural
+              label ===
+                t('Show {{x}}', {
+                  x: graphElement.getData().kindPlural,
+                }) ||
+              label ===
+                t('Hide {{x}}', {
+                  x: graphElement.getData().kindPlural,
+                })
             ) {
               const key = graphElement.getData().kindPlural;
               setGroupNodeStates((prev) => {
@@ -382,7 +388,7 @@ export const ApplicationGraphView: React.FC<{
       graph: {
         id: 'g1',
         type: 'graph',
-        layout: 'PipleineDagreLayout',
+        layout: 'Dagre',
       },
     };
 

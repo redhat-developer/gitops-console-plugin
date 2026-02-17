@@ -64,7 +64,7 @@ const createApplicationNode = (application: ApplicationKind): NodeModel => {
       ),
       rank: 0,
       nodeStatus: nodeStatus,
-      reourceHealthStatus: application?.status?.health?.status,
+      resourceHealthStatus: application?.status?.health?.status,
       appHealthStatus: application?.status?.health?.status,
       syncStatus: application?.status?.sync?.status,
     },
@@ -304,14 +304,14 @@ export const getInitialNodes = (
     // Spacer node to the right of the application node. Fixed.
     initialNodes.push(createSpacerNode(1, 'application-node-spacer'));
     // Add child resources
-    resources.forEach((resource, count) => {
+    resources.forEach((resource) => {
       const kind = resource.kind;
       const badgeLabel = allK8sModels[kind]?.abbr || kindToAbbr(kind);
       const color =
         RESOURCE_COLORS.get(
           RESOURCE_BADGE_COLORS.get('.co-m-resource-' + resource.kind.toLowerCase()),
         ) || RESOURCE_COLORS.get('color-container-dark');
-      const nodeId = count + '-' + resource.kind + '-' + resource.name + '-' + resource.namespace;
+      const nodeId = resource.kind + '-' + resource.name + '-' + resource.namespace;
       const key = resource.kind + 's';
       const resourceGroupExpandState = groupNodeStates.includes(key);
 

@@ -85,10 +85,10 @@ export const ResourceGroupNode: React.FC<
         {/* eslint-disable no-nested-ternary */}
         {data.hasProgressing ? (
           <SvgTextWithOverflow text={`Progressing`} maxWidth={200} x="69" y="40" />
-        ) : data.hasMissing ? (
-          <SvgTextWithOverflow text={`Missing`} maxWidth={200} x="69" y="40" />
         ) : data.hasDegraded ? (
           <SvgTextWithOverflow text={`Degraded`} maxWidth={200} x="69" y="40" />
+        ) : data.hasMissing ? (
+          <SvgTextWithOverflow text={`Missing`} maxWidth={200} x="69" y="40" />
         ) : data.hasSuspended ? (
           <SvgTextWithOverflow text={`Suspended`} maxWidth={200} x="69" y="40" />
         ) : data.hasUnknown ? (

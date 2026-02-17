@@ -93,6 +93,7 @@ const ApplicationSyncStatusIcon = ({ status }: { status: SyncStatus }) => {
       );
       break;
     case SyncStatus.UNKNOWN:
+    default:
       icon = (
         <CircleNotchIcon
           className={'fa-spin'}
