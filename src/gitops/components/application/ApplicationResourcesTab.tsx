@@ -21,6 +21,9 @@ import {
 import {
   EmptyState,
   EmptyStateBody,
+  Flex,
+  FlexItem,
+  PageBody,
   PageSection,
   PageSectionVariants,
   Title,
@@ -31,7 +34,10 @@ import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
 
 import { ArgoServer, getArgoServer } from '../../utils/gitops';
+import ArgoCDLink from '../shared/ArgoCDLink/ArgoCDLink';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+
+import { ApplicationGraphView } from './graph/ApplicationGraphView';
 
 type ApplicationResourcesTabProps = RouteComponentProps<{
   ns: string;
@@ -119,24 +125,64 @@ const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }
         <Title headingLevel="h2" className="co-section-heading">
           {t('Application resources')}
         </Title>
-        {obj.metadata && (
+        <Flex flex={{ default: 'flexDefault' }}>
+          <FlexItem fullWidth={{ default: 'fullWidth' }}>
+            {t(
+              "The graph and table views show health and sync status for the application's immediate resources only.  Click the Argo CD Link to see the complete resource tree. Use the filter to filter resources based on status and kind.",
+            )}
+          </FlexItem>
+        </Flex>
+        <PageBody>
+          <Flex style={{ marginTop: '15px' }} flex={{ default: 'flexDefault' }}>
+            <FlexItem>
+              <ArgoCDLink
+                href={
+                  argoServer.protocol +
+                  '://' +
+                  argoServer.host +
+                  '/applications/' +
+                  obj?.metadata?.namespace +
+                  '/' +
+                  obj?.metadata?.name
+                }
+              />
+            </FlexItem>
+          </Flex>
           <>
-            <ListPageFilter
-              hideNameLabelFilters
-              data={data}
-              loaded={true}
-              rowFilters={resourceFilters}
-              onFilterChange={onFilterChange}
-            />
-            <GitOpsDataViewTable
-              rows={rows}
-              columns={columnsDV}
-              emptyState={empty}
-              isEmpty={isEmptyResources}
-              activeState={isEmptyResources ? DataViewState.empty : null}
-            />
+            {obj.metadata && (
+              <Flex>
+                <FlexItem
+                  fullWidth={{ default: 'fullWidth' }}
+                  style={{
+                    width: '95%',
+                    height: '1000px',
+                    border: '1px solid gray',
+                    margin: '30px 30px',
+                  }}
+                >
+                  <ApplicationGraphView application={obj} resources={memoizedFilteredResources} />
+                </FlexItem>
+
+                <FlexItem fullWidth={{ default: 'fullWidth' }}>
+                  <ListPageFilter
+                    hideNameLabelFilters
+                    data={data}
+                    loaded={true}
+                    rowFilters={resourceFilters}
+                    onFilterChange={onFilterChange}
+                  />
+                  <GitOpsDataViewTable
+                    rows={rows}
+                    columns={columnsDV}
+                    emptyState={empty}
+                    isEmpty={isEmptyResources}
+                    activeState={isEmptyResources ? DataViewState.empty : null}
+                  />
+                </FlexItem>
+              </Flex>
+            )}
           </>
-        )}
+        </PageBody>
       </PageSection>
     </div>
   );

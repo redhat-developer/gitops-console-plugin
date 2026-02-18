@@ -4,6 +4,7 @@ declare module '*.png' {
 }
 
 declare module '*.svg' {
-  const value: any;
-  export = value;
+  import * as React from 'react';
+  const ReactComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string }>;
+  export default ReactComponent;
 }

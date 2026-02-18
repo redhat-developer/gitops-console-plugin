@@ -1,8 +1,5 @@
 import * as React from 'react';
-import {
-  OutOfSyncIcon,
-  SyncUnknownIcon,
-} from 'src/gitops/utils/components/Icons/Icons';
+import { OutOfSyncIcon, SyncUnknownIcon } from 'src/gitops/utils/components/Icons/Icons';
 import { SyncStatus as SS } from 'src/gitops/utils/constants';
 
 import { GreenCheckCircleIcon } from '@openshift-console/dynamic-plugin-sdk';
