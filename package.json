@@ -78,7 +78,7 @@
   "resolutions": {
     "glob-parent": "^5.1.2",
     "showdown": "^2.1.0",
-    "express": "4.21.2",
+    "express": "4.22.1",
     "@types/jest": "21.x",
     "hosted-git-info": "^3.0.8",
     "jquery": "3.5.1",
