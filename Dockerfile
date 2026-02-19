@@ -1,4 +1,4 @@
-FROM docker.io/library/node:23 AS build
+FROM docker.io/library/node:24 AS build
 
 ADD . /usr/src/app
 WORKDIR /usr/src/app
