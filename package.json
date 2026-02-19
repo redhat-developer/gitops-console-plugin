@@ -65,7 +65,7 @@
     "react-dom": "17.0.2",
     "react-i18next": "^11.7.3",
     "sass": "^1.42.1",
-    "sass-loader": "^10.1.1",
+    "sass-loader": "^16.0.0",
     "style-loader": "^2.0.0",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.7.0",
