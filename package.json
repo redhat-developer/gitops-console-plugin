@@ -84,7 +84,7 @@
     "jquery": "3.5.1",
     "lodash-es": "^4.17.23",
     "minimist": "1.2.8",
-    "ua-parser-js": "^0.7.24",
+    "ua-parser-js": "^2.0.0",
     "jest": "21.x",
     "postcss": "^8.2.13"
   },
