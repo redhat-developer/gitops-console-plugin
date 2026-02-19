@@ -109,7 +109,7 @@
     "git-url-parse": "^13.1.0",
     "react": "17.0.2",
     "react-helmet": "^6.1.0",
-    "react-redux": "7.2.9",
+    "react-redux": "9.2.0",
     "react-router-dom-v5-compat": "^6.30.0",
     "react-router-hash-link": "2.4.3",
     "redux": "4.0.1"
