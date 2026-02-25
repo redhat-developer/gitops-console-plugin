@@ -63,7 +63,7 @@
     "prop-types": "15.8.x",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-i18next": "^11.7.3",
+    "react-i18next": "^16.0.0",
     "sass": "^1.42.1",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
