@@ -150,13 +150,13 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
   };
 
   let sources: ApplicationSource[];
-  let revisions: string[];
+  let revisions: string[] = [];
   if (obj?.spec?.source) {
     sources = [obj?.spec?.source];
     revisions = [obj.status?.sync?.revision];
   } else if (obj?.spec?.sources) {
     sources = obj.spec.sources;
-    revisions = obj.status?.sync?.revisions;
+    revisions = obj.status?.sync?.revisions || [];
   } else {
     sources = [];
     revisions = [];
