@@ -90,7 +90,7 @@
   },
   "consolePlugin": {
     "name": "gitops-plugin",
-    "version": "0.0.15",
+    "version": "0.0.16",
     "displayName": "GitOps Plugin",
     "description": "OpenShift Console plugin for GitOps.",
     "exposedModules": {
