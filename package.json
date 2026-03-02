@@ -112,7 +112,7 @@
     "react-redux": "7.2.9",
     "react-router-dom-v5-compat": "^6.30.0",
     "react-router-hash-link": "2.4.3",
-    "redux": "4.0.1"
+    "redux": "4.2.1"
   },
   "//TODO": [
     "For @patternfly/react-icons: find another solution for icons from older react-icons version and remove this dependency."
