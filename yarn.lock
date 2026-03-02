@@ -4784,12 +4784,12 @@ eslint-plugin-chai-friendly@^0.7.2:
   resolved "https://registry.yarnpkg.com/eslint-plugin-chai-friendly/-/eslint-plugin-chai-friendly-0.7.4.tgz#eaf222b848673ef8a00b8e507f7c6fd83d036bf2"
   integrity sha512-PGPjJ8diYgX1mjLxGJqRop2rrGwZRKImoEOwUOgoIhg0p80MkTaqvmFLe5TF7/iagZHggasvIfQlUyHIhK/PYg==
 
-eslint-plugin-cypress@^2.12.1:
-  version "2.15.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-cypress/-/eslint-plugin-cypress-2.15.2.tgz#f22e12fad4c434edad7b298ef92bac8fa087ffa0"
-  integrity sha512-CtcFEQTDKyftpI22FVGpx8bkpKyYXBlNge6zSo0pl5/qJvBAnzaD76Vu2AsP16d6mTj478Ldn2mhgrWV+Xr0vQ==
+eslint-plugin-cypress@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-cypress/-/eslint-plugin-cypress-6.0.0.tgz#d137892de43278975c3f1951e2b2c3a8e40006ef"
+  integrity sha512-J96t5BLt8lYSiQ5b4vZ2IpUcsAc3XOw9Esy5sFSvgbx4Od/MIwlbXM8QazrcbEKrKKsynOnyXzZwiAQTtGCEyA==
   dependencies:
-    globals "^13.20.0"
+    globals "^17.3.0"
 
 eslint-plugin-import@^2.25.4:
   version "2.32.0"
@@ -5688,12 +5688,17 @@ glob@7.x, glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.2.0:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-globals@^13.20.0, globals@^13.6.0, globals@^13.9.0:
+globals@^13.6.0, globals@^13.9.0:
   version "13.24.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-13.24.0.tgz#8432a19d78ce0c1e833949c36adb345400bb1171"
   integrity sha512-AhO5QUcj8llrbG09iWhPU2B204J1xnPeL8kQmVorSsy+Sjj1sk8gIyh6cUocGmH4L0UuhAJy+hJMRA4mgA4mFQ==
   dependencies:
     type-fest "^0.20.2"
+
+globals@^17.3.0:
+  version "17.3.0"
+  resolved "https://registry.yarnpkg.com/globals/-/globals-17.3.0.tgz#8b96544c2fa91afada02747cc9731c002a96f3b9"
+  integrity sha512-yMqGUQVVCkD4tqjOJf3TnrvaaHDMYp4VlUSObbkIiuCPe/ofdMBFIAcBbCSRFWOnos6qRiTVStDwqPLUclaxIw==
 
 globals@^9.18.0:
   version "9.18.0"
