@@ -1,3 +1,12 @@
+import {
+  APP_NODE_HEIGHT,
+  APP_NODE_WIDTH,
+  createSpacerNode,
+  getResourceNodeHealthStatus,
+  getTopologyNodeStatus,
+  kindToAbbr,
+  NODE_DIAMETER,
+} from '@gitops/components/graph/utils';
 import { ApplicationKind, ApplicationResourceStatus } from '@gitops/models/ApplicationModel';
 import { HealthStatus, SyncStatus } from '@gitops/utils/constants';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
@@ -11,36 +20,12 @@ import {
 
 import { RESOURCE_BADGE_COLORS, RESOURCE_COLORS } from './icons/resource-colours';
 
-const NODE_DIAMETER = 50;
-
-export const kindToAbbr = (kind: string) => {
-  const abbrKind = (kind.replace(/[^A-Z]/g, '') || kind.toUpperCase()).slice(0, 4);
-  return abbrKind;
-};
-
 const NODE_TYPE_APPLICATION = 'application-node';
 const NODE_TYPE_APPLICATION_LABEL = 'Application';
 
 // Map application health status with topology node status
 const createApplicationNode = (application: ApplicationKind): NodeModel => {
-  // This is for the border color of the application node.  It will be determined by the app's health status.
-  let nodeStatus = NodeStatus.default;
-  switch (application.status?.health?.status) {
-    case HealthStatus.HEALTHY:
-      nodeStatus = NodeStatus.success;
-      break;
-    case HealthStatus.MISSING:
-      nodeStatus = NodeStatus.warning;
-      break;
-    case HealthStatus.PROGRESSING:
-      nodeStatus = NodeStatus.info;
-      break;
-    case HealthStatus.DEGRADED:
-      nodeStatus = NodeStatus.danger;
-      break;
-    default:
-      nodeStatus = NodeStatus.default;
-  }
+  const nodeStatus = getTopologyNodeStatus(application.status?.health?.status);
   return {
     id:
       application.kind +
@@ -51,8 +36,8 @@ const createApplicationNode = (application: ApplicationKind): NodeModel => {
     type: NODE_TYPE_APPLICATION,
     label: NODE_TYPE_APPLICATION_LABEL,
     status: nodeStatus,
-    width: 300,
-    height: 75,
+    width: APP_NODE_WIDTH,
+    height: APP_NODE_HEIGHT,
     data: {
       name: application?.metadata?.name,
       badge: 'A',
@@ -84,24 +69,6 @@ export const getResourceNodeSyncStatus = (resource: ApplicationResourceStatus): 
   }
 };
 
-// For the border color of the resource node to indicate the health status
-// If the resource has no health status (from the CR) then the color is default
-const getResourceNodeHealthStatus = (resource: ApplicationResourceStatus): NodeStatus => {
-  switch (resource.health?.status) {
-    case HealthStatus.HEALTHY:
-      return NodeStatus.success;
-    case HealthStatus.PROGRESSING:
-      return NodeStatus.info;
-    case HealthStatus.SUSPENDED:
-    case HealthStatus.MISSING:
-      return NodeStatus.warning;
-    case HealthStatus.DEGRADED:
-      return NodeStatus.danger;
-    default:
-      return NodeStatus.default;
-  }
-};
-
 // For the border color of the group node to indicate the overall health status
 const getGroupNodeHealthStatus = (
   resource: ApplicationResourceStatus,
@@ -129,16 +96,6 @@ const getGroupNodeHealthStatus = (
     return NodeStatus.warning;
   }
   return NodeStatus.default;
-};
-
-const createSpacerNode = (rank: number, id: string): NodeModel => {
-  return {
-    id: id,
-    type: 'spacer-node',
-    data: {
-      rank: rank,
-    },
-  };
 };
 
 const createGroupResourceNode = (
@@ -329,7 +286,7 @@ export const getInitialNodes = (
           initialNodes.push(groupResourceNodeMap.get(kind));
         }
       }
-      const healthStatus = getResourceNodeHealthStatus(resource);
+      const healthStatus = getResourceNodeHealthStatus(resource.health?.status);
       if (
         !showGroupNodes ||
         !groupResourceNodeMap.has(kind) ||
@@ -414,19 +371,21 @@ export const getInitialNodes = (
       groupResourceNodeMap.forEach((groupNode) => {
         idsOfChildren.push(groupNode.id);
       });
-      const transparentGroupsOfGroups = {
-        id: 'transparent-group-of-groups-container',
-        type: 'group',
-        group: true,
-        children: [...idsOfChildren],
-        borderRadius: 0,
-        collapsible: false,
-        selectable: false,
-        hideContextMenuKebab: true,
-        hulledOutline: false,
-        style: { padding: 40 },
-      };
-      initialNodes.push(transparentGroupsOfGroups);
+      if (idsOfChildren.length > 0) {
+        const transparentGroupsOfGroups = {
+          id: 'transparent-group-of-groups-container',
+          type: 'group',
+          group: true,
+          children: [...idsOfChildren],
+          borderRadius: 0,
+          collapsible: false,
+          selectable: false,
+          hideContextMenuKebab: true,
+          hulledOutline: false,
+          style: { padding: 40 },
+        };
+        initialNodes.push(transparentGroupsOfGroups);
+      }
     }
   }
   return initialNodes;

@@ -2,6 +2,7 @@ export const RESOURCE_COLORS = new Map<string, string>([
   ['color-alertmanager-dark', '#773d00'],
   ['color-application-dark', '#3e8635'],
   ['color-application', '#E9654B'],
+  ['color-applicationset', '#E9654B'],
   ['color-appproject', '#E9654B'],
   ['color-configmap-dark', '#40199a'],
   ['color-container-dark', '#2b9af3'],
@@ -30,6 +31,7 @@ export const COLOR_MAP = new Map<string, string>([
 
 export const RESOURCE_BADGE_COLORS = new Map<string, string>([
   ['.co-m-resource-application', 'color-application'],
+  ['.co-m-resource-applicationset', 'color-application'],
   ['.co-m-resource-appproject', 'color-appproject'],
   ['.co-m-resource-clusterrole', 'color-rbac-role-dark'],
   ['.co-m-resource-role', 'color-rbac-role-dark'],

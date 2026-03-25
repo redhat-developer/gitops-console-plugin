@@ -2,7 +2,7 @@
 .gitops-topology-view {
   height: 100%;
   width: 100%;
-  
+
   // Background grid
   .pf-topology-content
   {
@@ -10,6 +10,56 @@
     background-size: 24px 24px !important;
   }
 
+  // Customize the edge colors for the progressive sync flow view
+  .pf-topology__edge {
+    .pf-topology__edge__background {
+      stroke: transparent !important;
+      stroke-width: 0 !important;
+    }
+    &.pf-m-hover {
+      stroke-width: 4;
+
+      .pf-topology__edge__link {
+        stroke: inherit;
+        stroke-width: inherit;
+      }
+      
+      .step-edge-terminal.pf-topology-connector-arrow {
+        stroke-width: inherit;
+      }
+    }    
+  }
+  // .pf-topology__edge__background {
+  //   stroke: var(--pf-t--global--dark--background--color--100);
+  // }
+  
+  .step-edge {
+    &.step-edge-healthy {
+      stroke: var(--pf-v5-global--success-color--100);
+    }
+    &.step-edge-warning {
+      stroke: var(--pf-v5-global--warning-color--100);
+    }
+    &.step-edge-progressing {
+      stroke: lightblue;
+    }
+  }
+  
+  .step-edge-terminal.pf-topology-connector-arrow {
+    &.step-edge-terminal-healthy {
+      stroke: var(--pf-v5-global--success-color--100);
+      fill: var(--pf-v5-global--success-color--100);
+    }
+    &.step-edge-terminal-warning {
+      stroke: var(--pf-v5-global--warning-color--100);
+      fill: var(--pf-v5-global--warning-color--100);
+    }
+    &.step-edge-terminal-progressing {
+      stroke: lightblue;
+      fill: lightblue;
+    }
+  }
+    
   // Toolbar - move to the top left corner and override Patternfly's style
   // Argo CD toolbar is in the top left corner
   .pf-topology-control-bar {
@@ -19,11 +69,80 @@
     height: 40px !important;
     border-radius: 4px;
     padding: 8px;
+    
+    .pf-v6-c-toolbar__item:has(button#reset-view) {
+      padding-right: 6px;
+    }
+
+    .pf-v6-c-toolbar__item:has(button#setting-owner-reference-layout) {
+      padding-left: 8px;
+      border-left: 2px solid var(--pf-t--global--border--color--default);
+    }
   }
 
   // Not the same as in the Topology view, but seems like a border is better for more visibility,
   // especially when in dark mode. Remove this if we want to be consistent with the Topology view.
   .pf-topology-control-bar__button.pf-v6-c-button.pf-m-tertiary {
     border: 1px solid darkgray;
+  }
+
+  // Step group customization - thicker border
+  .gitops-step-group {
+    .pf-topology__group__background {
+      stroke: var(--pf-t--global--border--color--default);
+      fill: var(--pf-t--global--background--color--floating--default);
+      stroke-width: 1;
+      transform: translateY(10px);
+    }
+
+    &.pf-m-selected .pf-topology__group__background {
+      stroke-width: 3 !important;
+    }
+
+    &.pf-m-hover .pf-topology__group__background {
+      stroke: var(--pf-t--global--border--color--default);
+    }  
+  }
+
+  .gitops-step-group-label > * {
+    transform: translate(0px, -4px);
+
+  }
+  .gitops-step-group-label > .pf-topology__node__label__badge > * {
+    transform: translate(5px, 5px);
+  }
+
+  .gitops-step-group-collapsed-text {
+    fill: var(--pf-t--global--text--color--regular);
+  }  
+
+  .gitops-step-group-label {
+    text {
+      fill: var(--pf-t--global--text--color--regular);
+    }
+    
+    .pf-topology__node__label__background {
+      fill: var(--pf-t--global--background--color--floating--default);
+    }
+
+    .pf-topology__node__action-icon:hover svg{
+      fill: var(--pf-t--global--border--color--default) !important;
+    }
+
+    .pf-topology__node__action-icon__icon svg {
+      fill: var(--pf-t--global--text--color--regular);
+    }
+
+    &.pf-m-selected > .pf-topology__node__label__background {
+      fill: var(--pf-t--global--background--color--floating--default);
+      stroke: var(--pf-t--global--border--color--default);
+      stroke-width: 2;
+    }
+  }
+
+  .pf-topology__node.pf-m-selected.pf-m-warning {
+    .pf-topology__node__label >text {
+      fill: var(--pf-t--global--background--color--floating--default);
+    }
   }
 }
