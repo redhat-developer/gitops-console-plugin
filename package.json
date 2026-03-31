@@ -57,7 +57,7 @@
     "i18next": "^19.8.3",
     "i18next-parser": "^3.3.0",
     "lodash-es": "^4.17.23",
-    "marked": "15.0.12",
+    "marked": "17.0.5",
     "prettier": "^2.6.0",
     "prop-types": "15.8.x",
     "react": "17.0.2",
