@@ -36,28 +36,25 @@ export function getAppSetHealthStatus(appSet: ApplicationSetKind): HealthStatusC
     }
 
     // Check for missing resources
-    const missingResourceExist = resources.find((r) => r.health.status === HealthStatus.MISSING);
+    const missingResourceExist = resources.find((r) => r.health?.status === HealthStatus.MISSING);
     if (missingResourceExist) {
       return 'Missing';
     }
 
-    const degradedResourceExist = resources.find((r) => r.health.status === HealthStatus.DEGRADED);
+    const degradedResourceExist = resources.find((r) => r.health?.status === HealthStatus.DEGRADED);
     if (degradedResourceExist) {
       return 'Degraded';
     }
 
     const progressingResourceExist = resources.find(
-      (r) => r.health.status === HealthStatus.PROGRESSING,
+      (r) => r.health?.status === HealthStatus.PROGRESSING,
     );
     if (progressingResourceExist) {
       return 'Progressing';
     }
 
-    const allHealthyResources = resources.every((r) => r.health.status === HealthStatus.HEALTHY);
-    if (allHealthyResources) {
-      return 'Healthy';
-    }
-    return 'Healthy';
+    const allHealthyResources = resources.every((r) => r.health?.status === HealthStatus.HEALTHY);
+    return allHealthyResources ? 'Healthy' : 'Unknown';
   }
   return 'Unknown';
 }

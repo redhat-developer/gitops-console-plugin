@@ -131,7 +131,7 @@ export interface ApplicationStatusContent {
   application: string;
   status: 'Waiting' | 'Pending' | 'Progressing' | 'Healthy';
   message?: string;
-  lastTransitionTime?: string;
+  lastTransitionTime?: Time;
   step?: string;
   targetRevisions?: string[];
 }

@@ -158,7 +158,7 @@ export const getInitialNodes = (
       const isStepGroupExpanded = stepGroupId ? expandedStepGroups.has(stepGroupId) : false;
 
       let isOwnerRefOnly = false;
-      if (isStepGroupExpanded && appResource?.step > '0') {
+      if (isStepGroupExpanded && parseInt(appResource?.step) > 0) {
         const targetApp = applicationSet.status?.applicationStatus?.find(
           (appStatus) => appStatus.application === application.metadata.name,
         );
@@ -313,7 +313,7 @@ export const getInitialNodes = (
 };
 
 export const getInitialEdges = (
-  application: ApplicationSetKind,
+  applicationSet: ApplicationSetKind,
   applications: ApplicationKind[],
   nodes: NodeModel[],
   isOwnerReferenceView: boolean,
@@ -334,11 +334,11 @@ export const getInitialEdges = (
         id: 'e-applicationset',
         type: isOwnerReferenceView ? 'edge' : 'task-edge',
         source:
-          application.kind +
+          applicationSet.kind +
           '-' +
-          (application.metadata?.name ?? '') +
+          (applicationSet.metadata?.name ?? '') +
           '-' +
-          application.metadata?.namespace,
+          applicationSet.metadata?.namespace,
         target: isOwnerReferenceView ? 'applicationset-node-spacer' : '1-step-group',
         nodeSeparation: 0,
         edgeStyle: EdgeStyle.default,
