@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DevPreviewBadge from 'src/components/import/badges/DevPreviewBadge';
 
+import { ApplicationSetKind } from '@gitops/models/ApplicationSetModel';
 import {
   Action,
   K8sResourceCommon,
@@ -15,7 +16,7 @@ import {
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody, Flex, FlexItem, Spinner } from '@patternfly/react-core';
+import { EmptyState, EmptyStateBody, Flex, FlexItem, Spinner, Title } from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
@@ -35,6 +36,7 @@ import SyncStatusFragment from '../../Statuses/SyncStatus';
 import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
 import { isApplicationRefreshing } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
+import { ApplicationSetGraphView } from '../appset/graph/ApplicationSetGraphView';
 
 import {
   ShowOperandsInAllNamespacesRadioGroup,
@@ -48,7 +50,7 @@ interface ApplicationProps {
   // Needs the console API to support defining your own static filter though since neither a label
   // or a field-selector is available to select just the project apps based on k8s watch api.
   project?: AppProjectKind;
-  appset?: K8sResourceCommon;
+  appset?: K8sResourceCommon | ApplicationSetKind;
   hideNameLabelFilters?: boolean;
   showTitle?: boolean;
 }
@@ -219,6 +221,35 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         </ListPageHeader>
       )}
       <ListPageBody>
+        {/* Show an AppSet specific title if showTitle is undefined. We don't want a duplicate title from above */}
+        {appset && (
+          <Flex flex={{ default: 'flexDefault' }}>
+            {/* {showTitle == undefined && ( */}
+            <Title headingLevel="h2" className="co-section-heading">
+              {t('ApplicationSet Applications')}
+            </Title>
+            {/* )} */}
+            <FlexItem fullWidth={{ default: 'fullWidth' }}>
+              {t(
+                "The graph and table views show the ApplicationSet's applications. Use the filter below the graph to filter applications based on their health and sync status.",
+              )}
+            </FlexItem>
+            <FlexItem
+              fullWidth={{ default: 'fullWidth' }}
+              style={{
+                width: '95%',
+                height: '1000px',
+                border: '1px solid gray',
+                margin: '30px 30px',
+              }}
+            >
+              <ApplicationSetGraphView
+                applicationSet={appset as ApplicationSetKind}
+                applications={filteredData}
+              />
+            </FlexItem>
+          </Flex>
+        )}
         {!hideNameLabelFilters && hasOwnedApplications && (
           <ListPageFilter
             data={data}

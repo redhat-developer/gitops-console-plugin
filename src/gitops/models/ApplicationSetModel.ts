@@ -4,6 +4,8 @@ import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { K8sModel, Selector } from '@openshift-console/dynamic-plugin-sdk/lib/api/common-types';
 import { K8sResourceCondition } from '@openshift-console/dynamic-plugin-sdk-internal/lib/extensions/console-types';
 
+import { Time } from './ApplicationModel';
+
 export const ApplicationSetModel: K8sModel = {
   label: 'ApplicationSet',
   labelPlural: 'ApplicationSets',
@@ -95,10 +97,49 @@ export type AppSetGenerator = {
   union?: UnionAppSetGenerator;
 };
 
-export type ApplicationSetSpec = GeneratorParent; // & {};
+export type ApplicationSetSpec = GeneratorParent & {
+  strategy?: {
+    type: 'AllAtOnce' | 'RollingSync';
+    rollingSync?: {
+      steps: Array<{
+        matchExpressions: Array<{
+          key: string;
+          operator: string;
+          values: string[];
+        }>;
+        maxUpdate: number;
+      }>;
+    };
+  };
+};
+
+export interface ApplicationSetResource {
+  group: string;
+  version: string;
+  kind: string;
+  name: string;
+  namespace: string;
+  status: string;
+  health?: {
+    status: string;
+    lastTransitionTime: Time;
+  };
+  labels?: { [key: string]: string };
+}
+
+export interface ApplicationStatusContent {
+  application: string;
+  status: 'Waiting' | 'Pending' | 'Progressing' | 'Healthy';
+  message?: string;
+  lastTransitionTime?: Time;
+  step?: string;
+  targetRevisions?: string[];
+}
 
 export type ApplicationSetStatus = {
   conditions?: K8sResourceCondition[];
+  resources?: ApplicationSetResource[];
+  applicationStatus?: Array<ApplicationStatusContent>;
 };
 
 export type ApplicationSetKind = K8sResourceCommon & {

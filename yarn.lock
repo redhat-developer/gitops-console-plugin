@@ -1448,25 +1448,6 @@
     tslib "^2.0.0"
     webcola "3.4.0"
 
-"@patternfly/react-topology@^6.4.0":
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-topology/-/react-topology-6.4.0.tgz#d5ddd2f76ee4c3b585462ec94cb533b16bf6be04"
-  integrity sha512-Uy2ofRnI0apYiPWUYIAlXifl+4QPx/sqsVku1WglCkqjMPwuR8vC/GTIJEq2qW7mucDAcWSTFAPc5+zqyPRrlQ==
-  dependencies:
-    "@dagrejs/dagre" "1.1.2"
-    "@patternfly/react-core" "^6.0.0"
-    "@patternfly/react-icons" "^6.0.0"
-    "@patternfly/react-styles" "^6.0.0"
-    "@types/d3" "^7.4.0"
-    "@types/d3-force" "^1.2.1"
-    d3 "^7.8.0"
-    mobx "^6.9.0"
-    mobx-react "^7.6.0"
-    point-in-svg-path "^1.0.1"
-    popper.js "^1.16.1"
-    tslib "^2.0.0"
-    webcola "3.4.0"
-
 "@pkgr/core@^0.1.0":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"

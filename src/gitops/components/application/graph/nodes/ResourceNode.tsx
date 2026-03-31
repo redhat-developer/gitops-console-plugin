@@ -2,10 +2,13 @@
  * Resource Node for Argo CD Resources
  */
 import * as React from 'react';
+import { useLocation } from 'react-router-dom-v5-compat';
 import { observer } from 'mobx-react';
 
 import SvgTextWithOverflow from '@gitops/components/graph/SvgTextWithOverflow';
+import { ApplicationModel } from '@gitops/models/ApplicationModel';
 import { HealthStatus } from '@gitops/utils/constants';
+import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import {
   BadgeLocation,
   DefaultNode,
@@ -30,6 +33,7 @@ export const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithC
   observer(({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
     const data = element.getData();
     const kind = data.icon as string;
+    const location = useLocation();
     return (
       <DefaultNode
         element={element}
@@ -68,6 +72,43 @@ export const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithC
           />
         )}
         <SyncStatusSvgIcon status={data.syncStatus} x={71} y={28} width={16} height={16} />
+        {kind === ApplicationModel.kind && (
+          <foreignObject
+            x={90}
+            y={25}
+            width={100}
+            height={20}
+            color="var(--pf-topology__node__background--Stroke)"
+          >
+            <a
+              href={
+                location.pathname +
+                '/../../../argoproj.io~v1alpha1~Application/' +
+                data.name +
+                '/resources'
+              }
+              target={undefined}
+              rel={undefined}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              title={t('Go to application')}
+            >
+              <i className="fa fa-external-link-alt" />
+            </a>
+          </foreignObject>
+        )}
+        {data.step && (
+          <svg transform={`translate(55, 29)`}>
+            <text x="70" y="12">
+              {data.step !== '-1'
+                ? t('Step {{x}}', {
+                    x: data.step,
+                  })
+                : t('Step: unmatched')}
+            </text>
+          </svg>
+        )}
       </DefaultNode>
     );
   });
