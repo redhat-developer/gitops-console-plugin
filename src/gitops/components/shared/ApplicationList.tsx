@@ -226,12 +226,12 @@ const ApplicationList: React.FC<ApplicationProps> = ({
           <Flex flex={{ default: 'flexDefault' }}>
             {/* {showTitle == undefined && ( */}
             <Title headingLevel="h2" className="co-section-heading">
-              {t('Application Set Applications')}
+              {t('ApplicationSet Applications')}
             </Title>
             {/* )} */}
             <FlexItem fullWidth={{ default: 'fullWidth' }}>
               {t(
-                "The graph and table views show the Application Set's applications.  Use the filter below the graph to filter applications based on their health and sync status.",
+                "The graph and table views show the ApplicationSet's applications. Use the filter below the graph to filter applications based on their health and sync status.",
               )}
             </FlexItem>
             <FlexItem

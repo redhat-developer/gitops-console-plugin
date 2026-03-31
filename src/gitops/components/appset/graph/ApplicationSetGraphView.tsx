@@ -204,13 +204,13 @@ const AppSetContextMenuItem: React.FC<AppSetContextMenuItemProps> = ({
           `/k8s/ns/${applicationSet.metadata?.namespace}/${applicationModelRef}/${applicationSet.metadata?.name}/yaml`,
         );
         break;
-      case t('Edit Application Set'):
+      case t('Edit ApplicationSet'):
         navigate(
           `/k8s/ns/${applicationSet.metadata?.namespace}/${applicationSetModelRef}/${applicationSet.metadata?.name}/yaml`,
         );
         break;
       case t('Delete Application'):
-      case t('Delete Application Set'):
+      case t('Delete ApplicationSet'):
         launchDeleteModal();
         break;
     }
@@ -299,8 +299,8 @@ const createAppSetComponentFactory =
             paramsRef,
             t('Edit labels'),
             t('Edit annotations'),
-            t('Edit Application Set'),
-            t('Delete Application Set'),
+            t('Edit ApplicationSet'),
+            t('Delete ApplicationSet'),
           ),
         )(withSelection()(ApplicationSetNode));
       default:
@@ -334,8 +334,8 @@ export const ApplicationSetGraphView: React.FC<{
   const [treeViewLayout, setTreeViewLayout] = useUserSettings(
     'redhat.gitops.appSetTreeViewLayout',
     isProgressiveSyncEnabled
-      ? TreeViewLayout.OWNER_REFERENCE_LAYOUT
-      : TreeViewLayout.PROGRESSIVE_SYNC_FLOW_LAYOUT,
+      ? TreeViewLayout.PROGRESSIVE_SYNC_FLOW_LAYOUT
+      : TreeViewLayout.OWNER_REFERENCE_LAYOUT,
     false,
   );
   // Track expanded step-groups - only expanded step-groups have their app nodes included in initialNodes
@@ -759,9 +759,6 @@ export const ApplicationSetGraphView: React.FC<{
         // Re-layout with collapsed sizes
         graph.layout();
       });
-    } else if (!initialCollapseAppliedRef.current && treeViewLayout) {
-      // When treeViewLayout is OWNER_REFERENCE_LAYOUT, mark initial collapse as done without collapsing
-      initialCollapseAppliedRef.current = true;
     }
   }, [
     controller,
