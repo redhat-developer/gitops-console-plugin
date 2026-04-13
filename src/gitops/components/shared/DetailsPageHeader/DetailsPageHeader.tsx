@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom-v5-compat';
-import DevPreviewBadge from 'src/components/import/badges/DevPreviewBadge';
+import TechPreviewBadge from 'src/components/import/badges/TechPreviewBadge';
 
 import FavoriteButton from '@gitops/components/shared/FavoriteButton/FavoriteButton';
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
@@ -103,7 +103,11 @@ const DetailsPageHeader: React.FC<DetailsPageHeaderProps> = ({
                 className="details-page-header__item"
                 style={{ marginLeft: '10px', marginBottom: '5px' }}
               >
-                <DevPreviewBadge />
+                <TechPreviewBadge
+                  tooltipContent={t(
+                    'This details page is under tech preview, but not necessarily the resource it represents',
+                  )}
+                />
               </span>
             </Title>
             <ActionList className="co-actions">

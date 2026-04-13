@@ -1,5 +1,7 @@
 import * as React from 'react';
+import TechPreviewBadge from 'src/components/import/badges/TechPreviewBadge';
 
+import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import {
   DetailsTabSectionExtensionHook,
   K8sResourceKind,
@@ -8,7 +10,6 @@ import { TopologyDataObject } from '@openshift-console/dynamic-plugin-sdk/lib/ex
 import { getResource } from '@openshift-console/dynamic-plugin-sdk-internal';
 import { GraphElement } from '@patternfly/react-topology';
 
-import DevPreviewBadge from '../../../components/import/badges/DevPreviewBadge';
 import { PodOverviewItem } from '../console/PodsOverview';
 import { usePodsForRollouts } from '../usePodsForRollouts';
 
@@ -61,7 +62,9 @@ export const ResourceSection: React.FC<{
     <div className="ocs-sidebar-tabsection">
       <div className="co-m-pane__heading-owner">
         <span>
-          <DevPreviewBadge />
+          <TechPreviewBadge
+            tooltipContent={t('Rollouts in the Topology View is under tech preview')}
+          />
           <SidebarSectionHeading text={'Pods'} />
         </span>
         <div>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import * as _ from 'lodash';
+import TechPreviewBadge from 'src/components/import/badges/TechPreviewBadge';
 
 import {
   DetailsTabSectionExtensionHook,
@@ -33,7 +34,6 @@ import { Label as PfLabel, LabelGroup as PfLabelGroup } from '@patternfly/react-
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { GraphElement } from '@patternfly/react-topology';
 
-import DevPreviewBadge from '../../../components/import/badges/DevPreviewBadge';
 import { RolloutKind } from '../types';
 
 export type LabelProps = {
@@ -242,7 +242,9 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
     <>
       <div className="ocs-sidebar-tabsection">
         <div className="co-m-pane__heading-owner">
-          <DevPreviewBadge />
+          <TechPreviewBadge
+            tooltipContent={t('Rollouts in the Topology View is under tech preview')}
+          />
           <SidebarSectionHeading text={'Rollout'} />
         </div>
       </div>

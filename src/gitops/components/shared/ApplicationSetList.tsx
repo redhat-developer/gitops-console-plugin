@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import TechPreviewBadge from 'src/components/import/badges/TechPreviewBadge';
 
 import {
   K8sResourceCommon,
@@ -18,7 +19,6 @@ import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/dynamic
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
-import DevPreviewBadge from '../../../components/import/badges/DevPreviewBadge';
 import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
 import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
 import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
@@ -252,7 +252,13 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
         <ListPageHeader
           title={t('ApplicationSets')}
           badge={
-            location.pathname?.includes('openshift-gitops-operator') ? null : <DevPreviewBadge />
+            location.pathname?.includes('openshift-gitops-operator') ? null : (
+              <TechPreviewBadge
+                tooltipContent={t(
+                  'This list page is under tech preview, but not necessarily the resources it represents',
+                )}
+              />
+            )
           }
           helpText={
             location.pathname?.includes('openshift-gitops-operator') ? (
