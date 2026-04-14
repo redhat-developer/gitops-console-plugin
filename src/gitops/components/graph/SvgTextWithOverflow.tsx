@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 const SvgTextWithOverflow = ({ text, maxWidth, x, y }) => {
+  const originalText = text;
   const textRef = React.useRef(null);
   const [displayedText, setDisplayedText] = React.useState(text);
 
@@ -27,9 +28,12 @@ const SvgTextWithOverflow = ({ text, maxWidth, x, y }) => {
   }, [text, maxWidth]);
 
   return (
-    <text x={x} y={y} ref={textRef}>
-      {displayedText}
-    </text>
+    <g>
+      <title>{originalText}</title>
+      <text x={x} y={y} ref={textRef}>
+        {displayedText}
+      </text>
+    </g>
   );
 };
 

@@ -14,7 +14,10 @@ import {
   PauseIcon,
 } from '@patternfly/react-icons';
 import {
+  BadgeLocation,
   DefaultNode,
+  LabelBadge,
+  LabelPosition,
   Node,
   RectAnchor,
   ShapeProps,
@@ -183,11 +186,20 @@ export const ApplicationSetNode: React.FC<
   CustomNodeProps & WithSelectionProps & WithContextMenuProps
 > = observer(({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
   const data = element.getData();
+  const resourceNodeLayout = data.resourceNodeLayout as boolean;
   return (
     <DefaultNode
       element={element}
       showStatusDecorator={false}
       badge={data.badge}
+      badgeLocation={resourceNodeLayout ? BadgeLocation.below : BadgeLocation.inner}
+      labelPosition={resourceNodeLayout ? LabelPosition.left : LabelPosition.top}
+      labelClassName={
+        resourceNodeLayout
+          ? 'gitops-resource-node-label gitops-application-node-menu'
+          : 'gitops-node-layout'
+      }
+      badgeClassName={resourceNodeLayout ? 'gitops-resource-node-label-badge-opaque' : ''}
       onContextMenu={onContextMenu}
       contextMenuOpen={contextMenuOpen}
       badgeColor={data.badgeColor}
@@ -200,6 +212,22 @@ export const ApplicationSetNode: React.FC<
       getCustomShape={() => {
         return ApplicationSetShape;
       }}
-    />
+    >
+      {resourceNodeLayout && (
+        <>
+          <g id="argocd-application-node-badge" transform={`scale(0.85)`}>
+            <LabelBadge
+              x={-3}
+              y={74}
+              badge={data.badge}
+              badgeClassName={'gitops-resource-node-label-badge'}
+              badgeColor={data.badgeColor}
+              badgeTextColor={data.badgeTextColor}
+              badgeBorderColor={'var(--pf-topology__node__background--Stroke)'}
+            />
+          </g>
+        </>
+      )}
+    </DefaultNode>
   );
 });

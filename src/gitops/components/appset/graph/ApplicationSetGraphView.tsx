@@ -20,7 +20,13 @@ import {
   useLabelsModal,
   useUserSettings,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { EllipsisHIcon, ObjectGroupIcon, SitemapIcon } from '@patternfly/react-icons';
+import {
+  EllipsisHIcon,
+  ObjectGroupIcon,
+  SitemapIcon,
+  ToggleOffIcon,
+  ToggleOnIcon,
+} from '@patternfly/react-icons';
 import { css } from '@patternfly/react-styles';
 import {
   action,
@@ -338,6 +344,11 @@ export const ApplicationSetGraphView: React.FC<{
       : TreeViewLayout.OWNER_REFERENCE_LAYOUT,
     false,
   );
+  const [resourceNodeLayout, setResourceNodeLayout] = useUserSettings(
+    'redhat.gitops.resourceNodeLayout',
+    true,
+    false,
+  );
   // Track expanded step-groups - only expanded step-groups have their app nodes included in initialNodes
   const [expandedStepGroups, setExpandedStepGroups] = React.useState<Set<string>>(new Set());
   const [expandGroups, setExpandGroups] = React.useState<boolean>(false);
@@ -393,6 +404,7 @@ export const ApplicationSetGraphView: React.FC<{
     allK8sModels,
     adjustedExpansionSetting,
     expandedStepGroups,
+    resourceNodeLayout,
   );
   const initialEdges = getInitialEdges(
     applicationSet,
@@ -550,9 +562,13 @@ export const ApplicationSetGraphView: React.FC<{
     .sort()
     .join(',');
   const previousNodeIds = previousNodeIdsRef.current;
+  const resourceNodeLayoutRef = React.useRef<boolean>(resourceNodeLayout);
+  const previousResourceNodeLayout = resourceNodeLayoutRef.current;
 
   const isStructuralChange =
-    currentNodeCount !== previousNodeCount || currentNodeIds !== previousNodeIds;
+    currentNodeCount !== previousNodeCount ||
+    currentNodeIds !== previousNodeIds ||
+    previousResourceNodeLayout != resourceNodeLayout;
 
   if (isStructuralChange || previousNodeCount === 0) {
     // Save graph scale and position before updating model
@@ -641,6 +657,7 @@ export const ApplicationSetGraphView: React.FC<{
 
     previousNodeCountRef.current = currentNodeCount;
     previousNodeIdsRef.current = currentNodeIds;
+    resourceNodeLayoutRef.current = resourceNodeLayout;
   } else {
     // Data change only: Update ONLY changed nodes (no layout, no position changes)
     let updateCount = 0;
@@ -789,6 +806,22 @@ export const ApplicationSetGraphView: React.FC<{
               controller.getGraph().layout();
             }),
             customButtons: [
+              {
+                id: 'toggle-node-layout',
+                icon: resourceNodeLayout ? <ToggleOnIcon /> : <ToggleOffIcon />,
+                tooltip: t(
+                  'Toggle between OpenShift shapes and Argo CD shapes for tree nodes. Current setting: {{x}}',
+                  { x: resourceNodeLayout ? 'Argo CD' : 'OpenShift' },
+                ),
+                ariaLabel: t(
+                  'Toggle between OpenShift shapes and Argo CD shapes for tree nodes. Current setting: {{x}}',
+                  { x: resourceNodeLayout ? 'Argo CD' : 'OpenShift' },
+                ),
+                callback: () => {
+                  setResourceNodeLayout(!resourceNodeLayout);
+                  controller.getGraph().layout();
+                },
+              },
               {
                 id: 'setting-owner-reference-layout',
                 icon: <SitemapIcon style={{ transform: 'rotate(-90deg)' }}></SitemapIcon>,

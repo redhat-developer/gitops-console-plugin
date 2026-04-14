@@ -18,7 +18,7 @@ import {
   useUserSettings,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk/lib/utils/k8s/hooks/useK8sModel';
-import { ObjectGroupIcon } from '@patternfly/react-icons';
+import { ObjectGroupIcon, ToggleOffIcon, ToggleOnIcon } from '@patternfly/react-icons';
 import {
   action,
   ComponentFactory,
@@ -66,7 +66,7 @@ import './ApplicationGraphView.scss';
 const customLayoutFactory: LayoutFactory = (type: string, graph: Graph): Layout | undefined => {
   return new DagreLayout(graph, {
     rankdir: 'LR',
-    ranksep: 1,
+    ranksep: 0,
     nodesep: 0,
     edgesep: 0,
     ranker: 'network-simplex',
@@ -308,6 +308,11 @@ export const ApplicationGraphView: React.FC<{
     false,
     false,
   );
+  const [resourceNodeLayout, setResourceNodeLayout] = useUserSettings(
+    'redhat.gitops.resourceNodeLayout',
+    true,
+    false,
+  );
   const [argoServer, setArgoServer] = React.useState<ArgoServer>({ host: '', protocol: '' });
   const hrefRef = React.useRef<string>('');
   React.useEffect(() => {
@@ -363,6 +368,7 @@ export const ApplicationGraphView: React.FC<{
     allK8sModels,
     groupNodeState,
     groupNodeStates,
+    resourceNodeLayout,
   );
   const initialEdges = getInitialEdges(application, initialNodes, groupNodeState);
   const nodes = [...initialNodes];
@@ -373,12 +379,16 @@ export const ApplicationGraphView: React.FC<{
   // Track the previous node count to detect structural changes
   const previousNodeCountRef = React.useRef<number>(0);
   const groupNodeRef = React.useRef<boolean>(groupNodeState);
+  const resourceNodeLayoutRef = React.useRef<boolean>(resourceNodeLayout);
 
   const currentNodeCount = nodes.length;
   const previousNodeCount = previousNodeCountRef.current;
   const previousGroupNodeState = groupNodeRef.current;
+  const previousResourceNodeLayout = resourceNodeLayoutRef.current;
   const isStructuralChange =
-    currentNodeCount !== previousNodeCount || previousGroupNodeState != groupNodeState;
+    currentNodeCount !== previousNodeCount ||
+    previousGroupNodeState != groupNodeState ||
+    previousResourceNodeLayout != resourceNodeLayout;
 
   if (isStructuralChange || previousNodeCount === 0) {
     // Structural change: Create model WITH layout
@@ -395,6 +405,7 @@ export const ApplicationGraphView: React.FC<{
     controller.fromModel(modelWithLayout, false);
     previousNodeCountRef.current = currentNodeCount;
     groupNodeRef.current = groupNodeState;
+    resourceNodeLayoutRef.current = resourceNodeLayout;
   } else {
     // Data change only: Update ONLY changed nodes (no layout, no position changes)
     let updateCount = 0;
@@ -462,6 +473,22 @@ export const ApplicationGraphView: React.FC<{
               controller.getGraph().layout();
             }),
             customButtons: [
+              {
+                id: 'toggle-node-layout',
+                icon: resourceNodeLayout ? <ToggleOnIcon /> : <ToggleOffIcon />,
+                tooltip: t(
+                  'Toggle between OpenShift shapes and Argo CD shapes for tree nodes. Current setting: {{x}}',
+                  { x: resourceNodeLayout ? 'Argo CD' : 'OpenShift' },
+                ),
+                ariaLabel: t(
+                  'Toggle between OpenShift shapes and Argo CD shapes for tree nodes. Current setting: {{x}}',
+                  { x: resourceNodeLayout ? 'Argo CD' : 'OpenShift' },
+                ),
+                callback: () => {
+                  setResourceNodeLayout(!resourceNodeLayout);
+                  controller.getGraph().layout();
+                },
+              },
               {
                 id: 'use-group-nodes',
                 icon: <ObjectGroupIcon />,

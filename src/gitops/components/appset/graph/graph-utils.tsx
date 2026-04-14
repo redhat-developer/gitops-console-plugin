@@ -31,7 +31,10 @@ const NODE_TYPE_APPLICATIONSET = 'applicationset-node';
 const NODE_TYPE_APPLICATIONSET_LABEL = 'ApplicationSet';
 const STEP_GROUP_WIDTH = 300;
 
-const createApplicationSetNode = (applicationSet: ApplicationSetKind): NodeModel => {
+const createApplicationSetNode = (
+  applicationSet: ApplicationSetKind,
+  resourceNodeLayout: boolean,
+): NodeModel => {
   const appSetHealthStatus = getAppSetHealthStatus(applicationSet);
   const nodeStatus = getTopologyNodeStatus(getAppSetHealthStatus(applicationSet));
   return {
@@ -42,17 +45,19 @@ const createApplicationSetNode = (applicationSet: ApplicationSetKind): NodeModel
       '-' +
       applicationSet?.metadata?.namespace,
     type: NODE_TYPE_APPLICATIONSET,
-    label: NODE_TYPE_APPLICATIONSET_LABEL,
+    label: resourceNodeLayout ? ' ' : NODE_TYPE_APPLICATIONSET_LABEL,
     status: nodeStatus,
     width: APP_NODE_WIDTH,
     height: APP_NODE_HEIGHT,
     data: {
       name: applicationSet?.metadata?.name,
       kind: applicationSet?.kind,
+      resourceNodeLayout: resourceNodeLayout,
       badge: 'AS',
       badgeColor: RESOURCE_COLORS.get(
         RESOURCE_BADGE_COLORS.get('.co-m-resource-' + applicationSet?.kind.toLowerCase()),
       ),
+      badgeTextColor: 'white',
       badgeBorderColor: RESOURCE_COLORS.get(
         RESOURCE_BADGE_COLORS.get('.co-m-resource-' + applicationSet?.kind.toLowerCase()),
       ),
@@ -72,11 +77,12 @@ const createApplicationNode = (
   color: string,
   badgeLabel: string,
   kind: string,
+  resourceNodeLayout: boolean,
 ): NodeModel => {
   return {
     id: nodeId,
     type: 'node',
-    label: application.kind,
+    label: resourceNodeLayout ? ' ' : application.kind,
     width: 280,
     height: NODE_DIAMETER,
     labelPosition: LabelPosition.bottom,
@@ -86,6 +92,7 @@ const createApplicationNode = (
       name: application.metadata?.name,
       id: nodeId,
       step: appResource?.step || undefined,
+      resourceNodeLayout: resourceNodeLayout,
       resourcesLength: application?.status?.resources?.length || 0,
       group: ApplicationModel.apiGroup || 'argoproj.io',
       appIndex: appIndex,
@@ -96,6 +103,7 @@ const createApplicationNode = (
       resourceHealthStatus: application.status?.health?.status || undefined,
       syncStatus: application.status?.sync?.status,
       badgeColor: color,
+      badgeTextColor: 'white',
       badge: badgeLabel,
       icon: kind,
     },
@@ -109,6 +117,7 @@ export const getInitialNodes = (
   allK8sModels: { [key: string]: K8sModel },
   isOwnerReferenceView: boolean, // OwnerReference view or Progressive Sync flow view
   expandedStepGroups: Set<string> = new Set(),
+  resourceNodeLayout: boolean,
 ) => {
   // This contains all the nodes we want to add to the graph view
   const initialNodes: NodeModel[] = [];
@@ -124,7 +133,7 @@ export const getInitialNodes = (
     }
   }
   // Step 1. Create the ApplicationSet Node
-  initialNodes.push(createApplicationSetNode(applicationSet));
+  initialNodes.push(createApplicationSetNode(applicationSet, resourceNodeLayout));
 
   // Step 2: Proceed with adding apps
 
@@ -183,6 +192,7 @@ export const getInitialNodes = (
             color,
             badgeLabel,
             kind,
+            resourceNodeLayout,
           ),
         );
       } else if (isOwnerRefOnly) {
@@ -196,6 +206,7 @@ export const getInitialNodes = (
             color,
             badgeLabel,
             kind,
+            resourceNodeLayout,
           ),
         );
       }
@@ -313,7 +324,7 @@ export const getInitialNodes = (
 };
 
 export const getInitialEdges = (
-  applicationSet: ApplicationSetKind,
+  application: ApplicationSetKind,
   applications: ApplicationKind[],
   nodes: NodeModel[],
   isOwnerReferenceView: boolean,
@@ -334,11 +345,11 @@ export const getInitialEdges = (
         id: 'e-applicationset',
         type: isOwnerReferenceView ? 'edge' : 'task-edge',
         source:
-          applicationSet.kind +
+          application.kind +
           '-' +
-          (applicationSet.metadata?.name ?? '') +
+          (application.metadata?.name ?? '') +
           '-' +
-          applicationSet.metadata?.namespace,
+          application.metadata?.namespace,
         target: isOwnerReferenceView ? 'applicationset-node-spacer' : '1-step-group',
         nodeSeparation: 0,
         edgeStyle: EdgeStyle.default,
