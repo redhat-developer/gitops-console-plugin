@@ -287,7 +287,7 @@
   "There are no Argo Rollouts in this project.": "There are no Argo Rollouts in this project.",
   "There are no Argo Rollouts in all projects.": "There are no Argo Rollouts in all projects.",
   "There was an error retrieving rollouts. Check your connection and reload the page.": "There was an error retrieving rollouts. Check your connection and reload the page.",
-  "Argo Rollouts": "Argo Rollouts",
+  "Rollouts": "Rollouts",
   "Create Rollout": "Create Rollout",
   "Pods": "Pods",
   "Selector": "Selector",
