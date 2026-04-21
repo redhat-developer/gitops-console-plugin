@@ -324,7 +324,7 @@ export const getInitialNodes = (
 };
 
 export const getInitialEdges = (
-  application: ApplicationSetKind,
+  applicationSet: ApplicationSetKind,
   applications: ApplicationKind[],
   nodes: NodeModel[],
   isOwnerReferenceView: boolean,
@@ -345,11 +345,11 @@ export const getInitialEdges = (
         id: 'e-applicationset',
         type: isOwnerReferenceView ? 'edge' : 'task-edge',
         source:
-          application.kind +
+          applicationSet.kind +
           '-' +
-          (application.metadata?.name ?? '') +
+          (applicationSet.metadata?.name ?? '') +
           '-' +
-          application.metadata?.namespace,
+          applicationSet.metadata?.namespace,
         target: isOwnerReferenceView ? 'applicationset-node-spacer' : '1-step-group',
         nodeSeparation: 0,
         edgeStyle: EdgeStyle.default,
