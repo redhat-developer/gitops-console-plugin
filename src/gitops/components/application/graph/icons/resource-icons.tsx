@@ -31,12 +31,17 @@ import {
 interface ResourceIconProps {
   kind: string;
   badge: string;
+  badgeIconTransform?: string;
 }
 
 const iconHeight = 21;
 const iconWidth = 21;
 
-export const ResourceSvgIcon: React.FC<ResourceIconProps> = ({ kind, badge }) => {
+export const ResourceSvgIcon: React.FC<ResourceIconProps> = ({
+  kind,
+  badge,
+  badgeIconTransform,
+}) => {
   let targetIcon: React.ReactNode;
   switch (kind) {
     case 'Namespace':
@@ -77,14 +82,10 @@ export const ResourceSvgIcon: React.FC<ResourceIconProps> = ({ kind, badge }) =>
       break;
     default:
       targetIcon = (
-        <g>
-          <circle
-            transform={'translate(9, 10)'}
-            r="16"
-            fill="#495763"
-            stroke="#495763"
-            strokeWidth="1"
-          />
+        <g transform={badgeIconTransform}>
+          <g transform={'translate(9, 9)'}>
+            <circle r="16" fill="#495763" stroke="#495763" strokeWidth="1" />
+          </g>
           <text x={-1} y={14} width={18} height={18} fill="lightgray">
             {badge}
           </text>

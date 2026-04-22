@@ -32,7 +32,53 @@
   // .pf-topology__edge__background {
   //   stroke: var(--pf-t--global--dark--background--color--100);
   // }
-  
+
+  .pf-topology__node.pf-m-selected {     
+    .pf-topology__node__label__badge > rect {
+      stroke-width: 1;
+    }
+    .pf-topology__node__action-icon__icon .pf-v6-svg{
+      stroke: var(--pf-topology__node--Color);
+      fill: var(--pf-topology__node__label__background--Stroke);
+    }
+    .gitops-node-layout {
+      .pf-topology__node__action-icon__icon .pf-v6-svg{
+        stroke: var(--pf-t--global--border--color--default);
+        fill: var(--pf-topology__node__action-icon__icon--Color);
+      }
+    }
+  }
+
+  .gitops-resource-node-label-badge-opaque {
+    opacity: 0;
+  }
+
+  .gitops-resource-node-label {
+    .pf-topology__node__separator {
+      opacity: 0;
+    }
+    
+    .pf-topology__node__label__background {
+      width: 0px;
+      height: 0px;
+      stroke: var(--pf-topology__node--Color);
+      fill: var(--pf-topology__node--Color);
+    }
+  }
+
+  .gitops-resource-node-menu {
+    transform: translate(243px,10px);
+  }
+
+  .gitops-resource-group-node-menu {
+    transform: translate(243px,25px);
+  }
+
+  .gitops-application-node-menu {
+    transform: translate(263px,25px);
+    fill: var(--pf-topology__node__label__background--Stroke);
+  }
+
   .step-edge {
     &.step-edge-healthy {
       stroke: var(--pf-v5-global--success-color--100);
@@ -74,7 +120,7 @@
       padding-right: 6px;
     }
 
-    .pf-v6-c-toolbar__item:has(button#setting-owner-reference-layout) {
+    .pf-v6-c-toolbar__item:has(button#toggle-node-layout) {
       padding-left: 8px;
       border-left: 2px solid var(--pf-t--global--border--color--default);
     }

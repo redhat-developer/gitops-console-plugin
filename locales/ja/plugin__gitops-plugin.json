@@ -120,6 +120,7 @@
   "Delete Application": "Delete Application",
   "Show {{x}}": "Show {{x}}",
   "Hide {{x}}": "Hide {{x}}",
+  "Toggle between OpenShift shapes and Argo CD shapes for tree nodes. Current setting: {{x}}": "Toggle between OpenShift shapes and Argo CD shapes for tree nodes. Current setting: {{x}}",
   "Group resources of the same kind into one node": "Group resources of the same kind into one node",
   "Group Nodes": "Group Nodes",
   "There is no health status for this resource": "There is no health status for this resource",

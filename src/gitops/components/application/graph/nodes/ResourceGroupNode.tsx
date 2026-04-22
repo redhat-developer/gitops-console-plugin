@@ -13,7 +13,10 @@ import {
   QuestionCircleIcon,
 } from '@patternfly/react-icons';
 import {
+  BadgeLocation,
   DefaultNode,
+  LabelBadge,
+  LabelPosition,
   Node as TopologyNode,
   WithContextMenuProps,
   WithSelectionProps,
@@ -31,6 +34,15 @@ export const ResourceGroupNode: React.FC<
   const data = element.getData();
   // const Icon = data.icon ? data.icon : null;
   const kind = data.icon as string;
+  const resourceNodeLayout = data.resourceNodeLayout as boolean;
+  const truncatedBadge = data.badge.length > 3 ? data.badge.slice(0, 3) : data.badge;
+  let dx = 8;
+  if (truncatedBadge.length === 1) {
+    dx = 17;
+  } else if (truncatedBadge.length === 2) {
+    dx = 12;
+  }
+  const transform = resourceNodeLayout ? `scale(0.6) translate(8, 6)` : '';
   return (
     <DefaultNode
       element={element}
@@ -39,6 +51,14 @@ export const ResourceGroupNode: React.FC<
       onSelect={onSelect}
       selected={selected}
       badge={data.badge}
+      badgeLocation={resourceNodeLayout ? BadgeLocation.below : BadgeLocation.inner}
+      labelPosition={resourceNodeLayout ? LabelPosition.left : LabelPosition.top}
+      labelClassName={
+        resourceNodeLayout
+          ? 'gitops-resource-node-label gitops-resource-group-node-menu'
+          : 'gitops-node-layout'
+      }
+      badgeClassName={resourceNodeLayout ? 'gitops-resource-node-label-badge-opaque' : ''}
       badgeColor={data.badgeColor}
       badgeTextColor={'white'}
       hover={false} // Need to set this to false for proper selection
@@ -46,8 +66,8 @@ export const ResourceGroupNode: React.FC<
     >
       <g transform={`translate(14, 19)`}>
         {kind !== null ? (
-          <g transform={`translate(0, 5)`}>
-            <ResourceSvgIcon kind={kind as string} badge={data.badge} />
+          <g transform={resourceNodeLayout ? `translate(0, -5)` : `translate(0, 5)`}>
+            <ResourceSvgIcon kind={kind} badge={data.badge} badgeIconTransform={transform} />
           </g>
         ) : (
           <g>
@@ -71,6 +91,22 @@ export const ResourceGroupNode: React.FC<
           </g>
         )}
       </g>
+      {resourceNodeLayout && (
+        <>
+          <g transform={`scale(0.85)`}>
+            <LabelBadge
+              x={dx}
+              y={45}
+              badge={data.badge}
+              badgeClassName={'gitops-resource-node-label-badge'}
+              badgeColor={data.badgeColor}
+              badgeTextColor={'white'}
+              badgeBorderColor={'var(--pf-topology__node__background--Stroke)'}
+            />
+          </g>
+        </>
+      )}
+
       <line x1="45" y1="25" x2="277" y2="25" stroke="gray" strokeWidth="1" />
       <svg xmlns="http://www.w3.org/2000/svg">
         <SvgTextWithOverflow

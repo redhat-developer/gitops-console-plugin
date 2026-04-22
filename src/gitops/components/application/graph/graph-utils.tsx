@@ -24,7 +24,10 @@ const NODE_TYPE_APPLICATION = 'application-node';
 const NODE_TYPE_APPLICATION_LABEL = 'Application';
 
 // Map application health status with topology node status
-const createApplicationNode = (application: ApplicationKind): NodeModel => {
+const createApplicationNode = (
+  application: ApplicationKind,
+  resourceNodeLayout: boolean,
+): NodeModel => {
   const nodeStatus = getTopologyNodeStatus(application.status?.health?.status);
   return {
     id:
@@ -34,7 +37,7 @@ const createApplicationNode = (application: ApplicationKind): NodeModel => {
       '-' +
       application?.metadata?.namespace,
     type: NODE_TYPE_APPLICATION,
-    label: NODE_TYPE_APPLICATION_LABEL,
+    label: resourceNodeLayout ? ' ' : NODE_TYPE_APPLICATION_LABEL,
     status: nodeStatus,
     width: APP_NODE_WIDTH,
     height: APP_NODE_HEIGHT,
@@ -47,7 +50,9 @@ const createApplicationNode = (application: ApplicationKind): NodeModel => {
       badgeBorderColor: RESOURCE_COLORS.get(
         RESOURCE_BADGE_COLORS.get('.co-m-resource-' + application?.kind.toLowerCase()),
       ),
+      badgeTextColor: 'white',
       rank: 0,
+      resourceNodeLayout: resourceNodeLayout,
       nodeStatus: nodeStatus,
       resourceHealthStatus: application?.status?.health?.status,
       appHealthStatus: application?.status?.health?.status,
@@ -105,6 +110,7 @@ const createGroupResourceNode = (
   resources: ApplicationResourceStatus[],
   allK8sModels: { [key: string]: K8sModel },
   resourceGroupExpandState: boolean,
+  resourceNodeLayout: boolean,
 ): Map<string, NodeModel> => {
   const resourceCount = resources.filter((res) => res.kind === resource.kind).length;
   const resourceHealthyCount = resource.health
@@ -186,7 +192,7 @@ const createGroupResourceNode = (
     groupResourceNode = {
       id: kind + '-node-group',
       type: 'node-group',
-      label: allK8sModels[kind]?.labelPlural || kind + 's',
+      label: resourceNodeLayout ? ' ' : allK8sModels[kind]?.labelPlural || kind + 's',
       shape: NodeShape.stadium,
       status: groupStatus,
       width: 280,
@@ -196,6 +202,7 @@ const createGroupResourceNode = (
         kind: kind, // Group's kind
         kindPlural: allK8sModels[kind]?.labelPlural || kind + 's',
         resourceGroupExpandState: resourceGroupExpandState,
+        resourceNodeLayout: resourceNodeLayout,
         nodeStatus: groupStatus,
         healthStatus: groupStatus,
         healthyCount: resourceHealthyCount,
@@ -217,6 +224,7 @@ const createGroupResourceNode = (
         badgeColor:
           RESOURCE_COLORS.get(RESOURCE_BADGE_COLORS.get('.co-m-resource-' + kind.toLowerCase())) ||
           RESOURCE_COLORS.get('color-container-dark'),
+        badgeTextColor: 'white',
         icon: kind,
         resourceChildrenIds: [],
       },
@@ -246,6 +254,7 @@ export const getInitialNodes = (
   allK8sModels: { [key: string]: K8sModel },
   showGroupNodes: boolean,
   groupNodeStates: string[],
+  resourceNodeLayout: boolean,
 ) => {
   // This contains all the nodes we want to add to the graph view
   const initialNodes: NodeModel[] = [];
@@ -253,7 +262,7 @@ export const getInitialNodes = (
   let groupResourceNodeMap = new Map<string, NodeModel>();
 
   // Step 1. Create the Application Node
-  initialNodes.push(createApplicationNode(application));
+  initialNodes.push(createApplicationNode(application, resourceNodeLayout));
 
   // Step 2: Proceed with adding more nodes only if the application has resources
   // If we use the resource tree in the future, this will change
@@ -261,14 +270,14 @@ export const getInitialNodes = (
     // Spacer node to the right of the application node. Fixed.
     initialNodes.push(createSpacerNode(1, 'application-node-spacer'));
     // Add child resources
-    resources.forEach((resource) => {
+    resources.forEach((resource, count) => {
       const kind = resource.kind;
       const badgeLabel = allK8sModels[kind]?.abbr || kindToAbbr(kind);
       const color =
         RESOURCE_COLORS.get(
           RESOURCE_BADGE_COLORS.get('.co-m-resource-' + resource.kind.toLowerCase()),
         ) || RESOURCE_COLORS.get('color-container-dark');
-      const nodeId = resource.kind + '-' + resource.name + '-' + resource.namespace;
+      const nodeId = count + '-' + resource.kind + '-' + resource.name + '-' + resource.namespace;
       const key = resource.kind + 's';
       const resourceGroupExpandState = groupNodeStates.includes(key);
 
@@ -280,6 +289,7 @@ export const getInitialNodes = (
           resources,
           allK8sModels,
           resourceGroupExpandState,
+          resourceNodeLayout,
         );
 
         if (!initialNodes.includes(groupResourceNodeMap.get(kind))) {
@@ -295,7 +305,7 @@ export const getInitialNodes = (
         initialNodes.push({
           id: nodeId,
           type: 'node',
-          label: resource.kind,
+          label: resourceNodeLayout ? ' ' : resource.kind,
           width: 280,
           height: NODE_DIAMETER,
           labelPosition: LabelPosition.bottom,
@@ -305,6 +315,7 @@ export const getInitialNodes = (
             name: resource.name,
             group: resource.group,
             kind: resource.kind,
+            resourceNodeLayout: resourceNodeLayout,
             version: resource.version,
             namespace: resource.namespace,
             indent: 100,
@@ -313,6 +324,7 @@ export const getInitialNodes = (
             syncStatus: resource.status,
             rank: 5,
             badgeColor: color,
+            badgeTextColor: 'white',
             badge: badgeLabel,
             icon: kind,
           },
@@ -348,7 +360,6 @@ export const getInitialNodes = (
             selectable: false,
             hideContextMenuKebab: true,
             hulledOutline: false,
-            style: { padding: 40 },
             data: {
               kind: groupNode.data.kind,
             },
@@ -382,7 +393,6 @@ export const getInitialNodes = (
           selectable: false,
           hideContextMenuKebab: true,
           hulledOutline: false,
-          style: { padding: 40 },
         };
         initialNodes.push(transparentGroupsOfGroups);
       }
@@ -420,7 +430,7 @@ export const getInitialEdges = (
           target: node.id,
           edgeStyle: EdgeStyle.dotted,
           data: {
-            indent: 100,
+            indent: 0,
           },
         });
       }
@@ -432,7 +442,7 @@ export const getInitialEdges = (
           target: node.data.kind + '-node-spacer',
           edgeStyle: EdgeStyle.dotted,
           data: {
-            indent: 100,
+            indent: 0,
           },
         });
       }
@@ -445,17 +455,18 @@ export const getInitialEdges = (
         if (node.type === 'node') {
           const b =
             nodes.filter(
-              (res) => res.type === 'node-group' && res.id === node.label + '-node-group',
+              (res) => res.type === 'node-group' && res.id === node.data.kind + '-node-group',
             ).length > 0;
           initialEdges.push({
-            id: 'e-' + node.label + '-' + index,
+            id: 'e-' + node.data.kind + '-' + index,
             type: 'edge',
             nodeSeparation: 0,
-            source: showGroupNodes && b ? node.label + '-node-spacer' : 'application-node-spacer',
+            source:
+              showGroupNodes && b ? node.data.kind + '-node-spacer' : 'application-node-spacer',
             target: node.id,
             edgeStyle: EdgeStyle.default,
             data: {
-              indent: 100,
+              indent: 0,
             },
           });
         }
