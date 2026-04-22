@@ -120,7 +120,11 @@ export const useGitOpsDataViewSort = (
   columns: GitOpsDataViewSortConfig[],
 ): UseGitOpsDataViewSortResult => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { sortBy, direction, onSort } = useDataViewSort({ searchParams, setSearchParams });
+  const { sortBy, direction, onSort } = useDataViewSort({
+    initialSort: { sortBy: 'name', direction: 'asc' },
+    searchParams,
+    setSearchParams,
+  });
 
   const sortByIndex = React.useMemo(
     () => columns.findIndex((column) => column.key === sortBy),

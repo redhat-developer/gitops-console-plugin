@@ -179,7 +179,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
     <>
       {showTitle == undefined && (
         <ListPageHeader
-          title={t('Argo Rollouts')}
+          title={t('Rollouts')}
           badge={
             location.pathname?.includes('openshift-gitops-operator') ? null : (
               <TechPreviewBadge
