@@ -10,6 +10,7 @@ import {
 import { ApplicationKind, ApplicationModel } from '@gitops/models/ApplicationModel';
 import { ApplicationSetKind, ApplicationStatusContent } from '@gitops/models/ApplicationSetModel';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
+import { resourcePathFromModel } from '@gitops/utils/utils';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import {
   CenterAnchor,
@@ -78,6 +79,7 @@ const createApplicationNode = (
   badgeLabel: string,
   kind: string,
   resourceNodeLayout: boolean,
+  resourcePath: string,
 ): NodeModel => {
   return {
     id: nodeId,
@@ -93,6 +95,7 @@ const createApplicationNode = (
       id: nodeId,
       step: appResource?.step || undefined,
       resourceNodeLayout: resourceNodeLayout,
+      resourcePath: resourcePath,
       resourcesLength: application?.status?.resources?.length || 0,
       group: ApplicationModel.apiGroup || 'argoproj.io',
       appIndex: appIndex,
@@ -145,6 +148,13 @@ export const getInitialNodes = (
     // Add applications to nodes list
     applications.forEach((application, appIndex) => {
       const kind = application.kind;
+      const resourcePath =
+        resourcePathFromModel(
+          ApplicationModel as K8sModel,
+          application.metadata?.name,
+          application.metadata?.namespace,
+        ) + '/resources';
+
       const badgeLabel = allK8sModels[kind]?.abbr || kindToAbbr(kind);
       const color =
         RESOURCE_COLORS.get(
@@ -193,6 +203,7 @@ export const getInitialNodes = (
             badgeLabel,
             kind,
             resourceNodeLayout,
+            resourcePath,
           ),
         );
       } else if (isOwnerRefOnly) {
@@ -207,6 +218,7 @@ export const getInitialNodes = (
             badgeLabel,
             kind,
             resourceNodeLayout,
+            resourcePath,
           ),
         );
       }

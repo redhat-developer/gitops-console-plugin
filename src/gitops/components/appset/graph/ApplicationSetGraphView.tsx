@@ -219,6 +219,9 @@ const AppSetContextMenuItem: React.FC<AppSetContextMenuItemProps> = ({
       case t('Delete ApplicationSet'):
         launchDeleteModal();
         break;
+      case t('View Details'):
+        navigate(graphElement.getData().resourcePath);
+        break;
     }
   };
 
@@ -271,9 +274,9 @@ const getResourceMenuItems = (
     return createContextMenuItems(
       graphElement,
       paramsRef,
-      t('Edit Application'),
       t('Delete Application'),
       '-',
+      t('View Details'),
       t('View in Argo CD'),
     );
   }
@@ -349,9 +352,14 @@ export const ApplicationSetGraphView: React.FC<{
     true,
     false,
   );
+  // Use a setting to save the expand group state instead of alway having it set to a default value
+  const [expandGroups, setExpandGroups] = useUserSettings(
+    'redhat.gitops.expandGroups',
+    false,
+    false,
+  );
   // Track expanded step-groups - only expanded step-groups have their app nodes included in initialNodes
   const [expandedStepGroups, setExpandedStepGroups] = React.useState<Set<string>>(new Set());
-  const [expandGroups, setExpandGroups] = React.useState<boolean>(false);
   const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
   const [renderKey, setRenderKey] = React.useState(0);
   // Track if initial collapse is pending - hide graph until complete to avoid flicker
@@ -552,7 +560,6 @@ export const ApplicationSetGraphView: React.FC<{
   } | null>(null);
   // Track if initial collapse has been done
   const initialCollapseAppliedRef = React.useRef<boolean>(false);
-  // Ref to always access current controller in setTimeout
   const controllerRef = React.useRef(controller);
   controllerRef.current = controller;
   const currentNodeCount = nodes.length;
@@ -637,6 +644,10 @@ export const ApplicationSetGraphView: React.FC<{
         }
         graph2.layout();
       });
+    } else {
+      if (expandGroups) {
+        setExpandedStepGroups(new Set(stepGroupIds));
+      }
     }
 
     // Restore graph scale and position after model update
@@ -901,11 +912,7 @@ export const ApplicationSetGraphView: React.FC<{
                   skipExpandGroupsEffectRef.current = true;
 
                   // Update expandGroups state
-                  if (expandGroups) {
-                    setExpandGroups(false);
-                  } else {
-                    setExpandGroups(true);
-                  }
+                  setExpandGroups(!expandGroups);
                 },
               },
             ],

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { COLORS } from '@gitops/components/shared/colors';
 import {
+  getGroupVersionKindForModel,
   GroupVersionKind,
   K8sResourceCommon,
   K8sResourceKindReference,
@@ -48,6 +49,37 @@ export const getResourceUrl = (urlProps: ResourceUrlProps): string => {
   const name = resource?.metadata?.name || '';
 
   return `/k8s/${namespaced ? namespaceUrl : 'cluster'}/${ref}/${name}`;
+};
+
+export const resourcePathFromModel = (model: K8sModel, name?: string, namespace?: string) => {
+  const { plural, namespaced, crd } = model;
+
+  let url = '/k8s/';
+
+  if (!namespaced) {
+    url += 'cluster/';
+  }
+
+  if (namespaced) {
+    url += namespace ? `ns/${namespace}/` : 'all-namespaces/';
+  }
+  // 'argoproj.io~v1alpha1~Application'
+  if (crd) {
+    url +=
+      model.kind === 'Application'
+        ? 'argoproj.io~v1alpha1~Application'
+        : getGroupVersionKindForModel(model);
+  } else if (plural) {
+    url += plural;
+  }
+
+  if (name) {
+    // Some resources have a name that needs to be encoded. For instance,
+    // Users can have special characters in the name like `#`.
+    url += `/${encodeURIComponent(name)}`;
+  }
+
+  return url;
 };
 
 export function useObjectModifyPermissions(
