@@ -2,11 +2,7 @@ import * as React from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom-v5-compat';
 import { observer } from 'mobx-react';
 
-import {
-  ApplicationKind,
-  ApplicationModel,
-  applicationModelRef,
-} from '@gitops/models/ApplicationModel';
+import { ApplicationKind, ApplicationModel } from '@gitops/models/ApplicationModel';
 import { ApplicationSetKind, applicationSetModelRef } from '@gitops/models/ApplicationSetModel';
 import { HealthStatus } from '@gitops/utils/constants';
 import { ArgoServer, getArgoServer } from '@gitops/utils/gitops';
@@ -205,11 +201,6 @@ const AppSetContextMenuItem: React.FC<AppSetContextMenuItemProps> = ({
       case t('Edit annotations'):
         launchAnnotationsModal();
         break;
-      case t('Edit Application'):
-        navigate(
-          `/k8s/ns/${applicationSet.metadata?.namespace}/${applicationModelRef}/${applicationSet.metadata?.name}/yaml`,
-        );
-        break;
       case t('Edit ApplicationSet'):
         navigate(
           `/k8s/ns/${applicationSet.metadata?.namespace}/${applicationSetModelRef}/${applicationSet.metadata?.name}/yaml`,
@@ -219,7 +210,7 @@ const AppSetContextMenuItem: React.FC<AppSetContextMenuItemProps> = ({
       case t('Delete ApplicationSet'):
         launchDeleteModal();
         break;
-      case t('View Details'):
+      case t('View Graph'):
         navigate(graphElement.getData().resourcePath);
         break;
     }
@@ -276,7 +267,7 @@ const getResourceMenuItems = (
       paramsRef,
       t('Delete Application'),
       '-',
-      t('View Details'),
+      t('View Graph'),
       t('View in Argo CD'),
     );
   }
