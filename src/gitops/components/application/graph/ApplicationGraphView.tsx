@@ -59,7 +59,12 @@ import { GraphResourceMenuItem } from './hooks/GraphResourceMenuItems';
 import { ApplicationNode } from './nodes/ApplicationNode';
 import { ResourceGroupNode } from './nodes/ResourceGroupNode';
 import { ResourceNode } from './nodes/ResourceNode';
-import { getInitialEdges, getInitialNodes } from './graph-utils';
+import {
+  getInitialEdges,
+  getInitialNodes,
+  getResourceMapKey,
+  getResourcePathForResource,
+} from './graph-utils';
 
 import './ApplicationGraphView.scss';
 
@@ -122,7 +127,6 @@ const customComponentFactory =
       ) {
         return <GraphResourceMenuItem key={label} graphElement={graphElement} label={label} />;
       }
-
       // For other actions that don't need resource-specific hooks
       return (
         <ContextMenuItem
@@ -130,6 +134,9 @@ const customComponentFactory =
           onClick={() => {
             if (label === t('View in Argo CD')) {
               window.open(hrefRef.current, '_blank');
+            }
+            if (label === t('View Details')) {
+              navigate(graphElement.getData().resourcePath);
             }
           }}
         >
@@ -146,26 +153,14 @@ const customComponentFactory =
         graphElement.getData().kind === 'AppProject' ||
         graphElement.getData().kind === 'Namespace'
       ) {
-        return createContextMenuItems2(graphElement, [
-          t('Edit labels'),
-          t('Edit annotations'),
-          t('Edit {{x}}', {
-            x: graphElement.getData().kind,
-          }),
-          '-',
-          t('View in Argo CD'),
-        ]);
+        return createContextMenuItems2(graphElement, [t('View Details'), t('View in Argo CD')]);
       } else {
         return createContextMenuItems2(graphElement, [
-          t('Edit labels'),
-          t('Edit annotations'),
-          t('Edit {{x}}', {
-            x: graphElement.getData().kind,
-          }),
           t('Delete {{x}}', {
             x: graphElement.getData().kind,
           }),
           '-',
+          t('View Details'),
           t('View in Argo CD'),
         ]);
       }
@@ -362,6 +357,18 @@ export const ApplicationGraphView: React.FC<{
     return newController;
   }, []);
 
+  const resourcePaths = React.useMemo(() => {
+    const map = new Map<string, string>();
+    resources.forEach((resource) => {
+      const mapKey = getResourceMapKey(resource);
+      if (resource.health?.status !== HealthStatus.MISSING) {
+        map.set(mapKey, getResourcePathForResource(resource, allK8sModels));
+      } else {
+        map.set(mapKey, '');
+      }
+    });
+    return map;
+  }, [resources, allK8sModels]);
   const initialNodes = getInitialNodes(
     application,
     resources,
@@ -369,6 +376,7 @@ export const ApplicationGraphView: React.FC<{
     groupNodeState,
     groupNodeStates,
     resourceNodeLayout,
+    resourcePaths,
   );
   const initialEdges = getInitialEdges(application, initialNodes, groupNodeState);
   const nodes = [...initialNodes];

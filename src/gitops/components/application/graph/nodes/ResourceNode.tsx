@@ -2,13 +2,15 @@
  * Resource Node for Argo CD Resources
  */
 import * as React from 'react';
-import { useLocation } from 'react-router-dom-v5-compat';
+import { Link } from 'react-router-dom-v5-compat';
 import { observer } from 'mobx-react';
 
 import SvgTextWithOverflow from '@gitops/components/graph/SvgTextWithOverflow';
 import { ApplicationModel } from '@gitops/models/ApplicationModel';
 import { HealthStatus } from '@gitops/utils/constants';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
+import { resourcePathFromModel } from '@gitops/utils/utils';
+import { K8sModel, useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import {
   BadgeLocation,
   DefaultNode,
@@ -33,9 +35,8 @@ interface CustomNodeProps {
 export const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithContextMenuProps> =
   observer(({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
     const data = element.getData();
-    const kind = data.icon as string;
+    const kind = data.kind as string;
     const resourceNodeLayout = data.resourceNodeLayout as boolean;
-    const location = useLocation();
     const truncatedBadge = data.badge.length > 3 ? data.badge.slice(0, 3) : data.badge;
     let dx = 8;
     if (truncatedBadge.length === 1) {
@@ -43,6 +44,16 @@ export const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithC
     } else if (truncatedBadge.length === 2) {
       dx = 12;
     }
+    const [k8sModel] = useK8sModel({
+      group: data.group,
+      version: data.version,
+      kind: data.kind,
+    });
+    const resourcePath =
+      data.kind === ApplicationModel.kind
+        ? resourcePathFromModel(ApplicationModel as K8sModel, data.name, data.namespace) +
+          '/resources'
+        : resourcePathFromModel(k8sModel as K8sModel, data.name, data.namespace);
     const transform = resourceNodeLayout ? `scale(0.6) translate(8, 6)` : '';
     return (
       <DefaultNode
@@ -105,32 +116,27 @@ export const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithC
           />
         )}
         <SyncStatusSvgIcon status={data.syncStatus} x={71} y={28} width={16} height={16} />
+        {data.resourceHealthStatus !== HealthStatus.MISSING && (
+          <foreignObject
+            x={90}
+            y={25}
+            width={20}
+            height={20}
+            color="var(--pf-topology__node__background--Stroke)"
+          >
+            <Link
+              to={resourcePath}
+              title={''}
+              className="co-resource-item__resource-name"
+              data-test-id={data.name}
+              data-test={data.name}
+            >
+              <i className="fa fa-external-link-alt" />
+            </Link>
+          </foreignObject>
+        )}
         {kind === ApplicationModel.kind && (
           <>
-            <foreignObject
-              x={90}
-              y={25}
-              width={100}
-              height={20}
-              color="var(--pf-topology__node__background--Stroke)"
-            >
-              <a
-                href={
-                  location.pathname +
-                  '/../../../argoproj.io~v1alpha1~Application/' +
-                  data.name +
-                  '/resources'
-                }
-                target={undefined}
-                rel={undefined}
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-                title={t('Go to application')}
-              >
-                <i className="fa fa-external-link-alt" />
-              </a>
-            </foreignObject>
             {data.step && (
               <svg transform={`translate(55, 29)`}>
                 <text x="70" y="12">

@@ -7,8 +7,13 @@ import {
   kindToAbbr,
   NODE_DIAMETER,
 } from '@gitops/components/graph/utils';
-import { ApplicationKind, ApplicationResourceStatus } from '@gitops/models/ApplicationModel';
+import {
+  ApplicationKind,
+  ApplicationModel,
+  ApplicationResourceStatus,
+} from '@gitops/models/ApplicationModel';
 import { HealthStatus, SyncStatus } from '@gitops/utils/constants';
+import { resourcePathFromModel } from '@gitops/utils/utils';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import {
   EdgeStyle,
@@ -247,6 +252,27 @@ const createGroupResourceNode = (
   return groupResourceNodeMap;
 };
 
+export const getResourceMapKey = (resource: ApplicationResourceStatus): string => {
+  return `${resource.group}-${resource.version}-${resource.kind}-${resource.namespace}-${resource.name}`;
+};
+
+export const getResourcePathForResource = (
+  resource: ApplicationResourceStatus,
+  allK8sModels: { [key: string]: K8sModel },
+): string => {
+  if (resource.kind === ApplicationModel.kind) {
+    return (
+      resourcePathFromModel(ApplicationModel as K8sModel, resource.name, resource.namespace) +
+      '/resources'
+    );
+  }
+  const k8sModel = allK8sModels[resource.kind];
+  if (!k8sModel) {
+    return '';
+  }
+  return resourcePathFromModel(k8sModel, resource.name, resource.namespace);
+};
+
 // Application Graph Nodes
 export const getInitialNodes = (
   application: ApplicationKind,
@@ -255,6 +281,7 @@ export const getInitialNodes = (
   showGroupNodes: boolean,
   groupNodeStates: string[],
   resourceNodeLayout: boolean,
+  resourcePaths: Map<string, string>,
 ) => {
   // This contains all the nodes we want to add to the graph view
   const initialNodes: NodeModel[] = [];
@@ -280,6 +307,8 @@ export const getInitialNodes = (
       const nodeId = count + '-' + resource.kind + '-' + resource.name + '-' + resource.namespace;
       const key = resource.kind + 's';
       const resourceGroupExpandState = groupNodeStates.includes(key);
+
+      const resourcePath = resourcePaths.get(getResourceMapKey(resource));
 
       if (showGroupNodes && resources.filter((res) => res.kind === resource.kind).length > 1) {
         groupResourceNodeMap = createGroupResourceNode(
@@ -316,6 +345,7 @@ export const getInitialNodes = (
             group: resource.group,
             kind: resource.kind,
             resourceNodeLayout: resourceNodeLayout,
+            resourcePath: resourcePath,
             version: resource.version,
             namespace: resource.namespace,
             indent: 100,
