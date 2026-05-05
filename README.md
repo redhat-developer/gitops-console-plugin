@@ -7,8 +7,8 @@ Based on [Openshift Console dynamic plugin](https://github.com/openshift/console
 
 In one terminal window, run:
 
-1. `yarn install`
-2. `yarn run start`
+1. `pnpm install`
+2. `pnpm run start`
 
 In another terminal window, run:
 
@@ -30,7 +30,7 @@ spec:
     termination: reencrypt
     insecureEdgeTerminationPolicy: Allow
 ```
-3. `yarn run start-console` (requires [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io))
+3. `pnpm run start-console` (requires [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io))
 
 This will run the OpenShift console in a container connected to the cluster
 you've logged into. The plugin HTTP server runs on port 9001 with CORS enabled.
@@ -38,7 +38,7 @@ Navigate to <http://localhost:9000/envdynamic> to see the running plugin.
 
 #### Running start-console with Apple silicon and podman
 
-If you are using podman on a Mac with Apple silicon, `yarn run start-console`
+If you are using podman on a Mac with Apple silicon, `pnpm run start-console`
 might fail since it runs an amd64 image. You can work around the problem with
 [qemu-user-static](https://github.com/multiarch/qemu-user-static) by running
 these commands:
@@ -54,8 +54,8 @@ systemctl reboot
 
 In plugin directory, run
 
-1. `yarn install`
-2. `yarn run start`
+1. `pnpm install`
+2. `pnpm run start`
 
 In your local `console/` directory
 
@@ -90,13 +90,13 @@ Unit tests use [Jest](https://jestjs.io/) with inline snapshots (`toMatchInlineS
 
 ```bash
 # Run all tests
-yarn test
+pnpm test
 
 # Run tests and update inline snapshots
-yarn test:update
+pnpm test:update
 
 # Run tests with coverage report
-yarn test:coverage
+pnpm test:coverage
 ```
 
-When a component's rendered output or a utility's return value changes, the inline snapshots will fail. Run `yarn test:update` to accept the new output — the diff will show exactly what changed.
+When a component's rendered output or a utility's return value changes, the inline snapshots will fail. Run `pnpm test:update` to accept the new output — the diff will show exactly what changed.
