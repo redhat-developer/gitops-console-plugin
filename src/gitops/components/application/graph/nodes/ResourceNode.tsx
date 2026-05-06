@@ -49,11 +49,13 @@ export const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithC
       version: data.version,
       kind: data.kind,
     });
-    const resourcePath =
-      data.kind === ApplicationModel.kind
+    // eslint-disable-next-line no-nested-ternary
+    const resourcePath = k8sModel
+      ? data.kind === ApplicationModel.kind
         ? resourcePathFromModel(ApplicationModel as K8sModel, data.name, data.namespace) +
           '/resources'
-        : resourcePathFromModel(k8sModel as K8sModel, data.name, data.namespace);
+        : resourcePathFromModel(k8sModel as K8sModel, data.name, data.namespace)
+      : '';
     const transform = resourceNodeLayout ? `scale(0.6) translate(8, 6)` : '';
     return (
       <DefaultNode
