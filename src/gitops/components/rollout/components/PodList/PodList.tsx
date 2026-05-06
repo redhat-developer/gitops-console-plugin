@@ -497,7 +497,7 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
 
 function getMetric(podName: string, results): string {
   let value = '-';
-  if (results.data) {
+  if (results?.data) {
     results.data.result.forEach((result) => {
       if (result.metric.pod == podName) {
         value = '' + result.value[1];
