@@ -1,6 +1,6 @@
 import * as React from 'react';
-import ExternalLink from 'src/components/utils/ExternalLink/ExternalLink';
 
+import ExternalLink from '@gitops/utils/components/ExternalLink/ExternalLink';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import argoImage from '@images/argo.png';
 import { Tooltip } from '@patternfly/react-core';

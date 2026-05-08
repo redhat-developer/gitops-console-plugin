@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom-v5-compat';
-import TechPreviewBadge from 'src/components/import/badges/TechPreviewBadge';
+import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
 import { modelToGroupVersionKind, modelToRef } from '@gitops/utils/utils';

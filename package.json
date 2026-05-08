@@ -92,12 +92,6 @@
     "version": "0.0.17",
     "displayName": "GitOps Plugin",
     "description": "OpenShift Console plugin for GitOps.",
-    "exposedModules": {
-      "environments": "./components/ApplicationListPage",
-      "detailsPage": "./components/EnvironmentDetailsPageTabs",
-      "gitopsFlags": "./components/utils/flags",
-      "topology": "./components/topology"
-    },
     "dependencies": {
       "@console/pluginAPI": "*"
     }

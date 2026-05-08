@@ -1,5 +1,4 @@
-import { PodKind } from 'src/components/topology/console/types';
-
+import { PodKind } from '@gitops/topology/console/types';
 import {
   K8sResourceCommon,
   Operator,

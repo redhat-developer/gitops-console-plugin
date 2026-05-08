@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import ExternalLink from 'src/components/utils/ExternalLink/ExternalLink';
 
 import ArgoCDLink from '@gitops/components/shared/ArgoCDLink/ArgoCDLink';
 import Revision from '@gitops/Revision/Revision';
+import ExternalLink from '@gitops/utils/components/ExternalLink/ExternalLink';
 import { ArgoServer, getArgoServer } from '@gitops/utils/gitops';
 import { repoUrl } from '@gitops/utils/urls';
 import { ApplicationHistory, ApplicationKind } from '@gitops-models/ApplicationModel';

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom-v5-compat';
-import { PodKind } from 'src/components/topology/console/types';
 
 import { getPodStatus } from '@gitops/components/shared/pod-utils';
+import { PodKind } from '@gitops/topology/console/types';
 import { isApplicationRefreshing } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { getResourceUrl, modelToGroupVersionKind, resourceAsArray } from '@gitops/utils/utils';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import TechPreviewBadge from 'src/components/import/badges/TechPreviewBadge';
+import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 
 import {
   K8sResourceCommon,

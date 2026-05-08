@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { createRevisionURL } from 'src/gitops/utils/gitops';
 
+import ExternalLink from '@gitops/utils/components/ExternalLink/ExternalLink';
 import { isSHA, revisionUrl } from '@gitops/utils/urls';
-
-import ExternalLink from '../utils/components/ExternalLink/ExternalLink';
 
 interface RevisionProps {
   repoURL: string;

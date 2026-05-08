@@ -1,5 +1,4 @@
-import { DeploymentCondition, PodTemplate } from 'src/components/topology/console/types';
-
+import { DeploymentCondition, PodTemplate } from '@gitops/topology/console/types';
 import { modelToRef } from '@gitops/utils/utils';
 import { K8sModel, K8sResourceCommon, Selector } from '@openshift-console/dynamic-plugin-sdk';
 

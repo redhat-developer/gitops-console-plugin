@@ -6,40 +6,6 @@
     "type": "console.flag"
   },
   {
-    "type": "console.navigation/href",
-    "properties": {
-      "id": "gitops-environment",
-      "perspective": "dev",
-      "section": "resources",
-      "insertAfter": "pipelines",
-      "insertBefore": "helm",
-      "name": "Environments",
-      "href": "/envdynamic",
-      "dataAttributes": {
-        "data-test-id": "envdynamic-header"
-      }
-    },
-    "flags": {
-      "required": ["OPENSHIFT"]
-    }
-  },
-  {
-    "type": "console.page/route",
-    "properties": {
-      "component": { "$codeRef": "environments" },
-      "exact": true,
-      "path": "/envdynamic"
-    }
-  },
-  {
-    "type": "console.page/route",
-    "properties": {
-      "component": { "$codeRef": "detailsPage" },
-      "exact": false,
-      "path": "/envdynamic/:appName"
-    }
-  },
-  {
     "type": "console.flag/hookProvider",
     "properties": {
       "handler": { "$codeRef": "gitopsFlags.detectOpenShiftVersion" }

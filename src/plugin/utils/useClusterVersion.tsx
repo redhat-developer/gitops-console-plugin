@@ -9,7 +9,7 @@ import {
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 
-import { ClusterVersionKind } from '../topology/console/types';
+import { ClusterVersionKind } from '../../gitops/topology/console/types';
 
 export const ClusterVersionModel: K8sKind = {
   label: 'ClusterVersion',
