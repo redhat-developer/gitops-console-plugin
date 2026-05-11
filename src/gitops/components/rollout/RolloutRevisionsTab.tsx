@@ -1,7 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { PodKind } from 'src/components/topology/console/types';
 
+import { PodKind } from '@gitops/topology/console/types';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { resourceAsArray } from '@gitops/utils/utils';
 import { K8sResourceCommon, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';

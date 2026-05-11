@@ -1,5 +1,5 @@
 import * as React from 'react';
-import TechPreviewBadge from 'src/components/import/badges/TechPreviewBadge';
+import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import {

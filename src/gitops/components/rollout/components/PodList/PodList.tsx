@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { PodTraffic } from 'src/components/topology/console/pod-traffic';
-import { podPhase } from 'src/components/topology/console/PodsOverview';
-import { PodKind } from 'src/components/topology/console/types';
-import { RolloutKind } from 'src/components/topology/types';
 
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from '@gitops/components/shared/DataView';
+import { PodTraffic } from '@gitops/topology/console/pod-traffic';
+import { podPhase } from '@gitops/topology/console/PodsOverview';
+import { PodKind } from '@gitops/topology/console/types';
+import { RolloutKind } from '@gitops/topology/types';
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
 import {
   Action,

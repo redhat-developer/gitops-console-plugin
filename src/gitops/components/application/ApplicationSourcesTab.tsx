@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import ExternalLink from 'src/components/utils/ExternalLink/ExternalLink';
 
 import { ApplicationKind, ApplicationSource } from '@gitops/models/ApplicationModel';
+import ExternalLink from '@gitops/utils/components/ExternalLink/ExternalLink';
 import { GitIcon } from '@gitops/utils/components/Icons/GitIcon';
 import { HelmIcon } from '@gitops/utils/components/Icons/HelmIcon';
 import { OciIcon } from '@gitops/utils/components/Icons/OciIcon';

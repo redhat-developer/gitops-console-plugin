@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
-import { PodKind } from 'src/components/topology/console/types';
 
+import { PodKind } from '@gitops/topology/console/types';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import {
   Action,

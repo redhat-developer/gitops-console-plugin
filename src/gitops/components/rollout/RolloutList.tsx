@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 import classNames from 'classnames';
-import TechPreviewBadge from 'src/components/import/badges/TechPreviewBadge';
+import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 
 import { AppProjectKind } from '@gitops/models/AppProjectModel';
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';

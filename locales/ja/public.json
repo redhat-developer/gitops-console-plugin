@@ -17,8 +17,6 @@
   "Deployments": "Deployments",
   "ReplicaSet": "ReplicaSet",
   "ReplicaSets": "ReplicaSets",
-  "ClusterVersion": "ClusterVersion",
-  "ClusterVersions": "ClusterVersions",
   "True": "True",
   "False": "False",
   "Type": "Type",
@@ -28,5 +26,7 @@
   "Message": "Message",
   "No conditions found": "No conditions found",
   "No owner": "No owner",
-  "View {{kind}}": "View {{kind}}"
+  "View {{kind}}": "View {{kind}}",
+  "ClusterVersion": "ClusterVersion",
+  "ClusterVersions": "ClusterVersions"
 }
