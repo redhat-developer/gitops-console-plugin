@@ -1,8 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-import { ExternalLinkAltIcon } from '@patternfly/react-icons';
-
 type ExternalLinkProps = {
   href: string;
   text?: React.ReactNode;
@@ -27,7 +25,7 @@ const ExternalLink: React.FC<ExternalLinkProps> = ({
     data-test-id={dataTestID}
     {...(stopPropagation ? { onClick: (e) => e.stopPropagation() } : {})}
   >
-    {children || text} <ExternalLinkAltIcon />
+    {children || text}
   </a>
 );
 
