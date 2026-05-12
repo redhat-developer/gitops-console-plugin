@@ -47,7 +47,10 @@ const config: Configuration = {
       },
       {
         test: /\.s?css$/,
-        exclude: /node_modules\/(?!(@patternfly|@console\/plugin-shared)\/).*/,
+        exclude: (modulePath: string) =>
+          /node_modules/.test(modulePath) &&
+          !/@patternfly/.test(modulePath) &&
+          !/@console\/plugin-shared/.test(modulePath),
         use: [
           { loader: 'style-loader' },
           {
