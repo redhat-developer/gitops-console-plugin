@@ -56,7 +56,7 @@ export const OwnerReferences: React.FC<OwnerReferencesProps> = ({ resource }) =>
   return owners.length ? (
     <>{owners}</>
   ) : (
-    <span className="pf-v6-u-text-color-subtle">{t('public~No owner')}</span>
+    <span className="pf-v6-u-text-color-subtle">{t('plugin__gitops-public~No owner')}</span>
   );
 };
 
@@ -70,7 +70,10 @@ const OwnerReferenceLink: React.FC<OwnerReferenceLinkProps> = ({ owner, model, n
   const { t } = useGitOpsTranslation();
 
   return (
-    <Tooltip content={<div>{t('public~View {{kind}}', { kind: model.kind })}</div>} position="top">
+    <Tooltip
+      content={<div>{t('plugin__gitops-public~View {{kind}}', { kind: model.kind })}</div>}
+      position="top"
+    >
       <span className="pf-v6-u-display-inline-block">
         <ResourceLink
           namespace={namespace}

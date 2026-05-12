@@ -28,7 +28,7 @@ const ArgoRolloutNodeDecorator: React.FC<ArgoRolloutNodeDecoratorProps> = ({
   if (!data) {
     return null;
   }
-  const label = t('topology~Open URL');
+  const label = t('plugin__gitops-public~Open URL');
   return (
     <Tooltip triggerRef={ref} key="route" content={label} position={TooltipPosition.right}>
       <g ref={ref}>

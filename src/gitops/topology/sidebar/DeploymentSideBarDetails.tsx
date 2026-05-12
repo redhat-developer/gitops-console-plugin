@@ -174,7 +174,7 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
           {editable && editAsGroup && (
             <SplitItem>
               <EditButton testId={label} onClick={onEdit}>
-                {t('public~Edit')}
+                {t('plugin__gitops-public~Edit')}
               </EditButton>
             </SplitItem>
           )}
@@ -243,7 +243,9 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
       <div className="ocs-sidebar-tabsection">
         <div className="co-m-pane__heading-owner">
           <TechPreviewBadge
-            tooltipContent={t('Rollouts in the Topology View is under tech preview')}
+            tooltipContent={t(
+              'plugin__gitops-public~Rollouts in the Topology View is under tech preview',
+            )}
           />
           <SidebarSectionHeading text={'Rollout'} />
         </div>
@@ -251,8 +253,12 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
       <div className="overview__sidebar-pane-body resource-overview__body">
         <div className="resource-overview__summary">
           <DescriptionList>
-            <DetailsItem label={t('public~Name')} obj={d} path={'metadata.name'} />
-            <DetailsItem label={t('public~Namespace')} obj={d} path="metadata.namespace">
+            <DetailsItem label={t('plugin__gitops-public~Name')} obj={d} path={'metadata.name'} />
+            <DetailsItem
+              label={t('plugin__gitops-public~Namespace')}
+              obj={d}
+              path="metadata.namespace"
+            >
               <ResourceLink
                 kind="Namespace"
                 name={d.metadata?.namespace}
@@ -261,7 +267,7 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
               />
             </DetailsItem>
             <DetailsItem
-              label={t('public~Annotations')}
+              label={t('plugin__gitops-public~Annotations')}
               obj={d}
               path="metadata.annotations"
               onEdit={annotationsModalLauncher}
@@ -271,7 +277,7 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
               <>
                 {_.isEmpty(annotationItems) ? (
                   <div className="text-muted" key="0">
-                    {t('public~No annotations')}
+                    {t('plugin__gitops-public~No annotations')}
                   </div>
                 ) : (
                   <PfLabelGroup
@@ -286,7 +292,7 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
               </>
             </DetailsItem>
             <DetailsItem
-              label={t('public~Labels')}
+              label={t('plugin__gitops-public~Labels')}
               obj={d}
               path="metadata.labels"
               onEdit={labelsModalLauncher}
@@ -296,7 +302,7 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
               <>
                 {_.isEmpty(labelItems) ? (
                   <div className="text-muted" key="0">
-                    {t('public~No labels')}
+                    {t('plugin__gitops-public~No labels')}
                   </div>
                 ) : (
                   <PfLabelGroup
@@ -310,16 +316,24 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
                 )}
               </>
             </DetailsItem>
-            <DetailsItem label={t('public~Update Strategy')} obj={d} path="spec.strategy">
+            <DetailsItem
+              label={t('plugin__gitops-public~Update Strategy')}
+              obj={d}
+              path="spec.strategy"
+            >
               {strategy}
             </DetailsItem>
           </DescriptionList>
         </div>
         <div className="resource-overview__details">
           <DescriptionList>
-            <DetailsItem label={t('public~Replicas')} obj={d} path={'spec.replicas'} />
             <DetailsItem
-              label={t('public~Revision History Limit')}
+              label={t('plugin__gitops-public~Replicas')}
+              obj={d}
+              path={'spec.replicas'}
+            />
+            <DetailsItem
+              label={t('plugin__gitops-public~Revision History Limit')}
               obj={d}
               path={'spec.revisionHistoryLimit'}
             />

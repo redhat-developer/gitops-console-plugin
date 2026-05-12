@@ -10,9 +10,9 @@ export const Conditions: React.FC<ConditionsProps> = ({ conditions }) => {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'True':
-        return t('public~True');
+        return t('plugin__gitops-public~True');
       case 'False':
-        return t('public~False');
+        return t('plugin__gitops-public~False');
       default:
         return status;
     }
@@ -24,32 +24,41 @@ export const Conditions: React.FC<ConditionsProps> = ({ conditions }) => {
         <Table aria-label="Conditions table" borders>
           <Thead>
             <Tr>
-              <Th>{t('public~Type')}</Th>
-              <Th>{t('public~Status')}</Th>
-              <Th>{t('public~Updated')}</Th>
-              <Th>{t('public~Reason')}</Th>
-              <Th>{t('public~Message')}</Th>
+              <Th>{t('plugin__gitops-public~Type')}</Th>
+              <Th>{t('plugin__gitops-public~Status')}</Th>
+              <Th>{t('plugin__gitops-public~Updated')}</Th>
+              <Th>{t('plugin__gitops-public~Reason')}</Th>
+              <Th>{t('plugin__gitops-public~Message')}</Th>
             </Tr>
           </Thead>
           <Tbody>
             {conditions?.map?.((condition: any, i: number) => (
               <Tr data-test={condition.type} key={i}>
-                <Td dataLabel={t('public~Type')} data-test={`condition[${i}].type`}>
+                <Td dataLabel={t('plugin__gitops-public~Type')} data-test={`condition[${i}].type`}>
                   <CamelCaseWrap value={condition.type} />
                 </Td>
-                <Td dataLabel={t('public~Status')} data-test={`condition[${i}].status`}>
+                <Td
+                  dataLabel={t('plugin__gitops-public~Status')}
+                  data-test={`condition[${i}].status`}
+                >
                   {getStatusLabel(condition.status)}
                 </Td>
                 <Td
-                  dataLabel={t('public~Updated')}
+                  dataLabel={t('plugin__gitops-public~Updated')}
                   data-test={`condition[${i}].lastTransitionTime`}
                 >
                   <Timestamp timestamp={condition.lastTransitionTime} />
                 </Td>
-                <Td dataLabel={t('public~Reason')} data-test={`condition[${i}].reason`}>
+                <Td
+                  dataLabel={t('plugin__gitops-public~Reason')}
+                  data-test={`condition[${i}].reason`}
+                >
                   <CamelCaseWrap value={condition.reason} />
                 </Td>
-                <Td dataLabel={t('public~Message')} data-test={`condition[${i}].message`}>
+                <Td
+                  dataLabel={t('plugin__gitops-public~Message')}
+                  data-test={`condition[${i}].message`}
+                >
                   {condition.message?.trim() || '-'}
                 </Td>
               </Tr>
@@ -58,7 +67,9 @@ export const Conditions: React.FC<ConditionsProps> = ({ conditions }) => {
         </Table>
       ) : (
         <div className="cos-status-box">
-          <div className="pf-u-text-align-center">{t('public~No conditions found')}</div>
+          <div className="pf-u-text-align-center">
+            {t('plugin__gitops-public~No conditions found')}
+          </div>
         </div>
       )}
     </>

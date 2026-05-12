@@ -53,7 +53,7 @@ type FavoriteButtonProps = {
 };
 
 export const FavoriteButton = ({ defaultName }: FavoriteButtonProps) => {
-  const { t } = useTranslation('console-app');
+  const { t } = useTranslation('plugin__gitops-console-app');
   const [isStarred, setIsStarred] = React.useState(false);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [name, setName] = React.useState<string>('');

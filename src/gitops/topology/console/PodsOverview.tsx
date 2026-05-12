@@ -112,7 +112,7 @@ export const PodOverviewItem: React.FC<PodOverviewItemProps> = ({ pod }) => {
         </GridItem>
         <GridItem span={3}>
           <Link to={`${resourcePath(pod.metadata.name, pod.metadata.namespace)}/logs`}>
-            {t('public~View logs')}
+            {t('plugin__gitops-public~View logs')}
           </Link>
         </GridItem>
       </Grid>

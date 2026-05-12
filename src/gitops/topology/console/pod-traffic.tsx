@@ -65,7 +65,7 @@ export const PodTraffic: React.FC<PodTrafficProp> = ({ podName, namespace, toolt
   if (!loaded) {
     return <LoadingInline />;
   } else if (loaded && loadError) {
-    return <StatusComponent status="Error" title={t('public~Error')} />;
+    return <StatusComponent status="Error" title={t('plugin__gitops-public~Error')} />;
   }
   const allEndpoints = data?.reduce((prev, next) => prev.concat(next?.endpoints), []);
   const receivingTraffic = allEndpoints?.some((endPoint) => endPoint?.targetRef?.name === podName);
@@ -77,7 +77,9 @@ export const PodTraffic: React.FC<PodTrafficProp> = ({ podName, namespace, toolt
           <Tooltip
             position="top"
             content={
-              receivingTraffic ? t('public~Receiving Traffic') : t('public~Not Receiving Traffic')
+              receivingTraffic
+                ? t('plugin__gitops-public~Receiving Traffic')
+                : t('plugin__gitops-public~Not Receiving Traffic')
             }
           >
             {receivingTraffic ? <ConnectedIcon /> : <DisconnectedIcon />}
