@@ -247,7 +247,7 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
               'plugin__gitops-public~Rollouts in the Topology View is under tech preview',
             )}
           />
-          <SidebarSectionHeading text={'Rollout'} />
+          <SidebarSectionHeading text={t('plugin__gitops-public~Rollout')} />
         </div>
       </div>
       <div className="overview__sidebar-pane-body resource-overview__body">
