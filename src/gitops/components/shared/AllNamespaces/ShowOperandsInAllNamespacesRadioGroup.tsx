@@ -12,7 +12,7 @@ export const ShowOperandsInAllNamespacesRadioGroup: React.FC = () => {
       <FormGroup
         role="radiogroup"
         fieldId="show-operands"
-        label={t('olm~Show operands in:')}
+        label={t('plugin__gitops-olm~Show operands in:')}
         isInline
         hasNoPaddingTop
       >
@@ -20,7 +20,7 @@ export const ShowOperandsInAllNamespacesRadioGroup: React.FC = () => {
           id="all-namespaces"
           name="show-operands"
           value="true"
-          label={t('olm~All namespaces')}
+          label={t('plugin__gitops-olm~All namespaces')}
           onChange={() => setShowOperandsInAllNamespaces(true)}
           isChecked={showOperandsInAllNamespaces}
           data-checked-state={showOperandsInAllNamespaces}
@@ -29,7 +29,7 @@ export const ShowOperandsInAllNamespacesRadioGroup: React.FC = () => {
           id="current-namespace-only"
           name="show-operands"
           value="false"
-          label={t('olm~Current namespace only')}
+          label={t('plugin__gitops-olm~Current namespace only')}
           onChange={() => setShowOperandsInAllNamespaces(false)}
           isChecked={!showOperandsInAllNamespaces}
           data-checked-state={!showOperandsInAllNamespaces}

@@ -3,7 +3,10 @@
   "Receiving Traffic": "Receiving Traffic",
   "Not Receiving Traffic": "Not Receiving Traffic",
   "View logs": "View logs",
+  "Open URL": "Open URL",
   "Edit": "Edit",
+  "Rollouts in the Topology View is under tech preview": "Rollouts in the Topology View is under tech preview",
+  "Rollout": "Rollout",
   "Name": "Name",
   "Namespace": "Namespace",
   "Annotations": "Annotations",
@@ -13,10 +16,6 @@
   "Update Strategy": "Update Strategy",
   "Replicas": "Replicas",
   "Revision History Limit": "Revision History Limit",
-  "Deployment": "Deployment",
-  "Deployments": "Deployments",
-  "ReplicaSet": "ReplicaSet",
-  "ReplicaSets": "ReplicaSets",
   "True": "True",
   "False": "False",
   "Type": "Type",
@@ -26,7 +25,5 @@
   "Message": "Message",
   "No conditions found": "No conditions found",
   "No owner": "No owner",
-  "View {{kind}}": "View {{kind}}",
-  "ClusterVersion": "ClusterVersion",
-  "ClusterVersions": "ClusterVersions"
+  "View {{kind}}": "View {{kind}}"
 }

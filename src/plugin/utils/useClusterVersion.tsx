@@ -13,11 +13,9 @@ import { ClusterVersionKind } from '../../gitops/topology/console/types';
 
 export const ClusterVersionModel: K8sKind = {
   label: 'ClusterVersion',
-  // t('public~ClusterVersion')
-  labelKey: 'public~ClusterVersion',
+  labelKey: 'plugin__gitops-public~ClusterVersion',
   labelPlural: 'ClusterVersions',
-  // t('public~ClusterVersions')
-  labelPluralKey: 'public~ClusterVersions',
+  labelPluralKey: 'plugin__gitops-public~ClusterVersions',
   apiVersion: 'v1',
   apiGroup: 'config.openshift.io',
   plural: 'clusterversions',

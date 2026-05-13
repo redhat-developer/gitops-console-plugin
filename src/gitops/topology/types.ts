@@ -32,8 +32,7 @@ export type RolloutKind = {
 
 export const RolloutModel: K8sKind = {
   label: 'Rollout',
-  // t('public~Deployment')
-  labelKey: 'public~Rollout',
+  labelKey: 'plugin__gitops-public~Rollout',
   apiVersion: 'v1alpha1',
   apiGroup: 'argoproj.io',
   plural: 'rollouts',
@@ -43,14 +42,12 @@ export const RolloutModel: K8sKind = {
   kind: 'Rollout',
   id: 'rollout',
   labelPlural: 'Rollouts',
-  // t('public~Deployments')
-  labelPluralKey: 'public~Rollouts',
+  labelPluralKey: 'plugin__gitops-public~Rollouts',
 };
 
 export const ReplicaSetModel: K8sKind = {
   label: 'ReplicaSet',
-  // t('public~ReplicaSet')
-  labelKey: 'public~ReplicaSet',
+  labelKey: 'plugin__gitops-public~ReplicaSet',
   apiVersion: 'v1',
   apiGroup: 'apps',
   plural: 'replicasets',
@@ -60,6 +57,5 @@ export const ReplicaSetModel: K8sKind = {
   kind: 'ReplicaSet',
   id: 'replicaset',
   labelPlural: 'ReplicaSets',
-  // t('public~ReplicaSets')
-  labelPluralKey: 'public~ReplicaSets',
+  labelPluralKey: 'plugin__gitops-public~ReplicaSets',
 };
