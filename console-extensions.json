@@ -61,7 +61,7 @@
     "properties": {
       "id": "gitops-rollouts-topology-side-bar-tab-details",
       "label": "Details",
-      "priority": "1000",      
+      "priority": "1000",
       "insertBefore": "topology-side-bar-tab-resource"
     },
     "flags": {
@@ -84,7 +84,7 @@
       "id": "gitops-rollouts-topology-sidebar-details-tab-section",
       "tab": "gitops-rollouts-topology-side-bar-tab-details",
       "provider": { "$codeRef": "topology.useRolloutSideBarDetails" },
-      "insertBefore": "gitops-rollouts-topology-sidebar-resource-tab-section" 
+      "insertBefore": "gitops-rollouts-topology-sidebar-resource-tab-section"
     },
     "flags": {
       "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
@@ -268,6 +268,23 @@
     }
   },
   {
+    "type": "console.model-metadata",
+    "properties": {
+      "model": {
+        "group": "argocd-image-updater.argoproj.io",
+        "kind": "ImageUpdater",
+        "version": "v1alpha1"
+      },
+      "color": "#E9654B",
+      "label": "Argo CD Image Updater",
+      "labelPlural": "Argo CD Image Updaters",
+      "abbr": "IU"
+    },
+    "flags": {
+      "required": ["IMAGEUPDATER"]
+    }
+  },
+  {
     "type": "console.flag/model",
     "properties": {
         "flag": "APPLICATION",
@@ -287,6 +304,17 @@
             "kind": "ApplicationSet",
             "version": "v1alpha1"
         }
+    }
+  },
+  {
+    "type": "console.flag/model",
+    "properties": {
+      "flag": "IMAGEUPDATER",
+      "model": {
+        "group": "argocd-image-updater.argoproj.io",
+        "kind": "ImageUpdater",
+        "version": "v1alpha1"
+      }
     }
   },
   {
@@ -338,6 +366,29 @@
         "section": "gitops-navigation-section",
         "id": "argocd-separator",
         "insertAfter": "appproject"
+    }
+  },
+  {
+    "type": "console.navigation/resource-ns",
+    "properties": {
+      "id": "imageupdater",
+      "name": "ImageUpdaters",
+      "perspective": "admin",
+      "section": "gitops-navigation-section",
+      "model": {
+        "group": "argocd-image-updater.argoproj.io",
+        "kind": "ImageUpdater",
+        "version": "v1alpha1"
+      }
+    }
+  },
+  {
+    "type": "console.navigation/separator",
+    "properties": {
+      "perspective": "admin",
+      "section": "gitops-navigation-section",
+      "id": "argocd-separator",
+      "insertAfter": "imageupdater"
     }
   },
   {
@@ -424,6 +475,24 @@
         "component": {
             "$codeRef": "ApplicationDetails"
         }
+    }
+  },
+  {
+    "type": "console.page/resource/list",
+    "flags": {
+      "required": [
+        "IMAGEUPDATER"
+      ]
+    },
+    "properties": {
+      "model": {
+        "group": "argocd-image-updater.argoproj.io",
+        "kind": "ImageUpdater",
+        "version": "v1alpha1"
+      },
+      "component": {
+        "$codeRef": "ImageUpdaterList"
+      }
     }
   },
   {
@@ -539,6 +608,25 @@
     }
   },
   {
+    "type": "console.yaml-template",
+    "flags": {
+      "required": [
+        "IMAGEUPDATER"
+      ]
+    },
+    "properties": {
+      "name": "default",
+      "model": {
+        "group": "argocd-image-updater.argoproj.io",
+        "kind": "ImageUpdater",
+        "version": "v1alpha1"
+      },
+      "template": {
+        "$codeRef": "yamlTemplates.defaultImageUpdaterYamlTemplate"
+      }
+    }
+  },
+  {
     "type": "console.page/resource/details",
     "flags": {
         "required": [
@@ -572,6 +660,24 @@
         "component": {
             "$codeRef": "ProjectDetailsPage"
         }
+    }
+  },
+  {
+    "type": "console.page/resource/details",
+    "flags": {
+      "required": [
+        "IMAGEUPDATER"
+      ]
+    },
+    "properties": {
+      "model": {
+        "group": "argocd-image-updater.argoproj.io",
+        "kind": "ImageUpdater",
+        "version": "v1alpha1"
+      },
+      "component": {
+        "$codeRef": "ImageUpdaterDetailsPage"
+      }
     }
   },
   {
