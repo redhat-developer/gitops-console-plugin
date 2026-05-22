@@ -35,7 +35,7 @@ const Modal: React.FC<ModalProps> = ({ isFullScreen = false, className, ...props
     {...props}
     className={cx('ocs-modal', className)}
     appendTo={() =>
-      isFullScreen ? document.body : (document.querySelector('#modal-container') ?? document.body)
+      isFullScreen ? document.body : document.querySelector('#modal-container') ?? document.body
     }
   />
 );
