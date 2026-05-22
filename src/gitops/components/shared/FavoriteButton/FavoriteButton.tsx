@@ -15,7 +15,7 @@ import {
 } from '@patternfly/react-core';
 import { ModalVariant } from '@patternfly/react-core/deprecated';
 import { Modal as PfModal, ModalProps as PfModalProps } from '@patternfly/react-core/deprecated';
-import { StarIcon } from '@patternfly/react-icons';
+import { OutlinedStarIcon, StarIcon } from '@patternfly/react-icons';
 
 import { useUserSettingsCompatibility } from './useUserSettingsCompatibility';
 
@@ -34,7 +34,9 @@ const Modal: React.FC<ModalProps> = ({ isFullScreen = false, className, ...props
   <PfModal
     {...props}
     className={cx('ocs-modal', className)}
-    appendTo={() => (isFullScreen ? document.body : document.querySelector('#modal-container'))}
+    appendTo={() =>
+      isFullScreen ? document.body : (document.querySelector('#modal-container') ?? document.body)
+    }
   />
 );
 
@@ -101,7 +103,8 @@ export const FavoriteButton = ({ defaultName }: FavoriteButtonProps) => {
     setIsModalOpen(false);
   };
 
-  const handleConfirmStar = () => {
+  const handleConfirmStar = (e?: React.FormEvent) => {
+    e?.preventDefault();
     const trimmedName = name.trim();
     if (!trimmedName) {
       setError(t('Name is required.'));
@@ -157,7 +160,7 @@ export const FavoriteButton = ({ defaultName }: FavoriteButtonProps) => {
     <div className="co-fav-actions-icon">
       <Tooltip content={tooltipText} position="top">
         <Button
-          icon={<StarIcon color={isStarred ? 'gold' : 'gray'} />}
+          icon={isStarred ? <StarIcon color="gold" /> : <OutlinedStarIcon />}
           className="co-xl-icon-button"
           data-test="favorite-button"
           variant="plain"
@@ -188,10 +191,10 @@ export const FavoriteButton = ({ defaultName }: FavoriteButtonProps) => {
           ]}
           variant={ModalVariant.small}
         >
-          <Form id="confirm-favorite-form" onSubmit={handleConfirmStar}>
+          <Form id="confirm-favorite" onSubmit={handleConfirmStar}>
             <FormGroup label={t('Name')} isRequired fieldId="input-name">
               <TextInput
-                id="confirm-favorite-form-name"
+                id="input-name"
                 data-test="input-name"
                 name="name"
                 type="text"
