@@ -39,7 +39,7 @@ export const ImageUpdaterModel: K8sModel = {
   apiVersion: 'v1alpha1',
   apiGroup: 'argocd-image-updater.argoproj.io',
   plural: 'imageupdaters',
-  abbr: 'imageupdater',
+  abbr: 'IU',
   namespaced: true,
   kind: 'ImageUpdater',
   id: 'imageupdater',

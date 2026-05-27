@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { useTranslation } from 'react-i18next';
 
 import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
 import { EmptyState, EmptyStateBody, PageSection, PageSectionVariants, Title } from '@patternfly/react-core';
@@ -19,8 +18,6 @@ type ImageUpdaterRecentUpdatesTabProps = RouteComponentProps<{ ns: string; name:
 const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> = ({ obj }) => {
   const { t } = useGitOpsTranslation();
 
-  const recentUpdates: ImageUpdaterRecentUpdate[] = obj?.status?.recentUpdates || [];
-
   const columnSortConfig = React.useMemo(
     () =>
       ['alias', 'image', 'new-version', 'apps-updated', 'updated-at', 'message'].map((key) => ({
@@ -31,7 +28,9 @@ const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> 
 
   const { sortBy, direction, getSortParams } = useGitOpsDataViewSort(columnSortConfig);
 
-  const columnsDV = useColumnsDV(getSortParams);
+  const columnsDV = useColumnsDV(getSortParams, t);
+
+  const recentUpdates: ImageUpdaterRecentUpdate[] = obj?.status?.recentUpdates || [];
 
   const sortedUpdates = React.useMemo(
     () => sortData(recentUpdates, sortBy, direction),
@@ -39,6 +38,8 @@ const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> 
   );
 
   const rows = useRowsDV(sortedUpdates);
+
+  if (!obj) return null;
 
   const empty = (
     <Tbody>
@@ -53,8 +54,6 @@ const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> 
       </Tr>
     </Tbody>
   );
-
-  if (!obj) return null;
 
   return (
     <div>
@@ -117,9 +116,10 @@ const useRowsDV = (updates: ImageUpdaterRecentUpdate[]): DataViewTr[] => {
   return rows;
 };
 
-const useColumnsDV = (getSortParams: (columnIndex: number) => ThProps['sort']): DataViewTh[] => {
-  const { t } = useTranslation('plugin__gitops-plugin');
-
+const useColumnsDV = (
+  getSortParams: (columnIndex: number) => ThProps['sort'],
+  t: (key: string) => string,
+): DataViewTh[] => {
   return [
     {
       cell: t('Alias'),
@@ -156,7 +156,7 @@ const sortData = (
   if (!sortBy || !direction) return data;
 
   return [...data].sort((a, b) => {
-    let aValue: any, bValue: any;
+    let aValue: string | number, bValue: string | number;
 
     switch (sortBy) {
       case 'alias':

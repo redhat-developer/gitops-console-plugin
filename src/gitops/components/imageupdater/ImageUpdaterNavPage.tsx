@@ -4,14 +4,16 @@ import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-p
 import { ErrorState } from '@patternfly/react-component-groups';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 
+import {modelToGroupVersionKind} from '@gitops/utils/utils';
+
 import { ImageUpdaterKind, ImageUpdaterModel } from '../../models/ImageUpdaterModel';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
 import DetailsPageHeader from '../shared/DetailsPageHeader/DetailsPageHeader';
 import ResourceYAMLTab from '../shared/ResourceYAMLTab/ResourceYAMLTab';
 
 import { useImageUpdaterActionsProvider } from './hooks/useImageUpdaterActionsProvider';
-import ImageUpdaterDetailsTab from "@gitops/components/imageupdater/ImageUpdaterDetailsTab";
-import ImageUpdaterRecentUpdatesTab from "@gitops/components/imageupdater/ImageUpdaterRecentUpdatesTab";
+import ImageUpdaterDetailsTab from './ImageUpdaterDetailsTab';
+import ImageUpdaterRecentUpdatesTab from './ImageUpdaterRecentUpdatesTab';
 
 type ImageUpdaterPageProps = {
   name: string;
@@ -22,11 +24,7 @@ type ImageUpdaterPageProps = {
 const ImageUpdaterNavPage: React.FC<ImageUpdaterPageProps> = ({ name, namespace, kind }) => {
   const { t } = useGitOpsTranslation();
   const [imageUpdater, loaded, loadError] = useK8sWatchResource<ImageUpdaterKind>({
-    groupVersionKind: {
-      group: 'argocd-image-updater.argoproj.io',
-      kind: 'ImageUpdater',
-      version: 'v1alpha1',
-    },
+    groupVersionKind: modelToGroupVersionKind(ImageUpdaterModel),
     kind,
     name,
     namespace,

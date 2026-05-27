@@ -29,6 +29,10 @@ const ImageUpdaterDetailsTab: React.FC<ImageUpdaterDetailsTabProps> = ({ obj }) 
   if (!obj) return null;
 
   const status = obj.status || {};
+  const readyCondition = status.conditions?.find((c) => c.type === 'Ready');
+  const readyLabel = readyCondition
+    ? readyCondition.status === 'True' ? t('True') : t('False')
+    : '-';
 
   return (
     <>
@@ -56,25 +60,21 @@ const ImageUpdaterDetailsTab: React.FC<ImageUpdaterDetailsTabProps> = ({ obj }) 
                   title={t('Ready')}
                   help={t('Whether the last reconciliation completed without errors.')}
                 >
-                  {(() => {
-                    const readyCondition = status.conditions?.find((c) => c.type === 'Ready');
-                    if (!readyCondition) return '-';
-                    return readyCondition.status === 'True' ? t('True') : t('False');
-                  })()}
+                  {readyLabel}
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
                   title={t('Applications Matched')}
                   help={t('Number of applications matched by this ImageUpdater.')}
                 >
-                  {status.applicationsMatched != null ? String(status.applicationsMatched) : '-'}
+                  {String(status.applicationsMatched ?? '-')}
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
                   title={t('Images Managed')}
                   help={t('Number of images eligible for update checking.')}
                 >
-                  {status.imagesManaged != null ? String(status.imagesManaged) : '-'}
+                  {String(status.imagesManaged ?? '-')}
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
@@ -103,7 +103,7 @@ const ImageUpdaterDetailsTab: React.FC<ImageUpdaterDetailsTabProps> = ({ obj }) 
                   title={t('Observed Generation')}
                   help={t('The generation of the resource that was last reconciled.')}
                 >
-                  {status.observedGeneration != null ? String(status.observedGeneration) : '-'}
+                  {String(status.observedGeneration ?? '-')}
                 </DetailsDescriptionGroup>
               </DescriptionList>
             </FlexItem>

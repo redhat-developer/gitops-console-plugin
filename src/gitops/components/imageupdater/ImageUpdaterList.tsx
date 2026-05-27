@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom-v5-compat';
+import {useTranslation} from 'react-i18next';
+import {useLocation} from 'react-router-dom-v5-compat';
 import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
-import { modelToGroupVersionKind } from '@gitops/utils/utils';
+import {modelToGroupVersionKind} from '@gitops/utils/utils';
 import {
   Action,
   K8sResourceCommon,
@@ -12,27 +12,23 @@ import {
   ListPageCreate,
   ListPageFilter,
   ListPageHeader,
+  ResourceLink,
   RowFilter,
   Timestamp,
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
-import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
-import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
-import { CubesIcon } from '@patternfly/react-icons';
-import { ThProps } from '@patternfly/react-table';
-import { Tbody, Td, Tr } from '@patternfly/react-table';
+import {ErrorState} from '@patternfly/react-component-groups';
+import {EmptyState, EmptyStateBody} from '@patternfly/react-core';
+import {DataViewTh, DataViewTr} from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import {CubesIcon} from '@patternfly/react-icons';
+import {Tbody, Td, ThProps, Tr} from '@patternfly/react-table';
 
-import { ImageUpdaterKind, ImageUpdaterModel, imageUpdaterModelRef } from '../../models/ImageUpdaterModel';
-import {
-  ShowOperandsInAllNamespacesRadioGroup,
-  useShowOperandsInAllNamespaces,
-} from '../shared/AllNamespaces';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import {ImageUpdaterKind, ImageUpdaterModel, imageUpdaterModelRef} from '../../models/ImageUpdaterModel';
+import {ShowOperandsInAllNamespacesRadioGroup, useShowOperandsInAllNamespaces,} from '../shared/AllNamespaces';
+import {GitOpsDataViewTable, useGitOpsDataViewSort} from '../shared/DataView';
 
-import { useImageUpdaterActionsProvider } from './hooks/useImageUpdaterActionsProvider';
+import {useImageUpdaterActionsProvider} from './hooks/useImageUpdaterActionsProvider';
 
 import './imageupdater-list.scss';
 
@@ -51,41 +47,35 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
   const [showOperandsInAllNamespaces] = useShowOperandsInAllNamespaces();
   const listAllNamespaces =
     location.pathname?.includes('openshift-gitops-operator') && showOperandsInAllNamespaces;
-  if (listAllNamespaces) {
-    namespace = null;
-  }
+  const effectiveNamespace = listAllNamespaces ? null : namespace;
   const [imageUpdaters, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
-    groupVersionKind: {
-      group: 'argocd-image-updater.argoproj.io',
-      kind: 'ImageUpdater',
-      version: 'v1alpha1',
-    },
+    groupVersionKind: modelToGroupVersionKind(ImageUpdaterModel),
     namespaced: !listAllNamespaces,
-    namespace,
+    namespace: effectiveNamespace,
   });
 
   const columnSortConfig = React.useMemo(() => {
     return [
       'name',
-      ...(!listAllNamespaces || !namespace || namespace === '' ? ['namespace'] : []),
+      ...(!listAllNamespaces || !effectiveNamespace || effectiveNamespace === '' ? ['namespace'] : []),
       'apps',
       'images',
       'last-checked',
       'ready',
       'actions',
-    ].map((key) => ({ key }));
-  }, [listAllNamespaces, namespace]);
+    ].map((key) => ({key}));
+  }, [listAllNamespaces, effectiveNamespace]);
 
-  const { searchParams, sortBy, direction, getSortParams } =
+  const {searchParams, sortBy, direction, getSortParams} =
     useGitOpsDataViewSort(columnSortConfig);
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
 
-  const { t } = useTranslation('plugin__gitops-plugin');
+  const {t} = useTranslation('plugin__gitops-plugin');
 
-  const columnsDV = useColumnsDV(namespace, getSortParams);
+  const columnsDV = useColumnsDV(effectiveNamespace, getSortParams);
   const sortedItems = React.useMemo(() => {
     return sortData(imageUpdaters as ImageUpdaterKind[], sortBy, direction);
   }, [imageUpdaters, sortBy, direction]);
@@ -102,7 +92,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
     });
   }, [filteredData, searchQuery]);
 
-  const rows = useImageUpdaterRowsDV(filteredBySearch as ImageUpdaterKind[], namespace);
+  const rows = useImageUpdaterRowsDV(filteredBySearch as ImageUpdaterKind[], effectiveNamespace);
 
   const hasItems = React.useMemo(() => {
     return sortedItems.length > 0;
@@ -114,12 +104,12 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
         <>
           {t('No ImageUpdaters match the search filter')}{' '}
           <strong>&quot;{searchQuery}&quot;</strong>.
-          <br />
+          <br/>
           {t('Try removing the filter or searching for a different term to see more ImageUpdaters.')}
         </>
       );
     }
-    return namespace
+    return effectiveNamespace
       ? t('There are no ImageUpdaters in this namespace.')
       : t('There are no ImageUpdaters in all namespaces.');
   };
@@ -173,7 +163,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
           }
           helpText={
             location.pathname?.includes('openshift-gitops-operator') ? (
-              <ShowOperandsInAllNamespacesRadioGroup />
+              <ShowOperandsInAllNamespacesRadioGroup/>
             ) : null
           }
           hideFavoriteButton={false}
@@ -258,12 +248,12 @@ export const sortData = (
 };
 
 export const useColumnsDV = (
-  namespace: string | undefined,
+  namespace: string | null | undefined,
   getSortParams: (columnIndex: number) => ThProps['sort'],
 ): DataViewTh[] => {
   const showNamespace = !namespace || namespace === '';
   const i: number = showNamespace ? 1 : 0;
-  const { t } = useTranslation('plugin__gitops-plugin');
+  const {t} = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
       cell: t('Name'),
@@ -271,21 +261,21 @@ export const useColumnsDV = (
         'aria-label': 'name',
         className: 'pf-m-width-20',
         sort: getSortParams(0),
-        style: { minWidth: '200px' },
+        style: {minWidth: '200px'},
       },
     },
     ...(showNamespace
       ? [
-          {
-            cell: t('Namespace'),
-            props: {
-              'aria-label': 'namespace',
-              className: 'pf-m-width-15',
-              sort: getSortParams(1),
-              style: { minWidth: '150px' },
-            },
+        {
+          cell: t('Namespace'),
+          props: {
+            'aria-label': 'namespace',
+            className: 'pf-m-width-15',
+            sort: getSortParams(1),
+            style: {minWidth: '150px'},
           },
-        ]
+        },
+      ]
       : []),
     {
       cell: t('Apps'),
@@ -321,7 +311,7 @@ export const useColumnsDV = (
     },
     {
       cell: '',
-      props: { 'aria-label': 'actions' },
+      props: {'aria-label': 'actions'},
     },
   ];
 
@@ -330,10 +320,10 @@ export const useColumnsDV = (
 
 export const useImageUpdaterRowsDV = (
   imageUpdaterList: ImageUpdaterKind[],
-  namespace: string | undefined,
+  namespace: string | null | undefined,
 ): DataViewTr[] => {
   const rows: DataViewTr[] = [];
-  if (imageUpdaterList == undefined || imageUpdaterList.length == 0) {
+  if (imageUpdaterList === undefined || imageUpdaterList.length === 0) {
     return rows;
   }
   const showNamespace = !namespace || namespace === '';
@@ -358,12 +348,12 @@ export const useImageUpdaterRowsDV = (
       },
       ...(showNamespace
         ? [
-            {
-              cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
-              id: obj.metadata.namespace,
-              dataLabel: 'Namespace',
-            },
-          ]
+          {
+            cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace}/>,
+            id: obj.metadata.namespace,
+            dataLabel: 'Namespace',
+          },
+        ]
         : []),
       {
         id: 'apps',
@@ -378,8 +368,8 @@ export const useImageUpdaterRowsDV = (
       {
         id: 'last-checked',
         cell: obj.status?.lastCheckedAt ? (
-          <div style={{ whiteSpace: 'nowrap' }}>
-            <Timestamp timestamp={obj.status.lastCheckedAt} />
+          <div className="gitops-imageupdater-list__timestamp">
+            <Timestamp timestamp={obj.status.lastCheckedAt}/>
           </div>
         ) : (
           '-'
@@ -393,8 +383,8 @@ export const useImageUpdaterRowsDV = (
       },
       {
         id: 'actions-' + index,
-        cell: <ImageUpdaterActionsCell imageUpdater={obj} />,
-        props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
+        cell: <ImageUpdaterActionsCell imageUpdater={obj}/>,
+        props: {className: 'gitops-imageupdater-list__actions-cell'},
       },
     ]);
   });
@@ -403,10 +393,10 @@ export const useImageUpdaterRowsDV = (
 
 const ImageUpdaterActionsCell: React.FC<{
   imageUpdater: ImageUpdaterKind;
-}> = ({ imageUpdater }) => {
+}> = ({imageUpdater}) => {
   const actionList: Action[] = useImageUpdaterActionsProvider(imageUpdater);
   return (
-    <div style={{ textAlign: 'right' }}>
+    <div className="gitops-imageupdater-list__actions">
       <ActionsDropdown
         actions={actionList || []}
         id="gitops-imageupdater-actions"
@@ -425,21 +415,17 @@ const getFilters = (t: (key: string) => string): RowFilter[] => [
       return apps > 0 ? 'has-apps' : 'no-apps';
     },
     filter: (input, item) => {
-      if (input.selected?.length) {
-        const apps = (item as ImageUpdaterKind).status?.applicationsMatched;
-        const hasApps = apps > 0;
-        if (input.selected.includes('has-apps')) {
-          return hasApps;
-        }
-        if (input.selected.includes('no-apps')) {
-          return !hasApps;
-        }
-      }
-      return true;
+      if (!input.selected?.length) return true;
+      const apps = (item as ImageUpdaterKind).status?.applicationsMatched;
+      const hasApps = apps > 0;
+      return (
+        (input.selected.includes('has-apps') && hasApps) ||
+        (input.selected.includes('no-apps') && !hasApps)
+      );
     },
     items: [
-      { id: 'has-apps', title: t('Has Apps') },
-      { id: 'no-apps', title: t('No Apps') },
+      {id: 'has-apps', title: t('Has Apps')},
+      {id: 'no-apps', title: t('No Apps')},
     ],
   },
   {
@@ -452,23 +438,19 @@ const getFilters = (t: (key: string) => string): RowFilter[] => [
       return readyCondition?.status === 'True' ? 'ready' : 'not-ready';
     },
     filter: (input, item) => {
-      if (input.selected?.length) {
-        const readyCondition = (item as ImageUpdaterKind).status?.conditions?.find(
-          (c) => c.type === 'Ready',
-        );
-        const isReady = readyCondition?.status === 'True';
-        if (input.selected.includes('ready')) {
-          return isReady;
-        }
-        if (input.selected.includes('not-ready')) {
-          return !isReady;
-        }
-      }
-      return true;
+      if (!input.selected?.length) return true;
+      const readyCondition = (item as ImageUpdaterKind).status?.conditions?.find(
+        (c) => c.type === 'Ready',
+      );
+      const isReady = readyCondition?.status === 'True';
+      return (
+        (input.selected.includes('ready') && isReady) ||
+        (input.selected.includes('not-ready') && !isReady)
+      );
     },
     items: [
-      { id: 'ready', title: t('Ready') },
-      { id: 'not-ready', title: t('Not Ready') },
+      {id: 'ready', title: t('Ready')},
+      {id: 'not-ready', title: t('Not Ready')},
     ],
   },
 ];

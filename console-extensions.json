@@ -380,6 +380,11 @@
         "kind": "ImageUpdater",
         "version": "v1alpha1"
       }
+    },
+    "flags": {
+      "required": [
+        "IMAGEUPDATER"
+      ]
     }
   },
   {
@@ -389,6 +394,11 @@
       "section": "gitops-navigation-section",
       "id": "argocd-separator",
       "insertAfter": "imageupdater"
+    },
+    "flags": {
+      "required": [
+        "IMAGEUPDATER"
+      ]
     }
   },
   {
