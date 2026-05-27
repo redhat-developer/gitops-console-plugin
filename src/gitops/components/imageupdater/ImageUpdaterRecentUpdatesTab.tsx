@@ -16,6 +16,8 @@ type ImageUpdaterRecentUpdatesTabProps = RouteComponentProps<{ ns: string; name:
 };
 
 const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> = ({ obj }) => {
+  if (!obj) return null;
+
   const { t } = useGitOpsTranslation();
 
   const columnSortConfig = React.useMemo(
@@ -38,8 +40,6 @@ const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> 
   );
 
   const rows = useRowsDV(sortedUpdates);
-
-  if (!obj) return null;
 
   const empty = (
     <Tbody>

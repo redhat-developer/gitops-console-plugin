@@ -1,6 +1,6 @@
 // Prevent vertical text wrapping in Name and Namespace columns
-.pf-c-table tbody td[data-label='Name'],
-.pf-c-table tbody td[data-label='Namespace'] {
+.gitops-imageupdater-list .pf-c-table tbody td[data-label='Name'],
+.gitops-imageupdater-list .pf-c-table tbody td[data-label='Namespace'] {
   white-space: nowrap !important;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -15,7 +15,7 @@
 }
 
 // Description column text truncation
-.pf-c-table tbody td[data-label='Description'] {
+.gitops-imageupdater-list .pf-c-table tbody td[data-label='Description'] {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

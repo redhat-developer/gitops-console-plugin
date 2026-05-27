@@ -55,17 +55,18 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
     namespace: effectiveNamespace,
   });
 
+  const showNamespaceColumn = !effectiveNamespace || effectiveNamespace === '';
   const columnSortConfig = React.useMemo(() => {
     return [
       'name',
-      ...(!listAllNamespaces || !effectiveNamespace || effectiveNamespace === '' ? ['namespace'] : []),
+      ...(showNamespaceColumn ? ['namespace'] : []),
       'apps',
       'images',
       'last-checked',
       'ready',
       'actions',
-    ].map((key) => ({key}));
-  }, [listAllNamespaces, effectiveNamespace]);
+    ].map((key) => ({ key }));
+  }, [showNamespaceColumn]);
 
   const {searchParams, sortBy, direction, getSortParams} =
     useGitOpsDataViewSort(columnSortConfig);
