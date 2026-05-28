@@ -388,20 +388,6 @@
     }
   },
   {
-    "type": "console.navigation/separator",
-    "properties": {
-      "perspective": "admin",
-      "section": "gitops-navigation-section",
-      "id": "argocd-separator-imageupdater",
-      "insertAfter": "imageupdater"
-    },
-    "flags": {
-      "required": [
-        "IMAGEUPDATER"
-      ]
-    }
-  },
-  {
     "type": "console.navigation/resource-ns",
     "properties": {
         "id": "rollout",
