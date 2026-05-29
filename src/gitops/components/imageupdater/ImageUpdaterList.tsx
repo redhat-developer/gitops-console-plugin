@@ -87,9 +87,20 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
   const filteredBySearch = React.useMemo(() => {
     if (!searchQuery) return filteredData;
 
+    const lowerQuery = searchQuery.toLowerCase();
     return filteredData.filter((item) => {
       const name = item.metadata?.name || '';
-      return name.toLowerCase().includes(searchQuery.toLowerCase());
+      const labels = item.metadata?.labels || {};
+      return (
+        name.toLowerCase().includes(lowerQuery) ||
+        Object.entries(labels).some(([key, value]) => {
+          const labelSelector = `${key}=${value || ''}`;
+          return (
+            labelSelector.toLowerCase().includes(lowerQuery) ||
+            key.toLowerCase().includes(lowerQuery)
+          );
+        })
+      );
     });
   }, [filteredData, searchQuery]);
 
@@ -182,7 +193,6 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
             rowFilters={filters}
             onFilterChange={onFilterChange}
             nameFilterPlaceholder={t('Search by name...')}
-            hideLabelFilter
           />
         )}
         <GitOpsDataViewTable
