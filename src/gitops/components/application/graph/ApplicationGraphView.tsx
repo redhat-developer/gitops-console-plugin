@@ -355,6 +355,8 @@ export const ApplicationGraphView: React.FC<{
     );
     newController.addEventListener(SELECTION_EVENT, setSelectedIds);
     return newController;
+    // Controller is created once; graph updates are applied via separate effects.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const resourcePaths = React.useMemo(() => {

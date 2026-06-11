@@ -2,7 +2,13 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
-import { EmptyState, EmptyStateBody, PageSection, PageSectionVariants, Title } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateBody,
+  PageSection,
+  PageSectionVariants,
+  Title,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
@@ -16,8 +22,6 @@ type ImageUpdaterRecentUpdatesTabProps = RouteComponentProps<{ ns: string; name:
 };
 
 const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> = ({ obj }) => {
-  if (!obj) return null;
-
   const { t } = useGitOpsTranslation();
 
   const columnSortConfig = React.useMemo(
@@ -32,14 +36,16 @@ const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> 
 
   const columnsDV = useColumnsDV(getSortParams, t);
 
-  const recentUpdates: ImageUpdaterRecentUpdate[] = obj?.status?.recentUpdates || [];
-
-  const sortedUpdates = React.useMemo(
-    () => sortData(recentUpdates, sortBy, direction),
-    [recentUpdates, sortBy, direction],
-  );
+  const sortedUpdates = React.useMemo(() => {
+    const updates = obj?.status?.recentUpdates || [];
+    return sortData(updates, sortBy, direction);
+  }, [obj, sortBy, direction]);
 
   const rows = useRowsDV(sortedUpdates);
+
+  if (!obj) {
+    return null;
+  }
 
   const empty = (
     <Tbody>
@@ -188,10 +194,13 @@ const sortData = (
     }
 
     if (direction === 'asc') {
-      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-    } else {
-      return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      if (aValue < bValue) return -1;
+      if (aValue > bValue) return 1;
+      return 0;
     }
+    if (aValue > bValue) return -1;
+    if (aValue < bValue) return 1;
+    return 0;
   });
 };
 

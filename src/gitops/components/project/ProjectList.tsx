@@ -134,6 +134,7 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
   }, [filteredData, searchQuery]);
 
   const rows = useProjectsRowsDV(filteredBySearch, namespace, applications, appsLoaded);
+  const showNamespaceColumn = !namespace || namespace === '';
 
   // Check if there are projects initially (before search)
   const hasProjects = React.useMemo(() => {
@@ -225,14 +226,22 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
             nameFilterPlaceholder={t('Search by name...')}
           />
         )}
-        <GitOpsDataViewTable
-          columns={columnsDV}
-          rows={rows}
-          isEmpty={isEmptyState}
-          emptyState={empty}
-          isError={!!loadError}
-          errorState={error || undefined}
-        />
+        <div
+          className={
+            showNamespaceColumn
+              ? 'gitops-project-list gitops-project-list--with-namespace'
+              : 'gitops-project-list'
+          }
+        >
+          <GitOpsDataViewTable
+            columns={columnsDV}
+            rows={rows}
+            isEmpty={isEmptyState}
+            emptyState={empty}
+            isError={!!loadError}
+            errorState={error || undefined}
+          />
+        </div>
       </ListPageBody>
     </div>
   );
@@ -319,6 +328,17 @@ export const sortData = (
   });
 };
 
+const sortableHeaderProps = (
+  ariaLabel: string,
+  className: string,
+  sort: ThProps['sort'],
+): ThProps => ({
+  'aria-label': ariaLabel,
+  className,
+  sort,
+  tooltip: '',
+});
+
 export const useColumnsDV = (
   namespace: string | undefined,
   getSortParams: (columnIndex: number) => ThProps['sort'],
@@ -329,56 +349,38 @@ export const useColumnsDV = (
   const columns: DataViewTh[] = [
     {
       cell: t('Name'),
-      props: {
-        'aria-label': 'name',
-        className: 'pf-m-width-25',
-        sort: getSortParams(0),
-        style: { minWidth: '200px' },
-      },
+      props: sortableHeaderProps('name', 'pf-m-width-20', getSortParams(0)),
     },
     ...(showNamespace
       ? [
           {
             cell: t('Namespace'),
-            props: {
-              'aria-label': 'namespace',
-              className: 'pf-m-width-15',
-              sort: getSortParams(1),
-              style: { minWidth: '150px' },
-            },
+            props: sortableHeaderProps('namespace', 'pf-m-width-15', getSortParams(1)),
           },
         ]
       : []),
     {
       cell: t('Description'),
-      props: {
-        'aria-label': 'description',
-        className: 'pf-m-width-25',
-        sort: getSortParams(1 + i),
-      },
+      props: sortableHeaderProps('description', 'pf-m-width-10', getSortParams(1 + i)),
     },
     {
       cell: t('Applications'),
-      props: {
-        'aria-label': 'applications',
-        className: 'pf-m-width-15',
-        sort: getSortParams(2 + i),
-      },
+      props: sortableHeaderProps('applications', 'pf-m-width-15', getSortParams(2 + i)),
     },
     {
       cell: t('Labels'),
       props: {
         'aria-label': 'labels',
-        className: 'pf-m-width-15',
+        className: 'pf-m-width-20',
       },
     },
     {
       cell: t('Last Updated'),
-      props: {
-        'aria-label': 'last updated',
-        className: 'pf-m-width-15',
-        sort: getSortParams(showNamespace ? 5 : 4),
-      },
+      props: sortableHeaderProps(
+        'last updated',
+        'pf-m-width-15',
+        getSortParams(showNamespace ? 5 : 4),
+      ),
     },
     {
       cell: '',
@@ -406,14 +408,12 @@ export const useProjectsRowsDV = (
     rows.push([
       {
         cell: (
-          <div>
-            <ResourceLink
-              groupVersionKind={modelToGroupVersionKind(AppProjectModel)}
-              name={obj.metadata.name}
-              namespace={obj.metadata.namespace}
-              inline={true}
-            />
-          </div>
+          <ResourceLink
+            groupVersionKind={modelToGroupVersionKind(AppProjectModel)}
+            name={obj.metadata.name}
+            namespace={obj.metadata.namespace}
+            inline={true}
+          />
         ),
         id: 'name',
         dataLabel: 'Name',
@@ -429,16 +429,25 @@ export const useProjectsRowsDV = (
         : []),
       {
         id: 'description',
-        cell: obj.spec?.description || '-',
+        dataLabel: 'Description',
+        cell: (
+          <span className="gitops-project-list__description">{obj.spec?.description || '-'}</span>
+        ),
       },
       {
         id: 'applications',
-        cell: appsLoaded ? appsCount.toString() : '-',
+        dataLabel: 'Applications',
+        cell: (
+          <span className="gitops-project-list__applications-count">
+            {appsLoaded ? appsCount.toString() : '-'}
+          </span>
+        ),
       },
       {
         id: 'labels',
+        dataLabel: 'Labels',
         cell: (
-          <div className="pf-m-width-40">
+          <div>
             <MetadataLabels
               kind={
                 AppProjectModel.apiGroup +
@@ -448,6 +457,7 @@ export const useProjectsRowsDV = (
                 AppProjectModel.kind
               }
               labels={obj?.metadata?.labels}
+              numLabels={3}
             />
           </div>
         ),

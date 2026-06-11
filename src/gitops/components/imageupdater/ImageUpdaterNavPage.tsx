@@ -1,10 +1,9 @@
 import * as React from 'react';
 
+import { modelToGroupVersionKind } from '@gitops/utils/utils';
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
 import { Bullseye, Spinner } from '@patternfly/react-core';
-
-import {modelToGroupVersionKind} from '@gitops/utils/utils';
 
 import { ImageUpdaterKind, ImageUpdaterModel } from '../../models/ImageUpdaterModel';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';

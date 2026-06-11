@@ -25,6 +25,7 @@ import { useApplicationActionsProvider } from '../..//hooks/useApplicationAction
 import RevisionFragment from '../..//Revision/Revision';
 import HealthStatusFragment from '../..//Statuses/HealthStatus';
 import { HealthStatus, SyncStatus } from '../..//utils/constants';
+import { labelControllerNamespaceKey } from '../..//utils/gitops';
 import {
   ApplicationKind,
   ApplicationModel,
@@ -424,6 +425,11 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         id: app.spec?.project,
         cell: app.spec?.project && (
           <ResourceLink
+            namespace={
+              app.status?.controllerNamespace ||
+              app.metadata?.labels?.[labelControllerNamespaceKey] ||
+              app.metadata?.namespace
+            }
             groupVersionKind={{ group: 'argoproj.io', version: 'v1alpha1', kind: 'AppProject' }}
             name={app.spec.project}
           />

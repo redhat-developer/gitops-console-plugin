@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {useTranslation} from 'react-i18next';
-import {useLocation} from 'react-router-dom-v5-compat';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom-v5-compat';
 import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
-import {modelToGroupVersionKind} from '@gitops/utils/utils';
+import { modelToGroupVersionKind } from '@gitops/utils/utils';
 import {
   Action,
   K8sResourceCommon,
@@ -18,17 +18,24 @@ import {
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
-import {ErrorState} from '@patternfly/react-component-groups';
-import {EmptyState, EmptyStateBody} from '@patternfly/react-core';
-import {DataViewTh, DataViewTr} from '@patternfly/react-data-view/dist/esm/DataViewTable';
-import {CubesIcon} from '@patternfly/react-icons';
-import {Tbody, Td, ThProps, Tr} from '@patternfly/react-table';
+import { ErrorState } from '@patternfly/react-component-groups';
+import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import { CubesIcon } from '@patternfly/react-icons';
+import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
-import {ImageUpdaterKind, ImageUpdaterModel, imageUpdaterModelRef} from '../../models/ImageUpdaterModel';
-import {ShowOperandsInAllNamespacesRadioGroup, useShowOperandsInAllNamespaces,} from '../shared/AllNamespaces';
-import {GitOpsDataViewTable, useGitOpsDataViewSort} from '../shared/DataView';
+import {
+  ImageUpdaterKind,
+  ImageUpdaterModel,
+  imageUpdaterModelRef,
+} from '../../models/ImageUpdaterModel';
+import {
+  ShowOperandsInAllNamespacesRadioGroup,
+  useShowOperandsInAllNamespaces,
+} from '../shared/AllNamespaces';
+import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
 
-import {useImageUpdaterActionsProvider} from './hooks/useImageUpdaterActionsProvider';
+import { useImageUpdaterActionsProvider } from './hooks/useImageUpdaterActionsProvider';
 
 import './imageupdater-list.scss';
 
@@ -68,13 +75,13 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
     ].map((key) => ({ key }));
   }, [showNamespaceColumn]);
 
-  const {searchParams, sortBy, direction, getSortParams} =
+  const { searchParams, sortBy, direction, getSortParams } =
     useGitOpsDataViewSort(columnSortConfig);
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
 
-  const {t} = useTranslation('plugin__gitops-plugin');
+  const { t } = useTranslation('plugin__gitops-plugin');
 
   const columnsDV = useColumnsDV(effectiveNamespace, getSortParams);
   const sortedItems = React.useMemo(() => {
@@ -114,10 +121,12 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
     if (searchQuery) {
       return (
         <>
-          {t('No ImageUpdaters match the search filter')}{' '}
-          <strong>&quot;{searchQuery}&quot;</strong>.
-          <br/>
-          {t('Try removing the filter or searching for a different term to see more ImageUpdaters.')}
+          {t('No ImageUpdaters match the search filter')} <strong>&quot;{searchQuery}&quot;</strong>
+          .
+          <br />
+          {t(
+            'Try removing the filter or searching for a different term to see more ImageUpdaters.',
+          )}
         </>
       );
     }
@@ -133,9 +142,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
           <EmptyState
             headingLevel="h4"
             icon={CubesIcon}
-            titleText={
-              searchQuery ? t('No matching ImageUpdaters') : t('No ImageUpdaters')
-            }
+            titleText={searchQuery ? t('No matching ImageUpdaters') : t('No ImageUpdaters')}
           >
             <EmptyStateBody>{getEmptyStateBody()}</EmptyStateBody>
           </EmptyState>
@@ -175,7 +182,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
           }
           helpText={
             location.pathname?.includes('openshift-gitops-operator') ? (
-              <ShowOperandsInAllNamespacesRadioGroup/>
+              <ShowOperandsInAllNamespacesRadioGroup />
             ) : null
           }
           hideFavoriteButton={false}
@@ -264,7 +271,7 @@ export const useColumnsDV = (
 ): DataViewTh[] => {
   const showNamespace = !namespace || namespace === '';
   const i: number = showNamespace ? 1 : 0;
-  const {t} = useTranslation('plugin__gitops-plugin');
+  const { t } = useTranslation('plugin__gitops-plugin');
   const columns: DataViewTh[] = [
     {
       cell: t('Name'),
@@ -272,21 +279,21 @@ export const useColumnsDV = (
         'aria-label': 'name',
         className: 'pf-m-width-20',
         sort: getSortParams(0),
-        style: {minWidth: '200px'},
+        style: { minWidth: '200px' },
       },
     },
     ...(showNamespace
       ? [
-        {
-          cell: t('Namespace'),
-          props: {
-            'aria-label': 'namespace',
-            className: 'pf-m-width-15',
-            sort: getSortParams(1),
-            style: {minWidth: '150px'},
+          {
+            cell: t('Namespace'),
+            props: {
+              'aria-label': 'namespace',
+              className: 'pf-m-width-15',
+              sort: getSortParams(1),
+              style: { minWidth: '150px' },
+            },
           },
-        },
-      ]
+        ]
       : []),
     {
       cell: t('Apps'),
@@ -322,7 +329,7 @@ export const useColumnsDV = (
     },
     {
       cell: '',
-      props: {'aria-label': 'actions'},
+      props: { 'aria-label': 'actions' },
     },
   ];
 
@@ -359,16 +366,17 @@ export const useImageUpdaterRowsDV = (
       },
       ...(showNamespace
         ? [
-          {
-            cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace}/>,
-            id: obj.metadata.namespace,
-            dataLabel: 'Namespace',
-          },
-        ]
+            {
+              cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
+              id: obj.metadata.namespace,
+              dataLabel: 'Namespace',
+            },
+          ]
         : []),
       {
         id: 'apps',
-        cell: obj.status?.applicationsMatched != null ? String(obj.status.applicationsMatched) : '-',
+        cell:
+          obj.status?.applicationsMatched != null ? String(obj.status.applicationsMatched) : '-',
         dataLabel: 'Apps',
       },
       {
@@ -380,7 +388,7 @@ export const useImageUpdaterRowsDV = (
         id: 'last-checked',
         cell: obj.status?.lastCheckedAt ? (
           <div className="gitops-imageupdater-list__timestamp">
-            <Timestamp timestamp={obj.status.lastCheckedAt}/>
+            <Timestamp timestamp={obj.status.lastCheckedAt} />
           </div>
         ) : (
           '-'
@@ -394,8 +402,8 @@ export const useImageUpdaterRowsDV = (
       },
       {
         id: 'actions-' + index,
-        cell: <ImageUpdaterActionsCell imageUpdater={obj}/>,
-        props: {className: 'gitops-imageupdater-list__actions-cell'},
+        cell: <ImageUpdaterActionsCell imageUpdater={obj} />,
+        props: { className: 'gitops-imageupdater-list__actions-cell' },
       },
     ]);
   });
@@ -404,7 +412,7 @@ export const useImageUpdaterRowsDV = (
 
 const ImageUpdaterActionsCell: React.FC<{
   imageUpdater: ImageUpdaterKind;
-}> = ({imageUpdater}) => {
+}> = ({ imageUpdater }) => {
   const actionList: Action[] = useImageUpdaterActionsProvider(imageUpdater);
   return (
     <div className="gitops-imageupdater-list__actions">
@@ -435,8 +443,8 @@ const getFilters = (t: (key: string) => string): RowFilter[] => [
       );
     },
     items: [
-      {id: 'has-apps', title: t('Has Apps')},
-      {id: 'no-apps', title: t('No Apps')},
+      { id: 'has-apps', title: t('Has Apps') },
+      { id: 'no-apps', title: t('No Apps') },
     ],
   },
   {
@@ -460,8 +468,8 @@ const getFilters = (t: (key: string) => string): RowFilter[] => [
       );
     },
     items: [
-      {id: 'ready', title: t('Ready')},
-      {id: 'not-ready', title: t('Not Ready')},
+      { id: 'ready', title: t('Ready') },
+      { id: 'not-ready', title: t('Not Ready') },
     ],
   },
 ];

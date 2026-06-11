@@ -1,7 +1,7 @@
+import { modelToRef } from 'src/gitops/utils/utils';
+
 import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk/lib/api/common-types';
-
-import { modelToRef } from 'src/gitops/utils/utils';
 
 export type ImageUpdaterCondition = {
   lastTransitionTime: string;
