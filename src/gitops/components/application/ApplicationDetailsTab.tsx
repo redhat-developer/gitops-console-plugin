@@ -12,6 +12,7 @@ import HealthStatus from '@gitops/Statuses/HealthStatus';
 import { OperationState } from '@gitops/Statuses/OperationState';
 import SyncStatus from '@gitops/Statuses/SyncStatus';
 import { ArgoServer, getArgoServer, getFriendlyClusterName } from '@gitops/utils/gitops';
+import { labelControllerNamespaceKey } from '@gitops/utils/gitops';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { useObjectModifyPermissions } from '@gitops/utils/utils';
 import { k8sUpdate, ResourceLink, useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
@@ -114,6 +115,15 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
     sources = [];
     revisions = [];
   }
+
+  // Get the controller namespace for AppProject link
+  const getControllerNamespace = (): string => {
+    if (obj?.status?.controllerNamespace) return obj.status.controllerNamespace;
+    if (obj?.metadata?.labels?.[labelControllerNamespaceKey])
+      return obj.metadata.labels[labelControllerNamespaceKey];
+    return obj?.metadata?.namespace || '';
+  };
+
   return (
     <div>
       <PageSection
@@ -214,9 +224,8 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
                   title={t('Project')}
                   help={t('The Argo CD Project that this application belongs to.')}
                 >
-                  {/* TODO - Update to handle App in Any Namespace when controller namespace is in status */}
                   <ResourceLink
-                    namespace={obj?.metadata?.namespace}
+                    namespace={getControllerNamespace()}
                     groupVersionKind={{
                       group: 'argoproj.io',
                       version: 'v1alpha1',
