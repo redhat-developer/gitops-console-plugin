@@ -254,7 +254,7 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
   roles.forEach((role, index) => {
     rows.push([
       {
-        cell: <strong>{role.name}</strong>,
+        cell: role.name || '-',
         id: `name-${index}`,
         dataLabel: t('Name'),
       },

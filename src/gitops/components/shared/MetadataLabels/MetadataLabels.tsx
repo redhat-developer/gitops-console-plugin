@@ -35,12 +35,13 @@ const LabelL: React.FC<LabelProps> = ({ kind, name, value, expand }) => {
 type MetadataLabelsProps = {
   kind: K8sResourceKindReference;
   labels?: { [key: string]: string };
+  numLabels?: number;
 };
 
-export const MetadataLabels: React.FC<MetadataLabelsProps> = ({ kind, labels }) => {
+export const MetadataLabels: React.FC<MetadataLabelsProps> = ({ kind, labels, numLabels = 10 }) => {
   const { t } = useGitOpsTranslation();
   return labels && Object.keys(labels).length > 0 ? (
-    <LabelGroup numLabels={10} className="co-label-group metadata-labels-group">
+    <LabelGroup numLabels={numLabels} className="co-label-group metadata-labels-group">
       {Object.keys(labels || {})?.map((key) => {
         return (
           <LabelL key={key} kind={kind} name={key} value={labels[key]} expand={true}>

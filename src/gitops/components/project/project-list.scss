@@ -1,22 +1,245 @@
-// Prevent vertical text wrapping in Name and Namespace columns
-.pf-c-table tbody td[data-label='Name'],
-.pf-c-table tbody td[data-label='Namespace'] {
-  white-space: nowrap !important;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  
-  a,
-  .co-resource-item {
+// PF6 DataViewTh applies modifier="truncate" on headers. With table-layout: fixed, truncation
+// must happen on the sort-button label text so TableText can detect overflow and show tooltips.
+@mixin gitops-project-list-sortable-header-tooltip {
+  .pf-v6-c-table__button,
+  .pf-c-table__button {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .pf-v6-c-table__button-content,
+  .pf-c-table__button-content {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .pf-v6-c-table__text,
+  .pf-c-table__text {
+    display: block;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: inline-block;
+    white-space: nowrap;
+    min-width: 0;
     max-width: 100%;
   }
 }
 
-// Description column text truncation
-.pf-c-table tbody td[data-label='Description'] {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+@mixin gitops-project-list-full-header {
+  --pf-v6-c-table--cell--MaxWidth: none;
+  --pf-v6-c-table--m-truncate--cell--MaxWidth: none;
+  --pf-v6-c-table--cell--Overflow: visible;
+  --pf-v6-c-table--cell--TextOverflow: clip;
+  --pf-v6-c-table--cell--WhiteSpace: nowrap;
+  max-width: none !important;
+  overflow: visible !important;
+
+  .pf-v6-c-table__button,
+  .pf-v6-c-table__button-content,
+  .pf-v6-c-table__text,
+  .pf-c-table__button,
+  .pf-c-table__text {
+    overflow: visible;
+    text-overflow: clip;
+    max-width: none;
+    width: auto;
+  }
+}
+
+.gitops-project-list {
+  .pf-v6-c-table,
+  .pf-c-table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  td {
+    vertical-align: top;
+  }
+
+  // All-projects view: Name, Namespace, Description, Applications, Labels, Last Updated, Actions
+  &--with-namespace {
+    th:nth-child(1),
+    td:nth-child(1) {
+      width: 20%;
+      min-width: 14rem;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+      width: 14%;
+      min-width: 9.5rem;
+      white-space: nowrap;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+      width: 12%;
+      min-width: 8rem;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+      width: 12%;
+      white-space: nowrap;
+    }
+
+    td:nth-child(4) {
+      min-width: 3rem;
+    }
+
+    th:nth-child(5),
+    td:nth-child(5) {
+      width: 18%;
+      overflow: hidden;
+    }
+
+    th:nth-child(6),
+    td:nth-child(6) {
+      width: 14%;
+      white-space: nowrap;
+    }
+
+    th:nth-child(7),
+    td:nth-child(7) {
+      width: 4%;
+      white-space: nowrap;
+    }
+
+    // Name and description wrap instead of ellipsis truncation.
+    td:nth-child(1),
+    td:nth-child(3) {
+      white-space: normal;
+      word-break: normal;
+      overflow-wrap: anywhere;
+    }
+
+    td:nth-child(1) {
+      .co-resource-item {
+        display: inline-flex;
+        align-items: flex-start;
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      .co-resource-item__resource-name {
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: anywhere;
+        min-width: 0;
+        flex: 1;
+      }
+    }
+
+    th:nth-child(1),
+    th:nth-child(2),
+    th:nth-child(3) {
+      @include gitops-project-list-sortable-header-tooltip;
+    }
+
+    th:nth-child(4) {
+      min-width: 11rem;
+      @include gitops-project-list-full-header;
+    }
+
+    th:nth-child(6) {
+      min-width: 11.5rem;
+      @include gitops-project-list-full-header;
+    }
+  }
+
+  &__applications-count {
+    display: inline-block;
+    min-width: 1.5rem;
+    text-align: right;
+  }
+
+  &__description {
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+
+  // Single-namespace view: Name, Description, Applications, Labels, Last Updated, Actions
+  &:not(.gitops-project-list--with-namespace) {
+    th:nth-child(1),
+    td:nth-child(1) {
+      width: 22%;
+      min-width: 14rem;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+      width: 14%;
+      min-width: 8rem;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+      width: 11%;
+      white-space: nowrap;
+    }
+
+    td:nth-child(3) {
+      min-width: 3rem;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+      width: 22%;
+      overflow: hidden;
+    }
+
+    th:nth-child(5),
+    td:nth-child(5) {
+      width: 16%;
+      white-space: nowrap;
+    }
+
+    th:nth-child(6),
+    td:nth-child(6) {
+      width: 4%;
+      white-space: nowrap;
+    }
+
+    td:nth-child(1),
+    td:nth-child(2) {
+      white-space: normal;
+      word-break: normal;
+      overflow-wrap: anywhere;
+    }
+
+    td:nth-child(1) {
+      .co-resource-item {
+        display: inline-flex;
+        align-items: flex-start;
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      .co-resource-item__resource-name {
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: anywhere;
+        min-width: 0;
+        flex: 1;
+      }
+    }
+
+    th:nth-child(1),
+    th:nth-child(2) {
+      @include gitops-project-list-sortable-header-tooltip;
+    }
+
+    th:nth-child(3) {
+      min-width: 11rem;
+      @include gitops-project-list-full-header;
+    }
+
+    th:nth-child(5) {
+      min-width: 11.5rem;
+      @include gitops-project-list-full-header;
+    }
+  }
 }
