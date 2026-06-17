@@ -83,3 +83,20 @@ spec:
 source ./contrib/oc-environment.sh
 ./bin/bridge -plugins gitops-plugin=http://localhost:9001/
 ```
+
+## Testing
+
+Unit tests use [Jest](https://jestjs.io/) with inline snapshots (`toMatchInlineSnapshot()`), so expected values live directly in the test source files.
+
+```bash
+# Run all tests
+yarn test
+
+# Run tests and update inline snapshots
+yarn test:update
+
+# Run tests with coverage report
+yarn test:coverage
+```
+
+When a component's rendered output or a utility's return value changes, the inline snapshots will fail. Run `yarn test:update` to accept the new output — the diff will show exactly what changed.
