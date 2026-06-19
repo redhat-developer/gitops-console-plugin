@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import SvgTextWithOverflow from '@gitops/components/graph/SvgTextWithOverflow';
 import { dangerColor, successColor, warningColor } from '@gitops/utils/components/Icons/Icons';
 import { HealthStatus } from '@gitops/utils/constants';
-import ApplicationIcon from '@images/resources/application.svg';
+import ApplicationSetIcon from '@images/resources/applicationset.svg';
 import { Tooltip } from '@patternfly/react-core';
 import {
   GhostIcon,
@@ -102,54 +102,14 @@ const ApplicationSetShape: React.FunctionComponent<ShapeProps> = observer(
             stroke="var(--pf-topology__node__background--Stroke)"
             strokeWidth="2"
           />
-          <foreignObject
-            x={-24}
-            y={12}
-            width={16}
-            height={28}
-            color="var(--pf-topology__node__background--Stroke)"
-          >
-            <div
-              style={{
-                fontSize: '24px',
-                width: '16px',
-                height: '24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {`{`}
-            </div>
-          </foreignObject>
-          <ApplicationIcon
+          <ApplicationSetIcon
             className={className}
             x={-12}
             y={0}
             width={50}
             height={50}
-            style={{ fill: 'var(--pf-topology__node__background--Stroke)' }}
+            style={{ color: 'var(--pf-topology__node__background--Stroke)' }}
           />
-          <foreignObject
-            x={34}
-            y={12}
-            width={16}
-            height={28} // style={{ transform: 'scale(200)'}}
-            color="var(--pf-topology__node__background--Stroke)"
-          >
-            <div
-              style={{
-                fontSize: '24px',
-                width: '16px',
-                height: '24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {`}`}
-            </div>
-          </foreignObject>
         </g>
         <g>
           <svg
