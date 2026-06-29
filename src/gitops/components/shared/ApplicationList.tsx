@@ -37,12 +37,12 @@ import SyncStatusFragment from '../../Statuses/SyncStatus';
 import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
 import { isApplicationRefreshing } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
-import { ApplicationSetGraphView } from '../appset/graph/ApplicationSetGraphView';
 
 import {
   ShowOperandsInAllNamespacesRadioGroup,
   useShowOperandsInAllNamespaces,
 } from './AllNamespaces';
+import ApplicationSetApplicationsView from './ApplicationSetApplicationsView';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from './DataView';
 
 interface ApplicationProps {
@@ -133,6 +133,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
   // PatternFly filters work on owned apps only (the dataset that will be displayed)
   const filters = getFilters(t);
+  // const filters = React.useMemo(() => getFilters(t), [t]);
   const [data, filteredData, onFilterChange] = useListPageFilter(ownedApps, filters);
 
   // Filter by search query if present (after other filters)
@@ -231,33 +232,17 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         {/* Show an AppSet specific title if showTitle is undefined. We don't want a duplicate title from above */}
         {appset && (
           <Flex flex={{ default: 'flexDefault' }}>
-            {/* {showTitle == undefined && ( */}
             <Title headingLevel="h2" className="co-section-heading">
               {t('ApplicationSet Applications')}
             </Title>
-            {/* )} */}
             <FlexItem fullWidth={{ default: 'fullWidth' }}>
               {t(
-                "The graph and table views show the ApplicationSet's applications. Use the filter below the graph to filter applications based on their health and sync status.",
+                "The graph and table views show the ApplicationSet's applications. Use the filter to filter applications based on their health and sync status.",
               )}
-            </FlexItem>
-            <FlexItem
-              fullWidth={{ default: 'fullWidth' }}
-              style={{
-                width: '95%',
-                height: '1000px',
-                border: '1px solid gray',
-                margin: '30px 30px',
-              }}
-            >
-              <ApplicationSetGraphView
-                applicationSet={appset as ApplicationSetKind}
-                applications={filteredData}
-              />
             </FlexItem>
           </Flex>
         )}
-        {!hideNameLabelFilters && hasOwnedApplications && (
+        {!appset && !hideNameLabelFilters && hasOwnedApplications && (
           <ListPageFilter
             data={data}
             loaded={loaded}
@@ -266,14 +251,36 @@ const ApplicationList: React.FC<ApplicationProps> = ({
             nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
           />
         )}
-        <GitOpsDataViewTable
-          columns={columnsDV}
-          rows={rows}
-          isEmpty={filteredBySearch.length === 0}
-          emptyState={empty}
-          errorState={error || undefined}
-          isError={!!loadError}
-        />
+        {appset && (
+          <ApplicationSetApplicationsView
+            applicationSet={appset as ApplicationSetKind}
+            ownedApps={ownedApps as ApplicationKind[]}
+            filteredApplications={filteredData as ApplicationKind[]}
+            hideNameLabelFilters={hideNameLabelFilters}
+            hasOwnedApplications={hasOwnedApplications}
+            rowFilters={filters}
+            listPageFilterData={data as ApplicationKind[]}
+            onFilterChange={onFilterChange}
+            nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
+            loaded={loaded}
+            columns={columnsDV}
+            rows={rows}
+            isEmpty={filteredBySearch.length === 0}
+            emptyState={empty}
+            errorState={error || undefined}
+            isError={!!loadError}
+          />
+        )}
+        {!appset && (
+          <GitOpsDataViewTable
+            columns={columnsDV}
+            rows={rows}
+            isEmpty={filteredBySearch.length === 0}
+            emptyState={empty}
+            errorState={error || undefined}
+            isError={!!loadError}
+          />
+        )}
       </ListPageBody>
     </div>
   );

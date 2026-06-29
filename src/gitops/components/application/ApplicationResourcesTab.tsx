@@ -3,24 +3,11 @@ import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
-import { useResourceActionsProvider } from '@gitops/hooks/useResourceActionsProvider';
-import HealthStatus from '@gitops/Statuses/HealthStatus';
-import SyncStatus from '@gitops/Statuses/SyncStatus';
-import ActionDropDown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
+
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { ApplicationKind, ApplicationResourceStatus } from '@gitops-models/ApplicationModel';
+import { useUserSettings } from '@openshift-console/dynamic-plugin-sdk';
 import {
-  Action,
-  K8sGroupVersionKind,
-  ListPageFilter,
-  ResourceLink,
-  RowFilter,
-  RowFilterItem,
-  useListPageFilter,
-} from '@openshift-console/dynamic-plugin-sdk';
-import {
-  EmptyState,
-  EmptyStateBody,
   Flex,
   FlexItem,
   PageBody,
@@ -28,16 +15,13 @@ import {
   PageSectionVariants,
   Title,
 } from '@patternfly/react-core';
-import { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
-import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
-import { CubesIcon } from '@patternfly/react-icons';
-import { Tbody, Td, Tr } from '@patternfly/react-table';
-
-import { getApplicationArgoUrl } from '../../utils/gitops';
 import ArgoCDLink from '../shared/ArgoCDLink/ArgoCDLink';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
-
-import { ApplicationGraphView } from './graph/ApplicationGraphView';
+import ApplicationResourcesView from './ApplicationResourcesView';
+import {
+  APPLICATION_RESOURCES_VIEW_SETTING_KEY,
+  ApplicationResourcesViewType,
+} from './ApplicationResourcesViewType';
+import { getApplicationArgoUrl } from '@gitops/utils/gitops';
 
 type ApplicationResourcesTabProps = RouteComponentProps<{
   ns: string;
@@ -48,7 +32,23 @@ type ApplicationResourcesTabProps = RouteComponentProps<{
 
 const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }) => {
   const argoServer = useArgoServer(obj);
-  const argoUrl = getApplicationArgoUrl(argoServer, obj);
+  const argoURL = getApplicationArgoUrl(argoServer, obj);
+
+  const [savedViewType, setSavedViewType, viewSettingsLoaded] =
+  useUserSettings<ApplicationResourcesViewType>(
+    APPLICATION_RESOURCES_VIEW_SETTING_KEY,
+    ApplicationResourcesViewType.graph,
+    false,
+  );
+  const [viewType, setViewType] = React.useState<ApplicationResourcesViewType>(
+    ApplicationResourcesViewType.graph,
+  );
+
+  React.useEffect(() => {
+    if (viewSettingsLoaded) {
+      setViewType(savedViewType ?? ApplicationResourcesViewType.graph);
+    }
+  }, [savedViewType, viewSettingsLoaded]);
 
   let resources: ApplicationResourceStatus[];
   if (obj?.status?.resources) {
@@ -57,42 +57,18 @@ const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }
     resources = [];
   }
 
-  const columnSortConfig = React.useMemo(
-    () =>
-      ['name', 'namespace', 'sync-wave', 'sync-status', 'health-status', 'actions'].map((key) => ({
-        key,
-      })),
-    [],
+  const onViewChange = React.useCallback(
+    (newViewType: ApplicationResourcesViewType) => {
+      setViewType(newViewType);
+      setSavedViewType(newViewType);
+    },
+    [setSavedViewType],
   );
 
-  const { sortBy, direction, getSortParams } = useGitOpsDataViewSort(columnSortConfig);
-  const columnsDV = useResourceColumnsDV(getSortParams);
-  const sortedResources = React.useMemo(() => {
-    return sortData(resources, sortBy, direction);
-  }, [resources, sortBy, direction]);
+  if (!viewSettingsLoaded) {
+    return null;
+  }
 
-  // TODO: use alternate filter since it is deprecated. See DataTableView potentially
-  const resourceFilters = React.useMemo(() => filters(sortedResources), [sortedResources]);
-  const [data, filteredData, onFilterChange] = useListPageFilter(sortedResources, resourceFilters);
-
-  const memoizedFilteredResources = React.useMemo(() => [...filteredData], [filteredData]);
-  const isEmptyResources = memoizedFilteredResources.length === 0;
-
-  const rows = useResourceRowsDV(memoizedFilteredResources, obj, argoUrl);
-
-  const empty = (
-    <Tbody>
-      <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No resources')}>
-            <EmptyStateBody>
-              {t('There are no resources associated with the application.')}
-            </EmptyStateBody>
-          </EmptyState>
-        </Td>
-      </Tr>
-    </Tbody>
-  );
   return (
     <div>
       <PageSection
@@ -102,315 +78,33 @@ const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }
         <Title headingLevel="h2" className="co-section-heading">
           {t('Application resources')}
         </Title>
+
         <Flex flex={{ default: 'flexDefault' }}>
           <FlexItem fullWidth={{ default: 'fullWidth' }}>
             {t(
-              "The graph and table views show health and sync status for the application's immediate resources only.  Click the Argo CD Link to see the complete resource tree. Use the filter to filter resources based on status and kind.",
+              "The graph and table views show health and sync status for the application's immediate resources only. Click the Argo CD Link to see the complete resource tree. Use the filter to filter resources based on status and kind.",
             )}
           </FlexItem>
         </Flex>
         <PageBody>
           <Flex style={{ marginTop: '15px' }} flex={{ default: 'flexDefault' }}>
-            <FlexItem>{argoUrl ? <ArgoCDLink href={argoUrl} /> : <></>}</FlexItem>
+            <FlexItem>
+              <ArgoCDLink href={argoURL} />
+            </FlexItem>
           </Flex>
-          <>
-            {obj.metadata && (
-              <Flex>
-                <FlexItem
-                  fullWidth={{ default: 'fullWidth' }}
-                  style={{
-                    width: '95%',
-                    height: '1000px',
-                    border: '1px solid gray',
-                    margin: '30px 30px',
-                  }}
-                >
-                  <ApplicationGraphView application={obj} resources={memoizedFilteredResources} />
-                </FlexItem>
-
-                <FlexItem fullWidth={{ default: 'fullWidth' }}>
-                  <ListPageFilter
-                    hideNameLabelFilters
-                    data={data}
-                    loaded={true}
-                    rowFilters={resourceFilters}
-                    onFilterChange={onFilterChange}
-                  />
-                  <GitOpsDataViewTable
-                    rows={rows}
-                    columns={columnsDV}
-                    emptyState={empty}
-                    isEmpty={isEmptyResources}
-                    activeState={isEmptyResources ? DataViewState.empty : null}
-                  />
-                </FlexItem>
-              </Flex>
-            )}
-          </>
+          {obj?.metadata && (
+            <ApplicationResourcesView
+              application={obj}
+              resources={resources}
+              viewType={viewType}
+              onViewChange={onViewChange}
+              argoBaseURL={argoURL}
+            />
+          )}
         </PageBody>
       </PageSection>
     </div>
   );
-};
-
-const sortData = (
-  data: ApplicationResourceStatus[],
-  sortBy: string | undefined,
-  direction: 'asc' | 'desc' | undefined,
-) => {
-  if (!sortBy || !direction) return data;
-
-  return [...data].sort((a, b) => {
-    let aValue: any, bValue: any;
-
-    switch (sortBy) {
-      case 'name':
-        aValue = a.name || '';
-        bValue = b.name || '';
-        break;
-      case 'namespace':
-        aValue = a.namespace || '';
-        bValue = b.namespace || '';
-        break;
-      case 'sync-wave':
-        aValue = a.syncWave || '';
-        bValue = b.syncWave || '';
-        break;
-      case 'sync-status':
-        aValue = a.status || '';
-        bValue = b.status || '';
-        break;
-      case 'health-status':
-        aValue = a.health?.status || '';
-        bValue = b.health?.status || '';
-        break;
-      default:
-        return 0;
-    }
-
-    if (direction === 'asc') {
-      // eslint-disable-next-line no-nested-ternary
-      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-    } else {
-      // eslint-disable-next-line no-nested-ternary
-      return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
-    }
-  });
-};
-
-export const useResourceColumnsDV = (getSortParams) => {
-  const columns: DataViewTh[] = [
-    {
-      cell: t('Name'),
-      props: {
-        'aria-label': 'name',
-        className: 'pf-m-width-25',
-        sort: getSortParams(0),
-      },
-    },
-    {
-      cell: t('Namespace'),
-      props: {
-        'aria-label': 'namespace',
-        className: 'pf-m-width-20',
-        sort: getSortParams(1),
-      },
-    },
-    {
-      cell: t('Sync Wave'),
-      props: {
-        'aria-label': 'sync wave',
-        className: 'pf-m-width-15',
-        sort: getSortParams(2),
-      },
-    },
-    {
-      cell: t('Sync Status'),
-      props: {
-        'aria-label': 'sync status',
-        className: 'pf-m-width-15',
-        sort: getSortParams(3),
-      },
-    },
-    {
-      cell: t('Health Status'),
-      props: {
-        'aria-label': 'health status',
-        className: 'pf-m-width-15',
-        sort: getSortParams(4),
-      },
-    },
-    {
-      cell: '',
-      props: { 'aria-label': 'actions' },
-    },
-  ];
-
-  return columns;
-};
-
-const useResourceRowsDV = (
-  resources: ApplicationResourceStatus[],
-  obj: ApplicationKind,
-  argoBaseURL: string,
-): DataViewTr[] => {
-  const rows: DataViewTr[] = [];
-
-  resources.forEach((resource, index) => {
-    const gvk: K8sGroupVersionKind = {
-      version: resource.version,
-      group: resource.group,
-      kind: resource.kind,
-    };
-
-    rows.push([
-      {
-        cell: (
-          <div>
-            <ResourceLink
-              groupVersionKind={gvk}
-              name={resource.name}
-              namespace={resource.namespace}
-            />
-          </div>
-        ),
-        id: resource.name + '-' + index,
-        dataLabel: 'Name',
-      },
-      {
-        cell: resource.namespace ? resource.namespace : '-',
-        id: resource.namespace,
-        dataLabel: 'Namespace',
-      },
-      {
-        id: 'sync-wave-' + index,
-        cell: <>{resource.syncWave || '-'}</>,
-        dataLabel: 'Sync Order',
-      },
-      {
-        id: 'sync-status-' + index,
-        cell: <>{resource.status ? <SyncStatus status={resource.status} /> : '-'}</>,
-      },
-      {
-        id: 'health-status-' + index,
-        cell: (
-          <>
-            {resource.health?.status && (
-              <HealthStatus status={resource.health.status} message={resource.health.message} />
-            )}
-            {!resource.health?.status && '-'}
-          </>
-        ),
-      },
-      {
-        id: 'actions-' + index,
-        cell: <ResourceActionsCell resource={resource} app={obj} argoBaseURL={argoBaseURL} />,
-        props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
-      },
-    ]);
-  });
-  return rows;
-};
-
-const ResourceActionsCell: React.FC<{
-  resource: ApplicationResourceStatus;
-  app: ApplicationKind;
-  argoBaseURL: string;
-}> = ({ resource, app, argoBaseURL }) => {
-  const actionList: [actions: Action[]] = useResourceActionsProvider(resource, app, argoBaseURL);
-  return (
-    <div style={{ textAlign: 'right' }}>
-      <ActionDropDown
-        actions={actionList ? actionList[0] : []}
-        id="gitops-application-actions"
-        isKebabToggle={true}
-      />
-    </div>
-  );
-};
-
-const filters = (resources: ApplicationResourceStatus[]): RowFilter[] => {
-  return [
-    {
-      filterGroupName: t('Sync Status'),
-      type: 'resource-sync',
-      reducer: (resource) => (resource.status ? resource.status : 'No Sync Status'),
-      filter: (input, resource) => {
-        if (input.selected?.length) {
-          if (resource?.status) {
-            return input.selected.includes(resource.status);
-          } else {
-            return input.selected.includes('No Sync Status'); // The resource has no health status and the None filter is selected
-          }
-        }
-        return true;
-      },
-      items: resources
-        .map((resource) => {
-          return {
-            id: resource.status ? resource.status : 'No Sync Status',
-            title: resource.status ? resource.status : 'No Sync Status',
-          };
-        })
-        .reduce<RowFilterItem[]>(function (result: RowFilterItem[], resource: RowFilterItem) {
-          if (!result.some((item) => item.id === resource.id)) {
-            result.push(resource);
-          }
-          return result;
-        }, []),
-    },
-    {
-      filterGroupName: t('Health Status'),
-      type: 'resource-health',
-      reducer: (resource) => (resource.health ? resource.health.status : 'None'),
-      filter: (input, resource) => {
-        if (input.selected?.length) {
-          if (resource?.health?.status) {
-            return input.selected.includes(resource.health.status);
-          } else if (input.selected.includes('None')) {
-            return true;
-          }
-          return false;
-        }
-        return true;
-      },
-      items: resources
-        .map((resource) => {
-          return {
-            id: resource.health && resource.health.status ? resource.health.status : 'None',
-            title: resource.health && resource.health.status ? resource.health.status : 'None',
-          };
-        })
-        .reduce<RowFilterItem[]>(function (result: RowFilterItem[], resource: RowFilterItem) {
-          if (!result.some((item) => item.id === resource.id)) {
-            result.push(resource);
-          }
-          return result;
-        }, []),
-    },
-    {
-      filterGroupName: t('Kind'),
-      type: 'resource-kind',
-      reducer: (resource) => resource.kind,
-      filter: (input, resource) => {
-        if (input.selected?.length) {
-          return input.selected.includes(resource.kind);
-        } else {
-          return true;
-        }
-      },
-      items: resources
-        .map((resource) => {
-          return { id: resource.kind, title: resource.kind };
-        })
-        .reduce<RowFilterItem[]>(function (result: RowFilterItem[], resource: RowFilterItem) {
-          if (!result.some((item) => item.id === resource.id)) {
-            result.push(resource);
-          }
-          return result;
-        }, []),
-    },
-  ];
 };
 
 export default ApplicationResourcesTab;
