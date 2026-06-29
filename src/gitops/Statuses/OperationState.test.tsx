@@ -27,7 +27,7 @@ describe('OperationState', () => {
     expect(
       renderToStaticMarkup(<OperationState app={makeApp('Running', 'Sync') as any} />),
     ).toMatchInlineSnapshot(
-      `"<svg data-icon="CircleNotchIcon" class="undefined fa-spin" style="color:var(--pf-v5-global--primary-color--200)"></svg> Syncing"`,
+      `"<svg data-icon="CircleNotchIcon" class="undefined fa-spin" style="color:var(--pf-t--global--icon--color--brand--default)"></svg> Syncing"`,
     );
   });
 
@@ -35,7 +35,7 @@ describe('OperationState', () => {
     expect(
       renderToStaticMarkup(<OperationState app={makeApp('Failed', 'Sync') as any} />),
     ).toMatchInlineSnapshot(
-      `"<svg data-icon="ExclamationCircleIcon" style="color:var(--pf-v5-global--danger-color--100)"></svg> Sync failed"`,
+      `"<svg data-icon="ExclamationCircleIcon" style="color:var(--pf-t--global--icon--color--status--danger--default)"></svg> Sync failed"`,
     );
   });
 
@@ -43,7 +43,7 @@ describe('OperationState', () => {
     expect(
       renderToStaticMarkup(<OperationState app={makeApp('Error', 'Sync') as any} />),
     ).toMatchInlineSnapshot(
-      `"<svg data-icon="ExclamationCircleIcon" style="color:var(--pf-v5-global--danger-color--100)"></svg> Sync error"`,
+      `"<svg data-icon="ExclamationCircleIcon" style="color:var(--pf-t--global--icon--color--status--danger--default)"></svg> Sync error"`,
     );
   });
 
@@ -51,7 +51,7 @@ describe('OperationState', () => {
     expect(
       renderToStaticMarkup(<OperationState app={makeApp('Succeeded', 'Sync') as any} />),
     ).toMatchInlineSnapshot(
-      `"<svg data-icon="HeartIcon" style="color:var(--pf-v5-global--success-color--100)"></svg> Sync OK"`,
+      `"<svg data-icon="HeartIcon" style="color:var(--pf-t--global--icon--color--status--success--default)"></svg> Sync OK"`,
     );
   });
 
@@ -59,7 +59,7 @@ describe('OperationState', () => {
     expect(
       renderToStaticMarkup(<OperationState app={makeApp('Terminating', 'Sync') as any} />),
     ).toMatchInlineSnapshot(
-      `"<svg data-icon="BanIcon" style="color:var(--pf-v5-global--disabled-color--100)"></svg> Terminated"`,
+      `"<svg data-icon="BanIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> Terminated"`,
     );
   });
 
@@ -73,7 +73,7 @@ describe('OperationState', () => {
     expect(
       renderToStaticMarkup(<OperationState app={makeApp('Running', 'Sync') as any} quiet />),
     ).toMatchInlineSnapshot(
-      `"<svg data-icon="CircleNotchIcon" class="undefined fa-spin" style="color:var(--pf-v5-global--primary-color--200)"></svg> Syncing"`,
+      `"<svg data-icon="CircleNotchIcon" class="undefined fa-spin" style="color:var(--pf-t--global--icon--color--brand--default)"></svg> Syncing"`,
     );
   });
 });

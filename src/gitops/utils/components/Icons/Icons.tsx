@@ -26,13 +26,13 @@ import {
 // import { global_warning_color_100 as warningColor } from '@patternfly/react-tokens/dist/js/global_warning_color_100';
 // import { global_success_color_100 as successColor } from '@patternfly/react-tokens/dist/js/global_success_color_100';
 
-// Modern PatternFly v5 CSS variables approach
-export const dangerColor = 'var(--pf-v5-global--danger-color--100)';
-export const blueDefaultColor = 'var(--pf-v5-global--primary-color--200)';
-export const disabledColor = 'var(--pf-v5-global--disabled-color--100)';
-export const blueInfoColor = 'var(--pf-v5-global--palette--blue-300)';
-export const warningColor = 'var(--pf-v5-global--warning-color--100)';
-export const successColor = 'var(--pf-v5-global--success-color--100)';
+// PatternFly 6 design tokens
+export const dangerColor = 'var(--pf-t--global--icon--color--status--danger--default)';
+export const blueDefaultColor = 'var(--pf-t--global--icon--color--brand--default)';
+export const disabledColor = 'var(--pf-t--global--icon--color--disabled)';
+export const blueInfoColor = 'var(--pf-t--global--icon--color--status--info--default)';
+export const warningColor = 'var(--pf-t--global--icon--color--status--warning--default)';
+export const successColor = 'var(--pf-t--global--icon--color--status--success--default)';
 
 export {
   BlueInfoCircleIcon,

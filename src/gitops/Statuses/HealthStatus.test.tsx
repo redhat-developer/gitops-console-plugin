@@ -4,25 +4,25 @@ import HealthStatus, { HealthStatusIcon } from './HealthStatus';
 describe('HealthStatus', () => {
   it('renders Healthy', () => {
     expect(renderToStaticMarkup(<HealthStatus status="Healthy" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="HeartIcon" style="color:var(--pf-v5-global--success-color--100)"></svg> Healthy</div></div>"`,
+      `"<div><div><svg data-icon="HeartIcon" style="color:var(--pf-t--global--icon--color--status--success--default)"></svg> Healthy</div></div>"`,
     );
   });
 
   it('renders Degraded', () => {
     expect(renderToStaticMarkup(<HealthStatus status="Degraded" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="HeartBrokenIcon" style="color:var(--pf-v5-global--danger-color--100)"></svg> Degraded</div></div>"`,
+      `"<div><div><svg data-icon="HeartBrokenIcon" style="color:var(--pf-t--global--icon--color--status--danger--default)"></svg> Degraded</div></div>"`,
     );
   });
 
   it('renders Progressing', () => {
     expect(renderToStaticMarkup(<HealthStatus status="Progressing" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="CircleNotchIcon" class="undefined fa-spin" style="color:var(--pf-v5-global--primary-color--200)"></svg> Progressing</div></div>"`,
+      `"<div><div><svg data-icon="CircleNotchIcon" class="undefined fa-spin" style="color:var(--pf-t--global--icon--color--brand--default)"></svg> Progressing</div></div>"`,
     );
   });
 
   it('renders Unknown for unrecognized status', () => {
     expect(renderToStaticMarkup(<HealthStatus status="SomethingElse" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="UnknownIcon" style="color:var(--pf-v5-global--disabled-color--100)"></svg> SomethingElse</div></div>"`,
+      `"<div><div><svg data-icon="UnknownIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> SomethingElse</div></div>"`,
     );
   });
 
@@ -30,7 +30,7 @@ describe('HealthStatus', () => {
     expect(
       renderToStaticMarkup(<HealthStatus status="Degraded" message="Something broke" />),
     ).toMatchInlineSnapshot(
-      `"<div><div><div data-testid="popover"><div data-testid="popover-header"><div>Degraded</div></div><div data-testid="popover-body"><div>Something broke</div></div><button data-variant="link"><svg data-icon="HeartBrokenIcon" style="color:var(--pf-v5-global--danger-color--100)"></svg> Degraded</button></div></div></div>"`,
+      `"<div><div><div data-testid="popover"><div data-testid="popover-header"><div>Degraded</div></div><div data-testid="popover-body"><div>Something broke</div></div><button data-variant="link"><svg data-icon="HeartBrokenIcon" style="color:var(--pf-t--global--icon--color--status--danger--default)"></svg> Degraded</button></div></div></div>"`,
     );
   });
 });
