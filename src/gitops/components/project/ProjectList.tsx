@@ -276,6 +276,59 @@ const getApplicationsCount = (
   return applications.filter((app) => app.spec?.project === project.metadata?.name).length;
 };
 
+const getDescriptionFilterId = (project: K8sResourceCommon): string => {
+  const description = (project as AppProjectKind)?.spec?.description;
+  const hasDescription = Boolean(description && description.trim() !== '');
+  return hasDescription ? 'has-description' : 'no-description';
+};
+
+const getApplicationsFilterId = (
+  project: K8sResourceCommon,
+  applications: ApplicationKind[],
+  appsLoaded: boolean,
+): string => {
+  if (!applications || !appsLoaded) return 'unknown';
+  return getApplicationsCount(project as AppProjectKind, applications, appsLoaded) > 0
+    ? 'has-applications'
+    : 'no-applications';
+};
+
+const getProjectTypeFilterId = (project: K8sResourceCommon): string =>
+  project?.metadata?.name === 'default' ? 'default' : 'custom';
+
+const getSourceReposFilterId = (project: K8sResourceCommon): string => {
+  const sourceRepos = (project as AppProjectKind)?.spec?.sourceRepos;
+  const hasSourceRepos = Boolean(sourceRepos && sourceRepos.length > 0);
+  return hasSourceRepos ? 'has-source-repos' : 'no-source-repos';
+};
+
+const getDestinationsFilterId = (project: K8sResourceCommon): string => {
+  const destinations = (project as AppProjectKind)?.spec?.destinations;
+  const hasDestinations = Boolean(destinations && destinations.length > 0);
+  return hasDestinations ? 'has-destinations' : 'no-destinations';
+};
+
+type ProjectFilterIdGetter = (project: K8sResourceCommon) => string;
+
+const createProjectRowFilter = (
+  filterGroupName: string,
+  type: string,
+  getFilterId: ProjectFilterIdGetter,
+  items: { id: string; title: string }[],
+  skipWhen = false,
+): RowFilter => ({
+  filterGroupName,
+  type,
+  reducer: getFilterId,
+  filter: (input, project) => {
+    if (!input.selected?.length || !project || skipWhen) {
+      return true;
+    }
+    return input.selected.includes(getFilterId(project));
+  },
+  items,
+});
+
 export const sortData = (
   data: AppProjectKind[],
   sortBy: string | undefined,
@@ -503,128 +556,32 @@ const getFilters = (
   applications: ApplicationKind[],
   appsLoaded: boolean,
 ): RowFilter[] => [
-  {
-    filterGroupName: t('Description'),
-    type: 'has-description',
-    reducer: (project) => {
-      const hasDescription = project?.spec?.description && project.spec.description.trim() !== '';
-      return hasDescription ? 'has-description' : 'no-description';
-    },
-    filter: (input, project) => {
-      if (input.selected?.length) {
-        const hasDescription = project?.spec?.description && project.spec.description.trim() !== '';
-        if (input.selected.includes('has-description')) {
-          return hasDescription;
-        }
-        if (input.selected.includes('no-description')) {
-          return !hasDescription;
-        }
-      }
-      return true;
-    },
-    items: [
-      { id: 'has-description', title: t('Has Description') },
-      { id: 'no-description', title: t('No Description') },
-    ],
-  },
-  {
-    filterGroupName: t('Applications'),
-    type: 'has-applications',
-    reducer: (project) => {
-      if (!applications || !appsLoaded) return 'unknown';
-      const appsCount = getApplicationsCount(project as AppProjectKind, applications, appsLoaded);
-      return appsCount > 0 ? 'has-applications' : 'no-applications';
-    },
-    filter: (input, project) => {
-      if (input.selected?.length) {
-        if (!applications || !appsLoaded) return true;
-        const appsCount = getApplicationsCount(project as AppProjectKind, applications, appsLoaded);
-        if (input.selected.includes('has-applications')) {
-          return appsCount > 0;
-        }
-        if (input.selected.includes('no-applications')) {
-          return appsCount === 0;
-        }
-      }
-      return true;
-    },
-    items: [
+  createProjectRowFilter(t('Description'), 'has-description', getDescriptionFilterId, [
+    { id: 'has-description', title: t('Has Description') },
+    { id: 'no-description', title: t('No Description') },
+  ]),
+  createProjectRowFilter(
+    t('Applications'),
+    'has-applications',
+    (project) => getApplicationsFilterId(project, applications, appsLoaded),
+    [
       { id: 'has-applications', title: t('Has Applications') },
       { id: 'no-applications', title: t('No Applications') },
     ],
-  },
-  {
-    filterGroupName: t('Project Type'),
-    type: 'project-type',
-    reducer: (project) => {
-      const isDefault = project?.metadata?.name === 'default';
-      return isDefault ? 'default' : 'custom';
-    },
-    filter: (input, project) => {
-      if (input.selected?.length) {
-        const isDefault = project?.metadata?.name === 'default';
-        if (input.selected.includes('default')) {
-          return isDefault;
-        }
-        if (input.selected.includes('custom')) {
-          return !isDefault;
-        }
-      }
-      return true;
-    },
-    items: [
-      { id: 'default', title: t('Default Project') },
-      { id: 'custom', title: t('Custom Projects') },
-    ],
-  },
-  {
-    filterGroupName: t('Source Repositories'),
-    type: 'has-source-repos',
-    reducer: (project) => {
-      const hasSourceRepos = project?.spec?.sourceRepos && project.spec.sourceRepos.length > 0;
-      return hasSourceRepos ? 'has-source-repos' : 'no-source-repos';
-    },
-    filter: (input, project) => {
-      if (input.selected?.length) {
-        const hasSourceRepos = project?.spec?.sourceRepos && project.spec.sourceRepos.length > 0;
-        if (input.selected.includes('has-source-repos')) {
-          return hasSourceRepos;
-        }
-        if (input.selected.includes('no-source-repos')) {
-          return !hasSourceRepos;
-        }
-      }
-      return true;
-    },
-    items: [
-      { id: 'has-source-repos', title: t('Has Source Repos') },
-      { id: 'no-source-repos', title: t('No Source Repos') },
-    ],
-  },
-  {
-    filterGroupName: t('Destinations'),
-    type: 'has-destinations',
-    reducer: (project) => {
-      const hasDestinations = project?.spec?.destinations && project.spec.destinations.length > 0;
-      return hasDestinations ? 'has-destinations' : 'no-destinations';
-    },
-    filter: (input, project) => {
-      if (input.selected?.length) {
-        const hasDestinations = project?.spec?.destinations && project.spec.destinations.length > 0;
-        if (input.selected.includes('has-destinations')) {
-          return hasDestinations;
-        }
-        if (input.selected.includes('no-destinations')) {
-          return !hasDestinations;
-        }
-      }
-      return true;
-    },
-    items: [
-      { id: 'has-destinations', title: t('Has Destinations') },
-      { id: 'no-destinations', title: t('No Destinations') },
-    ],
-  },
+    !applications || !appsLoaded,
+  ),
+  createProjectRowFilter(t('Project Type'), 'project-type', getProjectTypeFilterId, [
+    { id: 'default', title: t('Default Project') },
+    { id: 'custom', title: t('Custom Projects') },
+  ]),
+  createProjectRowFilter(t('Source Repositories'), 'has-source-repos', getSourceReposFilterId, [
+    { id: 'has-source-repos', title: t('Has Source Repos') },
+    { id: 'no-source-repos', title: t('No Source Repos') },
+  ]),
+  createProjectRowFilter(t('Destinations'), 'has-destinations', getDestinationsFilterId, [
+    { id: 'has-destinations', title: t('Has Destinations') },
+    { id: 'no-destinations', title: t('No Destinations') },
+  ]),
 ];
 
 export default ProjectList;
