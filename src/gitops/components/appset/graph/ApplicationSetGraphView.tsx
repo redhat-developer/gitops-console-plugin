@@ -432,6 +432,8 @@ export const ApplicationSetGraphView: React.FC<{
     };
     newController.fromModel(modelWithLayout, false);
     return newController;
+    // Controller is recreated only when the ApplicationSet identity changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [applicationSetUid]);
 
   // Parts of the logic to refresh and update the graph is similar to application graph view.
@@ -492,12 +494,11 @@ export const ApplicationSetGraphView: React.FC<{
         prevViewType.current = expandGroups;
       }
       // Register new layout factory
-      if (applicationSet.status?.applicationStatus?.length > 0) {
-        adjustedExpansionSetting = treeViewLayout === TreeViewLayout.OWNER_REFERENCE_LAYOUT;
-      } else {
-        adjustedExpansionSetting = true;
-      }
-      controller.registerLayoutFactory(customLayoutFactory(adjustedExpansionSetting));
+      const expansionSetting =
+        applicationSet.status?.applicationStatus?.length > 0
+          ? treeViewLayout === TreeViewLayout.OWNER_REFERENCE_LAYOUT
+          : true;
+      controller.registerLayoutFactory(customLayoutFactory(expansionSetting));
 
       const hasCollapsedStepGroups = collapsedStepGroupsRef.current.size > 0;
 
@@ -538,7 +539,15 @@ export const ApplicationSetGraphView: React.FC<{
         });
       }
     }
-  }, [controller, nodes, initialEdges, treeViewLayout, applications, expandGroups]);
+  }, [
+    controller,
+    nodes,
+    initialEdges,
+    treeViewLayout,
+    applications,
+    expandGroups,
+    applicationSet.status?.applicationStatus?.length,
+  ]);
 
   const previousNodeCountRef = React.useRef<number>(0);
   const previousNodeIdsRef = React.useRef<string>('');
@@ -732,6 +741,11 @@ export const ApplicationSetGraphView: React.FC<{
     }
   }
 
+  const structuralNodes = React.useMemo(
+    () => nodes.filter((n) => n.type !== 'filler-node'),
+    [nodes],
+  );
+
   // Effect to handle initial collapse of step-groups after first render
   // This runs after Dagre has laid out the expanded graph, then collapses
   React.useEffect(() => {
@@ -779,13 +793,7 @@ export const ApplicationSetGraphView: React.FC<{
         graph.layout();
       });
     }
-  }, [
-    controller,
-    nodes.filter((n) => n.type !== 'filler-node'),
-    treeViewLayout,
-    expandedStepGroups,
-    expandGroups,
-  ]);
+  }, [controller, structuralNodes, initialNodes, treeViewLayout, expandedStepGroups, expandGroups]);
   return (
     <TopologyView
       className="gitops-topology-view"

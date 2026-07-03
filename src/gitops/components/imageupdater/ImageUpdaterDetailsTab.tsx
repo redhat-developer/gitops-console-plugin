@@ -30,9 +30,10 @@ const ImageUpdaterDetailsTab: React.FC<ImageUpdaterDetailsTabProps> = ({ obj }) 
 
   const status = obj.status || {};
   const readyCondition = status.conditions?.find((c) => c.type === 'Ready');
-  const readyLabel = readyCondition
-    ? readyCondition.status === 'True' ? t('True') : t('False')
-    : '-';
+  let readyLabel = '-';
+  if (readyCondition) {
+    readyLabel = readyCondition.status === 'True' ? t('True') : t('False');
+  }
 
   return (
     <>
@@ -81,22 +82,14 @@ const ImageUpdaterDetailsTab: React.FC<ImageUpdaterDetailsTabProps> = ({ obj }) 
                   title={t('Last Checked At')}
                   help={t('When the controller last checked for image updates.')}
                 >
-                  {status.lastCheckedAt ? (
-                    <Timestamp timestamp={status.lastCheckedAt} />
-                  ) : (
-                    '-'
-                  )}
+                  {status.lastCheckedAt ? <Timestamp timestamp={status.lastCheckedAt} /> : '-'}
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
                   title={t('Last Updated At')}
                   help={t('When the controller last performed an image update.')}
                 >
-                  {status.lastUpdatedAt ? (
-                    <Timestamp timestamp={status.lastUpdatedAt} />
-                  ) : (
-                    '-'
-                  )}
+                  {status.lastUpdatedAt ? <Timestamp timestamp={status.lastUpdatedAt} /> : '-'}
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup

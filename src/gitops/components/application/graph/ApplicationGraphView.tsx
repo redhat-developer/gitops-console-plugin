@@ -80,15 +80,19 @@ const customLayoutFactory: LayoutFactory = (type: string, graph: Graph): Layout 
   });
 };
 
+interface ApplicationContextMenuParams {
+  application: ApplicationKind;
+  navigate: NavigateFunction;
+  launchLabelsModal: () => void;
+  launchAnnotationsModal: () => void;
+  launchDeleteModal: () => void;
+  setGroupNodeStates: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
 const customComponentFactory =
   (
     hrefRef: React.MutableRefObject<string>,
-    application: ApplicationKind,
-    navigate: NavigateFunction,
-    launchLabelsModal: () => void,
-    launchAnnotationsModal: () => void,
-    launchDeleteModal: () => void,
-    setGroupNodeStates: React.Dispatch<React.SetStateAction<string[]>>,
+    paramsRef: React.RefObject<ApplicationContextMenuParams>,
   ): ComponentFactory =>
   (kind: ModelKind, type: string) => {
     const createContextMenuItems = (
@@ -132,11 +136,15 @@ const customComponentFactory =
         <ContextMenuItem
           key={label}
           onClick={() => {
+            const params = paramsRef.current;
+            if (!params) {
+              return;
+            }
             if (label === t('View in Argo CD')) {
               window.open(hrefRef.current, '_blank');
             }
             if (label === t('View Details')) {
-              navigate(graphElement.getData().resourcePath);
+              params.navigate(graphElement.getData().resourcePath);
             }
           }}
         >
@@ -180,6 +188,18 @@ const customComponentFactory =
         <ContextMenuItem
           key={label}
           onClick={async () => {
+            const params = paramsRef.current;
+            if (!params) {
+              return;
+            }
+            const {
+              application,
+              navigate,
+              launchLabelsModal,
+              launchAnnotationsModal,
+              launchDeleteModal,
+              setGroupNodeStates,
+            } = params;
             if (label === t('View in Argo CD')) {
               window.open(hrefRef.current, '_blank');
             } else if (label === t('Edit labels')) {
@@ -339,22 +359,34 @@ export const ApplicationGraphView: React.FC<{
   const launchDeleteModal = useDeleteModal(application);
   const navigate = useNavigate();
 
+  const contextMenuParamsRef = React.useRef<ApplicationContextMenuParams>({
+    application,
+    navigate,
+    launchLabelsModal,
+    launchAnnotationsModal,
+    launchDeleteModal,
+    setGroupNodeStates,
+  });
+
+  React.useEffect(() => {
+    contextMenuParamsRef.current = {
+      application,
+      navigate,
+      launchLabelsModal,
+      launchAnnotationsModal,
+      launchDeleteModal,
+      setGroupNodeStates,
+    };
+  }, [application, navigate, launchLabelsModal, launchAnnotationsModal, launchDeleteModal]);
+
   const controller = React.useMemo(() => {
     const newController = new Visualization();
     newController.registerLayoutFactory(customLayoutFactory);
-    newController.registerComponentFactory(
-      customComponentFactory(
-        hrefRef,
-        application,
-        navigate,
-        launchLabelsModal,
-        launchAnnotationsModal,
-        launchDeleteModal,
-        setGroupNodeStates,
-      ),
-    );
+    newController.registerComponentFactory(customComponentFactory(hrefRef, contextMenuParamsRef));
     newController.addEventListener(SELECTION_EVENT, setSelectedIds);
     return newController;
+    // Controller is created once; context menu handlers read latest params via ref.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const resourcePaths = React.useMemo(() => {
