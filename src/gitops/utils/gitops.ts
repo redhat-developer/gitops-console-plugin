@@ -99,6 +99,14 @@ export const getArgoServer = async (model, app: ApplicationKind): Promise<ArgoSe
   }
 };
 
+export const getApplicationArgoUrl = (argoServer: ArgoServer, app?: ApplicationKind): string => {
+  if (!argoServer.host || !app?.metadata?.name || !app?.metadata?.namespace) {
+    return '';
+  }
+
+  return `${argoServer.protocol}://${argoServer.host}/applications/${app.metadata.namespace}/${app.metadata.name}`;
+};
+
 export const getArgoServerForProject = async (
   model,
   project: { metadata?: { namespace?: string; labels?: Record<string, string> } },

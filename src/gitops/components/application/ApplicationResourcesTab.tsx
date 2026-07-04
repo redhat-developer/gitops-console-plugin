@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
 import { useResourceActionsProvider } from '@gitops/hooks/useResourceActionsProvider';
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import HealthStatus from '@gitops/Statuses/HealthStatus';
 import SyncStatus from '@gitops/Statuses/SyncStatus';
 import ActionDropDown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
@@ -15,7 +16,6 @@ import {
   ResourceLink,
   RowFilter,
   RowFilterItem,
-  useK8sModel,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -33,7 +33,7 @@ import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/Dat
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
 
-import { ArgoServer, getArgoServer } from '../../utils/gitops';
+import { getApplicationArgoUrl } from '../../utils/gitops';
 import ArgoCDLink from '../shared/ArgoCDLink/ArgoCDLink';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
 
@@ -47,21 +47,8 @@ type ApplicationResourcesTabProps = RouteComponentProps<{
 };
 
 const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }) => {
-  const [model] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
-
-  const [argoServer, setArgoServer] = React.useState<ArgoServer>({ host: '', protocol: '' });
-
-  React.useEffect(() => {
-    (async () => {
-      getArgoServer(model, obj)
-        .then((server) => {
-          setArgoServer(server);
-        })
-        .catch((err) => {
-          console.error('Error:', err);
-        });
-    })();
-  }, [model, obj]);
+  const argoServer = useArgoServer(obj);
+  const argoUrl = getApplicationArgoUrl(argoServer, obj);
 
   let resources: ApplicationResourceStatus[];
   if (obj?.status?.resources) {
@@ -91,17 +78,7 @@ const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }
   const memoizedFilteredResources = React.useMemo(() => [...filteredData], [filteredData]);
   const isEmptyResources = memoizedFilteredResources.length === 0;
 
-  const rows = useResourceRowsDV(
-    memoizedFilteredResources,
-    obj,
-    argoServer.protocol +
-      '://' +
-      argoServer.host +
-      '/applications/' +
-      obj?.metadata?.namespace +
-      '/' +
-      obj?.metadata?.name,
-  );
+  const rows = useResourceRowsDV(memoizedFilteredResources, obj, argoUrl);
 
   const empty = (
     <Tbody>
@@ -135,17 +112,7 @@ const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }
         <PageBody>
           <Flex style={{ marginTop: '15px' }} flex={{ default: 'flexDefault' }}>
             <FlexItem>
-              <ArgoCDLink
-                href={
-                  argoServer.protocol +
-                  '://' +
-                  argoServer.host +
-                  '/applications/' +
-                  obj?.metadata?.namespace +
-                  '/' +
-                  obj?.metadata?.name
-                }
-              />
+              {argoUrl ? <ArgoCDLink href={argoUrl} /> : <></>}
             </FlexItem>
           </Flex>
           <>

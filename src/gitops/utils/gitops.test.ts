@@ -1,11 +1,29 @@
 import {
   createRevisionURL,
+  getApplicationArgoUrl,
   getFriendlyClusterName,
   getDuration,
   isApplicationRefreshing,
   getOperationType,
   getAppSetStatus,
 } from './gitops';
+
+describe('getApplicationArgoUrl', () => {
+  it('builds application URLs', () => {
+    expect(
+      getApplicationArgoUrl({ protocol: 'https', host: 'openshift-gitops-server-openshift-gitops' }, {
+        metadata: { name: 'guestbook', namespace: 'openshift-gitops' },
+      } as any),
+    ).toBe('https://openshift-gitops-server-openshift-gitops/applications/openshift-gitops/guestbook');
+  });
+
+  it('returns empty string when server or app metadata is missing', () => {
+    expect(getApplicationArgoUrl({ protocol: 'https', host: '' }, {} as any)).toBe('');
+    expect(
+      getApplicationArgoUrl({ protocol: 'https', host: 'openshift-gitops-server-openshift-gitops' }, undefined),
+    ).toBe('');
+  });
+});
 
 describe('createRevisionURL', () => {
   it('builds commit URLs', () => {

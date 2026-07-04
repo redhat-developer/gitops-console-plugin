@@ -7,8 +7,9 @@ import {
   applicationModelRef,
   ApplicationResourceStatus,
 } from '@gitops/models/ApplicationModel';
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { HealthStatus } from '@gitops/utils/constants';
-import { ArgoServer, getArgoServer } from '@gitops/utils/gitops';
+import { getApplicationArgoUrl } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import {
   useAnnotationsModal,
@@ -17,7 +18,6 @@ import {
   useLabelsModal,
   useUserSettings,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk/lib/utils/k8s/hooks/useK8sModel';
 import { ObjectGroupIcon, ToggleOffIcon, ToggleOnIcon } from '@patternfly/react-icons';
 import {
   action,
@@ -314,7 +314,6 @@ export const ApplicationGraphView: React.FC<{
   application: ApplicationKind;
   resources: ApplicationResourceStatus[];
 }> = ({ application, resources }) => {
-  const [model] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
   const [allK8sModels] = useK8sModels();
   const [groupNodeStates, setGroupNodeStates] = React.useState<string[]>([]);
   // Save the group node setting so it will be used whenever the user re-enters the graph view
@@ -328,29 +327,10 @@ export const ApplicationGraphView: React.FC<{
     true,
     false,
   );
-  const [argoServer, setArgoServer] = React.useState<ArgoServer>({ host: '', protocol: '' });
+  const argoServer = useArgoServer(application);
+  const argoUrl = getApplicationArgoUrl(argoServer, application);
   const hrefRef = React.useRef<string>('');
-  React.useEffect(() => {
-    (async () => {
-      getArgoServer(model, application)
-        .then((server) => {
-          setArgoServer(server);
-        })
-        .catch((err) => {
-          console.error('Graph view error: ' + err);
-        });
-    })();
-  }, [model, application]);
-  const href = argoServer
-    ? argoServer.protocol +
-      '://' +
-      argoServer.host +
-      '/applications/' +
-      application?.metadata?.namespace +
-      '/' +
-      application?.metadata?.name
-    : '';
-  hrefRef.current = href;
+  hrefRef.current = argoUrl;
 
   const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
   const [renderKey, setRenderKey] = React.useState(0);
@@ -360,12 +340,12 @@ export const ApplicationGraphView: React.FC<{
   const navigate = useNavigate();
 
   const contextMenuParamsRef = React.useRef<ApplicationContextMenuParams>({
-    application,
-    navigate,
-    launchLabelsModal,
-    launchAnnotationsModal,
-    launchDeleteModal,
-    setGroupNodeStates,
+        application,
+        navigate,
+        launchLabelsModal,
+        launchAnnotationsModal,
+        launchDeleteModal,
+        setGroupNodeStates,
   });
 
   React.useEffect(() => {
