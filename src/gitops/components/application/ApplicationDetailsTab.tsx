@@ -2,6 +2,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import {
   ApplicationKind,
   ApplicationModel,
@@ -11,11 +12,11 @@ import Revision from '@gitops/Revision/Revision';
 import HealthStatus from '@gitops/Statuses/HealthStatus';
 import { OperationState } from '@gitops/Statuses/OperationState';
 import SyncStatus from '@gitops/Statuses/SyncStatus';
-import { ArgoServer, getArgoServer, getFriendlyClusterName } from '@gitops/utils/gitops';
+import { getApplicationArgoUrl, getFriendlyClusterName } from '@gitops/utils/gitops';
 import { labelControllerNamespaceKey } from '@gitops/utils/gitops';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { useObjectModifyPermissions } from '@gitops/utils/utils';
-import { k8sUpdate, ResourceLink, useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import { k8sUpdate, ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { Label as PfLabel, ToggleGroup, ToggleGroupItem } from '@patternfly/react-core';
 import {
   DescriptionList,
@@ -43,22 +44,10 @@ type ApplicationDetailsTabProps = RouteComponentProps<{
 
 const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) => {
   const { t } = useGitOpsTranslation();
-  const [model] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
 
   const [canPatch, canUpdate] = useObjectModifyPermissions(obj, ApplicationModel);
-
-  const [argoServer, setArgoServer] = React.useState<ArgoServer>({ host: '', protocol: '' });
-  React.useEffect(() => {
-    (async () => {
-      getArgoServer(model, obj)
-        .then((server) => {
-          setArgoServer(server);
-        })
-        .catch((err) => {
-          console.error('Error:', err);
-        });
-    })();
-  }, [model, obj]);
+  const argoServer = useArgoServer(obj);
+  const argoUrl = getApplicationArgoUrl(argoServer, obj);
 
   const onChangeAutomated = (event: React.MouseEvent<any> | React.KeyboardEvent | MouseEvent) => {
     const id = event.currentTarget.id;
@@ -142,21 +131,7 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
               <BaseDetailsSummary
                 obj={obj}
                 model={ApplicationModel}
-                nameLink={
-                  <>
-                    <ArgoCDLink
-                      href={
-                        argoServer.protocol +
-                        '://' +
-                        argoServer.host +
-                        '/applications/' +
-                        obj?.metadata?.namespace +
-                        '/' +
-                        obj?.metadata?.name
-                      }
-                    />
-                  </>
-                }
+                nameLink={argoUrl ? <ArgoCDLink href={argoUrl} /> : undefined}
               />
             </FlexItem>
           </Flex>

@@ -2,12 +2,13 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ArgoCDLink from '@gitops/components/shared/ArgoCDLink/ArgoCDLink';
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import Revision from '@gitops/Revision/Revision';
 import ExternalLink from '@gitops/utils/components/ExternalLink/ExternalLink';
-import { ArgoServer, getArgoServer } from '@gitops/utils/gitops';
+import { getApplicationArgoUrl } from '@gitops/utils/gitops';
 import { repoUrl } from '@gitops/utils/urls';
 import { ApplicationHistory, ApplicationKind } from '@gitops-models/ApplicationModel';
-import { Timestamp, useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
 import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
@@ -38,20 +39,8 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
 
   const rows = useRowsDV(sortedHistory, obj);
 
-  const [model] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
-  const [argoServer, setArgoServer] = React.useState<ArgoServer>({ host: '', protocol: '' });
-
-  React.useEffect(() => {
-    (async () => {
-      getArgoServer(model, obj)
-        .then((server) => {
-          setArgoServer(server);
-        })
-        .catch((err) => {
-          console.error('Error:', err);
-        });
-    })();
-  }, [model, obj]);
+  const argoServer = useArgoServer(obj);
+  const argoUrl = getApplicationArgoUrl(argoServer, obj);
 
   const empty = (
     <Tbody>
@@ -69,23 +58,19 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
 
   return (
     <div>
-      <ArgoCDLink
-        href={
-          argoServer.protocol +
-          '://' +
-          argoServer.host +
-          '/applications/' +
-          obj?.metadata?.namespace +
-          '/' +
-          obj?.metadata?.name +
-          '?resource=&node=argoproj.io%2FApplication%2F' +
-          obj?.metadata?.namespace +
-          '%2F' +
-          obj?.metadata?.name +
-          '%2F' +
-          '&view=tree&resource=&operation=false&rollback=0'
-        }
-      />
+      {argoUrl && (
+        <ArgoCDLink
+          href={
+            argoUrl +
+            '?resource=&node=argoproj.io%2FApplication%2F' +
+            obj?.metadata?.namespace +
+            '%2F' +
+            obj?.metadata?.name +
+            '%2F' +
+            '&view=tree&resource=&operation=false&rollback=0'
+          }
+        />
+      )}
       <GitOpsDataViewTable
         rows={rows}
         columns={columnsDV}

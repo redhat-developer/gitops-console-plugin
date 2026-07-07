@@ -1,7 +1,9 @@
 import * as React from 'react';
 
 import { useApplicationActionsProvider } from '@gitops/hooks/useApplicationActionsProvider';
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { ApplicationKind, ApplicationModel } from '@gitops/models/ApplicationModel';
+import { getApplicationArgoUrl } from '@gitops/utils/gitops';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { Bullseye, Spinner } from '@patternfly/react-core';
@@ -35,7 +37,9 @@ const ApplicationNavPage: React.FC<ApplicationPageProps> = ({ name, namespace, k
     namespace,
   });
 
-  const [actions] = useApplicationActionsProvider(application);
+  const argoServer = useArgoServer(application);
+  const argoUrl = getApplicationArgoUrl(argoServer, application);
+  const [actions] = useApplicationActionsProvider(application, argoUrl);
 
   const pages = React.useMemo(
     () => [

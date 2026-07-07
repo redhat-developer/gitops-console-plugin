@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { ApplicationKind, ApplicationSource } from '@gitops/models/ApplicationModel';
 import ExternalLink from '@gitops/utils/components/ExternalLink/ExternalLink';
 import { GitIcon } from '@gitops/utils/components/Icons/GitIcon';
 import { HelmIcon } from '@gitops/utils/components/Icons/HelmIcon';
 import { OciIcon } from '@gitops/utils/components/Icons/OciIcon';
-import { ArgoServer, getArgoServer } from '@gitops/utils/gitops';
+import { ArgoServer, getApplicationArgoUrl } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { repoUrl, revisionUrl } from '@gitops/utils/urls';
-import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import {
   EmptyState,
   EmptyStateBody,
@@ -182,6 +182,7 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
 export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer }) => {
   const columns = useColumnsDV();
   const rows = useRowsDV(sources);
+  const argoUrl = getApplicationArgoUrl(argoServer, obj);
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
@@ -197,23 +198,19 @@ export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer
   );
   return (
     <>
-      <ArgoCDLink
-        href={
-          argoServer.protocol +
-          '://' +
-          argoServer.host +
-          '/applications/' +
-          obj?.metadata?.namespace +
-          '/' +
-          obj?.metadata?.name +
-          '?resource=&node=argoproj.io%2FApplication%2F' +
-          obj?.metadata?.namespace +
-          '%2F' +
-          obj?.metadata?.name +
-          '%2F' +
-          '&tab=parameters'
-        }
-      />
+      {argoUrl && (
+        <ArgoCDLink
+          href={
+            argoUrl +
+            '?resource=&node=argoproj.io%2FApplication%2F' +
+            obj?.metadata?.namespace +
+            '%2F' +
+            obj?.metadata?.name +
+            '%2F' +
+            '&tab=parameters'
+          }
+        />
+      )}
       <GitOpsDataViewTable
         rows={rows}
         columns={columns}
@@ -225,7 +222,7 @@ export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer
 };
 
 const ApplicationSourcesTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) => {
-  const [model] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
+  const argoServer = useArgoServer(obj);
 
   let sources: ApplicationSource[];
   if (obj?.spec?.source) {
@@ -236,20 +233,6 @@ const ApplicationSourcesTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
     //Should never fall here since there always has to be a source or sources
     sources = [];
   }
-
-  const [argoServer, setArgoServer] = React.useState<ArgoServer>({ host: '', protocol: '' });
-
-  React.useEffect(() => {
-    (async () => {
-      getArgoServer(model, obj)
-        .then((server) => {
-          setArgoServer(server);
-        })
-        .catch((err) => {
-          console.error('Error:', err);
-        });
-    })();
-  }, [model, obj]);
 
   return (
     <div>

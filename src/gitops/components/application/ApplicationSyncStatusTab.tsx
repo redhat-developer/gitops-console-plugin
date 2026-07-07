@@ -2,11 +2,12 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { useResourceActionsProvider } from '@gitops/hooks/useResourceActionsProvider';
 import { OperationState } from '@gitops/Statuses/OperationState';
 import SyncStatus from '@gitops/Statuses/SyncStatus';
 import ActionDropDown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
-import { ArgoServer, getArgoServer, getDuration } from '@gitops/utils/gitops';
+import { getApplicationArgoUrl, getDuration } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { ApplicationKind, ApplicationResourceStatus } from '@gitops-models/ApplicationModel';
 import {
@@ -14,7 +15,6 @@ import {
   K8sGroupVersionKind,
   ResourceLink,
   Timestamp,
-  useK8sModel,
 } from '@openshift-console/dynamic-plugin-sdk';
 import {
   DescriptionList,
@@ -49,21 +49,8 @@ type ApplicationSyncStatusTabProps = RouteComponentProps<{
 };
 
 const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj }) => {
-  const [model] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
-
-  const [argoServer, setArgoServer] = React.useState<ArgoServer>({ host: '', protocol: '' });
-
-  React.useEffect(() => {
-    (async () => {
-      getArgoServer(model, obj)
-        .then((server) => {
-          setArgoServer(server);
-        })
-        .catch((err) => {
-          console.error('Error:', err);
-        });
-    })();
-  }, [model, obj]);
+  const argoServer = useArgoServer(obj);
+  const argoUrl = getApplicationArgoUrl(argoServer, obj);
 
   let resources: ApplicationResourceStatus[];
   if (obj?.status?.operationState?.syncResult?.resources) {
@@ -83,17 +70,7 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
     return sortData(resources, sortBy, direction);
   }, [resources, sortBy, direction]);
 
-  const rows = useResourceRowsDV(
-    sortedResources,
-    obj,
-    argoServer.protocol +
-      '://' +
-      argoServer.host +
-      '/applications/' +
-      obj?.metadata?.namespace +
-      '/' +
-      obj?.metadata?.name,
-  );
+  const rows = useResourceRowsDV(sortedResources, obj, argoUrl);
 
   const empty = (
     <Tbody>
