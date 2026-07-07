@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import classNames from 'classnames';
 
+import { LoadingInline } from '@gitops/utils/components/LoadingSpinner/Loading';
 import {
   K8sKind,
   StatusComponent,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Tooltip } from '@patternfly/react-core';
-import { Spinner } from '@patternfly/react-core';
 import { ConnectedIcon, DisconnectedIcon } from '@patternfly/react-icons';
 
 import { EndpointSliceKind } from './types';
@@ -24,24 +23,6 @@ const EndPointSliceModel: K8sKind = {
   abbr: 'EPS',
   namespaced: true,
   plural: 'endpointslices',
-};
-export const LoadingInline: React.FunctionComponent = () => <Loading isInline />;
-LoadingInline.displayName = 'LoadingInline';
-
-export const Loading: React.FunctionComponent<LoadingProps> = ({ className, isInline }) => (
-  <div
-    className={classNames('co-m-loader', { 'co-m-loader--inline': isInline }, className)}
-    data-test="loading-indicator"
-  >
-    <Spinner aria-live="polite" aria-busy="true" isInline={isInline} size="lg" />
-  </div>
-);
-
-Loading.displayName = 'Loading';
-
-type LoadingProps = {
-  className?: string;
-  isInline?: boolean;
 };
 
 export type PodTrafficProp = {
