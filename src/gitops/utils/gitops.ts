@@ -101,7 +101,7 @@ export const getArgoServer = async (model, app: ApplicationKind): Promise<ArgoSe
 
 export const getApplicationArgoUrl = (argoServer: ArgoServer, app?: ApplicationKind): string => {
   if (!argoServer.host || !app?.metadata?.name || !app?.metadata?.namespace) {
-    return '';
+    return undefined;
   }
 
   return `${argoServer.protocol}://${argoServer.host}/applications/${app.metadata.namespace}/${app.metadata.name}`;

@@ -2,8 +2,8 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
-import { useResourceActionsProvider } from '@gitops/hooks/useResourceActionsProvider';
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
+import { useResourceActionsProvider } from '@gitops/hooks/useResourceActionsProvider';
 import HealthStatus from '@gitops/Statuses/HealthStatus';
 import SyncStatus from '@gitops/Statuses/SyncStatus';
 import ActionDropDown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
@@ -111,9 +111,7 @@ const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }
         </Flex>
         <PageBody>
           <Flex style={{ marginTop: '15px' }} flex={{ default: 'flexDefault' }}>
-            <FlexItem>
-              {argoUrl ? <ArgoCDLink href={argoUrl} /> : <></>}
-            </FlexItem>
+            <FlexItem>{argoUrl ? <ArgoCDLink href={argoUrl} /> : <></>}</FlexItem>
           </Flex>
           <>
             {obj.metadata && (

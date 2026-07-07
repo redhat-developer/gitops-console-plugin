@@ -2,12 +2,12 @@ import * as React from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom-v5-compat';
 import { observer } from 'mobx-react';
 
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import {
   ApplicationKind,
   applicationModelRef,
   ApplicationResourceStatus,
 } from '@gitops/models/ApplicationModel';
-import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { HealthStatus } from '@gitops/utils/constants';
 import { getApplicationArgoUrl } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
@@ -169,7 +169,7 @@ const customComponentFactory =
           }),
           '-',
           t('View Details'),
-          t('View in Argo CD'),
+          ...(hrefRef.current ? [t('View in Argo CD')] : []),
         ]);
       }
     };
@@ -340,12 +340,12 @@ export const ApplicationGraphView: React.FC<{
   const navigate = useNavigate();
 
   const contextMenuParamsRef = React.useRef<ApplicationContextMenuParams>({
-        application,
-        navigate,
-        launchLabelsModal,
-        launchAnnotationsModal,
-        launchDeleteModal,
-        setGroupNodeStates,
+    application,
+    navigate,
+    launchLabelsModal,
+    launchAnnotationsModal,
+    launchDeleteModal,
+    setGroupNodeStates,
   });
 
   React.useEffect(() => {

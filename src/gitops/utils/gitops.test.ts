@@ -17,11 +17,11 @@ describe('getApplicationArgoUrl', () => {
     ).toBe('https://openshift-gitops-server-openshift-gitops/applications/openshift-gitops/guestbook');
   });
 
-  it('returns empty string when server or app metadata is missing', () => {
-    expect(getApplicationArgoUrl({ protocol: 'https', host: '' }, {} as any)).toBe('');
+  it('returns undefined when server or app metadata is missing', () => {
+    expect(getApplicationArgoUrl({ protocol: 'https', host: '' }, {} as any)).toBe(undefined);
     expect(
       getApplicationArgoUrl({ protocol: 'https', host: 'openshift-gitops-server-openshift-gitops' }, undefined),
-    ).toBe('');
+    ).toBe(undefined);
   });
 });
 

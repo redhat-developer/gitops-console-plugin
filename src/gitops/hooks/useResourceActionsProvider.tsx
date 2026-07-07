@@ -50,20 +50,23 @@ export const useResourceActionsProvider: UseResourceActionsProvider = (
   const launchDeleteModal = useDeleteModal(placeholderResource);
   const actions = React.useMemo(
     () => [
-      {
-        id: 'gitops-action-view-in-argocd',
-        disabled: false,
-        label: t('View in Argo CD'),
-        accessReview: {
-          group: ApplicationModel.apiGroup,
-          verb: 'patch' as K8sVerb,
-          resource: ApplicationModel.plural,
-          namespace: application?.metadata?.namespace,
-        },
-        cta: () => {
-          window.open(getResourceURL(argoBaseURL, resource), '_blank');
-        },
-      },
+      ...(argoBaseURL
+        ? [
+            {
+              id: 'gitops-action-view-in-argocd',
+              label: t('View in Argo CD'),
+              accessReview: {
+                group: ApplicationModel.apiGroup,
+                verb: 'patch' as K8sVerb,
+                resource: ApplicationModel.plural,
+                namespace: application?.metadata?.namespace,
+              },
+              cta: () => {
+                window.open(getResourceURL(argoBaseURL, resource), '_blank');
+              },
+            },
+          ]
+        : []),
       // {
       //   id: 'gitops-action-sync-resource',
       //   disabled: resource.status==undefined,

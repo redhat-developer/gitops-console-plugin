@@ -2,6 +2,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import {
   ApplicationKind,
   ApplicationModel,
@@ -11,7 +12,6 @@ import Revision from '@gitops/Revision/Revision';
 import HealthStatus from '@gitops/Statuses/HealthStatus';
 import { OperationState } from '@gitops/Statuses/OperationState';
 import SyncStatus from '@gitops/Statuses/SyncStatus';
-import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { getApplicationArgoUrl, getFriendlyClusterName } from '@gitops/utils/gitops';
 import { labelControllerNamespaceKey } from '@gitops/utils/gitops';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';

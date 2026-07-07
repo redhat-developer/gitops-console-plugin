@@ -2,11 +2,11 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { useResourceActionsProvider } from '@gitops/hooks/useResourceActionsProvider';
 import { OperationState } from '@gitops/Statuses/OperationState';
 import SyncStatus from '@gitops/Statuses/SyncStatus';
 import ActionDropDown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
-import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { getApplicationArgoUrl, getDuration } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { ApplicationKind, ApplicationResourceStatus } from '@gitops-models/ApplicationModel';

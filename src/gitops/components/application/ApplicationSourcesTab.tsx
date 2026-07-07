@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { ApplicationKind, ApplicationSource } from '@gitops/models/ApplicationModel';
 import ExternalLink from '@gitops/utils/components/ExternalLink/ExternalLink';
 import { GitIcon } from '@gitops/utils/components/Icons/GitIcon';
 import { HelmIcon } from '@gitops/utils/components/Icons/HelmIcon';
 import { OciIcon } from '@gitops/utils/components/Icons/OciIcon';
-import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { ArgoServer, getApplicationArgoUrl } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { repoUrl, revisionUrl } from '@gitops/utils/urls';
@@ -182,6 +182,7 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
 export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer }) => {
   const columns = useColumnsDV();
   const rows = useRowsDV(sources);
+  const argoUrl = getApplicationArgoUrl(argoServer, obj);
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
@@ -197,17 +198,19 @@ export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer
   );
   return (
     <>
-      <ArgoCDLink
-        href={
-          getApplicationArgoUrl(argoServer, obj) +
-          '?resource=&node=argoproj.io%2FApplication%2F' +
-          obj?.metadata?.namespace +
-          '%2F' +
-          obj?.metadata?.name +
-          '%2F' +
-          '&tab=parameters'
-        }
-      />
+      {argoUrl && (
+        <ArgoCDLink
+          href={
+            argoUrl +
+            '?resource=&node=argoproj.io%2FApplication%2F' +
+            obj?.metadata?.namespace +
+            '%2F' +
+            obj?.metadata?.name +
+            '%2F' +
+            '&tab=parameters'
+          }
+        />
+      )}
       <GitOpsDataViewTable
         rows={rows}
         columns={columns}
