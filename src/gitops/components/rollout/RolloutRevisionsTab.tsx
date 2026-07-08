@@ -2,6 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import { PodKind } from '@gitops/topology/console/types';
+import { Loading } from '@gitops/utils/components/LoadingSpinner/Loading';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { resourceAsArray } from '@gitops/utils/utils';
 import { K8sResourceCommon, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
@@ -54,7 +55,8 @@ const RolloutRevisionsTab: React.FC<RolloutRevisionsTabProps> = ({ obj: rollout 
         {t('Rollout Revisions')}
       </Title>
 
-      {loadError || !loaded || !podsloaded || podsloadError ? (
+      {/* eslint-disable-next-line no-nested-ternary */}
+      {loadError || podsloadError ? (
         <div>
           <Flex
             justifyContent={{ default: 'justifyContentSpaceEvenly' }}
@@ -63,6 +65,8 @@ const RolloutRevisionsTab: React.FC<RolloutRevisionsTabProps> = ({ obj: rollout 
             <FlexItem fullWidth={{ default: 'fullWidth' }}>{error}</FlexItem>
           </Flex>
         </div>
+      ) : !loaded || !podsloaded ? (
+        <Loading />
       ) : (
         <Revisions
           rollout={rollout}
