@@ -21,17 +21,14 @@ USER root
 # Install pnpm
 RUN npm install --global pnpm@10.33.2
 
-COPY ["package.json", "pnpm-lock.yaml", "./"]
-
-RUN pnpm install --frozen-lockfile --ignore-scripts
-
-ADD . /usr/src/app
 WORKDIR /usr/src/app
+
+COPY ["package.json", "pnpm-lock.yaml", "./"]
 
 RUN pnpm install --frozen-lockfile && \
     pnpm store prune
 
-COPY [".", "."]
+COPY . .
 
 RUN pnpm build
 
