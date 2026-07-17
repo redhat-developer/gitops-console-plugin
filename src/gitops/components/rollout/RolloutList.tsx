@@ -445,7 +445,7 @@ export const useRolloutsRowsDV = (rolloutsList, namespace): DataViewTr[] => {
       },
       {
         id: 'actions-' + index,
-        cell: <RolloutActionsCell app={obj} />,
+        cell: <RolloutActionsCell app={obj} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     ]);
@@ -455,13 +455,14 @@ export const useRolloutsRowsDV = (rolloutsList, namespace): DataViewTr[] => {
 
 const RolloutActionsCell: React.FC<{
   app: RolloutKind;
-}> = ({ app }) => {
+  index: number;
+}> = ({ app, index }) => {
   const actionList: [actions: Action[]] = useRolloutActionsProvider(app);
   return (
     <div style={{ textAlign: 'right' }}>
       <ActionsDropdown
         actions={actionList ? actionList[0] : []}
-        id="gitops-rollout-actions"
+        id={'gitops-rollout-actions-' + index}
         isKebabToggle={true}
       />
     </div>

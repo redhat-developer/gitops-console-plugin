@@ -1,13 +1,10 @@
 import * as React from 'react';
 
-import { useResourceActionsProvider } from '@gitops/hooks/useResourceActionsProvider';
 import HealthStatus from '@gitops/Statuses/HealthStatus';
 import SyncStatus from '@gitops/Statuses/SyncStatus';
-import ActionDropDown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { ApplicationKind, ApplicationResourceStatus } from '@gitops-models/ApplicationModel';
 import {
-  Action,
   K8sGroupVersionKind,
   ListPageFilter,
   ResourceLink,
@@ -29,6 +26,7 @@ import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
 
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import ResourceActionsCell from '../shared/ResourceActionsCell/ResourceActionsCell';
 
 import { ApplicationGraphView } from './graph/ApplicationGraphView';
 import ApplicationResourcesToolbar from './ApplicationResourcesToolbar';
@@ -297,29 +295,12 @@ const useResourceRowsDV = (
       },
       {
         id: 'actions-' + index,
-        cell: <ResourceActionsCell resource={resource} app={obj} argoBaseURL={argoBaseURL} />,
+        cell: <ResourceActionsCell resource={resource} app={obj} argoBaseURL={argoBaseURL} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     ]);
   });
   return rows;
-};
-
-const ResourceActionsCell: React.FC<{
-  resource: ApplicationResourceStatus;
-  app: ApplicationKind;
-  argoBaseURL: string;
-}> = ({ resource, app, argoBaseURL }) => {
-  const actionList: [actions: Action[]] = useResourceActionsProvider(resource, app, argoBaseURL);
-  return (
-    <div style={{ textAlign: 'right' }}>
-      <ActionDropDown
-        actions={actionList ? actionList[0] : []}
-        id="gitops-application-actions"
-        isKebabToggle={true}
-      />
-    </div>
-  );
 };
 
 const filters = (resources: ApplicationResourceStatus[]): RowFilter[] => {

@@ -3,15 +3,12 @@ import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
-import { useResourceActionsProvider } from '@gitops/hooks/useResourceActionsProvider';
 import { OperationState } from '@gitops/Statuses/OperationState';
 import SyncStatus from '@gitops/Statuses/SyncStatus';
-import ActionDropDown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
 import { getApplicationArgoUrl, getDuration } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { ApplicationKind, ApplicationResourceStatus } from '@gitops-models/ApplicationModel';
 import {
-  Action,
   K8sGroupVersionKind,
   ResourceLink,
   Timestamp,
@@ -38,6 +35,7 @@ import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
 import { DetailsDescriptionGroup } from '../shared/BaseDetailsSummary/BaseDetailsSummary';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import ResourceActionsCell from '../shared/ResourceActionsCell/ResourceActionsCell';
 
 import { ConditionsPopover } from './Conditions/ConditionsPopover';
 
@@ -402,7 +400,7 @@ const useResourceRowsDV = (
       },
       {
         id: 'actions-' + index,
-        cell: <ResourceActionsCell resource={resource} app={obj} argoBaseURL={argoBaseURL} />,
+        cell: <ResourceActionsCell resource={resource} app={obj} argoBaseURL={argoBaseURL} index={index} />,
         props: {
           style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 },
           className: 'dropdown-kebab-pf pf-c-table__action',
@@ -411,24 +409,6 @@ const useResourceRowsDV = (
     ]);
   });
   return rows;
-};
-
-const ResourceActionsCell: React.FC<{
-  resource: ApplicationResourceStatus;
-  app: ApplicationKind;
-  argoBaseURL: string;
-}> = ({ resource, app, argoBaseURL }) => {
-  const actionList: [actions: Action[]] = useResourceActionsProvider(resource, app, argoBaseURL);
-
-  return (
-    <div style={{ textAlign: 'right' }}>
-      <ActionDropDown
-        actions={actionList ? actionList[0] : []}
-        id="gitops-application-actions"
-        isKebabToggle={true}
-      />
-    </div>
-  );
 };
 
 export default ApplicationSyncStatusTab;

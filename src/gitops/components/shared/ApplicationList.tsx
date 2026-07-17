@@ -335,14 +335,14 @@ export const sortData = (
   });
 };
 
-const ApplicationActionsCell: React.FC<{ app: ApplicationKind }> = ({ app }) => {
+const ApplicationActionsCell: React.FC<{ app: ApplicationKind, index: number }> = ({ app, index}) => {
   const actionList: [actions: Action[]] = useApplicationActionsProvider(app);
 
   return (
     <div style={{ textAlign: 'right' }}>
       <ActionsDropdown
         actions={actionList ? actionList[0] : []}
-        id="gitops-application-actions"
+        id={'gitops-application-actions-' + index}
         isKebabToggle={true}
       />
     </div>
@@ -444,7 +444,7 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
       },
       {
         id: 'actions-' + index,
-        cell: <ApplicationActionsCell app={app} />,
+        cell: <ApplicationActionsCell app={app} index={index}/>,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     ]);
