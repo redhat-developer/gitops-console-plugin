@@ -327,13 +327,13 @@ const filters = (resources: ApplicationResourceStatus[]): RowFilter[] => {
     {
       filterGroupName: t('Sync Status'),
       type: 'resource-sync',
-      reducer: (resource) => (resource.status ? resource.status : 'No Sync Status'),
+      reducer: (resource) => (resource.status ? resource.status : t('No Sync Status')),
       filter: (input, resource) => {
         if (input.selected?.length) {
           if (resource?.status) {
             return input.selected.includes(resource.status);
           } else {
-            return input.selected.includes('No Sync Status');
+            return input.selected.includes(t('No Sync Status'));
           }
         }
         return true;
@@ -341,8 +341,8 @@ const filters = (resources: ApplicationResourceStatus[]): RowFilter[] => {
       items: resources
         .map((resource) => {
           return {
-            id: resource.status ? resource.status : 'No Sync Status',
-            title: resource.status ? resource.status : 'No Sync Status',
+            id: resource.status ? resource.status : t('No Sync Status'),
+            title: resource.status ? resource.status : t('No Sync Status'),
           };
         })
         .reduce<RowFilterItem[]>(function (result: RowFilterItem[], resource: RowFilterItem) {
@@ -355,7 +355,7 @@ const filters = (resources: ApplicationResourceStatus[]): RowFilter[] => {
     {
       filterGroupName: t('Health Status'),
       type: 'resource-health',
-      reducer: (resource) => (resource.health ? resource.health.status : 'None'),
+      reducer: (resource) => (resource.health ? resource.health.status : t('None')),
       filter: (input, resource) => {
         if (input.selected?.length) {
           if (resource?.health?.status) {
@@ -370,8 +370,8 @@ const filters = (resources: ApplicationResourceStatus[]): RowFilter[] => {
       items: resources
         .map((resource) => {
           return {
-            id: resource.health && resource.health.status ? resource.health.status : 'None',
-            title: resource.health && resource.health.status ? resource.health.status : 'None',
+            id: resource.health && resource.health.status ? resource.health.status : t('None'),
+            title: resource.health && resource.health.status ? resource.health.status : t('None'),
           };
         })
         .reduce<RowFilterItem[]>(function (result: RowFilterItem[], resource: RowFilterItem) {
