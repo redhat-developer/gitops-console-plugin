@@ -341,7 +341,7 @@ const filters = (resources: ApplicationResourceStatus[]): RowFilter[] => {
         if (input.selected?.length) {
           if (resource?.health?.status) {
             return input.selected.includes(resource.health.status);
-          } else if (input.selected.includes('None')) {
+          } else if (input.selected.includes(t('None'))) {
             return true;
           }
           return false;
