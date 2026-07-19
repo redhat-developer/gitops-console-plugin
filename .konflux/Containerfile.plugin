@@ -23,7 +23,7 @@ RUN npm install --global pnpm@10.33.2
 
 WORKDIR /usr/src/app
 
-COPY ["package.json", "pnpm-lock.yaml", "./"]
+COPY ["package.json", "pnpm-lock.yaml", ".npmrc", "./"]
 
 RUN pnpm install --frozen-lockfile && \
     pnpm store prune
