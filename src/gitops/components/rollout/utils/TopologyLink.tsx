@@ -9,7 +9,7 @@ export const topologyLink = (topologyUrl: string, t: (key: string) => string): R
     <span style={{ display: 'inline-flex', alignItems: 'center' }}>
       <Tooltip position="top" content={t('Topology view')}>
         <Link
-          className="pf-v5-c-content"
+          className="pf-v6-c-content"
           rel="noopener noreferrer"
           to={topologyUrl}
           role="button"
