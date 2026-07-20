@@ -39,7 +39,7 @@ const getAnalysisTemplates = (steps, namespace: string, t: TFunction) => {
                   }}
                 />
                 <Link
-                  className="pf-v5-c-content co-resource-item__resource-name"
+                  className="pf-v6-c-content co-resource-item__resource-name"
                   rel="noopener noreferrer"
                   to={
                     template.clusterScope

@@ -56,7 +56,7 @@ const formatPolicyDescription = (policy: string, t: (key: string) => string): Re
           <>
             <i
               className="fas fa-check-circle"
-              style={{ color: 'var(--pf-v5-global--success-color--100)' }}
+              style={{ color: 'var(--pf-t--global--icon--color--status--success--default)' }}
             />{' '}
             {t('Allow')}
           </>
@@ -64,7 +64,7 @@ const formatPolicyDescription = (policy: string, t: (key: string) => string): Re
           <>
             <i
               className="fas fa-times-circle"
-              style={{ color: 'var(--pf-v5-global--danger-color--100)' }}
+              style={{ color: 'var(--pf-t--global--icon--color--status--danger--default)' }}
             />{' '}
             {t('Deny')}
           </>

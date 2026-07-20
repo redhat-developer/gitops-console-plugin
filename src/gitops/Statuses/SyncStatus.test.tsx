@@ -10,13 +10,13 @@ describe('SyncStatus', () => {
 
   it('renders OutOfSync', () => {
     expect(renderToStaticMarkup(<SyncStatus status="OutOfSync" />)).toMatchInlineSnapshot(
-      `"<span><svg data-icon="ArrowCircleUpIcon" style="color:var(--pf-v5-global--warning-color--100)"></svg> OutOfSync</span>"`,
+      `"<span><svg data-icon="ArrowCircleUpIcon" style="color:var(--pf-t--global--icon--color--status--warning--default)"></svg> OutOfSync</span>"`,
     );
   });
 
   it('renders Unknown', () => {
     expect(renderToStaticMarkup(<SyncStatus status="Unknown" />)).toMatchInlineSnapshot(
-      `"<span><svg data-icon="UnknownIcon" style="color:var(--pf-v5-global--disabled-color--100)"></svg> Unknown</span>"`,
+      `"<span><svg data-icon="UnknownIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> Unknown</span>"`,
     );
   });
 

@@ -81,10 +81,10 @@
 
   .step-edge {
     &.step-edge-healthy {
-      stroke: var(--pf-v5-global--success-color--100);
+      stroke: var(--pf-t--global--icon--color--status--success--default);
     }
     &.step-edge-warning {
-      stroke: var(--pf-v5-global--warning-color--100);
+      stroke: var(--pf-t--global--icon--color--status--warning--default);
     }
     &.step-edge-progressing {
       stroke: lightblue;
@@ -93,12 +93,12 @@
   
   .step-edge-terminal.pf-topology-connector-arrow {
     &.step-edge-terminal-healthy {
-      stroke: var(--pf-v5-global--success-color--100);
-      fill: var(--pf-v5-global--success-color--100);
+      stroke: var(--pf-t--global--icon--color--status--success--default);
+      fill: var(--pf-t--global--icon--color--status--success--default);
     }
     &.step-edge-terminal-warning {
-      stroke: var(--pf-v5-global--warning-color--100);
-      fill: var(--pf-v5-global--warning-color--100);
+      stroke: var(--pf-t--global--icon--color--status--warning--default);
+      fill: var(--pf-t--global--icon--color--status--warning--default);
     }
     &.step-edge-terminal-progressing {
       stroke: lightblue;
