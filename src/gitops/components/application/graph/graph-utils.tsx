@@ -48,6 +48,10 @@ const createApplicationNode = (
     height: APP_NODE_HEIGHT,
     data: {
       name: application?.metadata?.name,
+      namespace: application?.metadata?.namespace,
+      kind: application?.kind,
+      version: ApplicationModel.apiVersion || 'v1alpha1',
+      group: ApplicationModel.apiGroup || 'argoproj.io',
       badge: 'A',
       badgeColor: RESOURCE_COLORS.get(
         RESOURCE_BADGE_COLORS.get('.co-m-resource-' + application?.kind.toLowerCase()),

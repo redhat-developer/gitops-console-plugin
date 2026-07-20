@@ -7,6 +7,7 @@ import {
 } from '@gitops/components/application/graph/icons/resource-colours';
 import { APP_NODE_HEIGHT } from '@gitops/components/graph/utils';
 import { successColor, warningColor } from '@gitops/utils/components/Icons/Icons';
+import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import ApplicationIcon from '@images/resources/application.svg';
 import { Tooltip } from '@patternfly/react-core';
 import { HeartIcon, PauseIcon, SyncAltIcon, WarningTriangleIcon } from '@patternfly/react-icons';
@@ -22,6 +23,7 @@ import {
   RectAnchor,
   ShapeProps,
   useAnchor,
+  WithContextMenuProps,
   WithSelectionProps,
 } from '@patternfly/react-topology';
 import styles from '@patternfly/react-topology/dist/esm/css/topology-components';
@@ -265,58 +267,73 @@ const DummyShape: React.FunctionComponent<RectangleProps> = ({
 };
 
 // This is the collapsible group of applications that have the same step, determined by the matched expression defined in the ApplicationSet
-export const StepGroupComponent: React.FC<WithSelectionProps & { element: TopologyNode }> =
-  observer(({ element, onSelect, selected }) => {
-    useAnchor(RightAnchor, AnchorEnd.source, 'task-edge');
-    useAnchor(LeftAnchor, AnchorEnd.target, 'task-edge');
+export const StepGroupComponent: React.FC<
+  WithContextMenuProps & WithSelectionProps & { element: TopologyNode }
+> = observer(({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
+  useAnchor(RightAnchor, AnchorEnd.source, 'task-edge');
+  useAnchor(LeftAnchor, AnchorEnd.target, 'task-edge');
 
-    const handleCollapseChange = React.useCallback((group: TopologyNode, collapsed: boolean) => {
-      const stepGroup = group
-        .getGraph()
-        .getChildren()
-        .find((c) => c.getId() === 'transparent-group-of-step-groups-' + group.getData()?.step);
-      if (stepGroup) {
-        stepGroup.getData().isCollapsed = collapsed;
-      }
-      // Update expanded step-groups state to trigger structural refresh
-      // Get callback from controller (not graph) since graph may be replaced during model updates
-      const graph = group.getGraph();
-      const controller = graph?.getController?.();
-      const updateExpanded = (controller as any)?.updateExpandedStepGroups;
-      if (updateExpanded) {
-        updateExpanded(group.getId(), !collapsed);
-      }
-    }, []);
+  const handleCollapseChange = React.useCallback((group: TopologyNode, collapsed: boolean) => {
+    const stepGroup = group
+      .getGraph()
+      .getChildren()
+      .find((c) => c.getId() === 'transparent-group-of-step-groups-' + group.getData()?.step);
+    if (stepGroup) {
+      stepGroup.getData().isCollapsed = collapsed;
+    }
+    // Update expanded step-groups state to trigger structural refresh
+    // Get callback from controller (not graph) since graph may be replaced during model updates
+    const graph = group.getGraph();
+    const controller = graph?.getController?.();
+    const updateExpanded = (controller as any)?.updateExpandedStepGroups;
+    if (updateExpanded) {
+      updateExpanded(group.getId(), !collapsed);
+    }
+  }, []);
 
-    return (
-      <DefaultGroup
-        element={element}
-        className={css('gitops-step-group', selected && 'pf-m-selected')}
-        borderRadius={5}
-        collapsible={true}
-        hulledOutline={true}
-        showLabelOnHover={false}
-        showLabel={true}
-        labelPosition={LabelPosition.top}
-        badgeLocation={BadgeLocation.inner}
-        badgeColor="var(--pf-t--global--background--color--floating--default)"
-        badgeBorderColor={RESOURCE_COLORS.get(
-          RESOURCE_BADGE_COLORS.get('.co-m-resource-application'),
-        )}
-        badgeTextColor="var(--pf-t--global--text--color--regular)"
-        badge={element.getData().step}
-        collapsedShadowOffset={0}
-        collapsedWidth={300}
-        collapsedHeight={50}
-        getCollapsedShape={() => DummyShape}
-        labelClassName={css('gitops-step-group-label', selected && 'pf-m-selected')}
-        onCollapseChange={handleCollapseChange}
-        onSelect={onSelect}
-        selected={selected}
-      >
-        <CollapsedGroup element={element} width={300} height={50} selected={selected} />
-      </DefaultGroup>
-    );
-  });
+  const handleContextMenu = React.useCallback(
+    (e: React.MouseEvent) => {
+      if (!selected) {
+        onSelect?.(e);
+      }
+      onContextMenu?.(e);
+    },
+    [onSelect, onContextMenu, selected],
+  );
+
+  return (
+    <DefaultGroup
+      element={element}
+      className={css('gitops-step-group', selected && 'pf-m-selected')}
+      borderRadius={5}
+      collapsible={true}
+      hulledOutline={true}
+      showLabelOnHover={false}
+      showLabel={true}
+      truncateLength={20}
+      hideContextMenuKebab={false}
+      labelPosition={LabelPosition.top}
+      badgeLocation={BadgeLocation.inner}
+      badgeColor="var(--pf-t--global--background--color--floating--default)"
+      badgeBorderColor={RESOURCE_COLORS.get(
+        RESOURCE_BADGE_COLORS.get('.co-m-resource-application'),
+      )}
+      badgeTextColor="var(--pf-t--global--text--color--regular)"
+      badge={t('Step {{x}}', { x: element.getData().step })}
+      collapsedShadowOffset={0}
+      collapsedWidth={300}
+      collapsedHeight={50}
+      getCollapsedShape={() => DummyShape}
+      labelClassName={css('gitops-step-group-label', selected && 'pf-m-selected')}
+      onCollapseChange={handleCollapseChange}
+      onContextMenu={handleContextMenu}
+      contextMenuOpen={contextMenuOpen}
+      onSelect={onSelect}
+      selected={selected}
+    >
+      <CollapsedGroup element={element} width={300} height={50} selected={selected} />
+    </DefaultGroup>
+  );
+});
 
 export default StepGroupComponent;
