@@ -294,11 +294,11 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   );
 };
 
-const ApplicationSetActionsCell: React.FC<{ appSet: ApplicationSetKind }> = ({ appSet }) => {
+const ApplicationSetActionsCell: React.FC<{ appSet: ApplicationSetKind, index: number }> = ({ appSet, index }) => {
   const [actions] = useApplicationSetActionsProvider(appSet);
   return (
     <div style={{ textAlign: 'right' }}>
-      <ActionsDropdown actions={actions} id="gitops-applicationset-actions" isKebabToggle={true} />
+      <ActionsDropdown actions={actions} id={'gitops-applicationset-actions-' + index} isKebabToggle={true} />
     </div>
   );
 };
@@ -353,7 +353,7 @@ const useApplicationSetRowsDV = (
       },
       {
         id: 'actions-' + index,
-        cell: <ApplicationSetActionsCell appSet={appSet} />,
+        cell: <ApplicationSetActionsCell appSet={appSet} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     ]);

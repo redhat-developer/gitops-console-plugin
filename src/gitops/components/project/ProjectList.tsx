@@ -528,7 +528,7 @@ export const useProjectsRowsDV = (
       },
       {
         id: 'actions-' + index,
-        cell: <ProjectActionsCell project={obj} />,
+        cell: <ProjectActionsCell project={obj} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     ]);
@@ -538,13 +538,14 @@ export const useProjectsRowsDV = (
 
 const ProjectActionsCell: React.FC<{
   project: AppProjectKind;
-}> = ({ project }) => {
+  index: number;
+}> = ({ project, index }) => {
   const actionList: Action[] = useProjectActionsProvider(project);
   return (
     <div style={{ textAlign: 'right' }}>
       <ActionsDropdown
         actions={actionList || []}
-        id="gitops-project-actions"
+        id={'gitops-project-actions-' + index}
         isKebabToggle={true}
       />
     </div>
