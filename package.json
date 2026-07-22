@@ -86,7 +86,7 @@
     "jest": "^29.0.0",
     "jest-environment-jsdom": "^29.0.0",
     "ts-jest": "^29.0.0",
-    "typesafe-actions": "^4.4.2",
+    "typesafe-actions": "^5.0.0",
     "typescript": "5.9.3",
     "webpack": "^5.1.0",
     "webpack-cli": "^4.9.2",
