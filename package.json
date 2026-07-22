@@ -34,7 +34,7 @@
     "@patternfly/react-icons": "^6.4.0",
     "@patternfly/react-styles": "^6.4.0",
     "@patternfly/react-table": "^6.4.0",
-    "@patternfly/react-tokens": "6.4.0",
+    "@patternfly/react-tokens": "6.6.0",
     "@patternfly/react-topology": "^6.2.0",
     "@svgr/webpack": "^8.1.0",
     "@types/classnames": "^2.3.1",

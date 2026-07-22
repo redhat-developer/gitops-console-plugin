@@ -96,8 +96,8 @@ importers:
         specifier: ^6.4.0
         version: 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-tokens':
-        specifier: 6.4.0
-        version: 6.4.0
+        specifier: 6.6.0
+        version: 6.6.0
       '@patternfly/react-topology':
         specifier: ^6.2.0
         version: 6.2.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -1302,8 +1302,8 @@ packages:
       react: ^17 || ^18 || ^19
       react-dom: ^17 || ^18 || ^19
 
-  '@patternfly/react-tokens@6.4.0':
-    resolution: {integrity: sha512-iZthBoXSGQ/+PfGTdPFJVulaJZI3rwE+7A/whOXPGp3Jyq3k6X52pr1+5nlO6WHasbZ9FyeZGqXf4fazUZNjbw==}
+  '@patternfly/react-tokens@6.6.0':
+    resolution: {integrity: sha512-oRUFYJAM9LKYTM9YRnd7rz3wB6ZoaBWit/Eu+EK22J4o5AhZRjLt0+ewXQ7I99dBP4c8BbnPEUFnxQYAroqNLg==}
 
   '@patternfly/react-topology@6.2.0':
     resolution: {integrity: sha512-tqLW9MBJOVq+R1b7MtHsz9zh+kjQ6wW5Ef3ub4cRJPHS3+2kVLv/943MdvSfHDa4uwsjT854Wr0roxlfRtRtvA==}
@@ -7083,7 +7083,7 @@ snapshots:
   '@patternfly/react-charts@8.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
       '@patternfly/react-styles': 6.4.0
-      '@patternfly/react-tokens': 6.4.0
+      '@patternfly/react-tokens': 6.6.0
       hoist-non-react-statics: 3.3.2
       lodash: 4.18.1
       react: 17.0.2
@@ -7104,7 +7104,7 @@ snapshots:
     dependencies:
       '@patternfly/react-icons': 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-styles': 6.4.0
-      '@patternfly/react-tokens': 6.4.0
+      '@patternfly/react-tokens': 6.6.0
       focus-trap: 7.6.4
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
@@ -7134,13 +7134,13 @@ snapshots:
       '@patternfly/react-core': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-icons': 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-styles': 6.4.0
-      '@patternfly/react-tokens': 6.4.0
+      '@patternfly/react-tokens': 6.6.0
       lodash: 4.18.1
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       tslib: 2.8.1
 
-  '@patternfly/react-tokens@6.4.0': {}
+  '@patternfly/react-tokens@6.6.0': {}
 
   '@patternfly/react-topology@6.2.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
