@@ -204,8 +204,8 @@ importers:
         specifier: 15.0.12
         version: 15.0.12
       mobx-react:
-        specifier: ^7.6.0
-        version: 7.6.0(mobx@6.13.6)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        specifier: ^9.0.0
+        version: 9.2.2(mobx@6.13.6)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       prettier:
         specifier: ^2.6.0
         version: 2.8.8
@@ -4189,11 +4189,37 @@ packages:
       react-native:
         optional: true
 
+  mobx-react-lite@4.1.1:
+    resolution: {integrity: sha512-iUxiMpsvNraCKXU+yPotsOncNNmyeS2B5DKL+TL6Tar/xm+wwNJAubJmtRSeAoYawdZqwv8Z/+5nPRHeQxTiXg==}
+    peerDependencies:
+      mobx: ^6.9.0
+      react: ^16.8.0 || ^17 || ^18 || ^19
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+
   mobx-react@7.6.0:
     resolution: {integrity: sha512-+HQUNuh7AoQ9ZnU6c4rvbiVVl+wEkb9WqYsVDzGLng+Dqj1XntHu79PvEWKtSMoMj67vFp/ZPXcElosuJO8ckA==}
     peerDependencies:
       mobx: ^6.1.0
       react: ^16.8.0 || ^17 || ^18
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+
+  mobx-react@9.2.2:
+    resolution: {integrity: sha512-ShszmQzR/VrhU3M0cQ7DA/s8qNcLcF2emSuudJ/TnDILS3C1Im48mdaG6CpyjZHy8+WqgXUCC9mPqSRIwPPMuQ==}
+    peerDependencies:
+      mobx: ^6.9.0
+      react: ^16.8.0 || ^17 || ^18 || ^19
       react-dom: '*'
       react-native: '*'
     peerDependenciesMeta:
@@ -5541,6 +5567,11 @@ packages:
 
   url-parse@1.5.10:
     resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
+
+  use-sync-external-store@1.6.0:
+    resolution: {integrity: sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
@@ -10715,10 +10746,26 @@ snapshots:
     optionalDependencies:
       react-dom: 17.0.2(react@17.0.2)
 
+  mobx-react-lite@4.1.1(mobx@6.13.6)(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+    dependencies:
+      mobx: 6.13.6
+      react: 17.0.2
+      use-sync-external-store: 1.6.0(react@17.0.2)
+    optionalDependencies:
+      react-dom: 17.0.2(react@17.0.2)
+
   mobx-react@7.6.0(mobx@6.13.6)(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
     dependencies:
       mobx: 6.13.6
       mobx-react-lite: 3.4.3(mobx@6.13.6)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      react: 17.0.2
+    optionalDependencies:
+      react-dom: 17.0.2(react@17.0.2)
+
+  mobx-react@9.2.2(mobx@6.13.6)(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+    dependencies:
+      mobx: 6.13.6
+      mobx-react-lite: 4.1.1(mobx@6.13.6)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react: 17.0.2
     optionalDependencies:
       react-dom: 17.0.2(react@17.0.2)
@@ -12146,6 +12193,10 @@ snapshots:
     dependencies:
       querystringify: 2.2.0
       requires-port: 1.0.0
+
+  use-sync-external-store@1.6.0(react@17.0.2):
+    dependencies:
+      react: 17.0.2
 
   util-deprecate@1.0.2: {}
 
