@@ -183,8 +183,8 @@ importers:
         specifier: 6.2.0
         version: 6.2.0(webpack@5.105.2)
       http-server:
-        specifier: 0.12.x
-        version: 0.12.3
+        specifier: 0.13.x
+        version: 0.13.0
       i18next:
         specifier: ^19.8.3
         version: 19.9.2
@@ -2736,11 +2736,6 @@ packages:
   duplexify@3.7.1:
     resolution: {integrity: sha512-07z8uv2wMyS51kKhD1KsdXJg5WQ6t93RneqRxUHnskXVtlYYkLqM0gqStQZ3pj073g687jPCHrqNfCzawLYh5g==}
 
-  ecstatic@3.3.2:
-    resolution: {integrity: sha512-fLf9l1hnwrHI2xn9mEDT7KIi22UDqA2jaCwyCbSUJh9a1V+LEUSL/JO/6TIz/QyuBURWUHrFL5Kg2TtO1bkkog==}
-    deprecated: This package is unmaintained and deprecated. See the GH Issue 259.
-    hasBin: true
-
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
@@ -3405,8 +3400,8 @@ packages:
     resolution: {integrity: sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==}
     engines: {node: '>=8.0.0'}
 
-  http-server@0.12.3:
-    resolution: {integrity: sha512-be0dKG6pni92bRjq0kvExtj/NrrAd28/8fCXkaI/4piTwQMSDSLMhWyW0NI1V+DBI3aa1HMlQu46/HjVLfmugA==}
+  http-server@0.13.0:
+    resolution: {integrity: sha512-/MjH9k/y470zbtXzKLkP8vioIVvxRArTkz8f9UX1ztkLZzr6S0hg6BW8h6MBn/HUfwjlTQvIe9DRknorN2u20Q==}
     engines: {node: '>=6'}
     hasBin: true
 
@@ -8816,13 +8811,6 @@ snapshots:
       readable-stream: 2.3.8
       stream-shift: 1.0.3
 
-  ecstatic@3.3.2:
-    dependencies:
-      he: 1.2.0
-      mime: 1.6.0
-      minimist: 1.2.8
-      url-join: 2.0.5
-
   ee-first@1.1.1: {}
 
   electron-to-chromium@1.5.302: {}
@@ -9708,18 +9696,20 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  http-server@0.12.3:
+  http-server@0.13.0:
     dependencies:
       basic-auth: 1.1.0
       colors: 1.4.0
       corser: 2.0.1
-      ecstatic: 3.3.2
+      he: 1.2.0
       http-proxy: 1.18.1
+      mime: 1.6.0
       minimist: 1.2.8
       opener: 1.5.2
       portfinder: 1.0.35
       secure-compare: 3.0.1
       union: 0.5.0
+      url-join: 2.0.5
     transitivePeerDependencies:
       - debug
       - supports-color
