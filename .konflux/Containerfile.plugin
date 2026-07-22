@@ -18,24 +18,19 @@ FROM registry.access.redhat.com/ubi9/nodejs-22 AS builder
 
 USER root
 
-# Install Yarn
-RUN npm install --global yarn
+# Install pnpm
+RUN npm install --global pnpm@10.33.2
 
-COPY ["package.json", "yarn.lock", "./"]
-
-RUN yarn install --no-progress --non-interactive
-
-ADD . /usr/src/app
 WORKDIR /usr/src/app
 
-RUN yarn install --network-timeout 600000 && \
-    yarn cache clean
+COPY ["package.json", "pnpm-lock.yaml", ".npmrc", "./"]
 
-RUN yarn install --no-progress --non-interactive
+RUN pnpm install --frozen-lockfile && \
+    pnpm store prune
 
-COPY [".", "."]
+COPY . .
 
-RUN yarn build
+RUN pnpm build
 
 ####################################################################################################
 

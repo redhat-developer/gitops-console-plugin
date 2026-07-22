@@ -1,9 +1,11 @@
 FROM docker.io/library/node:23 AS build
 
+RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
+
 ADD . /usr/src/app
 WORKDIR /usr/src/app
-RUN yarn config set network-timeout 600000 -g
-RUN yarn install && yarn build
+RUN pnpm config set fetchTimeout 600000 -g
+RUN pnpm install --frozen-lockfile && pnpm build
 
 FROM --platform=linux/amd64 registry.access.redhat.com/ubi9/httpd-24
 

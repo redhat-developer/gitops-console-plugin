@@ -15,11 +15,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'yarn'
 
-      - run: yarn install --frozen-lockfile
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
 
-      - run: yarn test:coverage
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm test:coverage
 
       - uses: codecov/codecov-action@v5
         with:
