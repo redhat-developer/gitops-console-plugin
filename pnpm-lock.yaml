@@ -50,8 +50,8 @@ importers:
         specifier: 2.4.3
         version: 2.4.3(react-router-dom@5.3.4(react@17.0.2))(react@17.0.2)
       redux:
-        specifier: 4.0.1
-        version: 4.0.1
+        specifier: 4.2.1
+        version: 4.2.1
     devDependencies:
       '@dagrejs/dagre':
         specifier: ^1.1.8
