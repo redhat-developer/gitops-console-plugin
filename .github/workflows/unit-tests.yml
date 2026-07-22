@@ -24,7 +24,7 @@ jobs:
 
       - run: pnpm test:coverage
 
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v7
         with:
           files: coverage/coverage-final.json
           flags: unit-tests
