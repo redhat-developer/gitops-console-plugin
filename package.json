@@ -74,7 +74,7 @@
     "prop-types": "15.8.x",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-i18next": "^11.7.3",
+    "react-i18next": "^17.0.0",
     "react-router": "5.3.4",
     "semver": "^7.0.0",
     "sass": "^1.42.1",
