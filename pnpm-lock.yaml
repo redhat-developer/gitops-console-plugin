@@ -219,8 +219,8 @@ importers:
         specifier: ^11.7.3
         version: 11.18.6(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react-router:
-        specifier: 5.3.4
-        version: 5.3.4(react@17.0.2)
+        specifier: 8.2.0
+        version: 8.2.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       sass:
         specifier: ^1.42.1
         version: 1.97.3
@@ -2319,6 +2319,9 @@ packages:
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  cookie-es@3.1.1:
+    resolution: {integrity: sha512-UaXxwISYJPTr9hwQxMFYZ7kNhSXboMXP+Z3TRX6f1/NyaGPfuNUZOWP1pUEb75B2HjfklIYLVRfWiFZJyC6Npg==}
 
   cookie-signature@1.0.7:
     resolution: {integrity: sha512-NXdYc3dLr47pBkpUCHtKSwIOQXLVn8dZEuywboCOJY/osA0wFSLlSawr3KN8qXJEyX66FcONTH8EIlVuK0yyFA==}
@@ -4696,6 +4699,16 @@ packages:
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
+
+  react-router@8.2.0:
+    resolution: {integrity: sha512-uP1LgGNHyilL1u+ZkecQk74DJOKOb6q4NLNYLRJcD/fjoogftNb5/Rj/07o/QBFsY/5MbAKPm1peTCQuVPv9cQ==}
+    engines: {node: '>=22.22.0'}
+    peerDependencies:
+      react: '>=19.2.7'
+      react-dom: '>=19.2.7'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
 
   react-side-effect@2.1.2:
     resolution: {integrity: sha512-PVjOcvVOyIILrYoyGEpDN3vmYNLdy1CajSFNt4TDsVQC5KpTijDvWVoR+/7Rz2xT978D8/ZtFceXxzsPwZEDvw==}
@@ -8372,6 +8385,8 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
+  cookie-es@3.1.1: {}
+
   cookie-signature@1.0.7: {}
 
   cookie@0.7.2: {}
@@ -11233,6 +11248,13 @@ snapshots:
     dependencies:
       '@remix-run/router': 1.23.0
       react: 17.0.2
+
+  react-router@8.2.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+    dependencies:
+      cookie-es: 3.1.1
+      react: 17.0.2
+    optionalDependencies:
+      react-dom: 17.0.2(react@17.0.2)
 
   react-side-effect@2.1.2(react@17.0.2):
     dependencies:

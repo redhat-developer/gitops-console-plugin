@@ -75,7 +75,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-i18next": "^11.7.3",
-    "react-router": "5.3.4",
+    "react-router": "8.2.0",
     "semver": "^7.0.0",
     "sass": "^1.42.1",
     "sass-loader": "^10.1.1",
