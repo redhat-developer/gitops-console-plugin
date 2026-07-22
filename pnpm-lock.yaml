@@ -183,8 +183,8 @@ importers:
         specifier: 6.2.0
         version: 6.2.0(webpack@5.105.2)
       http-server:
-        specifier: 0.12.x
-        version: 0.12.3
+        specifier: 14.1.x
+        version: 14.1.1
       i18next:
         specifier: ^19.8.3
         version: 19.9.2
@@ -2070,9 +2070,9 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  basic-auth@1.1.0:
-    resolution: {integrity: sha512-CtGuTyWf3ig+sgRyC7uP6DM3N+5ur/p8L+FPfsd+BbIfIs74TFfCajZTHnCw6K5dqM0bZEbRIqRy1fAdiUJhTA==}
-    engines: {node: '>= 0.6'}
+  basic-auth@2.0.1:
+    resolution: {integrity: sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==}
+    engines: {node: '>= 0.8'}
 
   batch@0.6.1:
     resolution: {integrity: sha512-x+VAiMRL6UPkx+kudNvxTl6hB2XNNCG2r+7wixVfIYwu/2HKRXimwQyaumLjMveWvT2Hkd/cAJw+QBMfJ/EKVw==}
@@ -2735,11 +2735,6 @@ packages:
 
   duplexify@3.7.1:
     resolution: {integrity: sha512-07z8uv2wMyS51kKhD1KsdXJg5WQ6t93RneqRxUHnskXVtlYYkLqM0gqStQZ3pj073g687jPCHrqNfCzawLYh5g==}
-
-  ecstatic@3.3.2:
-    resolution: {integrity: sha512-fLf9l1hnwrHI2xn9mEDT7KIi22UDqA2jaCwyCbSUJh9a1V+LEUSL/JO/6TIz/QyuBURWUHrFL5Kg2TtO1bkkog==}
-    deprecated: This package is unmaintained and deprecated. See the GH Issue 259.
-    hasBin: true
 
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
@@ -3405,9 +3400,9 @@ packages:
     resolution: {integrity: sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==}
     engines: {node: '>=8.0.0'}
 
-  http-server@0.12.3:
-    resolution: {integrity: sha512-be0dKG6pni92bRjq0kvExtj/NrrAd28/8fCXkaI/4piTwQMSDSLMhWyW0NI1V+DBI3aa1HMlQu46/HjVLfmugA==}
-    engines: {node: '>=6'}
+  http-server@14.1.1:
+    resolution: {integrity: sha512-+cbxadF40UXd9T01zUHgA+rlo2Bg1Srer4+B4NwIHdaGxAGGv59nYRnGGDJ9LBk7alpS0US+J+bLLdQOOkJq4A==}
+    engines: {node: '>=12'}
     hasBin: true
 
   https-proxy-agent@5.0.1:
@@ -5536,8 +5531,8 @@ packages:
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
-  url-join@2.0.5:
-    resolution: {integrity: sha512-c2H1fIgpUdwFRIru9HFno5DT73Ok8hg5oOb5AT3ayIgvCRfxgs2jyt5Slw8kEB7j3QUr6yJmMPDT/odjk7jXow==}
+  url-join@4.0.1:
+    resolution: {integrity: sha512-jk1+QP6ZJqyOiuEI9AEWQfju/nB2Pw466kbA0LEZljHwKeMgd9WrAEgEGxjPDD2+TNbbb37rTyhEfrCXfuKXnA==}
 
   url-parse@1.5.10:
     resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
@@ -8093,7 +8088,9 @@ snapshots:
 
   baseline-browser-mapping@2.10.0: {}
 
-  basic-auth@1.1.0: {}
+  basic-auth@2.0.1:
+    dependencies:
+      safe-buffer: 5.1.2
 
   batch@0.6.1: {}
 
@@ -8815,13 +8812,6 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 2.3.8
       stream-shift: 1.0.3
-
-  ecstatic@3.3.2:
-    dependencies:
-      he: 1.2.0
-      mime: 1.6.0
-      minimist: 1.2.8
-      url-join: 2.0.5
 
   ee-first@1.1.1: {}
 
@@ -9708,18 +9698,21 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  http-server@0.12.3:
+  http-server@14.1.1:
     dependencies:
-      basic-auth: 1.1.0
-      colors: 1.4.0
+      basic-auth: 2.0.1
+      chalk: 4.1.2
       corser: 2.0.1
-      ecstatic: 3.3.2
+      he: 1.2.0
+      html-encoding-sniffer: 3.0.0
       http-proxy: 1.18.1
+      mime: 1.6.0
       minimist: 1.2.8
       opener: 1.5.2
       portfinder: 1.0.35
       secure-compare: 3.0.1
       union: 0.5.0
+      url-join: 4.0.1
     transitivePeerDependencies:
       - debug
       - supports-color
@@ -12140,7 +12133,7 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  url-join@2.0.5: {}
+  url-join@4.0.1: {}
 
   url-parse@1.5.10:
     dependencies:
