@@ -73,7 +73,7 @@ importers:
         version: 0.0.3(react@17.0.2)
       '@patternfly/quickstarts':
         specifier: ^6.4.0
-        version: 6.4.0(@patternfly/react-core@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(marked@15.0.12)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 6.6.0(@patternfly/react-core@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(marked@15.0.12)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-charts':
         specifier: ^8.4.0
         version: 8.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -886,6 +886,10 @@ packages:
     resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/runtime@7.29.7':
+    resolution: {integrity: sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/template@7.28.6':
     resolution: {integrity: sha512-YA6Ma2KsCdGb+WC6UpBVFJGXL58MDA6oyONbjyF/+5sBgxY/dwkhLogbMT2GXXyU84/IhRw/2D1Os1B/giz+BQ==}
     engines: {node: '>=6.9.0'}
@@ -1200,8 +1204,8 @@ packages:
     resolution: {integrity: sha512-tmmZ3lQxAe/k/+rNnXQRawJ4NjxO2hqiOLTHvWchtGZULp4RyFeh6aU4XdOYBFe2KE1oShQTv4AblOs2iOrNnQ==}
     engines: {node: '>= 10.0.0'}
 
-  '@patternfly/quickstarts@6.4.0':
-    resolution: {integrity: sha512-A9XMlhY9aUhPT5+KVHOL8mxfXYNVQAhMRB4LWTd7vT9tby3mPfGcayrm9saW6CNCjSpgKpEvfsX+dcKsCccAaA==}
+  '@patternfly/quickstarts@6.6.0':
+    resolution: {integrity: sha512-4NQQknw5HHqTJdBQxsdpfR0KNl6aRP34HmAjs8EcBcf3jfQNBU1Tkv1DRuEo6bpOlushtsCWtBrbcljZYaaZLg==}
     peerDependencies:
       '@patternfly/react-core': ^6.0.0
       marked: ^15.0.6
@@ -2720,8 +2724,8 @@ packages:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
     engines: {node: '>= 4'}
 
-  dompurify@3.3.0:
-    resolution: {integrity: sha512-r+f6MYR1gGN1eJv0TVQbhA7if/U7P87cdPl3HN5rikqaBSBxLiCb/b9O+2eG0cxz0ghyU+mU1QkbsOwERMYlWQ==}
+  dompurify@3.4.12:
+    resolution: {integrity: sha512-zQvGet8Z2sWbQhCmfFz/T5QWH2oBmjnqK3qvOjaqaNLrLEF912WamU+ohnTp0TCep/MFVHpdJuCZEdFOdTnEFg==}
 
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
@@ -6618,6 +6622,8 @@ snapshots:
 
   '@babel/runtime@7.28.4': {}
 
+  '@babel/runtime@7.29.7': {}
+
   '@babel/template@7.28.6':
     dependencies:
       '@babel/code-frame': 7.29.0
@@ -7071,10 +7077,10 @@ snapshots:
       '@parcel/watcher-win32-x64': 2.5.6
     optional: true
 
-  '@patternfly/quickstarts@6.4.0(@patternfly/react-core@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(marked@15.0.12)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+  '@patternfly/quickstarts@6.6.0(@patternfly/react-core@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(marked@15.0.12)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
       '@patternfly/react-core': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      dompurify: 3.3.0
+      dompurify: 3.4.12
       history: 5.3.0
       marked: 15.0.12
       react: 17.0.2
@@ -8788,7 +8794,7 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
 
-  dompurify@3.3.0:
+  dompurify@3.4.12:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -9616,7 +9622,7 @@ snapshots:
 
   history@5.3.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.7
 
   hoist-non-react-statics@3.3.2:
     dependencies:
