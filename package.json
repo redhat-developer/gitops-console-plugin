@@ -96,7 +96,7 @@
     "overrides": {
       "glob-parent": "^6.0.0",
       "showdown": "^2.1.0",
-      "express": "4.22.1",
+      "express": "5.2.1",
       "@types/jest": "^29.5.0",
       "hosted-git-info": "^3.0.8",
       "jquery": "4.0.0",
