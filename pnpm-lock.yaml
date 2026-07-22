@@ -156,8 +156,8 @@ importers:
         specifier: ^2.5.0
         version: 2.7.1(eslint-plugin-import@2.32.0)(eslint@7.32.0)
       eslint-plugin-chai-friendly:
-        specifier: ^0.7.2
-        version: 0.7.4(eslint@7.32.0)
+        specifier: ^1.0.0
+        version: 1.2.1(eslint@7.32.0)
       eslint-plugin-cypress:
         specifier: ^2.12.1
         version: 2.15.2(eslint@7.32.0)
@@ -2890,8 +2890,8 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
 
-  eslint-plugin-chai-friendly@0.7.4:
-    resolution: {integrity: sha512-PGPjJ8diYgX1mjLxGJqRop2rrGwZRKImoEOwUOgoIhg0p80MkTaqvmFLe5TF7/iagZHggasvIfQlUyHIhK/PYg==}
+  eslint-plugin-chai-friendly@1.2.1:
+    resolution: {integrity: sha512-mV3EOJLDr8+L+LS8uCkP711fnNHz+4PsmPyz18xwkvjJwfLRlnx0Eu6CFnb5B+dW5ahoav2jVer2KFYsmIuv3A==}
     engines: {node: '>=0.10.0'}
     peerDependencies:
       eslint: '>=3.0.0'
@@ -9022,7 +9022,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-chai-friendly@0.7.4(eslint@7.32.0):
+  eslint-plugin-chai-friendly@1.2.1(eslint@7.32.0):
     dependencies:
       eslint: 7.32.0
 
