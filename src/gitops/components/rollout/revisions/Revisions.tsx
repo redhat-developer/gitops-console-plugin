@@ -356,7 +356,8 @@ export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods
       {
         key: `${Date.now()}-${prev.length}`,
         title: t('{{x}} failed with an error.', { x: action }),
-        message: error instanceof Error ? error.stack : error,
+        message: error instanceof Error ? error.message : error,
+        details: error instanceof Error ? error.stack : undefined,
         variant: AlertVariant.danger,
       },
     ]);
@@ -476,7 +477,7 @@ export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods
       </Flex>
       <Divider style={{ marginTop: '20px' }} />
       <AlertGroup isToast hasAnimations isLiveRegion>
-        {alerts.map(({ key, title, message, variant }) => (
+        {alerts.map(({ key, title, message, details,variant }) => (
           <Alert
             key={key}
             variant={variant}
@@ -488,6 +489,7 @@ export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods
             }
           >
             {message}
+            {details && <div>{details}</div>}
           </Alert>
         ))}
       </AlertGroup>

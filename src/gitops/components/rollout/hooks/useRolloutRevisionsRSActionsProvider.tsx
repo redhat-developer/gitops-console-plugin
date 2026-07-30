@@ -26,7 +26,7 @@ export const useRolloutRevisionsRSActionsProvider: UseRolloutRevisionsRSActionsP
     () => [
       {
         id: 'gitops-action-rollback-' + index,
-        disabled: index === 0,
+        disabled: index === 0 || !replicaSet?.replicaSet,
         label: t('Rollback'),
         accessReview: {
           group: RolloutModel.apiGroup,

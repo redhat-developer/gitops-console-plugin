@@ -185,7 +185,7 @@ export const getReplicaSetInfo = async (
       podTemplateHash: podTemplateHash,
       analysisRuns: getAnalysisRunInfo(analysisRuns, podTemplateHash, revision),
       replicaSet: rs,
-      replicaSetScaleDownDeadline: rs.metadata?.annotations['scale-down-deadline'],
+      replicaSetScaleDownDeadline: rs.metadata?.annotations?.['scale-down-deadline'],
     });
   });
 

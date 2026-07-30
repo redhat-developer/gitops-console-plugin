@@ -15,6 +15,7 @@ import { RolloutKind, RolloutModel } from './model/RolloutModel';
 import RolloutDetailsTab from './RolloutDetailsTab';
 import RolloutPodsTab from './RolloutPodsTab';
 import RolloutRevisionsTab from './RolloutRevisionsTab';
+import { useLocation } from 'react-router-dom-v5-compat';
 
 type RolloutPageProps = {
   name: string;
@@ -35,10 +36,10 @@ const RolloutNavPage: React.FC<RolloutPageProps> = ({ name, namespace, kind }) =
     namespace,
   });
 
-  const isRevisionsTab = /\/revisions\/?$/.test(location.pathname);
-  const [actions] = isRevisionsTab
-    ? useRolloutRevisionsActionsProvider(rollout)
-    : useRolloutActionsProvider(rollout);
+  const { pathname } = useLocation();
+  const [rolloutActions] = useRolloutActionsProvider(rollout);
+  const [revisionActions] = useRolloutRevisionsActionsProvider(rollout);
+  const actions = /\/revisions\/?$/.test(pathname) ? revisionActions : rolloutActions;
 
   const pages = React.useMemo(
     () => [

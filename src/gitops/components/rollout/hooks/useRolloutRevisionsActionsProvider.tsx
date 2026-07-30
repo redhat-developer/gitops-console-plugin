@@ -64,7 +64,7 @@ export const useRolloutRevisionsActionsProvider: UseRolloutRevisionsActionsProvi
       {
         id: 'separator-rollout-actions',
         label: '',
-        cta: () => {},
+        cta: () => undefined,
       },
       {
         id: 'gitops-action-abort',
