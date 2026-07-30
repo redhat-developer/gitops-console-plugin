@@ -107,7 +107,7 @@ export const RolloutStatusProgressingIcon = HealthProgressingIcon;
 export const RolloutStatusDegradedIcon = HealthDegradedIcon;
 export const RolloutStatusHealthyIcon = HealthHealthyIcon;
 export const RolloutStatusPausedIcon: React.FC<ColoredIconProps> = ({ className, title }) => (
-  <PausedIcon color={blueDefaultColor} className={className} title={title} />
+  <PausedIcon color={warningColor} className={className} title={title} />
 );
 // Should never see this one but if rollouts introduces a new status before this is updated good to show something
 export const RolloutStatusUnknownIcon = SyncUnknownIcon;

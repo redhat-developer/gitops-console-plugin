@@ -1,0 +1,6 @@
+.gitops-revisions-table {
+  tbody > tr:first-child {
+    --pf-v6-c-table__tr--BorderBlockEndWidth: 1px;
+    border-top: 1px solid;
+  }
+}

@@ -5,7 +5,7 @@ import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 import { AppProjectKind } from '@gitops/models/AppProjectModel';
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
 import { isApplicationRefreshing } from '@gitops/utils/gitops';
-import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
+import { t, useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { getSelectorSearchURL, modelToGroupVersionKind, modelToRef } from '@gitops/utils/utils';
 import {
   Action,
@@ -386,7 +386,18 @@ export const useRolloutsRowsDV = (rolloutsList, namespace): DataViewTr[] => {
         : []),
       {
         id: 'status',
-        cell: <RolloutStatusFragment status={obj.status?.phase as RolloutStatus} />,
+        cell: (
+          <RolloutStatusFragment
+            status={obj.status?.phase as RolloutStatus}
+            message={
+              obj?.status === undefined
+                ? t(
+                    'There is no rollout status. Check that the Rollout Manager is created and is available.',
+                  )
+                : undefined
+            }
+          />
+        ),
       },
       {
         id: 'pods',

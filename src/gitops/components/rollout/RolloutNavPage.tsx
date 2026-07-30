@@ -10,6 +10,7 @@ import EventsTab from '../shared/EventsTab/EventsTab';
 import ResourceYAMLTab from '../shared/ResourceYAMLTab/ResourceYAMLTab';
 
 import { useRolloutActionsProvider } from './hooks/useRolloutActionsProvider';
+import { useRolloutRevisionsActionsProvider } from './hooks/useRolloutRevisionsActionsProvider';
 import { RolloutKind, RolloutModel } from './model/RolloutModel';
 import RolloutDetailsTab from './RolloutDetailsTab';
 import RolloutPodsTab from './RolloutPodsTab';
@@ -34,7 +35,10 @@ const RolloutNavPage: React.FC<RolloutPageProps> = ({ name, namespace, kind }) =
     namespace,
   });
 
-  const [actions] = useRolloutActionsProvider(rollout);
+  const isRevisionsTab = /\/revisions\/?$/.test(location.pathname);
+  const [actions] = isRevisionsTab
+    ? useRolloutRevisionsActionsProvider(rollout)
+    : useRolloutActionsProvider(rollout);
 
   const pages = React.useMemo(
     () => [

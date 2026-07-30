@@ -119,7 +119,13 @@ const RolloutDetailsTab: React.FC<RolloutDetailsTabProps> = ({ obj }) => {
                     <FlexItem>
                       <RolloutStatusFragment
                         status={obj?.status?.phase}
-                        message={obj?.status?.message}
+                        message={
+                          obj?.status
+                            ? obj.status.message
+                            : t(
+                                'There is no rollout status. Check that the Rollout Manager is created and is available.',
+                              )
+                        }
                       />
                     </FlexItem>
                   </Flex>

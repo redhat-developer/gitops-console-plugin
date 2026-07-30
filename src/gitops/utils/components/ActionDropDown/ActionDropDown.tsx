@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useGitOpsTranslation } from 'src/gitops/utils/hooks/useGitOpsTranslation';
 
 import { Action } from '@openshift-console/dynamic-plugin-sdk';
-import { Dropdown, DropdownList } from '@patternfly/react-core';
+import { Divider, Dropdown, DropdownList } from '@patternfly/react-core';
 
 import ActionDropdownItem from '../ActionDropDownItem/ActionDropDownItem';
 import DropdownToggle from '../toggles/DropDownToggle';
@@ -52,9 +52,13 @@ const ActionsDropdown: React.FC<ActionsDropdownProps> = ({
       toggle={Toggle}
     >
       <DropdownList>
-        {actions?.map((action) => (
-          <ActionDropdownItem action={action} key={action?.id} setIsOpen={setIsOpen} />
-        ))}
+        {actions?.map((action) =>
+          action?.id === 'separator' || action?.id?.startsWith('separator-') ? (
+            <Divider component="li" key={action.id} />
+          ) : (
+            <ActionDropdownItem action={action} key={action?.id} setIsOpen={setIsOpen} />
+          ),
+        )}
       </DropdownList>
     </Dropdown>
   );
