@@ -477,7 +477,7 @@ export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods
       </Flex>
       <Divider style={{ marginTop: '20px' }} />
       <AlertGroup isToast hasAnimations isLiveRegion>
-        {alerts.map(({ key, title, message, details,variant }) => (
+        {alerts.map(({ key, title, message, details, variant }) => (
           <Alert
             key={key}
             variant={variant}

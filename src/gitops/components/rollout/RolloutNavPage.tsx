@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useLocation } from 'react-router-dom-v5-compat';
 
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
@@ -15,7 +16,6 @@ import { RolloutKind, RolloutModel } from './model/RolloutModel';
 import RolloutDetailsTab from './RolloutDetailsTab';
 import RolloutPodsTab from './RolloutPodsTab';
 import RolloutRevisionsTab from './RolloutRevisionsTab';
-import { useLocation } from 'react-router-dom-v5-compat';
 
 type RolloutPageProps = {
   name: string;

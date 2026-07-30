@@ -1,13 +1,6 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
 
-import {
-  Action,
-  K8sVerb,
-  useAnnotationsModal,
-  useDeleteModal,
-  useLabelsModal,
-} from '@openshift-console/dynamic-plugin-sdk';
+import { Action, K8sVerb } from '@openshift-console/dynamic-plugin-sdk';
 
 import { useGitOpsTranslation } from '../../../utils/hooks/useGitOpsTranslation';
 import { RolloutKind, RolloutModel } from '../model/RolloutModel';
@@ -24,10 +17,6 @@ export const useRolloutRevisionsActionsProvider: UseRolloutRevisionsActionsProvi
   onError,
 ) => {
   const { t } = useGitOpsTranslation();
-  const navigate = useNavigate();
-  const launchLabelsModal = useLabelsModal(rollout);
-  const launchAnnotationsModal = useAnnotationsModal(rollout);
-  const launchDeleteModal = useDeleteModal(rollout);
 
   const actions = React.useMemo(
     () => [
@@ -113,7 +102,7 @@ export const useRolloutRevisionsActionsProvider: UseRolloutRevisionsActionsProvi
         },
       },
     ],
-    [rollout, launchLabelsModal, launchAnnotationsModal, launchDeleteModal, navigate, t, onError],
+    [rollout, t, onError],
   );
 
   return [actions];
