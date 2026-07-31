@@ -7,7 +7,7 @@ import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { resourceAsArray } from '@gitops/utils/utils';
 import { K8sResourceCommon, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
-import { Flex, FlexItem, PageSection, PageSectionVariants, Title } from '@patternfly/react-core';
+import { Flex, FlexItem, PageSection, PageSectionVariants } from '@patternfly/react-core';
 
 import { ReplicaSetKind, RolloutKind } from './model/RolloutModel';
 import { Revisions } from './revisions/Revisions';
@@ -51,10 +51,6 @@ const RolloutRevisionsTab: React.FC<RolloutRevisionsTabProps> = ({ obj: rollout 
       variant={PageSectionVariants.default}
       className={classNames('co-m-pane__body', { 'co-m-pane__body--section-heading': true })}
     >
-      <Title headingLevel="h2" className="co-section-heading">
-        {t('Rollout Revisions')}
-      </Title>
-
       {/* eslint-disable-next-line no-nested-ternary */}
       {loadError || podsloadError ? (
         <div>

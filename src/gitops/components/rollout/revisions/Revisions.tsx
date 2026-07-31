@@ -1,19 +1,42 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom-v5-compat';
+import moment from 'moment';
 
 import { getPodStatus } from '@gitops/components/shared/pod-utils';
 import { PodKind } from '@gitops/topology/console/types';
+import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
 import { isApplicationRefreshing } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
-import { getResourceUrl, modelToGroupVersionKind, resourceAsArray } from '@gitops/utils/utils';
 import {
+  formatDuration,
+  getResourceUrl,
+  modelToGroupVersionKind,
+  resourceAsArray,
+} from '@gitops/utils/utils';
+import {
+  Action,
   K8sModel,
   ResourceLink,
   Selector,
   useK8sModel,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Label, LabelGroup, Spinner, Tooltip } from '@patternfly/react-core';
+import {
+  Button,
+  Divider,
+  Flex,
+  FlexItem,
+  Label,
+  LabelGroup,
+  Spinner,
+  Title,
+  Toolbar,
+  ToolbarContent,
+  ToolbarGroup,
+  ToolbarItem,
+  // Popover,
+  Tooltip,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTrTree } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import DataViewTableTree from '@patternfly/react-data-view/dist/esm/DataViewTableTree';
 import { FolderIcon, FolderOpenIcon } from '@patternfly/react-icons';
@@ -23,9 +46,19 @@ import { EyeIcon } from '@patternfly/react-icons/dist/esm/icons/eye-icon';
 import { MigrationIcon } from '@patternfly/react-icons/dist/esm/icons/migration-icon';
 import { RunningIcon } from '@patternfly/react-icons/dist/esm/icons/running-icon';
 
+import { Ticker } from '../../shared/Ticker/Ticker';
 import { AnalysisRunStatusFragment } from '../components/AnalysisRunStatus/AnalysisRunStatus';
+import {
+  RevisionAlertGroup,
+  useRevisionAlerts,
+} from '../components/RevisionAlertGroup/RevisionAlertGroup';
+import { useRolloutRevisionsActionsProvider } from '../hooks/useRolloutRevisionsActionsProvider';
+import { useRolloutRevisionsRSActionsProvider } from '../hooks/useRolloutRevisionsRSActionsProvider';
 import { AnalysisRunKind } from '../model/AnalysisRunModel';
 import { ReplicaSetKind, RolloutKind, RolloutModel } from '../model/RolloutModel';
+import { RolloutStatusFragment } from '../RolloutStatus';
+import { abortRollout, promoteRollout, restartRollout, retryRollout } from '../services/Rollout';
+import { isDeploying, RolloutStatus } from '../utils/rollout-utils';
 
 import {
   getAnalysisRunSelector,
@@ -34,6 +67,8 @@ import {
   ReplicaSetInfo,
   ReplicaSetStatus,
 } from './ReplicaSetInfo';
+
+import './Revisions.scss';
 
 interface RevisionsProps {
   rollout: RolloutKind;
@@ -73,14 +108,59 @@ const getColumnsDV = (): DataViewTh[] => {
         'aria-label': 'info',
       },
     },
+    {
+      cell: '',
+      props: { 'aria-label': 'actions' },
+    },
   ];
   return columns;
+};
+
+const RolloutActionsCell: React.FC<{
+  app: RolloutKind;
+  index: number;
+  onError?: (error: Error | string, action: string) => void;
+}> = ({ app, index, onError }) => {
+  const actionList: [actions: Action[]] = useRolloutRevisionsActionsProvider(app, onError);
+  return (
+    <div style={{ textAlign: 'right' }}>
+      <ActionsDropdown
+        actions={actionList ? actionList[0] : []}
+        id={'gitops-rollout-actions-' + index}
+        isKebabToggle={true}
+      />
+    </div>
+  );
+};
+
+const RolloutRevisionRSActionsCell: React.FC<{
+  rollout: RolloutKind;
+  replicaSet: ReplicaSetInfo;
+  index: number;
+  onError?: (error: Error | string, action: string) => void;
+}> = ({ rollout, replicaSet, index, onError }) => {
+  const actionList: [actions: Action[]] = useRolloutRevisionsRSActionsProvider(
+    rollout,
+    replicaSet,
+    index,
+    onError,
+  );
+  return (
+    <div style={{ textAlign: 'right' }}>
+      <ActionsDropdown
+        actions={actionList ? actionList[0] : []}
+        id={'gitops-rollout-rollback-action-' + index}
+        isKebabToggle={true}
+      />
+    </div>
+  );
 };
 
 const getRowsDV = (
   replicaSetInfo: ReplicaSetInfo[],
   replicaSetModel: K8sModel,
   obj: RolloutKind,
+  onRevisionError?: (error: Error | string, action: string) => void,
 ): DataViewTrTree[] => {
   const rows: DataViewTrTree[] = [];
   const rsChildren: DataViewTrTree[] = [];
@@ -93,6 +173,7 @@ const getRowsDV = (
         <ResourceLink
           groupVersionKind={modelToGroupVersionKind(RolloutModel)}
           name={obj.metadata?.name}
+          linkTo={false}
           namespace={obj.metadata?.namespace}
           inline={true}
         >
@@ -102,8 +183,25 @@ const getRowsDV = (
         </ResourceLink>
       </div>,
       obj.kind,
-      obj.status?.phase,
+      {
+        cell: (
+          <>
+            {
+              <RolloutStatusFragment
+                showPhaseLabel={false}
+                status={obj.status?.phase as RolloutStatus}
+              />
+            }
+          </>
+        ),
+      },
       getAgeInMinutes(obj.metadata?.creationTimestamp) + 'm',
+      {
+        cell: <></>,
+      },
+      {
+        cell: <RolloutActionsCell app={obj} index={0} onError={onRevisionError} />,
+      },
     ],
   });
 
@@ -172,9 +270,46 @@ const getRowsDV = (
           ),
         },
         replicaSet?.replicaSet.kind,
-        replicaSet?.status,
+        {
+          cell: (
+            <div>
+              <div>{replicaSet?.status}</div>
+              {replicaSet.replicaSetScaleDownDeadline && (
+                <div style={{ marginTop: '5px' }}>
+                  <Ticker>
+                    {(now) => {
+                      const time = moment(replicaSet.replicaSetScaleDownDeadline).diff(
+                        now.toDate(),
+                        'second',
+                      );
+                      return time <= 0 ? null : (
+                        <span>
+                          <Label color="yellow">
+                            <span style={{ marginRight: '5px' }}>{t('Scaling down in:')}</span>
+                            <span>{formatDuration(time, 2)}</span>
+                            <i style={{ marginLeft: '5px' }} className="fa fa-clock" />
+                          </Label>
+                        </span>
+                      );
+                    }}
+                  </Ticker>
+                </div>
+              )}
+            </div>
+          ),
+        },
         getAgeInMinutes(replicaSet?.replicaSet?.metadata?.creationTimestamp) + 'm',
         getStatusSection(replicaSet.statuses),
+        {
+          cell: (
+            <RolloutRevisionRSActionsCell
+              rollout={obj}
+              index={rsIndex}
+              replicaSet={replicaSet}
+              onError={onRevisionError}
+            />
+          ),
+        },
       ],
       ...{ children: podsChildren },
     });
@@ -186,6 +321,7 @@ const getRowsDV = (
 
 export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods }) => {
   const [replicaSetInfo, setReplicaSetInfo] = React.useState<ReplicaSetInfo[]>([]);
+  const { alerts, removeAlert, onRevisionError } = useRevisionAlerts();
 
   const selector: Selector = React.useMemo(
     () => getAnalysisRunSelector(resourceAsArray(replicaSets)),
@@ -212,11 +348,112 @@ export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods
     });
   }, [rollout, replicaSets, analysisRuns, pods]);
 
-  const rows = getRowsDV(replicaSetInfo, replicaSetModel, rollout);
+  const rows = getRowsDV(replicaSetInfo, replicaSetModel, rollout, onRevisionError);
   return (
     <>
+      <Flex
+        justifyContent={{ default: 'justifyContentFlexEnd' }}
+        direction={{ default: 'column', sm: 'column', md: 'row', lg: 'row', xl: 'row' }}
+        // className='pf-v6-c-table__td pf-v6-c-table__tree-view-title-cell'
+        style={{ marginLeft: '20px', marginRight: '20px' }}
+      >
+        <Flex flex={{ default: 'flex_4', sm: 'flex_1' }} direction={{ default: 'column' }}>
+          <FlexItem>
+            <Title headingLevel="h2" className="co-section-heading">
+              {t('Rollout Revisions')}
+            </Title>
+          </FlexItem>
+        </Flex>
+        <Flex>
+          <FlexItem>
+            <Toolbar>
+              <ToolbarContent rowWrap={{ default: 'nowrap' }}>
+                <ToolbarGroup variant="action-group">
+                  <ToolbarItem>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      isDisabled={!isDeploying(rollout)}
+                      onClick={() => {
+                        promoteRollout(rollout, false).catch((err: unknown) => {
+                          onRevisionError(err instanceof Error ? err : String(err), t('Promote'));
+                        });
+                      }}
+                    >
+                      {t('Promote')}
+                    </Button>
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      isDisabled={!isDeploying(rollout)}
+                      onClick={() => {
+                        promoteRollout(rollout, true).catch((err: unknown) => {
+                          onRevisionError(
+                            err instanceof Error ? err : String(err),
+                            t('Full Promote'),
+                          );
+                        });
+                      }}
+                    >
+                      {t('Full Promote')}
+                    </Button>
+                  </ToolbarItem>
+                  <ToolbarItem variant="separator"></ToolbarItem>
+                  <ToolbarItem>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      isDisabled={!isDeploying(rollout)}
+                      onClick={() => {
+                        abortRollout(rollout).catch((err: unknown) => {
+                          onRevisionError(err instanceof Error ? err : String(err), t('Abort'));
+                        });
+                      }}
+                    >
+                      {t('Abort')}
+                    </Button>
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      isDisabled={rollout?.status?.phase !== RolloutStatus.Degraded}
+                      onClick={() => {
+                        retryRollout(rollout).catch((err: unknown) => {
+                          onRevisionError(err instanceof Error ? err : String(err), t('Retry'));
+                        });
+                      }}
+                    >
+                      {t('Retry')}
+                    </Button>
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      isDisabled={false}
+                      onClick={() => {
+                        restartRollout(rollout).catch((err: unknown) => {
+                          onRevisionError(err instanceof Error ? err : String(err), t('Restart'));
+                        });
+                      }}
+                    >
+                      {t('Restart')}
+                    </Button>
+                  </ToolbarItem>
+                </ToolbarGroup>
+              </ToolbarContent>
+            </Toolbar>
+          </FlexItem>
+        </Flex>
+      </Flex>
+      <Divider style={{ marginTop: '20px' }} />
+      <RevisionAlertGroup alerts={alerts} onRemove={removeAlert} />
       {rollout.metadata && (
         <DataViewTableTree
+          className="gitops-revisions-table"
           isTreeTable
           borders={true}
           columns={getColumnsDV()}
@@ -239,7 +476,7 @@ const getImages = (images: ImageInfo[]) => {
       <React.Fragment key={`image-${index}`}>
         <Tooltip content={image?.image}>
           <Label variant="outline" icon={<CubeIcon />}>
-            {image?.name}
+            {image?.image}
           </Label>
         </Tooltip>
       </React.Fragment>,
@@ -267,7 +504,7 @@ const getStatusSection = (statuses: ReplicaSetStatus[]) => {
   return (
     <LabelGroup>
       {statuses.includes(ReplicaSetStatus.Stable) && (
-        <Label variant="outline" color="blue" icon={<ArrowCircleUpIcon />}>
+        <Label variant="outline" color="green" icon={<ArrowCircleUpIcon />}>
           {t('Stable')}
         </Label>
       )}

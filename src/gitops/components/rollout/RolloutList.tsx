@@ -109,7 +109,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
 
   const { t } = useGitOpsTranslation();
 
-  const columnsDV = useColumnsDV(namespace, getSortParams);
+  const columnsDV = useColumnsDV(namespace, getSortParams, t);
   const sortedRollouts = React.useMemo(() => {
     return sortData(rollouts, sortBy, direction);
   }, [rollouts, sortBy, direction]);
@@ -132,7 +132,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
     });
   }, [filteredData, searchQuery]);
 
-  const rows = useRolloutsRowsDV(filteredBySearch, namespace);
+  const rows = useRolloutsRowsDV(filteredBySearch, namespace, t);
 
   const empty = (
     <Tbody>
@@ -278,9 +278,9 @@ export const sortData = (
 export const useColumnsDV = (
   namespace: string,
   getSortParams: (columnIndex: number) => ThProps['sort'],
+  t: (key: string) => string,
 ) => {
   const i: number = namespace ? 0 : 1;
-  const { t } = useGitOpsTranslation();
   const columns: DataViewTh[] = [
     {
       cell: t('Name'),
@@ -350,7 +350,11 @@ export const useColumnsDV = (
   return columns;
 };
 
-export const useRolloutsRowsDV = (rolloutsList, namespace): DataViewTr[] => {
+export const useRolloutsRowsDV = (
+  rolloutsList,
+  namespace,
+  t: (key: string) => string,
+): DataViewTr[] => {
   const rows: DataViewTr[] = [];
   if (rolloutsList == undefined || rolloutsList.length == 0) {
     return rows;
@@ -386,7 +390,18 @@ export const useRolloutsRowsDV = (rolloutsList, namespace): DataViewTr[] => {
         : []),
       {
         id: 'status',
-        cell: <RolloutStatusFragment status={obj.status?.phase as RolloutStatus} />,
+        cell: (
+          <RolloutStatusFragment
+            status={obj.status?.phase as RolloutStatus}
+            message={
+              obj?.status === undefined
+                ? t(
+                    'There is no rollout status. Check that the Rollout Manager is created and is available.',
+                  )
+                : undefined
+            }
+          />
+        ),
       },
       {
         id: 'pods',

@@ -50,6 +50,7 @@ export type ReplicaSetInfo = {
   podTemplateHash: string;
   analysisRuns: AnalysisRunInfo[];
   replicaSet?: K8sResourceCommon;
+  replicaSetScaleDownDeadline?: string;
 };
 
 function getReplicaSetStatus(
@@ -184,6 +185,7 @@ export const getReplicaSetInfo = async (
       podTemplateHash: podTemplateHash,
       analysisRuns: getAnalysisRunInfo(analysisRuns, podTemplateHash, revision),
       replicaSet: rs,
+      replicaSetScaleDownDeadline: rs.metadata?.annotations?.['scale-down-deadline'],
     });
   });
 

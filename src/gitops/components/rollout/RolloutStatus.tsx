@@ -15,9 +15,14 @@ import { RolloutStatus } from './utils/rollout-utils';
 interface RolloutStatusProps {
   status: RolloutStatus;
   message?: string;
+  showPhaseLabel?: boolean;
 }
 
-export const RolloutStatusFragment: React.FC<RolloutStatusProps> = ({ status, message }) => {
+export const RolloutStatusFragment: React.FC<RolloutStatusProps> = ({
+  status,
+  message,
+  showPhaseLabel = true,
+}) => {
   let icon: React.ReactNode;
   switch (status) {
     case RolloutStatus.Progressing: {
@@ -41,9 +46,9 @@ export const RolloutStatusFragment: React.FC<RolloutStatusProps> = ({ status, me
   }
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-      <span style={{ paddingRight: '4px' }}>Phase:</span>
+      {showPhaseLabel && <span style={{ paddingRight: '4px' }}>Phase:</span>}
       {icon} <span style={{ paddingLeft: '4px' }}>{status}</span>{' '}
-      {status == RolloutStatus.Degraded && message && (
+      {(status == RolloutStatus.Degraded || status === undefined) && message && (
         <Tooltip content={message}>
           <InfoCircleIcon style={{ paddingLeft: '4px' }} />
         </Tooltip>

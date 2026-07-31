@@ -209,3 +209,46 @@ export const ComparisonStatusIcon = ({
     </React.Fragment>
   );
 };
+
+export function formatDuration(seconds: number, sigfigs = 1) {
+  let remainingSeconds = Math.abs(Math.round(seconds));
+  let formattedDuration = '';
+  const figs = [];
+
+  if (remainingSeconds > 86400) {
+    const days = Math.floor(remainingSeconds / 86400) + 'd';
+    figs.push(days);
+    formattedDuration += days;
+    remainingSeconds = remainingSeconds % 86400;
+  }
+
+  if (remainingSeconds > 3600) {
+    const hours = Math.floor(remainingSeconds / 3600) + 'h';
+    figs.push(hours);
+    formattedDuration += hours;
+    remainingSeconds = remainingSeconds % 3600;
+  }
+
+  if (remainingSeconds > 60) {
+    const minutes = Math.floor(remainingSeconds / 60) + 'm';
+    figs.push(minutes);
+    formattedDuration += minutes;
+    remainingSeconds = remainingSeconds % 60;
+  }
+
+  if (remainingSeconds > 0 || Math.round(seconds) === 0) {
+    figs.push(remainingSeconds + 's');
+    formattedDuration += remainingSeconds + 's';
+  }
+
+  if (sigfigs <= figs.length) {
+    formattedDuration = '';
+    for (let i = 0; i < sigfigs; i++) {
+      formattedDuration += figs[i];
+      formattedDuration += ' ';
+    }
+    return formattedDuration;
+  }
+
+  return formattedDuration;
+}
