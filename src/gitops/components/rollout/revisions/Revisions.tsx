@@ -418,7 +418,7 @@ export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods
                         promoteRollout(rollout, true).catch((err: unknown) => {
                           onRevisionError(
                             err instanceof Error ? err : String(err),
-                            t('FullPromote'),
+                            t('Full Promote'),
                           );
                         });
                       }}
