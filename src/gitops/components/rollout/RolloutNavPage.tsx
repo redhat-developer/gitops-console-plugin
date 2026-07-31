@@ -10,6 +10,10 @@ import DetailsPageHeader from '../shared/DetailsPageHeader/DetailsPageHeader';
 import EventsTab from '../shared/EventsTab/EventsTab';
 import ResourceYAMLTab from '../shared/ResourceYAMLTab/ResourceYAMLTab';
 
+import {
+  RevisionAlertGroup,
+  useRevisionAlerts,
+} from './components/RevisionAlertGroup/RevisionAlertGroup';
 import { useRolloutActionsProvider } from './hooks/useRolloutActionsProvider';
 import { useRolloutRevisionsActionsProvider } from './hooks/useRolloutRevisionsActionsProvider';
 import { RolloutKind, RolloutModel } from './model/RolloutModel';
@@ -25,6 +29,7 @@ type RolloutPageProps = {
 
 const RolloutNavPage: React.FC<RolloutPageProps> = ({ name, namespace, kind }) => {
   const { t } = useGitOpsTranslation();
+  const { alerts, removeAlert, onRevisionError } = useRevisionAlerts();
   const [rollout, loaded, loadError] = useK8sWatchResource<RolloutKind>({
     groupVersionKind: {
       group: 'argoproj.io',
@@ -38,7 +43,7 @@ const RolloutNavPage: React.FC<RolloutPageProps> = ({ name, namespace, kind }) =
 
   const { pathname } = useLocation();
   const [rolloutActions] = useRolloutActionsProvider(rollout);
-  const [revisionActions] = useRolloutRevisionsActionsProvider(rollout);
+  const [revisionActions] = useRolloutRevisionsActionsProvider(rollout, onRevisionError);
   const actions = /\/revisions\/?$/.test(pathname) ? revisionActions : rolloutActions;
 
   const pages = React.useMemo(
@@ -74,6 +79,7 @@ const RolloutNavPage: React.FC<RolloutPageProps> = ({ name, namespace, kind }) =
 
   return (
     <>
+      <RevisionAlertGroup alerts={alerts} onRemove={removeAlert} />
       <DetailsPageHeader
         obj={rollout}
         model={RolloutModel}

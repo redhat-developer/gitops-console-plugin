@@ -22,10 +22,6 @@ import {
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import {
-  Alert,
-  AlertActionCloseButton,
-  AlertGroup,
-  AlertVariant,
   Button,
   Divider,
   Flex,
@@ -52,6 +48,10 @@ import { RunningIcon } from '@patternfly/react-icons/dist/esm/icons/running-icon
 
 import { Ticker } from '../../shared/Ticker/Ticker';
 import { AnalysisRunStatusFragment } from '../components/AnalysisRunStatus/AnalysisRunStatus';
+import {
+  RevisionAlertGroup,
+  useRevisionAlerts,
+} from '../components/RevisionAlertGroup/RevisionAlertGroup';
 import { useRolloutRevisionsActionsProvider } from '../hooks/useRolloutRevisionsActionsProvider';
 import { useRolloutRevisionsRSActionsProvider } from '../hooks/useRolloutRevisionsRSActionsProvider';
 import { AnalysisRunKind } from '../model/AnalysisRunModel';
@@ -154,15 +154,6 @@ const RolloutRevisionRSActionsCell: React.FC<{
       />
     </div>
   );
-};
-
-type RevisionAlert = {
-  key: string;
-  title: string;
-  message: string;
-  details?: string;
-  variant: AlertVariant;
-  actionLinks?: React.ReactNode;
 };
 
 const getRowsDV = (
@@ -330,7 +321,7 @@ const getRowsDV = (
 
 export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods }) => {
   const [replicaSetInfo, setReplicaSetInfo] = React.useState<ReplicaSetInfo[]>([]);
-  const [alerts, setAlerts] = React.useState<RevisionAlert[]>([]);
+  const { alerts, removeAlert, onRevisionError } = useRevisionAlerts();
 
   const selector: Selector = React.useMemo(
     () => getAnalysisRunSelector(resourceAsArray(replicaSets)),
@@ -345,23 +336,6 @@ export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods
     namespace: rollout.metadata?.namespace,
     selector: selector,
   });
-
-  const removeAlert = React.useCallback((key: string) => {
-    setAlerts((prev) => prev.filter((alert) => alert.key !== key));
-  }, []);
-
-  const onRevisionError = React.useCallback((error: Error | string, action: string) => {
-    setAlerts((prev) => [
-      ...prev,
-      {
-        key: `${Date.now()}-${prev.length}`,
-        title: t('{{x}} failed with an error.', { x: action }),
-        message: error instanceof Error ? error.message : error,
-        details: error instanceof Error ? error.stack : undefined,
-        variant: AlertVariant.danger,
-      },
-    ]);
-  }, []);
 
   React.useEffect(() => {
     getReplicaSetInfo(
@@ -476,23 +450,7 @@ export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods
         </Flex>
       </Flex>
       <Divider style={{ marginTop: '20px' }} />
-      <AlertGroup isToast hasAnimations isLiveRegion>
-        {alerts.map(({ key, title, message, details, variant }) => (
-          <Alert
-            key={key}
-            variant={variant}
-            title={title}
-            isExpandable={true}
-            onTimeout={() => removeAlert(key)}
-            actionClose={
-              <AlertActionCloseButton aria-label={t('Close')} onClose={() => removeAlert(key)} />
-            }
-          >
-            {message}
-            {details && <div>{details}</div>}
-          </Alert>
-        ))}
-      </AlertGroup>
+      <RevisionAlertGroup alerts={alerts} onRemove={removeAlert} />
       {rollout.metadata && (
         <DataViewTableTree
           className="gitops-revisions-table"
