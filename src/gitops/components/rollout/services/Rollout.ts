@@ -39,7 +39,7 @@ export const restartRollout = async (rollout: RolloutKind): Promise<RolloutKind>
     resource: rollout,
     data: [
       {
-        op: 'replace2',
+        op: 'replace',
         path: '/spec/restartAt',
         value: now,
       },
