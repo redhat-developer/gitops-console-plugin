@@ -200,7 +200,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
         <>
           {t('No Argo CD ApplicationSets match the filter')}
           <br />
-          {t('Try changing the filter to see more ApplicationSets.')}
+          {t('Adjust the filter to see more ApplicationSets.')}
         </>
       );
     }

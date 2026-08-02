@@ -317,7 +317,7 @@
   "The graph and table views show the ApplicationSet's applications. Use the filter to filter applications based on their health and sync status.": "The graph and table views show the ApplicationSet's applications. Use the filter to filter applications based on their health and sync status.",
   "Revision": "修订",
   "No Argo CD ApplicationSets match the filter": "No Argo CD ApplicationSets match the filter",
-  "Try changing the filter to see more ApplicationSets.": "Try changing the filter to see more ApplicationSets.",
+  "Adjust the filter to see more ApplicationSets.": "Adjust the filter to see more ApplicationSets.",
   "There are no Argo CD ApplicationSets in this project.": "There are no Argo CD ApplicationSets in this project.",
   "There are no Argo CD ApplicationSets in all projects.": "There are no Argo CD ApplicationSets in all projects.",
   "No matching Argo CD ApplicationSets": "No matching Argo CD ApplicationSets",
