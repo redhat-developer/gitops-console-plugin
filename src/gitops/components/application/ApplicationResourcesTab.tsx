@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
-
+import { getApplicationArgoUrl } from '@gitops/utils/gitops';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { ApplicationKind, ApplicationResourceStatus } from '@gitops-models/ApplicationModel';
 import { useUserSettings } from '@openshift-console/dynamic-plugin-sdk';
@@ -15,13 +15,14 @@ import {
   PageSectionVariants,
   Title,
 } from '@patternfly/react-core';
+
 import ArgoCDLink from '../shared/ArgoCDLink/ArgoCDLink';
+
 import ApplicationResourcesView from './ApplicationResourcesView';
 import {
   APPLICATION_RESOURCES_VIEW_SETTING_KEY,
   ApplicationResourcesViewType,
 } from './ApplicationResourcesViewType';
-import { getApplicationArgoUrl } from '@gitops/utils/gitops';
 
 type ApplicationResourcesTabProps = RouteComponentProps<{
   ns: string;
@@ -35,11 +36,11 @@ const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }
   const argoURL = getApplicationArgoUrl(argoServer, obj);
 
   const [savedViewType, setSavedViewType, viewSettingsLoaded] =
-  useUserSettings<ApplicationResourcesViewType>(
-    APPLICATION_RESOURCES_VIEW_SETTING_KEY,
-    ApplicationResourcesViewType.graph,
-    false,
-  );
+    useUserSettings<ApplicationResourcesViewType>(
+      APPLICATION_RESOURCES_VIEW_SETTING_KEY,
+      ApplicationResourcesViewType.graph,
+      false,
+    );
   const [viewType, setViewType] = React.useState<ApplicationResourcesViewType>(
     ApplicationResourcesViewType.graph,
   );

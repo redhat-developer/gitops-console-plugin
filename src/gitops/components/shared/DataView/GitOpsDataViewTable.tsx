@@ -29,6 +29,10 @@ export type GitOpsDataViewTableProps = {
    */
   isError?: boolean;
   /**
+   * Whether the table should display its loading state.
+   */
+  isLoading?: boolean;
+  /**
    * Optional custom error state body.
    */
   errorState?: React.ReactNode;
@@ -63,6 +67,7 @@ export const GitOpsDataViewTable: React.FC<GitOpsDataViewTableProps> = ({
   columns,
   rows,
   isEmpty,
+  isLoading,
   emptyState,
   isError,
   errorState,
@@ -82,6 +87,9 @@ export const GitOpsDataViewTable: React.FC<GitOpsDataViewTableProps> = ({
     if (activeState !== undefined) {
       return activeState;
     }
+    if (isLoading) {
+      return DataViewState.loading;
+    }
     if (isError) {
       return DataViewState.error;
     }
@@ -89,7 +97,7 @@ export const GitOpsDataViewTable: React.FC<GitOpsDataViewTableProps> = ({
       return DataViewState.empty;
     }
     return null;
-  }, [activeState, isEmpty, isError]);
+  }, [activeState, isEmpty, isError, isLoading]);
 
   return (
     <DataView activeState={resolvedActiveState}>

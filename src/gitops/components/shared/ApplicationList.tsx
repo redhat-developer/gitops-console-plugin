@@ -157,28 +157,29 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState
-            headingLevel="h4"
-            icon={CubesIcon}
-            titleText={
-              searchQuery ? t('No matching Argo CD Applications') : t('No Argo CD Applications')
-            }
-          >
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No Argo CD Applications')}>
             <EmptyStateBody>
               {(() => {
-                if (searchQuery) {
+                if (!loaded) {
+                  return t('Loading Argo CD Applications...');
+                }
+                if (
+                  searchQuery ||
+                  (filteredBySearch.length === 0 && sortedApplications.length !== 0)
+                ) {
                   return (
                     <>
-                      {t('No Argo CD Applications match the label filter')}{' '}
-                      <strong>&quot;{searchQuery}&quot;</strong>.
-                      <br />
-                      {t(
-                        'Try removing the filter or selecting a different label to see more applications.',
-                      )}
+                      {t('No Argo CD Applications match the filter')} <br />
+                      {t('Adjust the filter to see more applications.')}
                     </>
                   );
                 }
-                return namespace
+                // eslint-disable-next-line no-nested-ternary
+                return appset
+                  ? namespace
+                    ? t('There are no Argo CD Applications in this application set.')
+                    : t('There are no Argo CD Applications in all projects.')
+                  : namespace
                   ? t('There are no Argo CD Applications in this project.')
                   : t('There are no Argo CD Applications in all projects.');
               })()}
@@ -190,7 +191,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   );
   const error = loadError && (
     <Tbody>
-      <Tr key="loading" ouiaId={'table-tr-loading'}>
+      <Tr key="loading-error" ouiaId={'table-tr-loading-error'}>
         <Td colSpan={columnsDV.length}>
           <ErrorState
             titleText={t('Unable to load data')}
@@ -254,8 +255,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         {appset && (
           <ApplicationSetApplicationsView
             applicationSet={appset as ApplicationSetKind}
-            ownedApps={ownedApps as ApplicationKind[]}
-            filteredApplications={filteredData as ApplicationKind[]}
+            filteredApplications={filteredBySearch as ApplicationKind[]}
             hideNameLabelFilters={hideNameLabelFilters}
             hasOwnedApplications={hasOwnedApplications}
             rowFilters={filters}
@@ -335,7 +335,10 @@ export const sortData = (
   });
 };
 
-const ApplicationActionsCell: React.FC<{ app: ApplicationKind, index: number }> = ({ app, index}) => {
+const ApplicationActionsCell: React.FC<{ app: ApplicationKind; index: number }> = ({
+  app,
+  index,
+}) => {
   const actionList: [actions: Action[]] = useApplicationActionsProvider(app);
 
   return (
@@ -444,7 +447,7 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
       },
       {
         id: 'actions-' + index,
-        cell: <ApplicationActionsCell app={app} index={index}/>,
+        cell: <ApplicationActionsCell app={app} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     ]);

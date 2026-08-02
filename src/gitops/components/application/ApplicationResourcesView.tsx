@@ -64,9 +64,18 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
     [resources, sortBy, direction],
   );
 
-  const resourceFilters = React.useMemo(() => filters(sortedResources), [sortedResources]);
+  const filterableResources = React.useMemo(
+    () =>
+      sortedResources.map((resource) => ({
+        ...resource,
+        metadata: { name: resource.name },
+      })),
+    [sortedResources],
+  );
+
+  const resourceFilters = React.useMemo(() => filters(filterableResources), [filterableResources]);
   const [data, filteredResources, onFilterChange] = useListPageFilter(
-    sortedResources,
+    filterableResources,
     resourceFilters,
   );
 
@@ -80,7 +89,11 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
         <Td colSpan={columnsDV.length}>
           <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No resources')}>
             <EmptyStateBody>
-              {t('There are no resources associated with the application.')}
+              {resources.length === 0
+                ? t('There are no resources associated with the application.')
+                : t(
+                    'There are no resources based on the applied filters. Adjust the filters to see more resources.',
+                  )}
             </EmptyStateBody>
           </EmptyState>
         </Td>
@@ -102,19 +115,16 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
           <Flex alignItems={{ default: 'alignItemsCenter' }}>
             <FlexItem flex={{ default: 'flex_1' }}>
               <ListPageFilter
-                hideNameLabelFilters
                 data={data}
                 loaded={true}
                 rowFilters={resourceFilters}
                 onFilterChange={onFilterChange}
+                nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
+                hideLabelFilter
               />
             </FlexItem>
             <FlexItem className="gitops-graph-list-view__header">
-              <ApplicationResourcesToolbar
-                viewType={viewType}
-                onViewChange={onViewChange}
-                isDisabled={resources.length === 0}
-              />
+              <ApplicationResourcesToolbar viewType={viewType} onViewChange={onViewChange} />
             </FlexItem>
           </Flex>
         </StackItem>
@@ -164,8 +174,8 @@ const sortData = (
         bValue = b.namespace || '';
         break;
       case 'sync-wave':
-        aValue = a.syncWave || '';
-        bValue = b.syncWave || '';
+        aValue = a.syncWave ?? '';
+        bValue = b.syncWave ?? '';
         break;
       case 'sync-status':
         aValue = a.status || '';
@@ -266,17 +276,17 @@ const useResourceRowsDV = (
           </div>
         ),
         id: resource.name + '-' + index,
-        dataLabel: 'Name',
+        dataLabel: t('Name'),
       },
       {
         cell: resource.namespace ? resource.namespace : '-',
         id: resource.namespace,
-        dataLabel: 'Namespace',
+        dataLabel: t('Namespace'),
       },
       {
         id: 'sync-wave-' + index,
-        cell: <>{resource.syncWave || '-'}</>,
-        dataLabel: 'Sync Order',
+        cell: <>{resource.syncWave ?? '-'}</>,
+        dataLabel: t('Sync Wave'),
       },
       {
         id: 'sync-status-' + index,
@@ -295,7 +305,14 @@ const useResourceRowsDV = (
       },
       {
         id: 'actions-' + index,
-        cell: <ResourceActionsCell resource={resource} app={obj} argoBaseURL={argoBaseURL} index={index} />,
+        cell: (
+          <ResourceActionsCell
+            resource={resource}
+            app={obj}
+            argoBaseURL={argoBaseURL}
+            index={index}
+          />
+        ),
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     ]);

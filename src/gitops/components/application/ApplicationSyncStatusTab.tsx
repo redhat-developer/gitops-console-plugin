@@ -400,7 +400,14 @@ const useResourceRowsDV = (
       },
       {
         id: 'actions-' + index,
-        cell: <ResourceActionsCell resource={resource} app={obj} argoBaseURL={argoBaseURL} index={index} />,
+        cell: (
+          <ResourceActionsCell
+            resource={resource}
+            app={obj}
+            argoBaseURL={argoBaseURL}
+            index={index}
+          />
+        ),
         props: {
           style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 },
           className: 'dropdown-kebab-pf pf-c-table__action',

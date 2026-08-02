@@ -17,7 +17,6 @@ import './GitOpsGraphListView.scss';
 
 type ApplicationSetApplicationsViewProps = {
   applicationSet: ApplicationSetKind;
-  ownedApps: ApplicationKind[];
   filteredApplications: ApplicationKind[];
   hideNameLabelFilters?: boolean;
   hasOwnedApplications: boolean;
@@ -36,7 +35,6 @@ type ApplicationSetApplicationsViewProps = {
 
 const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewProps> = ({
   applicationSet,
-  ownedApps,
   filteredApplications,
   hideNameLabelFilters,
   hasOwnedApplications,
@@ -106,7 +104,6 @@ const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewPro
               <GitOpsViewSwitcher
                 viewType={viewType}
                 onViewChange={onViewChange}
-                isDisabled={ownedApps.length === 0}
                 testId="application-set-applications-view-switcher"
               />
             </FlexItem>
@@ -123,10 +120,20 @@ const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewPro
                 columns={columns}
                 rows={rows}
                 isEmpty={isEmpty}
+                isLoading={!loaded}
                 emptyState={emptyState}
                 errorState={errorState}
                 isError={isError}
-                activeState={isEmpty ? DataViewState.empty : null}
+                activeState={
+                  // eslint-disable-next-line no-nested-ternary
+                  isError
+                    ? DataViewState.error // eslint-disable-next-line no-nested-ternary
+                    : !loaded // eslint-disable-next-line no-nested-ternary
+                    ? DataViewState.loading
+                    : isEmpty // eslint-disable-next-line no-nested-ternary
+                    ? DataViewState.empty
+                    : undefined
+                }
               />
             ) : (
               <div className="gitops-graph-list-view__graph">
