@@ -16,6 +16,7 @@ import {
 import { ErrorState } from '@patternfly/react-component-groups';
 import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
+import { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
@@ -194,13 +195,12 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   }, [sortedApplicationSets]);
 
   const getEmptyStateBody = () => {
-    if (searchQuery) {
+    if (searchQuery || (filteredBySearch.length === 0 && sortedApplicationSets.length > 0)) {
       return (
         <>
-          {t('No Argo CD ApplicationSets match the label filter')}{' '}
-          <strong>&quot;{searchQuery}&quot;</strong>.
+          {t('No Argo CD ApplicationSets match the filter')}
           <br />
-          {t('Try removing the filter or selecting a different label to see more ApplicationSets.')}
+          {t('Adjust the filter to see more ApplicationSets.')}
         </>
       );
     }
@@ -244,7 +244,10 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     </Tbody>
   );
 
-  const isEmptyState = !loadError && filteredBySearch.length === 0;
+  const isEmptyState =
+    applicationSets.length === 0 ||
+    sortedApplicationSets.length === 0 ||
+    filteredBySearch.length === 0;
 
   return (
     <div>
@@ -286,19 +289,31 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
           columns={columnsDV}
           isEmpty={isEmptyState}
           emptyState={empty}
+          isLoading={!loaded}
           isError={!!loadError}
           errorState={error}
+          activeState={
+            // eslint-disable-next-line no-nested-ternary
+            !loaded ? DataViewState.loading : isEmptyState ? DataViewState.empty : undefined
+          }
         />
       </ListPageBody>
     </div>
   );
 };
 
-const ApplicationSetActionsCell: React.FC<{ appSet: ApplicationSetKind }> = ({ appSet }) => {
+const ApplicationSetActionsCell: React.FC<{ appSet: ApplicationSetKind; index: number }> = ({
+  appSet,
+  index,
+}) => {
   const [actions] = useApplicationSetActionsProvider(appSet);
   return (
     <div style={{ textAlign: 'right' }}>
-      <ActionsDropdown actions={actions} id="gitops-applicationset-actions" isKebabToggle={true} />
+      <ActionsDropdown
+        actions={actions}
+        id={'gitops-applicationset-actions-' + index}
+        isKebabToggle={true}
+      />
     </div>
   );
 };
@@ -353,7 +368,7 @@ const useApplicationSetRowsDV = (
       },
       {
         id: 'actions-' + index,
-        cell: <ApplicationSetActionsCell appSet={appSet} />,
+        cell: <ApplicationSetActionsCell appSet={appSet} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     ]);

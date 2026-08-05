@@ -37,12 +37,12 @@ import SyncStatusFragment from '../../Statuses/SyncStatus';
 import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
 import { isApplicationRefreshing } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
-import { ApplicationSetGraphView } from '../appset/graph/ApplicationSetGraphView';
 
 import {
   ShowOperandsInAllNamespacesRadioGroup,
   useShowOperandsInAllNamespaces,
 } from './AllNamespaces';
+import ApplicationSetApplicationsView from './ApplicationSetApplicationsView';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from './DataView';
 
 interface ApplicationProps {
@@ -133,6 +133,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   // TODO: use alternate filter since it is deprecated. See DataTableView potentially
   // PatternFly filters work on owned apps only (the dataset that will be displayed)
   const filters = getFilters(t);
+  // const filters = React.useMemo(() => getFilters(t), [t]);
   const [data, filteredData, onFilterChange] = useListPageFilter(ownedApps, filters);
 
   // Filter by search query if present (after other filters)
@@ -156,28 +157,29 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState
-            headingLevel="h4"
-            icon={CubesIcon}
-            titleText={
-              searchQuery ? t('No matching Argo CD Applications') : t('No Argo CD Applications')
-            }
-          >
+          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No Argo CD Applications')}>
             <EmptyStateBody>
               {(() => {
-                if (searchQuery) {
+                if (!loaded) {
+                  return t('Loading Argo CD Applications...');
+                }
+                if (
+                  searchQuery ||
+                  (filteredBySearch.length === 0 && sortedApplications.length !== 0)
+                ) {
                   return (
                     <>
-                      {t('No Argo CD Applications match the label filter')}{' '}
-                      <strong>&quot;{searchQuery}&quot;</strong>.
-                      <br />
-                      {t(
-                        'Try removing the filter or selecting a different label to see more applications.',
-                      )}
+                      {t('No Argo CD Applications match the filter')} <br />
+                      {t('Adjust the filter to see more applications.')}
                     </>
                   );
                 }
-                return namespace
+                // eslint-disable-next-line no-nested-ternary
+                return appset
+                  ? namespace
+                    ? t('There are no Argo CD Applications in this application set.')
+                    : t('There are no Argo CD Applications in all projects.')
+                  : namespace
                   ? t('There are no Argo CD Applications in this project.')
                   : t('There are no Argo CD Applications in all projects.');
               })()}
@@ -189,7 +191,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   );
   const error = loadError && (
     <Tbody>
-      <Tr key="loading" ouiaId={'table-tr-loading'}>
+      <Tr key="loading-error" ouiaId={'table-tr-loading-error'}>
         <Td colSpan={columnsDV.length}>
           <ErrorState
             titleText={t('Unable to load data')}
@@ -231,33 +233,17 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         {/* Show an AppSet specific title if showTitle is undefined. We don't want a duplicate title from above */}
         {appset && (
           <Flex flex={{ default: 'flexDefault' }}>
-            {/* {showTitle == undefined && ( */}
             <Title headingLevel="h2" className="co-section-heading">
               {t('ApplicationSet Applications')}
             </Title>
-            {/* )} */}
             <FlexItem fullWidth={{ default: 'fullWidth' }}>
               {t(
-                "The graph and table views show the ApplicationSet's applications. Use the filter below the graph to filter applications based on their health and sync status.",
+                "The graph and table views show the ApplicationSet's applications. Use the filter to filter applications based on their health and sync status.",
               )}
-            </FlexItem>
-            <FlexItem
-              fullWidth={{ default: 'fullWidth' }}
-              style={{
-                width: '95%',
-                height: '1000px',
-                border: '1px solid gray',
-                margin: '30px 30px',
-              }}
-            >
-              <ApplicationSetGraphView
-                applicationSet={appset as ApplicationSetKind}
-                applications={filteredData}
-              />
             </FlexItem>
           </Flex>
         )}
-        {!hideNameLabelFilters && hasOwnedApplications && (
+        {!appset && !hideNameLabelFilters && hasOwnedApplications && (
           <ListPageFilter
             data={data}
             loaded={loaded}
@@ -266,14 +252,35 @@ const ApplicationList: React.FC<ApplicationProps> = ({
             nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
           />
         )}
-        <GitOpsDataViewTable
-          columns={columnsDV}
-          rows={rows}
-          isEmpty={filteredBySearch.length === 0}
-          emptyState={empty}
-          errorState={error || undefined}
-          isError={!!loadError}
-        />
+        {appset && (
+          <ApplicationSetApplicationsView
+            applicationSet={appset as ApplicationSetKind}
+            filteredApplications={filteredBySearch as ApplicationKind[]}
+            hideNameLabelFilters={hideNameLabelFilters}
+            hasOwnedApplications={hasOwnedApplications}
+            rowFilters={filters}
+            listPageFilterData={data as ApplicationKind[]}
+            onFilterChange={onFilterChange}
+            nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
+            loaded={loaded}
+            columns={columnsDV}
+            rows={rows}
+            isEmpty={filteredBySearch.length === 0}
+            emptyState={empty}
+            errorState={error || undefined}
+            isError={!!loadError}
+          />
+        )}
+        {!appset && (
+          <GitOpsDataViewTable
+            columns={columnsDV}
+            rows={rows}
+            isEmpty={filteredBySearch.length === 0}
+            emptyState={empty}
+            errorState={error || undefined}
+            isError={!!loadError}
+          />
+        )}
       </ListPageBody>
     </div>
   );
@@ -328,14 +335,17 @@ export const sortData = (
   });
 };
 
-const ApplicationActionsCell: React.FC<{ app: ApplicationKind }> = ({ app }) => {
+const ApplicationActionsCell: React.FC<{ app: ApplicationKind; index: number }> = ({
+  app,
+  index,
+}) => {
   const actionList: [actions: Action[]] = useApplicationActionsProvider(app);
 
   return (
     <div style={{ textAlign: 'right' }}>
       <ActionsDropdown
         actions={actionList ? actionList[0] : []}
-        id="gitops-application-actions"
+        id={'gitops-application-actions-' + index}
         isKebabToggle={true}
       />
     </div>
@@ -437,7 +447,7 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
       },
       {
         id: 'actions-' + index,
-        cell: <ApplicationActionsCell app={app} />,
+        cell: <ApplicationActionsCell app={app} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     ]);

@@ -43,7 +43,7 @@ const ApplicationHealthStatusIcon = ({ status }: { status: HealthStatus }) => {
   let icon = null;
   switch (status) {
     case HealthStatus.HEALTHY:
-      icon = <HeartIcon style={{ fill: `${successColor}` }} />;
+      icon = <HeartIcon style={{ color: `${successColor}` }} />;
       break;
     case HealthStatus.MISSING:
       icon = <GhostIcon style={{ fill: `${warningColor}` }} />;

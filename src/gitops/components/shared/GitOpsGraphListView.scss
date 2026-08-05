@@ -1,0 +1,53 @@
+.gitops-graph-list-view {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--pf-t--global--spacer--md);
+
+  &__content {
+    min-height: 0;
+  }
+
+  &__panel,
+  &__list-panel {
+    min-height: 1000px;
+  }
+
+  &__list-panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__toolbar-row {
+    margin-bottom: var(--pf-t--global--spacer--sm);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    padding-right: 30px;
+  }
+
+  &__graph {
+    box-sizing: border-box;
+    width: 95%;
+    height: 1000px;
+    margin: 30px;
+    border: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+
+    > .gitops-topology-view {
+      flex: 1;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .gitops-topology-view,
+    .pf-topology-container,
+    .pf-topology-content {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}

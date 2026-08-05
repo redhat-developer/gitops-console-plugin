@@ -402,7 +402,7 @@ export const useImageUpdaterRowsDV = (
       },
       {
         id: 'actions-' + index,
-        cell: <ImageUpdaterActionsCell imageUpdater={obj} />,
+        cell: <ImageUpdaterActionsCell imageUpdater={obj} index={index} />,
         props: { className: 'gitops-imageupdater-list__actions-cell' },
       },
     ]);
@@ -412,13 +412,14 @@ export const useImageUpdaterRowsDV = (
 
 const ImageUpdaterActionsCell: React.FC<{
   imageUpdater: ImageUpdaterKind;
-}> = ({ imageUpdater }) => {
+  index: number;
+}> = ({ imageUpdater, index }) => {
   const actionList: Action[] = useImageUpdaterActionsProvider(imageUpdater);
   return (
     <div className="gitops-imageupdater-list__actions">
       <ActionsDropdown
         actions={actionList || []}
-        id="gitops-imageupdater-actions"
+        id={'gitops-imageupdater-actions-' + index}
         isKebabToggle={true}
       />
     </div>

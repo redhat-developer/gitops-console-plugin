@@ -317,7 +317,7 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
       },
       {
         id: 'actions-' + index,
-        cell: <PodRowActions pod={obj} />,
+        cell: <PodRowActions pod={obj} index={index} />,
         props: { className: 'dropdown-kebab-pf pf-c-table__action' },
       },
     ]);
@@ -327,13 +327,14 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
 
 const PodRowActions: React.FC<{
   pod: PodKind;
-}> = ({ pod }) => {
+  index: number;
+}> = ({ pod, index }) => {
   const actionList: [actions: Action[]] = usePodActionsProvider(pod);
   return (
     <div style={{ textAlign: 'right' }}>
       <ActionsDropdown
         actions={actionList ? actionList[0] : []}
-        id="gitops-rollout-actions"
+        id={'gitops-rollout-actions-' + index}
         isKebabToggle={true}
       />
     </div>
