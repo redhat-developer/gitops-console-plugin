@@ -403,9 +403,9 @@ const getTopologySideBar = ({
           >
             <Flex flex={{ default: 'flex_2' }}>
               <FlexItem fullWidth={{ default: 'fullWidth' }}>
-                <DescriptionList className="pf-c-description-list">
-                  <DescriptionListGroup className="pf-c-description-list__group">
-                    <DescriptionListTermHelpText className="pf-c-description-list__term">
+                <DescriptionList className="pf-v6-c-description-list">
+                  <DescriptionListGroup className="pf-v6-c-description-list__group">
+                    <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
                       <Popover
                         headerContent={<div>{t('Name')}</div>}
                         bodyContent={<div>{t('Name must be unique within a namespace.')}</div>}

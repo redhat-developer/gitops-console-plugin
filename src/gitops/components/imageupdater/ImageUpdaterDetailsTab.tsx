@@ -56,7 +56,7 @@ const ImageUpdaterDetailsTab: React.FC<ImageUpdaterDetailsTabProps> = ({ obj }) 
 
           <Flex flex={{ default: 'flex_2' }} direction={{ default: 'column' }}>
             <FlexItem>
-              <DescriptionList className="pf-c-description-list">
+              <DescriptionList className="pf-v6-c-description-list">
                 <DetailsDescriptionGroup
                   title={t('Ready')}
                   help={t('Whether the last reconciliation completed without errors.')}

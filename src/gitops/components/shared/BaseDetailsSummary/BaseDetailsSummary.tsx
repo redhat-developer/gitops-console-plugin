@@ -43,8 +43,8 @@ export const DetailsDescriptionGroup = (
   props: React.PropsWithChildren<DetailsDescriptionGroupProps>,
 ) => {
   return (
-    <DescriptionListGroup className="pf-c-description-list__group">
-      <DescriptionListTermHelpText className="pf-c-description-list__term">
+    <DescriptionListGroup className="pf-v6-c-description-list__group">
+      <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
         <Popover headerContent={<div>{props.title}</div>} bodyContent={<div>{props.help}</div>}>
           <DescriptionListTermHelpTextButton>{props.title}</DescriptionListTermHelpTextButton>
         </Popover>
@@ -114,9 +114,9 @@ export const BaseDetailsSummary: React.FC<BaseDetailsSummaryProps> = ({
 
   return (
     <>
-      <DescriptionList className="pf-c-description-list">
-        <DescriptionListGroup className="pf-c-description-list__group">
-          <DescriptionListTermHelpText className="pf-c-description-list__term">
+      <DescriptionList className="pf-v6-c-description-list">
+        <DescriptionListGroup className="pf-v6-c-description-list__group">
+          <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
             <Popover
               headerContent={<div>{t('Name')}</div>}
               bodyContent={<div>{t('Name must be unique within a namespace.')}</div>}
@@ -137,10 +137,10 @@ export const BaseDetailsSummary: React.FC<BaseDetailsSummaryProps> = ({
         >
           <ResourceLink kind="Namespace" name={obj?.metadata?.namespace} />
         </DetailsDescriptionGroup>
-        <DescriptionListGroup className="pf-c-description-list__group">
+        <DescriptionListGroup className="pf-v6-c-description-list__group">
           <Split>
             <SplitItem isFilled>
-              <DescriptionListTermHelpText className="pf-c-description-list__term">
+              <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
                 <Popover
                   headerContent={<div>{t('Labels')}</div>}
                   bodyContent={
@@ -182,8 +182,8 @@ export const BaseDetailsSummary: React.FC<BaseDetailsSummaryProps> = ({
           </DescriptionListDescription>
         </DescriptionListGroup>
 
-        <DescriptionListGroup className="pf-c-description-list__group">
-          <DescriptionListTermHelpText className="pf-c-description-list__term">
+        <DescriptionListGroup className="pf-v6-c-description-list__group">
+          <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
             <Popover
               headerContent={<div>{t('Annotations')}</div>}
               bodyContent={

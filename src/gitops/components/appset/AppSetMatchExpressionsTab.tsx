@@ -20,9 +20,9 @@ const AppSetMatchExpressionsTab: React.FC<AppSetMatchExpressionsTabProps> = ({
   customData,
 }) => {
   const { t } = useGitOpsTranslation();
-  const index = customData.step !== undefined ? parseInt(customData?.step) - 1 : -1;
+  const index = customData?.step !== undefined ? parseInt(String(customData.step), 10) - 1 : -1;
   if (index >= 0) {
-    const yaml = obj?.spec?.strategy?.rollingSync?.steps[index] || {};
+    const yaml = obj?.spec?.strategy?.rollingSync?.steps?.[index] || {};
     return (
       <>
         <PageSection>
@@ -41,7 +41,7 @@ const AppSetMatchExpressionsTab: React.FC<AppSetMatchExpressionsTabProps> = ({
                 </div>
                 <Card>
                   <CardBody>
-                    <pre>{YamlFormatter.stringify(yaml, null, 2)}</pre>
+                    <pre>{YamlFormatter.stringify(yaml, { indent: 2 })}</pre>
                   </CardBody>
                 </Card>
               </FlexItem>
