@@ -100,7 +100,7 @@ importers:
         version: 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-styles':
         specifier: ^6.4.0
-        version: 6.4.0
+        version: 6.6.1
       '@patternfly/react-table':
         specifier: ^6.4.0
         version: 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -1302,8 +1302,8 @@ packages:
       react: ^17 || ^18 || ^19
       react-dom: ^17 || ^18 || ^19
 
-  '@patternfly/react-styles@6.4.0':
-    resolution: {integrity: sha512-EXmHA67s5sy+Wy/0uxWoUQ52jr9lsH2wV3QcgtvVc5zxpyBX89gShpqv4jfVqaowznHGDoL6fVBBrSe9BYOliQ==}
+  '@patternfly/react-styles@6.6.1':
+    resolution: {integrity: sha512-hwByXA4wSpOIBJFtrYUdkFDIqvzHRP5yzvip/NHDlG0y/kXausOh5Z4m00SbTA6t7Hzudw5eU1lf+IOPCm5C6Q==}
 
   '@patternfly/react-table@6.4.1':
     resolution: {integrity: sha512-dceS5X1I5gmhRfEf6gsLIdFhrQd5hY+SWRIYzEvI19rrdN9VwCVWg+bhSsNv05pQnGs8uOlzYVBI25p7PJtFeA==}
@@ -7097,7 +7097,7 @@ snapshots:
 
   '@patternfly/react-charts@8.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
-      '@patternfly/react-styles': 6.4.0
+      '@patternfly/react-styles': 6.6.1
       '@patternfly/react-tokens': 6.4.0
       hoist-non-react-statics: 3.3.2
       lodash: 4.18.1
@@ -7109,7 +7109,7 @@ snapshots:
     dependencies:
       '@patternfly/react-core': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-icons': 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@patternfly/react-styles': 6.4.0
+      '@patternfly/react-styles': 6.6.1
       '@patternfly/react-table': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
@@ -7118,7 +7118,7 @@ snapshots:
   '@patternfly/react-core@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
       '@patternfly/react-icons': 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@patternfly/react-styles': 6.4.0
+      '@patternfly/react-styles': 6.6.1
       '@patternfly/react-tokens': 6.4.0
       focus-trap: 7.6.4
       react: 17.0.2
@@ -7142,13 +7142,13 @@ snapshots:
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
 
-  '@patternfly/react-styles@6.4.0': {}
+  '@patternfly/react-styles@6.6.1': {}
 
   '@patternfly/react-table@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
       '@patternfly/react-core': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-icons': 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@patternfly/react-styles': 6.4.0
+      '@patternfly/react-styles': 6.6.1
       '@patternfly/react-tokens': 6.4.0
       lodash: 4.18.1
       react: 17.0.2
@@ -7162,7 +7162,7 @@ snapshots:
       '@dagrejs/dagre': 1.1.2
       '@patternfly/react-core': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-icons': 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@patternfly/react-styles': 6.4.0
+      '@patternfly/react-styles': 6.6.1
       '@types/d3': 7.4.3
       '@types/d3-force': 1.2.7
       '@types/react-measure': 2.0.12
