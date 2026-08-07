@@ -333,7 +333,7 @@ const useSyncWindowsRowsDV = (
               ))}
             </div>
           ) : (
-            <span className="pf-v6-u-color-400">{t('All')}</span>
+            <span className="pf-v6-u-text-color-subtle">{t('All')}</span>
           ),
         id: `applications-${index}`,
         dataLabel: t('Applications'),
@@ -349,7 +349,7 @@ const useSyncWindowsRowsDV = (
               ))}
             </div>
           ) : (
-            <span className="pf-v6-u-color-400">{t('All')}</span>
+            <span className="pf-v6-u-text-color-subtle">{t('All')}</span>
           ),
         id: `clusters-${index}`,
         dataLabel: t('Clusters'),
@@ -365,7 +365,7 @@ const useSyncWindowsRowsDV = (
               ))}
             </div>
           ) : (
-            <span className="pf-v6-u-color-400">{t('All')}</span>
+            <span className="pf-v6-u-text-color-subtle">{t('All')}</span>
           ),
         id: `namespaces-${index}`,
         dataLabel: t('Namespaces'),
