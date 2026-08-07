@@ -318,7 +318,7 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
       {
         id: 'actions-' + index,
         cell: <PodRowActions pod={obj} index={index} />,
-        props: { className: 'dropdown-kebab-pf pf-c-table__action' },
+        props: { className: 'dropdown-kebab-pf pf-v6-c-table__action' },
       },
     ]);
   });

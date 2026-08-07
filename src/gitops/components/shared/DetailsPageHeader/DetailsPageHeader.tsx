@@ -73,7 +73,7 @@ const DetailsPageHeader: React.FC<DetailsPageHeaderProps> = ({
       <div>
         <DetailsPageTitle
           breadcrumb={
-            <Breadcrumb className="pf-c-breadcrumb co-breadcrumb">
+            <Breadcrumb className="pf-v6-c-breadcrumb co-breadcrumb">
               <BreadcrumbItem>
                 <Link
                   to={`/k8s/ns/${namespace || DEFAULT_NAMESPACE}/${

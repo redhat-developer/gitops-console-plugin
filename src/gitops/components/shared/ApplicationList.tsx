@@ -378,7 +378,7 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
               namespace={app.metadata.namespace}
               inline={true}
             >
-              <span className="pf-u-pl-sm">
+              <span className="pf-v6-u-pl-sm">
                 {isApplicationRefreshing(app) && <Spinner size="sm" />}
               </span>
             </ResourceLink>

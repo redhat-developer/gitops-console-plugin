@@ -67,7 +67,7 @@ export const Conditions: React.FC<ConditionsProps> = ({ conditions }) => {
         </Table>
       ) : (
         <div className="cos-status-box">
-          <div className="pf-u-text-align-center">
+          <div className="pf-v6-u-text-align-center">
             {t('plugin__gitops-public~No conditions found')}
           </div>
         </div>

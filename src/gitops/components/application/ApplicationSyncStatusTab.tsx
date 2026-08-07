@@ -344,7 +344,7 @@ export const useResourceColumnsDV = (getSortParams: (columnIndex: number) => ThP
       cell: '',
       props: {
         'aria-label': 'actions',
-        className: 'dropdown-kebab-pf pf-c-table__action',
+        className: 'dropdown-kebab-pf pf-v6-c-table__action',
       },
     },
   ];
@@ -410,7 +410,7 @@ const useResourceRowsDV = (
         ),
         props: {
           style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 },
-          className: 'dropdown-kebab-pf pf-c-table__action',
+          className: 'dropdown-kebab-pf pf-v6-c-table__action',
         },
       },
     ]);

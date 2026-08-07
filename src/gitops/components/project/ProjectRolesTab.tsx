@@ -268,7 +268,7 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
           role.groups && role.groups.length > 0 ? (
             <div>
               {role.groups.map((group, idx) => (
-                <Badge key={idx} isRead color="blue" className="pf-u-mr-sm pf-u-mb-sm">
+                <Badge key={idx} isRead color="blue" className="pf-v6-u-mr-sm pf-v6-u-mb-sm">
                   {group}
                 </Badge>
               ))}
@@ -287,7 +287,7 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
                 const formattedDescription = formatPolicyDescription(policy, t);
                 return (
                   <Tooltip key={idx} content={formattedDescription}>
-                    <Badge isRead color="grey" className="pf-u-mr-sm pf-u-mb-sm">
+                    <Badge isRead color="grey" className="pf-v6-u-mr-sm pf-v6-u-mb-sm">
                       {policy}
                     </Badge>
                   </Tooltip>

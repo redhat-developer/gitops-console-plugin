@@ -370,7 +370,7 @@ export const useRolloutsRowsDV = (
               namespace={obj.metadata.namespace}
               inline={true}
             >
-              <span className="pf-u-pl-sm">
+              <span className="pf-v6-u-pl-sm">
                 {isApplicationRefreshing(obj) && <Spinner size="sm" />}
               </span>
             </ResourceLink>
@@ -431,7 +431,7 @@ export const useRolloutsRowsDV = (
           <>
             {obj.status && obj.status.selector ? (
               <span style={{ display: 'inline', alignItems: 'center' }}>
-                <SearchIcon className="pf-u-pr-xs" />
+                <SearchIcon className="pf-v6-u-pr-xs" />
                 <Link
                   to={getSelectorSearchURL(
                     obj.metadata.namespace,
