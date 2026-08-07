@@ -90,7 +90,7 @@ const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj, match }) => {
           </Flex>
           <Flex flex={{ default: 'flex_2' }} direction={{ default: 'column' }}>
             <FlexItem>
-              <DescriptionList className="pf-c-description-list">
+              <DescriptionList className="pf-v6-c-description-list">
                 <DetailsDescriptionGroup
                   title={t('Status')}
                   help={t('Current health status of the ApplicationSet.')}

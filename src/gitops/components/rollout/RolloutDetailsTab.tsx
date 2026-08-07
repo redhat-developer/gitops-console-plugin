@@ -92,7 +92,7 @@ const RolloutDetailsTab: React.FC<RolloutDetailsTabProps> = ({ obj }) => {
           </Flex>
           <Flex flex={{ default: 'flex_2' }} direction={{ default: 'column' }}>
             <FlexItem>
-              <DescriptionList className="pf-c-description-list">
+              <DescriptionList className="pf-v6-c-description-list">
                 <DetailsDescriptionGroup
                   title={t('Replicas')}
                   help={t('The number of desired replicas for the rollout')}

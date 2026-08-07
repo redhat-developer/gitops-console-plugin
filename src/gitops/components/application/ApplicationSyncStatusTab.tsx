@@ -99,7 +99,7 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
         >
           <Flex flex={{ default: 'flex_2' }}>
             <FlexItem>
-              <DescriptionList className="pf-c-description-list">
+              <DescriptionList className="pf-v6-c-description-list">
                 <DetailsDescriptionGroup
                   title={t('Operation')}
                   help={t('The operation that was performed.')}
@@ -118,8 +118,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                     {!obj?.status?.operationState && !obj?.status?.conditions && '-'}
                   </Flex>
                 </DetailsDescriptionGroup>
-                <DescriptionListGroup className="pf-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                <DescriptionListGroup className="pf-v6-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Phase')}</div>}
                       bodyContent={<div>{t('The operation phase.')}</div>}
@@ -134,8 +134,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                   </DescriptionListDescription>
                 </DescriptionListGroup>
 
-                <DescriptionListGroup className="pf-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                <DescriptionListGroup className="pf-v6-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Message')}</div>}
                       bodyContent={<div>{t('The message from the operation.')}</div>}
@@ -152,8 +152,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                   </DescriptionListDescription>
                 </DescriptionListGroup>
 
-                <DescriptionListGroup className="pf-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                <DescriptionListGroup className="pf-v6-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Initiated By')}</div>}
                       bodyContent={<div>{t('Who initiated the operation.')}</div>}
@@ -174,9 +174,9 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
           </Flex>
           <Flex flex={{ default: 'flex_2' }} direction={{ default: 'column' }}>
             <FlexItem>
-              <DescriptionList className="pf-c-description-list">
-                <DescriptionListGroup className="pf-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+              <DescriptionList className="pf-v6-c-description-list">
+                <DescriptionListGroup className="pf-v6-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Started At')}</div>}
                       bodyContent={<div>{t('When the operation was started.')}</div>}
@@ -191,8 +191,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                   </DescriptionListDescription>
                 </DescriptionListGroup>
 
-                <DescriptionListGroup className="pf-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                <DescriptionListGroup className="pf-v6-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Duration')}</div>}
                       bodyContent={<div>{t('How long the operation took to complete.')}</div>}
@@ -217,8 +217,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                   </DescriptionListDescription>
                 </DescriptionListGroup>
 
-                <DescriptionListGroup className="pf-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-c-description-list__term">
+                <DescriptionListGroup className="pf-v6-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Finished At')}</div>}
                       bodyContent={<div>{t('When the operation was finished.')}</div>}
