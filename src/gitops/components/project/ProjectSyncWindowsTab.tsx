@@ -327,13 +327,13 @@ const useSyncWindowsRowsDV = (
           window.applications && window.applications.length > 0 ? (
             <div>
               {window.applications.map((app, idx) => (
-                <Badge key={idx} isRead color="grey" className="pf-u-mr-sm pf-u-mb-sm">
+                <Badge key={idx} isRead color="grey" className="pf-v6-u-mr-sm pf-v6-u-mb-sm">
                   {app}
                 </Badge>
               ))}
             </div>
           ) : (
-            <span className="pf-u-color-400">{t('All')}</span>
+            <span className="pf-v6-u-color-400">{t('All')}</span>
           ),
         id: `applications-${index}`,
         dataLabel: t('Applications'),
@@ -343,13 +343,13 @@ const useSyncWindowsRowsDV = (
           window.clusters && window.clusters.length > 0 ? (
             <div>
               {window.clusters.map((cluster, idx) => (
-                <Badge key={idx} isRead color="grey" className="pf-u-mr-sm pf-u-mb-sm">
+                <Badge key={idx} isRead color="grey" className="pf-v6-u-mr-sm pf-v6-u-mb-sm">
                   {cluster}
                 </Badge>
               ))}
             </div>
           ) : (
-            <span className="pf-u-color-400">{t('All')}</span>
+            <span className="pf-v6-u-color-400">{t('All')}</span>
           ),
         id: `clusters-${index}`,
         dataLabel: t('Clusters'),
@@ -359,13 +359,13 @@ const useSyncWindowsRowsDV = (
           window.namespaces && window.namespaces.length > 0 ? (
             <div>
               {window.namespaces.map((ns, idx) => (
-                <Badge key={idx} isRead color="grey" className="pf-u-mr-sm pf-u-mb-sm">
+                <Badge key={idx} isRead color="grey" className="pf-v6-u-mr-sm pf-v6-u-mb-sm">
                   {ns}
                 </Badge>
               ))}
             </div>
           ) : (
-            <span className="pf-u-color-400">{t('All')}</span>
+            <span className="pf-v6-u-color-400">{t('All')}</span>
           ),
         id: `namespaces-${index}`,
         dataLabel: t('Namespaces'),

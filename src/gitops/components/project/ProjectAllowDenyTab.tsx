@@ -30,7 +30,7 @@ import ResourceAllowDenyList from './ResourceAllowDenyList';
 const renderStringArray = (items: string[] | undefined, t: (key: string) => string) => {
   if (items && items.length > 0) {
     return (
-      <List isPlain className="pf-u-mt-sm">
+      <List isPlain className="pf-v6-u-mt-sm">
         {items.map((el, idx) => {
           const denyRule = isDenyRule(el);
           const displayValue = getDisplayValue(el);
@@ -38,14 +38,14 @@ const renderStringArray = (items: string[] | undefined, t: (key: string) => stri
             <ListItem key={idx}>
               {denyRule ? (
                 <span>
-                  <Badge isRead color="red" className="pf-u-mr-sm">
+                  <Badge isRead color="red" className="pf-v6-u-mr-sm">
                     {t('Deny')}
                   </Badge>
                   <code>{displayValue}</code>
                 </span>
               ) : (
                 <span>
-                  <Badge isRead color="green" className="pf-u-mr-sm">
+                  <Badge isRead color="green" className="pf-v6-u-mr-sm">
                     {t('Allow')}
                   </Badge>
                   <code>{displayValue}</code>
@@ -57,7 +57,7 @@ const renderStringArray = (items: string[] | undefined, t: (key: string) => stri
       </List>
     );
   } else {
-    return <div className="pf-u-text-align-center pf-u-mt-sm">{'-'}</div>;
+    return <div className="pf-v6-u-text-align-center pf-v6-u-mt-sm">{'-'}</div>;
   }
 };
 

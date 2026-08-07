@@ -24,7 +24,7 @@ export const ConditionsPopover: React.FC<ConditionsPopoverProps> = ({ conditions
       headerContent={<div>Application Conditions</div>}
       bodyContent={
         <div>
-          <div className="pf-u-pt-sm pf-u-pb-md">
+          <div className="pf-v6-u-pt-sm pf-v6-u-pb-md">
             A list of currently observed application conditions
           </div>
 
@@ -38,7 +38,7 @@ export const ConditionsPopover: React.FC<ConditionsPopoverProps> = ({ conditions
           >
             {conditions.map((condition) => (
               <StatusPopupItem value={condition.type} key={condition.type}>
-                <span className="pf-u-pr-md">{condition.message}</span>
+                <span className="pf-v6-u-pr-md">{condition.message}</span>
               </StatusPopupItem>
             ))}
           </StatusPopupSection>
