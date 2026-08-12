@@ -19,7 +19,12 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { ThProps } from '@patternfly/react-table';
@@ -161,13 +166,14 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState
-            headingLevel="h4"
-            icon={CubesIcon}
-            titleText={
-              searchQuery ? t('No matching Argo CD App Projects') : t('No Argo CD App Projects')
-            }
-          >
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={
+                searchQuery ? t('No matching Argo CD App Projects') : t('No Argo CD App Projects')
+              }
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>{getEmptyStateBody()}</EmptyStateBody>
           </EmptyState>
         </Td>
@@ -179,8 +185,8 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
       <Tr key="loading" ouiaId={'table-tr-loading'}>
         <Td colSpan={columnsDV.length}>
           <ErrorState
-            titleText={t('Unable to load data')}
-            bodyText={t(
+            errorTitle={t('Unable to load data')}
+            errorDescription={t(
               'There was an error retrieving App Projects. Check your connection and reload the page.',
             )}
           />
@@ -209,7 +215,6 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
               <ShowOperandsInAllNamespacesRadioGroup />
             ) : null
           }
-          hideFavoriteButton={false}
         >
           <ListPageCreate groupVersionKind={modelToRef(AppProjectModel)}>
             {t('Create AppProject')}

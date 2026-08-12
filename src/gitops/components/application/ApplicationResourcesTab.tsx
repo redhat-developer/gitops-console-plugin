@@ -10,7 +10,7 @@ import { useUserSettings } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Flex,
   FlexItem,
-  PageBody,
+  // PageBody,
   PageSection,
   PageSectionVariants,
   Title,
@@ -87,22 +87,22 @@ const ApplicationResourcesTab: React.FC<ApplicationResourcesTabProps> = ({ obj }
             )}
           </FlexItem>
         </Flex>
-        <PageBody>
-          <Flex style={{ marginTop: '15px' }} flex={{ default: 'flexDefault' }}>
-            <FlexItem>
-              <ArgoCDLink href={argoURL} />
-            </FlexItem>
-          </Flex>
-          {obj?.metadata && (
-            <ApplicationResourcesView
-              application={obj}
-              resources={resources}
-              viewType={viewType}
-              onViewChange={onViewChange}
-              argoBaseURL={argoURL}
-            />
-          )}
-        </PageBody>
+        {/* <PageBody> */}
+        <Flex style={{ marginTop: '15px' }} flex={{ default: 'flexDefault' }}>
+          <FlexItem>
+            <ArgoCDLink href={argoURL} />
+          </FlexItem>
+        </Flex>
+        {obj?.metadata && (
+          <ApplicationResourcesView
+            application={obj}
+            resources={resources}
+            viewType={viewType}
+            onViewChange={onViewChange}
+            argoBaseURL={argoURL}
+          />
+        )}
+        {/* </PageBody> */}
       </PageSection>
     </div>
   );

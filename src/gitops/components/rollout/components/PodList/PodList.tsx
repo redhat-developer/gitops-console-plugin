@@ -24,7 +24,12 @@ import {
   useListPageFilter,
   usePrometheusPoll,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
@@ -318,7 +323,7 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
       {
         id: 'actions-' + index,
         cell: <PodRowActions pod={obj} index={index} />,
-        props: { className: 'dropdown-kebab-pf pf-v6-c-table__action' },
+        props: { className: 'dropdown-kebab-pf pf-v5-c-table__action' },
       },
     ]);
   });
@@ -451,7 +456,12 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No pods')}>
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={t('No pods')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>{t('There are no pods associated with the rollout.')}</EmptyStateBody>
           </EmptyState>
         </Td>
@@ -472,11 +482,7 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
 
   return (
     <div>
-      <ListPageHeader
-        title={'Pods'}
-        hideFavoriteButton={true}
-        badge={topologyLink(topologyUrl, t)}
-      />
+      <ListPageHeader title={'Pods'} badge={topologyLink(topologyUrl, t)} />
       <ListPageBody>
         <ListPageFilter
           data={data}

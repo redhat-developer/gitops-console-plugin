@@ -128,7 +128,7 @@ const DataEdge: React.FC<DataEdgeProps> = observer(({ element, ...rest }) => {
       edgeStyle={EdgeStyle.dashedMd}
       endTerminalType={EdgeTerminalType.directional}
       animationDuration={0.8}
-      canDrop={false}
+      // canDrop={false}
       tagStatus={
         // eslint-disable-next-line no-nested-ternary
         overallState === 'healthy'
@@ -356,14 +356,6 @@ type TopologySideBarParams = {
   applicationSet: ApplicationSetKind;
 };
 
-const PAGES = [
-  {
-    href: '',
-    name: t('Match Expressions'),
-    component: AppSetMatchExpressionsTab,
-  },
-];
-
 const getTopologySideBar = ({
   show,
   onClose,
@@ -381,13 +373,19 @@ const getTopologySideBar = ({
   const renderSidebarContent = () => {
     if (selectedNode === undefined) return <div></div>;
     if (isStepGroup) {
+      const selectedStep = selectedNode?.getData().step;
+      const pages = [
+        {
+          href: '',
+          name: t('Match Expressions'),
+          component: (props) => (
+            <AppSetMatchExpressionsTab {...props} customData={{ step: selectedStep }} />
+          ),
+        },
+      ];
       return (
         <div>
-          <HorizontalNav
-            pages={PAGES}
-            resource={applicationSet}
-            customData={{ step: selectedNode?.getData().step }}
-          />
+          <HorizontalNav pages={pages} resource={applicationSet} />
         </div>
       );
     }
@@ -403,9 +401,9 @@ const getTopologySideBar = ({
           >
             <Flex flex={{ default: 'flex_2' }}>
               <FlexItem fullWidth={{ default: 'fullWidth' }}>
-                <DescriptionList className="pf-v6-c-description-list">
-                  <DescriptionListGroup className="pf-v6-c-description-list__group">
-                    <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
+                <DescriptionList className="pf-v5-c-description-list">
+                  <DescriptionListGroup className="pf-v5-c-description-list__group">
+                    <DescriptionListTermHelpText className="pf-v5-c-description-list__term">
                       <Popover
                         headerContent={<div>{t('Name')}</div>}
                         bodyContent={<div>{t('Name must be unique within a namespace.')}</div>}

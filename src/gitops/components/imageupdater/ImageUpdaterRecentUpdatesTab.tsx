@@ -5,6 +5,8 @@ import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
 import {
   EmptyState,
   EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
   PageSection,
   PageSectionVariants,
   Title,
@@ -51,7 +53,12 @@ const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> 
     <Tbody>
       <Tr key="empty" ouiaId="table-tr-empty">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No recent updates')}>
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={t('No recent updates')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>
               {t('No image updates have been recorded in the most recent reconciliation cycle.')}
             </EmptyStateBody>

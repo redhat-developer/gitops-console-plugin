@@ -3,17 +3,17 @@
   border: none !important;
   padding: 0 !important;
   min-width: auto !important;
-  color: var(--pf-t--global--text--color--regular) !important;
+  color: var(--pf-v5-global--Color--100) !important;
   
   &:hover,
   &:focus,
   &:active {
     background-color: transparent !important;
     border: none !important;
-    color: var(--pf-t--global--text--color--regular) !important;
+    color: var(--pf-v5-global--Color--100) !important;
   }
   
-  .pf-v6-c-button__icon {
+  .pf-v5-c-button__icon {
     margin: 0 !important;
   }
   

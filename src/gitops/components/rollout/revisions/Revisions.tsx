@@ -177,7 +177,7 @@ const getRowsDV = (
           namespace={obj.metadata?.namespace}
           inline={true}
         >
-          <span className="pf-v6-u-pl-sm">
+          <span className="pf-v5-u-pl-sm">
             {isApplicationRefreshing(obj) && <Spinner size="sm" />}
           </span>
         </ResourceLink>
@@ -284,7 +284,7 @@ const getRowsDV = (
                       );
                       return time <= 0 ? null : (
                         <span>
-                          <Label color="yellow">
+                          <Label style={{ color: 'yellow' }}>
                             <span style={{ marginRight: '5px' }}>{t('Scaling down in:')}</span>
                             <span>{formatDuration(time, 2)}</span>
                             <i style={{ marginLeft: '5px' }} className="fa fa-clock" />
@@ -354,7 +354,7 @@ export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods
       <Flex
         justifyContent={{ default: 'justifyContentFlexEnd' }}
         direction={{ default: 'column', sm: 'column', md: 'row', lg: 'row', xl: 'row' }}
-        // className='pf-v6-c-table__td pf-v6-c-table__tree-view-title-cell'
+        // className='pf-v5-c-table__td pf-v5-c-table__tree-view-title-cell'
         style={{ marginLeft: '20px', marginRight: '20px' }}
       >
         <Flex flex={{ default: 'flex_4', sm: 'flex_1' }} direction={{ default: 'column' }}>
@@ -367,8 +367,8 @@ export const Revisions: React.FC<RevisionsProps> = ({ rollout, replicaSets, pods
         <Flex>
           <FlexItem>
             <Toolbar>
-              <ToolbarContent rowWrap={{ default: 'nowrap' }}>
-                <ToolbarGroup variant="action-group">
+              <ToolbarContent>
+                <ToolbarGroup>
                   <ToolbarItem>
                     <Button
                       variant="primary"
@@ -519,7 +519,7 @@ const getStatusSection = (statuses: ReplicaSetStatus[]) => {
         </Label>
       )}
       {statuses.includes(ReplicaSetStatus.Canary) && (
-        <Label variant="outline" color="yellow" icon={<MigrationIcon />}>
+        <Label variant="outline" style={{ color: 'yellow' }} icon={<MigrationIcon />}>
           {t('Canary')}
         </Label>
       )}

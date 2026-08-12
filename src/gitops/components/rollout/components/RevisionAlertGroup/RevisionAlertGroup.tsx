@@ -21,13 +21,13 @@ export const RevisionAlertGroup: React.FC<RevisionAlertGroupProps> = ({ alerts, 
   const { t } = useGitOpsTranslation();
 
   return (
-    <AlertGroup isToast hasAnimations isLiveRegion>
+    <AlertGroup isToast isLiveRegion>
       {alerts.map(({ key, title, message, details, variant }) => (
         <Alert
           key={key}
           variant={variant}
           title={title}
-          isExpandable={true}
+          timeout
           onTimeout={() => onRemove(key)}
           actionClose={
             <AlertActionCloseButton aria-label={t('Close')} onClose={() => onRemove(key)} />

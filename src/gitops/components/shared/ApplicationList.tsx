@@ -16,7 +16,16 @@ import {
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody, Flex, FlexItem, Spinner, Title } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
+  Flex,
+  FlexItem,
+  Spinner,
+  Title,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
@@ -157,7 +166,12 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No Argo CD Applications')}>
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={t('No Argo CD Applications')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>
               {(() => {
                 if (!loaded) {
@@ -194,8 +208,8 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       <Tr key="loading-error" ouiaId={'table-tr-loading-error'}>
         <Td colSpan={columnsDV.length}>
           <ErrorState
-            titleText={t('Unable to load data')}
-            bodyText={t(
+            errorTitle={t('Unable to load data')}
+            errorDescription={t(
               'There was an error retrieving applications. Check your connection and reload the page.',
             )}
           />
@@ -222,7 +236,6 @@ const ApplicationList: React.FC<ApplicationProps> = ({
               <ShowOperandsInAllNamespacesRadioGroup />
             ) : null
           }
-          hideFavoriteButton={false}
         >
           <ListPageCreate groupVersionKind={modelToRef(ApplicationModel)}>
             Create Application
@@ -378,7 +391,7 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
               namespace={app.metadata.namespace}
               inline={true}
             >
-              <span className="pf-v6-u-pl-sm">
+              <span className="pf-v5-u-pl-sm">
                 {isApplicationRefreshing(app) && <Spinner size="sm" />}
               </span>
             </ResourceLink>

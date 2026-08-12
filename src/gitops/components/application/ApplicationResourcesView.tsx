@@ -15,6 +15,8 @@ import {
 import {
   EmptyState,
   EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
   Flex,
   FlexItem,
   Stack,
@@ -87,7 +89,12 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No resources')}>
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={t('No resources')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>
               {resources.length === 0
                 ? t('There are no resources associated with the application.')

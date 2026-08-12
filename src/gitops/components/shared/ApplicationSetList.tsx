@@ -14,7 +14,12 @@ import {
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
 import { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
 import { CubesIcon } from '@patternfly/react-icons';
@@ -213,15 +218,16 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState
-            headingLevel="h4"
-            icon={CubesIcon}
-            titleText={
-              searchQuery
-                ? t('No matching Argo CD ApplicationSets')
-                : t('No Argo CD ApplicationSets')
-            }
-          >
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={
+                searchQuery
+                  ? t('No matching Argo CD ApplicationSets')
+                  : t('No Argo CD ApplicationSets')
+              }
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>{getEmptyStateBody()}</EmptyStateBody>
           </EmptyState>
         </Td>
@@ -234,8 +240,8 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
       <Tr key="loading" ouiaId={'table-tr-loading'}>
         <Td colSpan={columnsDV.length}>
           <ErrorState
-            titleText={t('Unable to load data')}
-            bodyText={t(
+            errorTitle={t('Unable to load data')}
+            errorDescription={t(
               'There was an error retrieving applicationsets. Check your connection and reload the page.',
             )}
           />
@@ -268,7 +274,6 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
               <ShowOperandsInAllNamespacesRadioGroup />
             ) : null
           }
-          hideFavoriteButton={false}
         >
           <ListPageCreate groupVersionKind={modelToRef(ApplicationSetModel)}>
             {t('Create ApplicationSet')}

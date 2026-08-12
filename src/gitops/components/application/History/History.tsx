@@ -9,7 +9,12 @@ import { getApplicationArgoUrl } from '@gitops/utils/gitops';
 import { repoUrl } from '@gitops/utils/urls';
 import { ApplicationHistory, ApplicationKind } from '@gitops-models/ApplicationModel';
 import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
-import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
@@ -46,7 +51,12 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No history')}>
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={t('No history')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>
               {t('There is no history associated with the application.')}
             </EmptyStateBody>

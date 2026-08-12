@@ -24,7 +24,7 @@ export const ConditionsPopover: React.FC<ConditionsPopoverProps> = ({ conditions
       headerContent={<div>Application Conditions</div>}
       bodyContent={
         <div>
-          <div className="pf-v6-u-pt-sm pf-v6-u-pb-md">
+          <div className="pf-v5-u-pt-sm pf-v5-u-pb-md">
             A list of currently observed application conditions
           </div>
 
@@ -38,7 +38,7 @@ export const ConditionsPopover: React.FC<ConditionsPopoverProps> = ({ conditions
           >
             {conditions.map((condition) => (
               <StatusPopupItem value={condition.type} key={condition.type}>
-                <span className="pf-v6-u-pr-md">{condition.message}</span>
+                <span className="pf-v5-u-pr-md">{condition.message}</span>
               </StatusPopupItem>
             ))}
           </StatusPopupSection>
@@ -49,15 +49,15 @@ export const ConditionsPopover: React.FC<ConditionsPopoverProps> = ({ conditions
         {summary.error > 0 && (
           <div>
             <RedExclamationCircleIcon />
-            <span className="pf-v6-u-ml-sm">
+            <span className="pf-v5-u-ml-sm">
               {summary.error == 1 ? '1 Error' : summary.error + ' Errors'}
             </span>
           </div>
         )}
         {summary.warning > 0 && (
-          <div className={summary.error > 0 ? 'pf-v6-u-pl-sm' : ''}>
+          <div className={summary.error > 0 ? 'pf-v5-u-pl-sm' : ''}>
             <YellowExclamationTriangleIcon />
-            <span className="pf-v6-u-ml-sm">
+            <span className="pf-v5-u-ml-sm">
               {summary.warning == 1 ? '1 Warning' : summary.warning + ' Warnings'}
             </span>
           </div>
@@ -65,7 +65,7 @@ export const ConditionsPopover: React.FC<ConditionsPopoverProps> = ({ conditions
         {summary.info > 0 && (
           <div className={summary.error > 0 || summary.warning > 0 ? 'pf-v6u-pl-sm' : ''}>
             <BlueInfoCircleIcon />
-            <span className="pf-v6-u-ml-sm">
+            <span className="pf-v5-u-ml-sm">
               {summary.info == 1 ? '1 Notice' : summary.info + ' Notices'}
             </span>
           </div>

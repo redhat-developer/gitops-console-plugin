@@ -1,6 +1,11 @@
 import * as React from 'react';
 
-import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 
@@ -44,7 +49,12 @@ const ResourceAllowDenyList: React.FC<ResourceAllowDenyListProps> = ({ list }) =
           </Table>
         </div>
       ) : (
-        <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No resources configured')}>
+        <EmptyState>
+          <EmptyStateHeader
+            headingLevel="h4"
+            titleText={t('No resources configured')}
+            icon={<EmptyStateIcon icon={CubesIcon} />}
+          />
           <EmptyStateBody>{t('This list does not have any resources configured.')}</EmptyStateBody>
         </EmptyState>
       )}

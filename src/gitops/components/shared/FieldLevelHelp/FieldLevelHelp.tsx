@@ -42,7 +42,7 @@ export const FieldLevelHelp: React.FC<FieldLevelHelpProps> = ({
           }}
         >
           <OutlinedQuestionCircleIcon
-            className="pf-v6-svg co-field-level-help_icon"
+            className="pf-v5-svg co-field-level-help_icon"
             style={{
               fontSize: '0.75rem',
               width: '0.75rem',

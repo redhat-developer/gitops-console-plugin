@@ -13,8 +13,8 @@ import {
   TextInput,
   Tooltip,
 } from '@patternfly/react-core';
-import { ModalVariant } from '@patternfly/react-core/deprecated';
-import { Modal as PfModal, ModalProps as PfModalProps } from '@patternfly/react-core/deprecated';
+import { ModalVariant } from '@patternfly/react-core';
+import { Modal as PfModal, ModalProps as PfModalProps } from '@patternfly/react-core';
 import { OutlinedStarIcon, StarIcon } from '@patternfly/react-icons';
 
 import { useUserSettingsCompatibility } from './useUserSettingsCompatibility';

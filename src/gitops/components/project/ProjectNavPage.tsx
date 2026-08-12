@@ -97,8 +97,8 @@ const ProjectNavPage: React.FC<ProjectPageProps> = ({ name, namespace, kind }) =
         </div>
       ) : loadError ? (
         <ErrorState
-          titleText={t('Unable to load data')}
-          bodyText={t(
+          errorTitle={t('Unable to load data')}
+          errorDescription={t(
             'There was an error retrieving the AppProject. Check your connection and reload the page.',
           )}
         />

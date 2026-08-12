@@ -117,11 +117,11 @@
 }
 
 // Force dashed border styling for labels in ApplicationSet details
-.pf-v6-c-description-list__description .co-label-group {
-  border: 1px dashed var(--pf-v6-global--BorderColor--200) !important;
-  border-radius: var(--pf-v6-global--BorderRadius--sm) !important;
-  padding: var(--pf-v6-global--spacer--sm) !important;
-  min-height: var(--pf-v6-global--spacer--lg) !important;
+.pf-v5-c-description-list__description .co-label-group {
+  border: 1px dashed var(--pf-v5-global--BorderColor--200) !important;
+  border-radius: var(--pf-v5-global--BorderRadius--sm) !important;
+  padding: var(--pf-v5-global--spacer--sm) !important;
+  min-height: var(--pf-v5-global--spacer--lg) !important;
   display: flex !important;
   align-items: center !important;
   width: fit-content !important;

@@ -305,26 +305,25 @@ export const StepGroupComponent: React.FC<
     <DefaultGroup
       element={element}
       className={css('gitops-step-group', selected && 'pf-m-selected')}
-      borderRadius={5}
+      // borderRadius={5}
       collapsible={true}
       hulledOutline={true}
-      showLabelOnHover={false}
       showLabel={true}
       truncateLength={20}
-      hideContextMenuKebab={false}
+      // hideContextMenuKebab={false}
       labelPosition={LabelPosition.top}
       badgeLocation={BadgeLocation.inner}
-      badgeColor="var(--pf-t--global--background--color--floating--default)"
+      badgeColor="var(--pf-v5-global--BackgroundColor--100)"
       badgeBorderColor={RESOURCE_COLORS.get(
         RESOURCE_BADGE_COLORS.get('.co-m-resource-application'),
       )}
-      badgeTextColor="var(--pf-t--global--text--color--regular)"
+      badgeTextColor="var(--pf-v5-global--Color--100)"
       badge={t('Step {{x}}', { x: element.getData().step })}
       collapsedShadowOffset={0}
       collapsedWidth={300}
       collapsedHeight={50}
       getCollapsedShape={() => DummyShape}
-      labelClassName={css('gitops-step-group-label', selected && 'pf-m-selected')}
+      // labelClassName={css('gitops-step-group-label', selected && 'pf-m-selected')}
       onCollapseChange={handleCollapseChange}
       onContextMenu={handleContextMenu}
       contextMenuOpen={contextMenuOpen}

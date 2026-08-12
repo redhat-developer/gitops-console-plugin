@@ -104,7 +104,7 @@ const ProjectDetailsTab: React.FC<ProjectDetailsTabProps> = ({ obj, match }) => 
           </Flex>
           <Flex flex={{ default: 'flex_2' }} direction={{ default: 'column' }}>
             <FlexItem>
-              <DescriptionList className="pf-v6-c-description-list">
+              <DescriptionList className="pf-v5-c-description-list">
                 {isDefaultProject && (
                   <DetailsDescriptionGroup
                     title={t('Project Type')}

@@ -70,8 +70,8 @@ const ImageUpdaterNavPage: React.FC<ImageUpdaterPageProps> = ({ name, namespace,
         </div>
       ) : loadError ? (
         <ErrorState
-          titleText={t('Unable to load data')}
-          bodyText={t(
+          errorTitle={t('Unable to load data')}
+          errorDescription={t(
             'There was an error retrieving the ImageUpdater. Check your connection and reload the page.',
           )}
         />

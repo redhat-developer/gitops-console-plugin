@@ -151,7 +151,7 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
         data-test-selector={`details-item-label__${label}`}
         className={labelClassName}
       >
-        <Split className="pf-v6-u-w-100">
+        <Split className="pf-v5-u-w-100">
           <SplitItem isFilled>
             {popoverContent || path ? (
               <Popover

@@ -2,7 +2,15 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
-import { Badge, EmptyState, EmptyStateBody, PageSection, Title } from '@patternfly/react-core';
+import {
+  Badge,
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
+  PageSection,
+  Title,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { ThProps } from '@patternfly/react-table';
@@ -66,11 +74,12 @@ const ProjectSyncWindowsTab: React.FC<ProjectSyncWindowsTabProps> = ({ obj }) =>
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState
-            headingLevel="h4"
-            icon={CubesIcon}
-            titleText={t('No sync windows configured')}
-          >
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={t('No sync windows configured')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>
               {t('This AppProject does not have any sync windows configured.')}
             </EmptyStateBody>
@@ -327,13 +336,13 @@ const useSyncWindowsRowsDV = (
           window.applications && window.applications.length > 0 ? (
             <div>
               {window.applications.map((app, idx) => (
-                <Badge key={idx} isRead color="grey" className="pf-v6-u-mr-sm pf-v6-u-mb-sm">
+                <Badge key={idx} isRead color="grey" className="pf-v5-u-mr-sm pf-v5-u-mb-sm">
                   {app}
                 </Badge>
               ))}
             </div>
           ) : (
-            <span className="pf-v6-u-text-color-subtle">{t('All')}</span>
+            <span className="pf-v5-u-color-200">{t('All')}</span>
           ),
         id: `applications-${index}`,
         dataLabel: t('Applications'),
@@ -343,13 +352,13 @@ const useSyncWindowsRowsDV = (
           window.clusters && window.clusters.length > 0 ? (
             <div>
               {window.clusters.map((cluster, idx) => (
-                <Badge key={idx} isRead color="grey" className="pf-v6-u-mr-sm pf-v6-u-mb-sm">
+                <Badge key={idx} isRead color="grey" className="pf-v5-u-mr-sm pf-v5-u-mb-sm">
                   {cluster}
                 </Badge>
               ))}
             </div>
           ) : (
-            <span className="pf-v6-u-text-color-subtle">{t('All')}</span>
+            <span className="pf-v5-u-color-200">{t('All')}</span>
           ),
         id: `clusters-${index}`,
         dataLabel: t('Clusters'),
@@ -359,13 +368,13 @@ const useSyncWindowsRowsDV = (
           window.namespaces && window.namespaces.length > 0 ? (
             <div>
               {window.namespaces.map((ns, idx) => (
-                <Badge key={idx} isRead color="grey" className="pf-v6-u-mr-sm pf-v6-u-mb-sm">
+                <Badge key={idx} isRead color="grey" className="pf-v5-u-mr-sm pf-v5-u-mb-sm">
                   {ns}
                 </Badge>
               ))}
             </div>
           ) : (
-            <span className="pf-v6-u-text-color-subtle">{t('All')}</span>
+            <span className="pf-v5-u-color-200">{t('All')}</span>
           ),
         id: `namespaces-${index}`,
         dataLabel: t('Namespaces'),

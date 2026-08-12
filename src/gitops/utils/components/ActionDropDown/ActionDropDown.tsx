@@ -35,10 +35,9 @@ const ActionsDropdown: React.FC<ActionsDropdownProps> = ({
   };
 
   const Toggle = isKebabToggle
-    ? KebabToggle({ isExpanded: isOpen, onClick: onToggle })
+    ? KebabToggle({ onClick: onToggle })
     : DropdownToggle({
         children: t('Actions'),
-        isExpanded: isOpen,
         onClick: onToggle,
       });
 
