@@ -1,19 +1,19 @@
 // PF6 DataViewTh applies modifier="truncate" on headers. With table-layout: fixed, truncation
 // must happen on the sort-button label text so TableText can detect overflow and show tooltips.
 @mixin gitops-project-list-sortable-header-tooltip {
-  .pf-v6-c-table__button {
+  .pf-v5-c-table__button {
     width: 100%;
     max-width: 100%;
     min-width: 0;
   }
 
-  .pf-v6-c-table__button-content {
+  .pf-v5-c-table__button-content {
     width: 100%;
     max-width: 100%;
     min-width: 0;
   }
 
-  .pf-v6-c-table__text {
+  .pf-v5-c-table__text {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -24,17 +24,18 @@
 }
 
 @mixin gitops-project-list-full-header {
-  --pf-v6-c-table--cell--MaxWidth: none;
-  --pf-v6-c-table--m-truncate--cell--MaxWidth: none;
-  --pf-v6-c-table--cell--Overflow: visible;
-  --pf-v6-c-table--cell--TextOverflow: clip;
-  --pf-v6-c-table--cell--WhiteSpace: nowrap;
+  --pf-v5-c-table--cell--MaxWidth: none;
+  --pf-v5-c-table--m-truncate--cell--MaxWidth: none;
+  --pf-v5-c-table--cell--Overflow: visible;
+  --pf-v5-c-table--cell--TextOverflow: clip;
+  --pf-v5-c-table--cell--WhiteSpace: nowrap;
+
   max-width: none !important;
   overflow: visible !important;
 
-  .pf-v6-c-table__button,
-  .pf-v6-c-table__button-content,
-  .pf-v6-c-table__text {
+  .pf-v5-c-table__button,
+  .pf-v5-c-table__button-content,
+  .pf-v5-c-table__text {
     overflow: visible;
     text-overflow: clip;
     max-width: none;
@@ -43,7 +44,7 @@
 }
 
 .gitops-project-list {
-  .pf-v6-c-table {
+  .pf-v5-c-table {
     table-layout: fixed;
     width: 100%;
   }

@@ -29,8 +29,8 @@ const ClusterGenerator: React.FC<ClusterGeneratorProps> = ({ generator }) => {
                   whiteSpace: 'pre-wrap',
                   wordBreak: 'break-word',
                   padding: '8px',
-                  backgroundColor: 'var(--pf-t--global--background--color--secondary--default)',
-                  border: '1px solid var(--pf-t--global--border--color--default)',
+                  backgroundColor: 'var(--pf-v5-global--BackgroundColor--200)',
+                  border: '1px solid var(--pf-v5-global--BorderColor--100)',
                   borderRadius: '4px',
                 }}
               >

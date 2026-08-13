@@ -21,7 +21,13 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody, Spinner } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
+  Spinner,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon, SearchIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
@@ -138,7 +144,12 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No Argo Rollouts')}>
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={t('No Argo Rollouts')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>
               {namespace
                 ? t('There are no Argo Rollouts in this project.')
@@ -154,8 +165,8 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
       <Tr key="loading" ouiaId={'table-tr-loading'}>
         <Td colSpan={columnsDV.length}>
           <ErrorState
-            titleText={t('Unable to load data')}
-            bodyText={t(
+            errorTitle={t('Unable to load data')}
+            errorDescription={t(
               'There was an error retrieving rollouts. Check your connection and reload the page.',
             )}
           />
@@ -370,7 +381,7 @@ export const useRolloutsRowsDV = (
               namespace={obj.metadata.namespace}
               inline={true}
             >
-              <span className="pf-v6-u-pl-sm">
+              <span className="pf-v5-u-pl-sm">
                 {isApplicationRefreshing(obj) && <Spinner size="sm" />}
               </span>
             </ResourceLink>
@@ -431,7 +442,7 @@ export const useRolloutsRowsDV = (
           <>
             {obj.status && obj.status.selector ? (
               <span style={{ display: 'inline', alignItems: 'center' }}>
-                <SearchIcon className="pf-v6-u-pr-xs" />
+                <SearchIcon className="pf-v5-u-pr-xs" />
                 <Link
                   to={getSelectorSearchURL(
                     obj.metadata.namespace,

@@ -39,8 +39,8 @@ const RolloutRevisionsTab: React.FC<RolloutRevisionsTabProps> = ({ obj: rollout 
   const error = (
     <FlexItem>
       <ErrorState
-        titleText={t('Unable to load data')}
-        bodyText={t(
+        errorTitle={t('Unable to load data')}
+        errorDescription={t(
           'There was an error retrieving the rollout revisions. Check your connection and reload the page.',
         )}
       />

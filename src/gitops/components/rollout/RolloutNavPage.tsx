@@ -96,8 +96,8 @@ const RolloutNavPage: React.FC<RolloutPageProps> = ({ name, namespace, kind }) =
         </div>
       ) : loadError ? (
         <ErrorState
-          titleText={t('Unable to load data')}
-          bodyText={t(
+          errorTitle={t('Unable to load data')}
+          errorDescription={t(
             'There was an error retrieving the rollout. Check your connection and reload the page.',
           )}
         />

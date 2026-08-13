@@ -6,6 +6,8 @@ import {
   Badge,
   EmptyState,
   EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
   PageSection,
   Title,
   Tooltip,
@@ -56,7 +58,7 @@ const formatPolicyDescription = (policy: string, t: (key: string) => string): Re
           <>
             <i
               className="fas fa-check-circle"
-              style={{ color: 'var(--pf-t--global--icon--color--status--success--default)' }}
+              style={{ color: 'var(--pf-v5-global--success-color--100)' }}
             />{' '}
             {t('Allow')}
           </>
@@ -64,7 +66,7 @@ const formatPolicyDescription = (policy: string, t: (key: string) => string): Re
           <>
             <i
               className="fas fa-times-circle"
-              style={{ color: 'var(--pf-t--global--icon--color--status--danger--default)' }}
+              style={{ color: 'var(--pf-v5-global--danger-color--100)' }}
             />{' '}
             {t('Deny')}
           </>
@@ -116,7 +118,12 @@ const ProjectRolesTab: React.FC<ProjectRolesTabProps> = ({ obj }) => {
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No roles configured')}>
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={t('No roles configured')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>
               {t('This AppProject does not have any roles configured.')}
             </EmptyStateBody>
@@ -268,7 +275,7 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
           role.groups && role.groups.length > 0 ? (
             <div>
               {role.groups.map((group, idx) => (
-                <Badge key={idx} isRead color="blue" className="pf-v6-u-mr-sm pf-v6-u-mb-sm">
+                <Badge key={idx} isRead color="blue" className="pf-v5-u-mr-sm pf-v5-u-mb-sm">
                   {group}
                 </Badge>
               ))}
@@ -287,7 +294,7 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
                 const formattedDescription = formatPolicyDescription(policy, t);
                 return (
                   <Tooltip key={idx} content={formattedDescription}>
-                    <Badge isRead color="grey" className="pf-v6-u-mr-sm pf-v6-u-mb-sm">
+                    <Badge isRead color="grey" className="pf-v5-u-mr-sm pf-v5-u-mb-sm">
                       {policy}
                     </Badge>
                   </Tooltip>

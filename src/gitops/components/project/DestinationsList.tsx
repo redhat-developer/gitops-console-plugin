@@ -1,6 +1,13 @@
 import * as React from 'react';
 
-import { Badge, EmptyState, EmptyStateBody, PageSection } from '@patternfly/react-core';
+import {
+  Badge,
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
+  PageSection,
+} from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 
@@ -63,7 +70,12 @@ const DestinationsList: React.FC<DestinationsListProps> = ({ destinations }) => 
           </Tbody>
         </Table>
       ) : (
-        <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No destinations configured')}>
+        <EmptyState>
+          <EmptyStateHeader
+            headingLevel="h4"
+            titleText={t('No destinations configured')}
+            icon={<EmptyStateIcon icon={CubesIcon} />}
+          />
           <EmptyStateBody>
             {t('This AppProject does not have any destinations configured.')}
           </EmptyStateBody>

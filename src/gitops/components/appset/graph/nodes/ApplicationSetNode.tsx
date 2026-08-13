@@ -98,7 +98,7 @@ const ApplicationSetShape: React.FunctionComponent<ShapeProps> = observer(
           <circle
             transform={'translate(12, 26)'}
             r="37"
-            fill="var(--pf-t--global--background--color--floating--default)"
+            fill="var(--pf-v5-global--BackgroundColor--100)"
             stroke="var(--pf-topology__node__background--Stroke)"
             strokeWidth="2"
           />

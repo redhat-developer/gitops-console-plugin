@@ -41,9 +41,7 @@ const DetailsPageTitle: React.FC<DetailsPageTitleProps> = ({ breadcrumb, childre
   <div>
     <PageGroup>
       <PageBreadcrumb>{breadcrumb}</PageBreadcrumb>
-      <PageSection className="details-page-title" hasBodyWrapper={false}>
-        {children}
-      </PageSection>
+      <PageSection className="details-page-title">{children}</PageSection>
     </PageGroup>
   </div>
 );
@@ -73,7 +71,7 @@ const DetailsPageHeader: React.FC<DetailsPageHeaderProps> = ({
       <div>
         <DetailsPageTitle
           breadcrumb={
-            <Breadcrumb className="pf-v6-c-breadcrumb co-breadcrumb">
+            <Breadcrumb className="pf-v5-c-breadcrumb co-breadcrumb">
               <BreadcrumbItem>
                 <Link
                   to={`/k8s/ns/${namespace || DEFAULT_NAMESPACE}/${

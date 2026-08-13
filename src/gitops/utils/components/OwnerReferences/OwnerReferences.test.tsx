@@ -8,7 +8,7 @@ describe('OwnerReferences', () => {
         <OwnerReferences resource={{ metadata: { namespace: 'default' } } as any} />,
       ),
     ).toMatchInlineSnapshot(
-      `"<span class="pf-v6-u-text-color-subtle">plugin__gitops-public~No owner</span>"`,
+      `"<span class="pf-v5-u-color-200">plugin__gitops-public~No owner</span>"`,
     );
   });
 
@@ -34,7 +34,7 @@ describe('OwnerReferences', () => {
         />,
       ),
     ).toMatchInlineSnapshot(
-      `"<span data-testid="tooltip"><span class="pf-v6-u-display-inline-block">[Application] my-app</span></span>"`,
+      `"<span data-testid="tooltip"><span class="pf-v5-u-display-inline-block">[Application] my-app</span></span>"`,
     );
   });
 
@@ -60,7 +60,7 @@ describe('OwnerReferences', () => {
         />,
       ),
     ).toMatchInlineSnapshot(
-      `"<span data-testid="tooltip"><span class="pf-v6-u-display-inline-block">[ApplicationSet] my-appset</span></span>"`,
+      `"<span data-testid="tooltip"><span class="pf-v5-u-display-inline-block">[ApplicationSet] my-appset</span></span>"`,
     );
   });
 

@@ -19,7 +19,12 @@ import {
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
-import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from '@patternfly/react-core';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
@@ -139,11 +144,12 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState
-            headingLevel="h4"
-            icon={CubesIcon}
-            titleText={searchQuery ? t('No matching ImageUpdaters') : t('No ImageUpdaters')}
-          >
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={searchQuery ? t('No matching ImageUpdaters') : t('No ImageUpdaters')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>{getEmptyStateBody()}</EmptyStateBody>
           </EmptyState>
         </Td>
@@ -155,8 +161,8 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
       <Tr key="loading" ouiaId={'table-tr-loading'}>
         <Td colSpan={columnsDV.length}>
           <ErrorState
-            titleText={t('Unable to load data')}
-            bodyText={t(
+            errorTitle={t('Unable to load data')}
+            errorDescription={t(
               'There was an error retrieving ImageUpdaters. Check your connection and reload the page.',
             )}
           />
@@ -185,7 +191,6 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
               <ShowOperandsInAllNamespacesRadioGroup />
             ) : null
           }
-          hideFavoriteButton={false}
         >
           <ListPageCreate groupVersionKind={imageUpdaterModelRef}>
             {t('Create ImageUpdater')}

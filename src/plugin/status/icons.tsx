@@ -8,11 +8,11 @@ import {
   SyncAltIcon,
   UnknownIcon,
 } from '@patternfly/react-icons';
-import disabledColor from '@patternfly/react-tokens/dist/esm/t_global_color_disabled_100';
-import blueInfoColor from '@patternfly/react-tokens/dist/esm/t_global_color_nonstatus_blue_300';
-import dangerColor from '@patternfly/react-tokens/dist/esm/t_global_color_status_danger_100';
-import warningColor from '@patternfly/react-tokens/dist/esm/t_global_color_status_warning_100';
-import blueDefaultColor from '@patternfly/react-tokens/dist/esm/t_global_icon_color_nonstatus_on_blue_default';
+import dangerColor from '@patternfly/react-tokens/dist/esm/global_danger_color_100';
+import disabledColor from '@patternfly/react-tokens/dist/esm/global_disabled_color_100';
+import blueInfoColor from '@patternfly/react-tokens/dist/esm/global_palette_blue_300';
+import blueDefaultColor from '@patternfly/react-tokens/dist/esm/global_primary_color_100';
+import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 
 export {
   BlueInfoCircleIcon,

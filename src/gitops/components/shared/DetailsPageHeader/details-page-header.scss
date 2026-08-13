@@ -4,15 +4,14 @@
 }
 
 $co-button-height: calc(
-  var(--pf-t--global--font--size--body--default) * var(--pf-t--global--font--line-height--body) +
-    var(--pf-t--global--spacer--control--vertical--default) * 2
+  var(--pf-v5-global--FontSize--md) * var(--pf-v5-global--LineHeight--md) + var(--pf-v5-global--spacer--form-element) * 2
 );
 
 .co-actions {
     // ensure all actions are of the same height regardless of content
     min-height: $co-button-height;
   
-    > .pf-v6-c-action-list__group {
+    > .pf-v5-c-action-list__group {
       // remove extra spacing when a component is rendered but has no children
       > div:empty {
         display: none;
@@ -29,5 +28,5 @@ $co-button-height: calc(
     }
 }
 .details-page-title {
-    padding-block-start: var(--pf-t--global--spacer--sm);
+    padding-block-start: var(--pf-v5-global--spacer--sm);
 }

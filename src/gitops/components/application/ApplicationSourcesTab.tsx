@@ -13,6 +13,8 @@ import { repoUrl, revisionUrl } from '@gitops/utils/urls';
 import {
   EmptyState,
   EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
   PageSection,
   PageSectionVariants,
   Title,
@@ -46,7 +48,7 @@ export const useColumnsDV = () => {
       props: {
         key: 'type',
         'aria-label': 'type',
-        className: 'pf-v6-u-max-width',
+        className: 'pf-v5-u-max-width',
         style: { maxWidth: '2ch' },
       },
     },
@@ -56,7 +58,7 @@ export const useColumnsDV = () => {
       props: {
         key: 'repository',
         'aria-label': 'repository',
-        className: 'pf-v6-u-max-width',
+        className: 'pf-v5-u-max-width',
         style: { maxWidth: '50ch' },
       },
     },
@@ -66,7 +68,7 @@ export const useColumnsDV = () => {
       props: {
         key: 'targetRevision',
         'aria-label': 'targetRevision',
-        className: 'pf-v6-u-min-width pf-v6-u-max-width',
+        className: 'pf-v5-u-min-width pf-v5-u-max-width',
         style: { minWidth: '20ch', maxWidth: '20ch' },
       },
     },
@@ -76,7 +78,7 @@ export const useColumnsDV = () => {
       props: {
         key: 'path',
         'aria-label': 'path',
-        className: 'pf-v6-u-min-width pf-v6-u-max-width',
+        className: 'pf-v5-u-min-width pf-v5-u-max-width',
         style: { minWidth: '20ch', maxWidth: '25ch' },
       },
     },
@@ -187,7 +189,12 @@ export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columns.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No source')}>
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={t('No source')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
             <EmptyStateBody>
               {t('Error. There must at least one source in the application.')}
             </EmptyStateBody>

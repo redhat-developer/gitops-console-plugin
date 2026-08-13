@@ -137,7 +137,7 @@ const ApplicationDetailsTab: React.FC<ApplicationDetailsTabProps> = ({ obj }) =>
           </Flex>
           <Flex flex={{ default: 'flex_2' }} direction={{ default: 'column' }}>
             <FlexItem>
-              <DescriptionList className="pf-v6-c-description-list">
+              <DescriptionList className="pf-v5-c-description-list">
                 <DetailsDescriptionGroup
                   title={t('Health Status')}
                   help={t('Health status represents the overall health of the application.')}

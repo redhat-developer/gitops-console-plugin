@@ -21,6 +21,8 @@ import {
   DescriptionListTermHelpTextButton,
   EmptyState,
   EmptyStateBody,
+  EmptyStateHeader,
+  EmptyStateIcon,
   Flex,
   FlexItem,
   PageSection,
@@ -74,10 +76,13 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
         <Td colSpan={columnsDV.length}>
-          <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No resources')}>
-            <EmptyStateBody>
-              {t('There are no resources associated with the application.')}
-            </EmptyStateBody>
+          <EmptyState>
+            <EmptyStateHeader
+              headingLevel="h4"
+              titleText={t('No resources')}
+              icon={<EmptyStateIcon icon={CubesIcon} />}
+            />
+            <EmptyStateBody>{t('There are no resources last synced.')}</EmptyStateBody>
           </EmptyState>
         </Td>
       </Tr>
@@ -99,7 +104,7 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
         >
           <Flex flex={{ default: 'flex_2' }}>
             <FlexItem>
-              <DescriptionList className="pf-v6-c-description-list">
+              <DescriptionList className="pf-v5-c-description-list">
                 <DetailsDescriptionGroup
                   title={t('Operation')}
                   help={t('The operation that was performed.')}
@@ -118,8 +123,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                     {!obj?.status?.operationState && !obj?.status?.conditions && '-'}
                   </Flex>
                 </DetailsDescriptionGroup>
-                <DescriptionListGroup className="pf-v6-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
+                <DescriptionListGroup className="pf-v5-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v5-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Phase')}</div>}
                       bodyContent={<div>{t('The operation phase.')}</div>}
@@ -134,8 +139,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                   </DescriptionListDescription>
                 </DescriptionListGroup>
 
-                <DescriptionListGroup className="pf-v6-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
+                <DescriptionListGroup className="pf-v5-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v5-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Message')}</div>}
                       bodyContent={<div>{t('The message from the operation.')}</div>}
@@ -152,8 +157,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                   </DescriptionListDescription>
                 </DescriptionListGroup>
 
-                <DescriptionListGroup className="pf-v6-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
+                <DescriptionListGroup className="pf-v5-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v5-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Initiated By')}</div>}
                       bodyContent={<div>{t('Who initiated the operation.')}</div>}
@@ -174,9 +179,9 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
           </Flex>
           <Flex flex={{ default: 'flex_2' }} direction={{ default: 'column' }}>
             <FlexItem>
-              <DescriptionList className="pf-v6-c-description-list">
-                <DescriptionListGroup className="pf-v6-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
+              <DescriptionList className="pf-v5-c-description-list">
+                <DescriptionListGroup className="pf-v5-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v5-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Started At')}</div>}
                       bodyContent={<div>{t('When the operation was started.')}</div>}
@@ -191,8 +196,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                   </DescriptionListDescription>
                 </DescriptionListGroup>
 
-                <DescriptionListGroup className="pf-v6-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
+                <DescriptionListGroup className="pf-v5-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v5-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Duration')}</div>}
                       bodyContent={<div>{t('How long the operation took to complete.')}</div>}
@@ -217,8 +222,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
                   </DescriptionListDescription>
                 </DescriptionListGroup>
 
-                <DescriptionListGroup className="pf-v6-c-description-list__group">
-                  <DescriptionListTermHelpText className="pf-v6-c-description-list__term">
+                <DescriptionListGroup className="pf-v5-c-description-list__group">
+                  <DescriptionListTermHelpText className="pf-v5-c-description-list__term">
                     <Popover
                       headerContent={<div>{t('Finished At')}</div>}
                       bodyContent={<div>{t('When the operation was finished.')}</div>}
@@ -344,7 +349,7 @@ export const useResourceColumnsDV = (getSortParams: (columnIndex: number) => ThP
       cell: '',
       props: {
         'aria-label': 'actions',
-        className: 'dropdown-kebab-pf pf-v6-c-table__action',
+        className: 'dropdown-kebab-pf pf-v5-c-table__action',
       },
     },
   ];
@@ -410,7 +415,7 @@ const useResourceRowsDV = (
         ),
         props: {
           style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 },
-          className: 'dropdown-kebab-pf pf-v6-c-table__action',
+          className: 'dropdown-kebab-pf pf-v5-c-table__action',
         },
       },
     ]);

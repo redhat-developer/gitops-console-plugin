@@ -30,7 +30,7 @@ import ResourceAllowDenyList from './ResourceAllowDenyList';
 const renderStringArray = (items: string[] | undefined, t: (key: string) => string) => {
   if (items && items.length > 0) {
     return (
-      <List isPlain className="pf-v6-u-mt-sm">
+      <List isPlain className="pf-v5-u-mt-sm">
         {items.map((el, idx) => {
           const denyRule = isDenyRule(el);
           const displayValue = getDisplayValue(el);
@@ -38,14 +38,14 @@ const renderStringArray = (items: string[] | undefined, t: (key: string) => stri
             <ListItem key={idx}>
               {denyRule ? (
                 <span>
-                  <Badge isRead color="red" className="pf-v6-u-mr-sm">
+                  <Badge isRead color="red" className="pf-v5-u-mr-sm">
                     {t('Deny')}
                   </Badge>
                   <code>{displayValue}</code>
                 </span>
               ) : (
                 <span>
-                  <Badge isRead color="green" className="pf-v6-u-mr-sm">
+                  <Badge isRead color="green" className="pf-v5-u-mr-sm">
                     {t('Allow')}
                   </Badge>
                   <code>{displayValue}</code>
@@ -57,7 +57,7 @@ const renderStringArray = (items: string[] | undefined, t: (key: string) => stri
       </List>
     );
   } else {
-    return <div className="pf-v6-u-text-align-center pf-v6-u-mt-sm">{'-'}</div>;
+    return <div className="pf-v5-u-text-align-center pf-v5-u-mt-sm">{'-'}</div>;
   }
 };
 
@@ -106,10 +106,10 @@ const ProjectAllowDenyTab: React.FC<ProjectAllowDenyTabProps> = ({ obj }) => {
             <ArgoCDLink href={argoCDUrl} />
           </div>
         )}
-        <Panel className="pf-v6-u-background-color-200 pf-v6-u-p-md">
+        <Panel className="pf-v5-u-background-color-200 pf-v5-u-p-md">
           <Grid hasGutter>
             <GridItem span={12} md={6}>
-              <Card className="pf-v6-u-h-100">
+              <Card className="pf-v5-u-h-100">
                 <CardHeader>
                   <Title headingLevel="h5">{t('Repositories')}</Title>
                 </CardHeader>
@@ -117,7 +117,7 @@ const ProjectAllowDenyTab: React.FC<ProjectAllowDenyTabProps> = ({ obj }) => {
               </Card>
             </GridItem>
             <GridItem span={12} md={6}>
-              <Card className="pf-v6-u-h-100">
+              <Card className="pf-v5-u-h-100">
                 <CardHeader>
                   <Title headingLevel="h5">{t('Namespaces')}</Title>
                 </CardHeader>
@@ -137,10 +137,10 @@ const ProjectAllowDenyTab: React.FC<ProjectAllowDenyTabProps> = ({ obj }) => {
           title={t('Allowed Destinations')}
           helpText={t('Allowed Destinations help')}
         />
-        <Panel className="pf-v6-u-background-color-200 pf-v6-u-p-md">
+        <Panel className="pf-v5-u-background-color-200 pf-v5-u-p-md">
           <Grid hasGutter>
             <GridItem>
-              <Card className="pf-v6-u-h-100">
+              <Card className="pf-v5-u-h-100">
                 <CardBody>
                   <DestinationsList destinations={spec.destinations} />
                 </CardBody>
@@ -159,10 +159,10 @@ const ProjectAllowDenyTab: React.FC<ProjectAllowDenyTabProps> = ({ obj }) => {
           title={t('Resource Allow/Deny Lists')}
           helpText={t('Resource Allow/Deny Lists help')}
         />
-        <Panel className="pf-v6-u-background-color-200 pf-v6-u-p-md">
+        <Panel className="pf-v5-u-background-color-200 pf-v5-u-p-md">
           <Grid hasGutter>
             <GridItem span={12} md={6} lg={3}>
-              <Card className="pf-v6-u-h-100">
+              <Card className="pf-v5-u-h-100">
                 <CardHeader>
                   <Title headingLevel="h5">{t('Cluster Resource Allow List')}</Title>
                 </CardHeader>
@@ -172,7 +172,7 @@ const ProjectAllowDenyTab: React.FC<ProjectAllowDenyTabProps> = ({ obj }) => {
               </Card>
             </GridItem>
             <GridItem span={12} md={6} lg={3}>
-              <Card className="pf-v6-u-h-100">
+              <Card className="pf-v5-u-h-100">
                 <CardHeader>
                   <Title headingLevel="h5">{t('Cluster Resource Deny List')}</Title>
                 </CardHeader>
@@ -182,7 +182,7 @@ const ProjectAllowDenyTab: React.FC<ProjectAllowDenyTabProps> = ({ obj }) => {
               </Card>
             </GridItem>
             <GridItem span={12} md={6} lg={3}>
-              <Card className="pf-v6-u-h-100">
+              <Card className="pf-v5-u-h-100">
                 <CardHeader>
                   <Title headingLevel="h5">{t('Namespace Resource Allow List')}</Title>
                 </CardHeader>
@@ -192,7 +192,7 @@ const ProjectAllowDenyTab: React.FC<ProjectAllowDenyTabProps> = ({ obj }) => {
               </Card>
             </GridItem>
             <GridItem span={12} md={6} lg={3}>
-              <Card className="pf-v6-u-h-100">
+              <Card className="pf-v5-u-h-100">
                 <CardHeader>
                   <Title headingLevel="h5">{t('Namespace Resource Deny List')}</Title>
                 </CardHeader>

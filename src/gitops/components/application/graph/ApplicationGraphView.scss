@@ -6,7 +6,7 @@
   // Background grid
   .pf-topology-content
   {
-    background-image: radial-gradient( var(--pf-t--global--text--color--regular) 0.5px, transparent 0.5px) !important;
+    background-image: radial-gradient( var(--pf-v5-global--Color--100) 0.5px, transparent 0.5px) !important;
     background-size: 24px 24px !important;
   }
 
@@ -30,20 +30,20 @@
     }    
   }
   // .pf-topology__edge__background {
-  //   stroke: var(--pf-t--global--dark--background--color--100);
+  //   stroke: var(--pf-v5-global--BackgroundColor--dark-100);
   // }
 
   .pf-topology__node.pf-m-selected {     
     .pf-topology__node__label__badge > rect {
       stroke-width: 1;
     }
-    .pf-topology__node__action-icon__icon .pf-v6-svg{
+    .pf-topology__node__action-icon__icon .pf-v5-svg{
       stroke: var(--pf-topology__node--Color);
       fill: var(--pf-topology__node__label__background--Stroke);
     }
     .gitops-node-layout {
-      .pf-topology__node__action-icon__icon .pf-v6-svg{
-        stroke: var(--pf-t--global--border--color--default);
+      .pf-topology__node__action-icon__icon .pf-v5-svg{
+        stroke: var(--pf-v5-global--BorderColor--100);
         fill: var(--pf-topology__node__action-icon__icon--Color);
       }
     }
@@ -81,10 +81,10 @@
 
   .step-edge {
     &.step-edge-healthy {
-      stroke: var(--pf-t--global--icon--color--status--success--default);
+      stroke: var(--pf-v5-global--success-color--100);
     }
     &.step-edge-warning {
-      stroke: var(--pf-t--global--icon--color--status--warning--default);
+      stroke: var(--pf-v5-global--warning-color--100);
     }
     &.step-edge-progressing {
       stroke: lightblue;
@@ -93,12 +93,12 @@
   
   .step-edge-terminal.pf-topology-connector-arrow {
     &.step-edge-terminal-healthy {
-      stroke: var(--pf-t--global--icon--color--status--success--default);
-      fill: var(--pf-t--global--icon--color--status--success--default);
+      stroke: var(--pf-v5-global--success-color--100);
+      fill: var(--pf-v5-global--success-color--100);
     }
     &.step-edge-terminal-warning {
-      stroke: var(--pf-t--global--icon--color--status--warning--default);
-      fill: var(--pf-t--global--icon--color--status--warning--default);
+      stroke: var(--pf-v5-global--warning-color--100);
+      fill: var(--pf-v5-global--warning-color--100);
     }
     &.step-edge-terminal-progressing {
       stroke: lightblue;
@@ -111,32 +111,32 @@
   .pf-topology-control-bar {
     position: absolute;
     top: 0;
-    left: var(--pf-t--global--spacer--lg);
+    left: var(--pf-v5-global--spacer--lg);
     height: 40px !important;
     border-radius: 4px;
     padding: 8px;
     
-    .pf-v6-c-toolbar__item:has(button#reset-view) {
+    .pf-v5-c-toolbar__item:has(button#reset-view) {
       padding-right: 6px;
     }
 
-    .pf-v6-c-toolbar__item:has(button#toggle-node-layout) {
+    .pf-v5-c-toolbar__item:has(button#toggle-node-layout) {
       padding-left: 8px;
-      border-left: 2px solid var(--pf-t--global--border--color--default);
+      border-left: 2px solid var(--pf-v5-global--BorderColor--100);
     }
   }
 
   // Not the same as in the Topology view, but seems like a border is better for more visibility,
   // especially when in dark mode. Remove this if we want to be consistent with the Topology view.
-  .pf-topology-control-bar__button.pf-v6-c-button.pf-m-tertiary {
+  .pf-topology-control-bar__button.pf-v5-c-button.pf-m-tertiary {
     border: 1px solid darkgray;
   }
 
   // Step group customization - thicker border
   .gitops-step-group {
     .pf-topology__group__background {
-      stroke: var(--pf-t--global--border--color--default);
-      fill: var(--pf-t--global--background--color--floating--default);
+      stroke: var(--pf-v5-global--BorderColor--100);
+      fill: var(--pf-v5-global--BackgroundColor--100);
       stroke-width: 1;
       transform: translateY(10px);
     }
@@ -146,7 +146,7 @@
     }
 
     &.pf-m-hover .pf-topology__group__background {
-      stroke: var(--pf-t--global--border--color--default);
+      stroke: var(--pf-v5-global--BorderColor--100);
     }  
   }
 
@@ -159,42 +159,42 @@
   }
 
   .gitops-step-group-collapsed-text {
-    fill: var(--pf-t--global--text--color--regular);
+    fill: var(--pf-v5-global--Color--100);
   }  
 
   .gitops-step-group-label {
     text {
-      fill: var(--pf-t--global--text--color--regular);
+      fill: var(--pf-v5-global--Color--100);
     }
     
     .pf-topology__node__label__background {
-      fill: var(--pf-t--global--background--color--floating--default);
-      stroke: var(--pf-t--global--border--color--default);
+      fill: var(--pf-v5-global--BackgroundColor--100);
+      stroke: var(--pf-v5-global--BorderColor--100);
       stroke-width: 1;
     }
 
     .pf-topology__node__action-icon:hover svg{
-      fill: var(--pf-t--global--border--color--default) !important;
+      fill: var(--pf-v5-global--BorderColor--100) !important;
     }
 
     .pf-topology__node__action-icon__icon svg {
-      fill: var(--pf-t--global--text--color--regular);
+      fill: var(--pf-v5-global--Color--100);
     }
 
     &.pf-m-selected > .pf-topology__node__label__background {
-      fill: var(--pf-t--global--background--color--floating--default);
-      stroke: var(--pf-t--global--border--color--default);
+      fill: var(--pf-v5-global--BackgroundColor--100);
+      stroke: var(--pf-v5-global--BorderColor--100);
       stroke-width: 2;
     }
   }
 
   .pf-topology__node.pf-m-selected.pf-m-warning {
     .pf-topology__node__label >text {
-      fill: var(--pf-t--global--background--color--floating--default);
+      fill: var(--pf-v5-global--BackgroundColor--100);
     }
   }
 
   .topology-example-sidebar.pf-topology-side-bar {
-    background-color: var(--pf-t--global--background--color--floating--default);
+    background-color: var(--pf-v5-global--BackgroundColor--100);
   }
 }
