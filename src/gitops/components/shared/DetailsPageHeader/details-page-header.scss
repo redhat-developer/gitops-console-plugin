@@ -4,8 +4,7 @@
 }
 
 $co-button-height: calc(
-  var(--pf-v5-global--FontSize--md) * var(--pf-v5-global--LineHeight--md) +
-    var(--pf-v5-global--spacer--form-element) * 2
+  var(--pf-v5-global--FontSize--md) * var(--pf-v5-global--LineHeight--md) + var(--pf-v5-global--spacer--form-element) * 2
 );
 
 .co-actions {

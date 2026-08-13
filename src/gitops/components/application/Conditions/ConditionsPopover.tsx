@@ -63,7 +63,7 @@ export const ConditionsPopover: React.FC<ConditionsPopoverProps> = ({ conditions
           </div>
         )}
         {summary.info > 0 && (
-          <div className={summary.error > 0 || summary.warning > 0 ? 'pf-v6u-pl-sm' : ''}>
+          <div className={summary.error > 0 || summary.warning > 0 ? 'pf-v5-u-pl-sm' : ''}>
             <BlueInfoCircleIcon />
             <span className="pf-v5-u-ml-sm">
               {summary.info == 1 ? '1 Notice' : summary.info + ' Notices'}
