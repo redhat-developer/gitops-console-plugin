@@ -12,15 +12,27 @@ export const Popover: React.FC<any> = ({ headerContent, bodyContent, children })
   </div>
 );
 
-export const MenuToggle = React.forwardRef<any, any>(({ children, variant, ...rest }, ref) => (
-  <button ref={ref} data-variant={variant} {...rest}>{children}</button>
-));
+export const MenuToggle = React.forwardRef<any, any>(
+  ({ children, variant, isExpanded, ...rest }, ref) => (
+    <button ref={ref} data-variant={variant} data-expanded={isExpanded} {...rest}>
+      {children}
+    </button>
+  ),
+);
 MenuToggle.displayName = 'MenuToggle';
 
 export type MenuToggleElement = HTMLButtonElement;
 export type MenuToggleProps = any;
 
-export const Dropdown: React.FC<any> = ({ children, isOpen, toggle, ...props }) => (
+export const Dropdown: React.FC<any> = ({
+  children,
+  isOpen,
+  toggle,
+  //patternfly-only props — keep off the dom to avoid react warnings in tests
+  popperProps: _popperProps,
+  onOpenChange: _onOpenChange,
+  ...props
+}) => (
   <div data-testid="dropdown" data-open={isOpen} {...props}>
     {typeof toggle === 'function' ? toggle(null) : toggle}
     {isOpen && children}
@@ -30,7 +42,14 @@ export const Dropdown: React.FC<any> = ({ children, isOpen, toggle, ...props }) 
 export const DropdownList: React.FC<any> = ({ children }) => <ul>{children}</ul>;
 
 export const DropdownItem: React.FC<any> = ({ children, description, isDisabled, ...props }) => (
-  <li data-disabled={isDisabled} {...props}>{children}{description && <small>{description}</small>}</li>
+  <li data-disabled={isDisabled} {...props}>
+    {children}
+    {description && <small>{description}</small>}
+  </li>
+);
+
+export const Divider: React.FC<any> = ({ component: Component = 'hr', ...props }) => (
+  <Component data-testid="divider" {...props} />
 );
 
 export const Tooltip: React.FC<any> = ({ content, children }) => (
