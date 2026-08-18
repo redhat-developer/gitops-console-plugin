@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
+import * as YamlFormatter from 'yaml';
 
 import { ApplicationSetKind } from '@gitops/models/ApplicationSetModel';
 import {
@@ -44,6 +45,7 @@ import {
 } from './AllNamespaces';
 import ApplicationSetApplicationsView from './ApplicationSetApplicationsView';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from './DataView';
+import MetadataLabels from './MetadataLabels';
 
 interface ApplicationProps {
   namespace: string;
@@ -106,6 +108,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         'sync-status',
         'health-status',
         'revision',
+        'labels',
         'project',
         'actions',
       ].map((key) => ({ key })),
@@ -317,6 +320,10 @@ export const sortData = (
         aValue = a.status?.sync?.revision || '';
         bValue = b.status?.sync?.revision || '';
         break;
+      case 'labels':
+        aValue = YamlFormatter.stringify(a.metadata?.labels || {});
+        bValue = YamlFormatter.stringify(b.metadata?.labels || {});
+        break;
       case 'project':
         aValue = a.spec?.project || '';
         bValue = b.spec?.project || '';
@@ -432,6 +439,25 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         ),
       },
       {
+        id: 'labels',
+        dataLabel: 'Labels',
+        cell: (
+          <div>
+            <MetadataLabels
+              kind={
+                ApplicationModel.apiGroup +
+                '~' +
+                ApplicationModel.apiVersion +
+                '~' +
+                ApplicationModel.kind
+              }
+              labels={app?.metadata?.labels}
+              numLabels={3}
+            />
+          </div>
+        ),
+      },
+      {
         id: app.spec?.project,
         cell: app.spec?.project && (
           <ResourceLink
@@ -507,11 +533,19 @@ const useColumnsDV = (
       },
     },
     {
+      cell: t('Labels'),
+      props: {
+        'aria-label': 'labels',
+        className: 'pf-m-width-20',
+        sort: getSortParams(4 + i),
+      },
+    },
+    {
       cell: t('App Project'),
       props: {
         'aria-label': 'project',
         className: 'pf-m-width-20',
-        sort: getSortParams(4 + i),
+        sort: getSortParams(5 + i),
       },
     },
     {

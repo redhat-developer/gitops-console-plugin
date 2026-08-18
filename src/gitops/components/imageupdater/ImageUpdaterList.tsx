@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom-v5-compat';
 import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
+import * as YamlFormatter from 'yaml';
 
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
 import { modelToGroupVersionKind } from '@gitops/utils/utils';
@@ -34,6 +35,7 @@ import {
   useShowOperandsInAllNamespaces,
 } from '../shared/AllNamespaces';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import MetadataLabels from '../shared/MetadataLabels';
 
 import { useImageUpdaterActionsProvider } from './hooks/useImageUpdaterActionsProvider';
 
@@ -71,6 +73,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
       'images',
       'last-checked',
       'ready',
+      'labels',
       'actions',
     ].map((key) => ({ key }));
   }, [showNamespaceColumn]);
@@ -251,6 +254,10 @@ export const sortData = (
         aValue = a.status?.conditions?.find((c) => c.type === 'Ready')?.status || '';
         bValue = b.status?.conditions?.find((c) => c.type === 'Ready')?.status || '';
         break;
+      case 'labels':
+        aValue = YamlFormatter.stringify(a.metadata?.labels || {});
+        bValue = YamlFormatter.stringify(b.metadata?.labels || {});
+        break;
       default:
         return 0;
     }
@@ -277,7 +284,7 @@ export const useColumnsDV = (
       cell: t('Name'),
       props: {
         'aria-label': 'name',
-        className: 'pf-m-width-20',
+        className: 'pf-m-width-30',
         sort: getSortParams(0),
         style: { minWidth: '200px' },
       },
@@ -299,7 +306,7 @@ export const useColumnsDV = (
       cell: t('Apps'),
       props: {
         'aria-label': 'apps',
-        className: 'pf-m-width-10',
+        className: 'pf-m-width-20',
         sort: getSortParams(1 + i),
       },
     },
@@ -307,7 +314,7 @@ export const useColumnsDV = (
       cell: t('Images'),
       props: {
         'aria-label': 'images',
-        className: 'pf-m-width-10',
+        className: 'pf-m-width-20',
         sort: getSortParams(2 + i),
       },
     },
@@ -315,7 +322,7 @@ export const useColumnsDV = (
       cell: t('Last Checked'),
       props: {
         'aria-label': 'last checked',
-        className: 'pf-m-width-15',
+        className: 'pf-m-width-20',
         sort: getSortParams(3 + i),
       },
     },
@@ -325,6 +332,14 @@ export const useColumnsDV = (
         'aria-label': 'ready',
         className: 'pf-m-width-10',
         sort: getSortParams(4 + i),
+      },
+    },
+    {
+      cell: t('Labels'),
+      props: {
+        'aria-label': 'labels',
+        className: 'pf-m-width-10',
+        sort: getSortParams(5 + i),
       },
     },
     {
@@ -399,6 +414,25 @@ export const useImageUpdaterRowsDV = (
         id: 'ready',
         cell: readyCondition ? String(isReady) : '-',
         dataLabel: 'Ready',
+      },
+      {
+        id: 'labels',
+        dataLabel: 'Labels',
+        cell: (
+          <div>
+            <MetadataLabels
+              kind={
+                ImageUpdaterModel.apiGroup +
+                '~' +
+                ImageUpdaterModel.apiVersion +
+                '~' +
+                ImageUpdaterModel.kind
+              }
+              labels={obj?.metadata?.labels}
+              numLabels={3}
+            />
+          </div>
+        ),
       },
       {
         id: 'actions-' + index,
