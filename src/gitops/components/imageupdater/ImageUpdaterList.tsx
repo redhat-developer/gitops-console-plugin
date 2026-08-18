@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom-v5-compat';
-import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 import * as YamlFormatter from 'yaml';
 
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
@@ -174,15 +173,6 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
       {showTitle == undefined && (
         <ListPageHeader
           title={t('ImageUpdaters')}
-          badge={
-            location?.pathname?.includes('openshift-gitops-operator') ? null : (
-              <TechPreviewBadge
-                tooltipContent={t(
-                  'This list page is under tech preview, but not necessarily the resources it represents',
-                )}
-              />
-            )
-          }
           helpText={
             location.pathname?.includes('openshift-gitops-operator') ? (
               <ShowOperandsInAllNamespacesRadioGroup />

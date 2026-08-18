@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 import * as YamlFormatter from 'yaml';
 
 import { ApplicationSetKind } from '@gitops/models/ApplicationSetModel';
@@ -211,15 +210,6 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       {showTitle == undefined && (project == undefined || appset == undefined) && (
         <ListPageHeader
           title={t('plugin__gitops-plugin~Applications')}
-          badge={
-            location.pathname?.includes('openshift-gitops-operator') ? null : (
-              <TechPreviewBadge
-                tooltipContent={t(
-                  'This list page is under tech preview, but not necessarily the resources it represents',
-                )}
-              />
-            )
-          }
           helpText={
             location.pathname?.includes('openshift-gitops-operator') ? (
               <ShowOperandsInAllNamespacesRadioGroup />

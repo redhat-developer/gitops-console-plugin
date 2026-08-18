@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom-v5-compat';
-import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 import * as YamlFormatter from 'yaml';
 
 import { AppProjectKind } from '@gitops/models/AppProjectModel';
@@ -174,15 +173,6 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
       {showTitle == undefined && (
         <ListPageHeader
           title={t('Rollouts')}
-          badge={
-            location.pathname?.includes('openshift-gitops-operator') ? null : (
-              <TechPreviewBadge
-                tooltipContent={t(
-                  'This list page is under tech preview, but not necessarily the resources it represents',
-                )}
-              />
-            )
-          }
           helpText={
             location.pathname?.includes('openshift-gitops-operator') ? (
               <ShowOperandsInAllNamespacesRadioGroup />

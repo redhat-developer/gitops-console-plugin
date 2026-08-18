@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 import * as YamlFormatter from 'yaml';
 
 import {
@@ -257,15 +256,6 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
       {showTitle == undefined && (
         <ListPageHeader
           title={t('ApplicationSets')}
-          badge={
-            location.pathname?.includes('openshift-gitops-operator') ? null : (
-              <TechPreviewBadge
-                tooltipContent={t(
-                  'This list page is under tech preview, but not necessarily the resources it represents',
-                )}
-              />
-            )
-          }
           helpText={
             location.pathname?.includes('openshift-gitops-operator') ? (
               <ShowOperandsInAllNamespacesRadioGroup />

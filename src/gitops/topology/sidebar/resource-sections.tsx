@@ -1,7 +1,5 @@
 import * as React from 'react';
-import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 
-import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import {
   DetailsTabSectionExtensionHook,
   K8sResourceKind,
@@ -61,12 +59,7 @@ export const ResourceSection: React.FC<{
   return (
     <div className="ocs-sidebar-tabsection">
       <div className="co-m-pane__heading-owner">
-        <span>
-          <TechPreviewBadge
-            tooltipContent={t('Rollouts in the Topology View is under tech preview')}
-          />
-          <SidebarSectionHeading text={'Pods'} />
-        </span>
+        <SidebarSectionHeading text={'Pods'} />
         <div>
           {statusOfPods && statusOfPods.pods && (
             <div>
