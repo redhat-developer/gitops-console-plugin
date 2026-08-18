@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom-v5-compat';
-import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 
 import FavoriteButton from '@gitops/components/shared/FavoriteButton/FavoriteButton';
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
@@ -96,16 +95,6 @@ const DetailsPageHeader: React.FC<DetailsPageHeaderProps> = ({
               <span className="co-resource-item__resource-name">
                 {name ?? obj?.metadata?.name}{' '}
                 {isApplicationRefreshing(obj) ? <Spinner size="md" /> : <span></span>}
-              </span>
-              <span
-                className="details-page-header__item"
-                style={{ marginLeft: '10px', marginBottom: '5px' }}
-              >
-                <TechPreviewBadge
-                  tooltipContent={t(
-                    'This details page is under tech preview, but not necessarily the resource it represents',
-                  )}
-                />
               </span>
             </Title>
             <ActionList className="co-actions">
