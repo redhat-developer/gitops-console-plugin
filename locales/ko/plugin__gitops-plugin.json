@@ -356,5 +356,13 @@
   "annotations": "annotations",
   "annotation": "annotation",
   "No owner": "No owner",
-  "Tech preview": "Tech preview"
+  "Tech preview": "Tech preview",
+  "Pagination": "Pagination",
+  "Go to first page": "Go to first page",
+  "Go to previous page": "Go to previous page",
+  "Go to next page": "Go to next page",
+  "Go to last page": "Go to last page",
+  "Items per page": "Items per page",
+  "per page": "per page",
+  "of": "of"
 }
