@@ -52,7 +52,13 @@ import {
   useShowOperandsInAllNamespaces,
 } from './AllNamespaces';
 import ApplicationSetApplicationsView from './ApplicationSetApplicationsView';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from './DataView';
+import {
+  getGitOpsPaginationResetKey,
+  GitOpsDataViewTable,
+  paginateItems,
+  useGitOpsDataViewPagination,
+  useGitOpsDataViewSort,
+} from './DataView';
 import MetadataLabels from './MetadataLabels';
 
 interface ApplicationProps {
@@ -160,7 +166,21 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       });
     });
   }, [filteredData, searchQuery]);
-  const rows = useApplicationRowsDV(filteredBySearch, namespace);
+
+  const searchParamsKey = searchParams.toString();
+  const paginationResetKey = React.useMemo(
+    () => getGitOpsPaginationResetKey(namespace, new URLSearchParams(searchParamsKey)),
+    [namespace, searchParamsKey],
+  );
+  const pagination = useGitOpsDataViewPagination({
+    itemCount: filteredBySearch.length,
+    resetKey: paginationResetKey,
+  });
+  const pagedApplications = React.useMemo(
+    () => paginateItems(filteredBySearch, pagination.page, pagination.perPage),
+    [filteredBySearch, pagination.page, pagination.perPage],
+  );
+  const rows = useApplicationRowsDV(pagedApplications, namespace);
 
   // Check if there are applications owned by this ApplicationSet initially (before filters/search)
   const hasOwnedApplications = ownedApps.length > 0;
@@ -275,6 +295,8 @@ const ApplicationList: React.FC<ApplicationProps> = ({
             emptyState={empty}
             errorState={error || undefined}
             isError={!!loadError}
+            itemCount={filteredBySearch.length}
+            pagination={pagination}
           />
         )}
         {!appset && (
@@ -285,6 +307,8 @@ const ApplicationList: React.FC<ApplicationProps> = ({
             emptyState={empty}
             errorState={error || undefined}
             isError={!!loadError}
+            itemCount={filteredBySearch.length}
+            pagination={pagination}
           />
         )}
       </ListPageBody>
