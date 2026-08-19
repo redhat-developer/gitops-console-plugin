@@ -75,6 +75,7 @@ describe('matchesLabelSearchQuery (GitOps q param)', () => {
   it('matches label keys and key=value, and ignores resource name', () => {
     expect(matchesLabelSearchQuery('', labels)).toBe(true);
     expect(matchesLabelSearchQuery('guestbook', labels)).toBe(true);
+    expect(matchesLabelSearchQuery('GUESTBOOK', labels)).toBe(true);
     expect(matchesLabelSearchQuery('app=', labels)).toBe(true);
     expect(matchesLabelSearchQuery('env', labels)).toBe(true);
     expect(matchesLabelSearchQuery('missing', labels)).toBe(false);

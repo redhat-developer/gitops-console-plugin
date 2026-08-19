@@ -120,8 +120,7 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedProjects, filters);
 
   const filteredByNameAndLabels = React.useMemo(
-    () =>
-      filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
+    () => filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
     [filteredData, nameQuery, labelsParam],
   );
 

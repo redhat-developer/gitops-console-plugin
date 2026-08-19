@@ -156,11 +156,10 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     [sortedApplications, project, appset],
   );
 
-  // Console ListPageFilter is deprecated and its selected row-filter state can
-  // drift from the URL chips. Apply health/sync from the URL so the table and
-  // pager match what the user selected.
+  // Apply the URL chips to the full owned list so the table and pager match
+  // what the user selected, even if the Console filter hook is out of date.
   const filters = React.useMemo(() => getApplicationRowFilters(t), [t]);
-  const [data, filteredData, onFilterChange] = useListPageFilter(ownedApps, filters);
+  const [data, , onFilterChange] = useListPageFilter(ownedApps, filters);
   const healthFilterParam = searchParams.get(APPLICATION_HEALTH_FILTER_PARAM);
   const syncFilterParam = searchParams.get(APPLICATION_SYNC_FILTER_PARAM);
   const nameQuery = searchParams.get('name') || '';
@@ -168,20 +167,16 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   const filteredByStatus = React.useMemo(
     () =>
       filterApplicationsByStatus(
-        filteredData as ApplicationKind[],
+        data as ApplicationKind[],
         parseRowFilterParam(healthFilterParam),
         parseRowFilterParam(syncFilterParam),
       ),
-    [filteredData, healthFilterParam, syncFilterParam],
+    [data, healthFilterParam, syncFilterParam],
   );
 
   const filteredByNameAndLabels = React.useMemo(
     () =>
-      filterByConsoleNameAndLabels(
-        filteredByStatus,
-        nameQuery,
-        parseLabelFilterParam(labelsParam),
-      ),
+      filterByConsoleNameAndLabels(filteredByStatus, nameQuery, parseLabelFilterParam(labelsParam)),
     [filteredByStatus, nameQuery, labelsParam],
   );
 

@@ -192,8 +192,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, filters);
 
   const filteredByNameAndLabels = React.useMemo(
-    () =>
-      filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
+    () => filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
     [filteredData, nameQuery, labelsParam],
   );
 
