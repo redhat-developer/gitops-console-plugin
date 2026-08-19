@@ -11,7 +11,6 @@ import {
   ListPageFilter,
   ListPageHeader,
   ResourceLink,
-  RowFilter,
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
@@ -51,14 +50,24 @@ import {
   ShowOperandsInAllNamespacesRadioGroup,
   useShowOperandsInAllNamespaces,
 } from './AllNamespaces';
+import {
+  APPLICATION_HEALTH_FILTER_PARAM,
+  APPLICATION_SYNC_FILTER_PARAM,
+  filterApplicationsByStatus,
+  getApplicationRowFilters,
+  parseRowFilterParam,
+} from './applicationListFilters';
 import ApplicationSetApplicationsView from './ApplicationSetApplicationsView';
 import {
-  getGitOpsPaginationResetKey,
   GitOpsDataViewTable,
-  paginateItems,
-  useGitOpsDataViewPagination,
   useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
 } from './DataView';
+import {
+  filterByConsoleNameAndLabels,
+  filterResourcesByLabelQuery,
+  parseLabelFilterParam,
+} from './listPageTextFilters';
 import MetadataLabels from './MetadataLabels';
 
 interface ApplicationProps {
@@ -147,39 +156,49 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     [sortedApplications, project, appset],
   );
 
-  // TODO: use alternate filter since it is deprecated. See DataTableView potentially
-  // PatternFly filters work on owned apps only (the dataset that will be displayed)
-  const filters = getFilters(t);
-  // const filters = React.useMemo(() => getFilters(t), [t]);
+  // Console ListPageFilter is deprecated and its selected row-filter state can
+  // drift from the URL chips. Apply health/sync from the URL so the table and
+  // pager match what the user selected.
+  const filters = React.useMemo(() => getApplicationRowFilters(t), [t]);
   const [data, filteredData, onFilterChange] = useListPageFilter(ownedApps, filters);
-
-  // Filter by search query if present (after other filters)
-  const filteredBySearch = React.useMemo(() => {
-    if (!searchQuery) return filteredData;
-
-    return filteredData.filter((app) => {
-      const labels = app.metadata?.labels || {};
-      // Check if any label matches the search query
-      return Object.entries(labels).some(([key, value]) => {
-        const labelSelector = `${key}=${value}`;
-        return labelSelector.includes(searchQuery) || key.includes(searchQuery);
-      });
-    });
-  }, [filteredData, searchQuery]);
-
-  const searchParamsKey = searchParams.toString();
-  const paginationResetKey = React.useMemo(
-    () => getGitOpsPaginationResetKey(namespace, new URLSearchParams(searchParamsKey)),
-    [namespace, searchParamsKey],
+  const healthFilterParam = searchParams.get(APPLICATION_HEALTH_FILTER_PARAM);
+  const syncFilterParam = searchParams.get(APPLICATION_SYNC_FILTER_PARAM);
+  const nameQuery = searchParams.get('name') || '';
+  const labelsParam = searchParams.get('labels') || '';
+  const filteredByStatus = React.useMemo(
+    () =>
+      filterApplicationsByStatus(
+        filteredData as ApplicationKind[],
+        parseRowFilterParam(healthFilterParam),
+        parseRowFilterParam(syncFilterParam),
+      ),
+    [filteredData, healthFilterParam, syncFilterParam],
   );
-  const pagination = useGitOpsDataViewPagination({
-    itemCount: filteredBySearch.length,
-    resetKey: paginationResetKey,
+
+  const filteredByNameAndLabels = React.useMemo(
+    () =>
+      filterByConsoleNameAndLabels(
+        filteredByStatus,
+        nameQuery,
+        parseLabelFilterParam(labelsParam),
+      ),
+    [filteredByStatus, nameQuery, labelsParam],
+  );
+
+  const filteredBySearch = React.useMemo(
+    () => filterResourcesByLabelQuery(filteredByNameAndLabels, searchQuery),
+    [filteredByNameAndLabels, searchQuery],
+  );
+
+  const {
+    pagination,
+    pagedItems: pagedApplications,
+    itemCount,
+  } = useGitOpsListPagePagination({
+    items: filteredBySearch,
+    namespace,
+    searchParams,
   });
-  const pagedApplications = React.useMemo(
-    () => paginateItems(filteredBySearch, pagination.page, pagination.perPage),
-    [filteredBySearch, pagination.page, pagination.perPage],
-  );
   const rows = useApplicationRowsDV(pagedApplications, namespace);
 
   // Check if there are applications owned by this ApplicationSet initially (before filters/search)
@@ -295,7 +314,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
             emptyState={empty}
             errorState={error || undefined}
             isError={!!loadError}
-            itemCount={filteredBySearch.length}
+            itemCount={itemCount}
             pagination={pagination}
           />
         )}
@@ -307,7 +326,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
             emptyState={empty}
             errorState={error || undefined}
             isError={!!loadError}
-            itemCount={filteredBySearch.length}
+            itemCount={itemCount}
             pagination={pagination}
           />
         )}
@@ -582,58 +601,5 @@ const useColumnsDV = (
   ];
   return columns;
 };
-
-const FilterUnknownStatus: string = 'Sync.' + SyncStatus.UNKNOWN;
-
-const getFilters = (t: (key: string) => string): RowFilter[] => [
-  {
-    filterGroupName: t('Sync Status'),
-    type: 'app-sync',
-    reducer: (application) =>
-      application.status?.sync?.status == SyncStatus.UNKNOWN ||
-      application.status?.sync?.status == undefined
-        ? FilterUnknownStatus
-        : application.status?.sync?.status,
-    filter: (input, application) => {
-      if (input.selected?.length && application?.status?.sync?.status) {
-        return (
-          input.selected.includes(application.status?.sync?.status) ||
-          (input.selected.includes(FilterUnknownStatus) &&
-            application.status?.sync?.status == SyncStatus.UNKNOWN)
-        );
-      } else if (application.status?.sync?.status == undefined) {
-        return true;
-      } else if (!application?.status?.sync?.status) {
-        return false;
-      }
-      return true;
-    },
-    items: [
-      { id: SyncStatus.SYNCED, title: SyncStatus.SYNCED },
-      { id: SyncStatus.OUT_OF_SYNC, title: SyncStatus.OUT_OF_SYNC },
-      { id: FilterUnknownStatus, title: SyncStatus.UNKNOWN },
-    ],
-  },
-  {
-    filterGroupName: t('Health Status'),
-    type: 'app-health',
-    reducer: (application) => application.status?.health?.status,
-    filter: (input, application) => {
-      if (input.selected?.length && application?.status?.health?.status) {
-        return input.selected.includes(application.status?.health?.status);
-      } else {
-        return true;
-      }
-    },
-    items: [
-      { id: HealthStatus.UNKNOWN, title: HealthStatus.UNKNOWN },
-      { id: HealthStatus.PROGRESSING, title: HealthStatus.PROGRESSING },
-      { id: HealthStatus.SUSPENDED, title: HealthStatus.SUSPENDED },
-      { id: HealthStatus.HEALTHY, title: HealthStatus.HEALTHY },
-      { id: HealthStatus.DEGRADED, title: HealthStatus.DEGRADED },
-      { id: HealthStatus.MISSING, title: HealthStatus.MISSING },
-    ],
-  },
-];
 
 export default ApplicationList;

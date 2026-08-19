@@ -13,4 +13,5 @@ export {
   GitOpsDataViewTable,
   useGitOpsDataViewPagination,
   useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
 } from './GitOpsDataViewTable';
