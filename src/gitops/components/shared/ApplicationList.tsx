@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
+import * as YamlFormatter from 'yaml';
 
 import { ApplicationSetKind } from '@gitops/models/ApplicationSetModel';
 import {
@@ -59,6 +59,7 @@ import {
   filterResourcesByLabelQuery,
   parseLabelFilterParam,
 } from './listPageTextFilters';
+import MetadataLabels from './MetadataLabels';
 
 interface ApplicationProps {
   namespace: string;
@@ -121,6 +122,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         'sync-status',
         'health-status',
         'revision',
+        'labels',
         'project',
         'actions',
       ].map((key) => ({ key })),
@@ -247,15 +249,6 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       {showTitle == undefined && (project == undefined || appset == undefined) && (
         <ListPageHeader
           title={t('plugin__gitops-plugin~Applications')}
-          badge={
-            location.pathname?.includes('openshift-gitops-operator') ? null : (
-              <TechPreviewBadge
-                tooltipContent={t(
-                  'This list page is under tech preview, but not necessarily the resources it represents',
-                )}
-              />
-            )
-          }
           helpText={
             location.pathname?.includes('openshift-gitops-operator') ? (
               <ShowOperandsInAllNamespacesRadioGroup />
@@ -359,6 +352,10 @@ export const sortData = (
       case 'revision':
         aValue = a.status?.sync?.revision || '';
         bValue = b.status?.sync?.revision || '';
+        break;
+      case 'labels':
+        aValue = YamlFormatter.stringify(a.metadata?.labels || {});
+        bValue = YamlFormatter.stringify(b.metadata?.labels || {});
         break;
       case 'project':
         aValue = a.spec?.project || '';
@@ -475,6 +472,25 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         ),
       },
       {
+        id: 'labels',
+        dataLabel: 'Labels',
+        cell: (
+          <div>
+            <MetadataLabels
+              kind={
+                ApplicationModel.apiGroup +
+                '~' +
+                ApplicationModel.apiVersion +
+                '~' +
+                ApplicationModel.kind
+              }
+              labels={app?.metadata?.labels}
+              numLabels={3}
+            />
+          </div>
+        ),
+      },
+      {
         id: app.spec?.project,
         cell: app.spec?.project && (
           <ResourceLink
@@ -550,11 +566,19 @@ const useColumnsDV = (
       },
     },
     {
+      cell: t('Labels'),
+      props: {
+        'aria-label': 'labels',
+        className: 'pf-m-width-20',
+        sort: getSortParams(4 + i),
+      },
+    },
+    {
       cell: t('App Project'),
       props: {
         'aria-label': 'project',
         className: 'pf-m-width-20',
-        sort: getSortParams(4 + i),
+        sort: getSortParams(5 + i),
       },
     },
     {

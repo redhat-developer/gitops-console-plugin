@@ -3,7 +3,8 @@
  * https://github.com/argoproj/argo-cd/blob/4bd8b07c514e26c6b7837f30d52afd1a3cdedcfd/ui/src/app/shared/components/urls.ts
  */
 
-import * as GitUrlParse from 'git-url-parse';
+//cjs package — default import needs esmoduleinterop or jest can't call it
+import GitUrlParse from 'git-url-parse';
 import { GitUrl } from 'git-url-parse';
 
 export const isSHA = (revision: string) => {
