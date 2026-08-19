@@ -15,7 +15,7 @@ describe('ActionsDropdown', () => {
         />,
       ),
     ).toMatchInlineSnapshot(
-      `"<div data-testid="dropdown" data-open="false" popperProps="[object Object]"><button>Actions</button></div>"`,
+      `"<div data-testid="dropdown" data-open="false"><button data-expanded="false">Actions</button></div>"`,
     );
   });
 
@@ -28,13 +28,13 @@ describe('ActionsDropdown', () => {
         />,
       ),
     ).toMatchInlineSnapshot(
-      `"<div data-testid="dropdown" data-open="false" popperProps="[object Object]"><button data-variant="plain"><svg data-icon="EllipsisVIcon"></svg></button></div>"`,
+      `"<div data-testid="dropdown" data-open="false"><button data-variant="plain" data-expanded="false"><svg data-icon="EllipsisVIcon"></svg></button></div>"`,
     );
   });
 
   it('renders with no actions', () => {
     expect(renderToStaticMarkup(<ActionsDropdown actions={[]} />)).toMatchInlineSnapshot(
-      `"<div data-testid="dropdown" data-open="false" popperProps="[object Object]"><button>Actions</button></div>"`,
+      `"<div data-testid="dropdown" data-open="false"><button data-expanded="false">Actions</button></div>"`,
     );
   });
 });
