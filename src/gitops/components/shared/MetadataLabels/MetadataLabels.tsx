@@ -41,7 +41,11 @@ type MetadataLabelsProps = {
 export const MetadataLabels: React.FC<MetadataLabelsProps> = ({ kind, labels, numLabels = 10 }) => {
   const { t } = useGitOpsTranslation();
   return labels && Object.keys(labels).length > 0 ? (
-    <LabelGroup numLabels={numLabels} className="co-label-group metadata-labels-group">
+    <LabelGroup
+      numLabels={numLabels}
+      className="co-label-group metadata-labels-group"
+      style={{ maxWidth: '200px' }}
+    >
       {Object.keys(labels || {})?.map((key) => {
         return (
           <LabelL key={key} kind={kind} name={key} value={labels[key]} expand={true}>
