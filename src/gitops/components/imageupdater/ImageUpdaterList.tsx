@@ -33,7 +33,12 @@ import {
   ShowOperandsInAllNamespacesRadioGroup,
   useShowOperandsInAllNamespaces,
 } from '../shared/AllNamespaces';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from '../shared/DataView';
+import { filterByConsoleNameAndLabels, parseLabelFilterParam } from '../shared/listPageTextFilters';
 
 import { useImageUpdaterActionsProvider } from './hooks/useImageUpdaterActionsProvider';
 
@@ -80,6 +85,8 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
+  const nameQuery = searchParams.get('name') || '';
+  const labelsParam = searchParams.get('labels') || '';
 
   const { t } = useTranslation('plugin__gitops-plugin');
 
@@ -91,11 +98,17 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
   const filters = getFilters(t);
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedItems, filters);
 
+  const filteredByNameAndLabels = React.useMemo(
+    () =>
+      filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
+    [filteredData, nameQuery, labelsParam],
+  );
+
   const filteredBySearch = React.useMemo(() => {
-    if (!searchQuery) return filteredData;
+    if (!searchQuery) return filteredByNameAndLabels;
 
     const lowerQuery = searchQuery.toLowerCase();
-    return filteredData.filter((item) => {
+    return filteredByNameAndLabels.filter((item) => {
       const name = item.metadata?.name || '';
       const labels = item.metadata?.labels || {};
       return (
@@ -109,9 +122,14 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
         })
       );
     });
-  }, [filteredData, searchQuery]);
+  }, [filteredByNameAndLabels, searchQuery]);
 
-  const rows = useImageUpdaterRowsDV(filteredBySearch as ImageUpdaterKind[], effectiveNamespace);
+  const { pagination, pagedItems, itemCount } = useGitOpsListPagePagination({
+    items: filteredBySearch as ImageUpdaterKind[],
+    namespace: effectiveNamespace,
+    searchParams,
+  });
+  const rows = useImageUpdaterRowsDV(pagedItems, effectiveNamespace);
 
   const hasItems = React.useMemo(() => {
     return sortedItems.length > 0;
@@ -209,6 +227,8 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
           emptyState={empty}
           isError={!!loadError}
           errorState={error || undefined}
+          itemCount={itemCount}
+          pagination={pagination}
         />
       </ListPageBody>
     </div>

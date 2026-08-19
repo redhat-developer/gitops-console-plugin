@@ -31,7 +31,12 @@ import {
   ShowOperandsInAllNamespacesRadioGroup,
   useShowOperandsInAllNamespaces,
 } from '../shared/AllNamespaces';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from '../shared/DataView';
+import { filterByConsoleNameAndLabels, parseLabelFilterParam } from '../shared/listPageTextFilters';
 import { MetadataLabels } from '../shared/MetadataLabels/MetadataLabels';
 
 import { useProjectActionsProvider } from './hooks/useProjectActionsProvider';
@@ -96,6 +101,8 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
+  const nameQuery = searchParams.get('name') || '';
+  const labelsParam = searchParams.get('labels') || '';
 
   const { t } = useTranslation('plugin__gitops-plugin');
 
@@ -107,11 +114,17 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
   const filters = getFilters(t, applications, appsLoaded);
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedProjects, filters);
 
+  const filteredByNameAndLabels = React.useMemo(
+    () =>
+      filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
+    [filteredData, nameQuery, labelsParam],
+  );
+
   // Filter by search query if present (after other filters)
   const filteredBySearch = React.useMemo(() => {
-    if (!searchQuery) return filteredData;
+    if (!searchQuery) return filteredByNameAndLabels;
 
-    return filteredData.filter((project) => {
+    return filteredByNameAndLabels.filter((project) => {
       const name = project.metadata?.name || '';
       const description = project.spec?.description || '';
       const labels = project.metadata?.labels || {};
@@ -131,9 +144,14 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
         })
       );
     });
-  }, [filteredData, searchQuery]);
+  }, [filteredByNameAndLabels, searchQuery]);
 
-  const rows = useProjectsRowsDV(filteredBySearch, namespace, applications, appsLoaded);
+  const { pagination, pagedItems, itemCount } = useGitOpsListPagePagination({
+    items: filteredBySearch,
+    namespace,
+    searchParams,
+  });
+  const rows = useProjectsRowsDV(pagedItems, namespace, applications, appsLoaded);
   const showNamespaceColumn = !namespace || namespace === '';
 
   // Check if there are projects initially (before search)
@@ -240,6 +258,8 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
             emptyState={empty}
             isError={!!loadError}
             errorState={error || undefined}
+            itemCount={itemCount}
+            pagination={pagination}
           />
         </div>
       </ListPageBody>

@@ -12,7 +12,12 @@ import DataViewToolbar from '@patternfly/react-data-view/dist/esm/DataViewToolba
 import { useDataViewPagination, useDataViewSort } from '@patternfly/react-data-view/dist/esm/Hooks';
 import { ThProps } from '@patternfly/react-table';
 
-import { GITOPS_DEFAULT_PER_PAGE, GITOPS_PER_PAGE_OPTIONS } from './gitOpsDataViewPagination';
+import {
+  getGitOpsPaginationResetKey,
+  GITOPS_DEFAULT_PER_PAGE,
+  GITOPS_PER_PAGE_OPTIONS,
+  paginateItems,
+} from './gitOpsDataViewPagination';
 
 let gitOpsPaginationInstanceCounter = 0;
 
@@ -319,6 +324,41 @@ export const useGitOpsDataViewPagination = ({
   }, [itemCount, onSetPage, page, perPage]);
 
   return pagination;
+};
+
+/**
+ * Wires URL pagination for a filtered GitOps list: reset on filter/search/namespace
+ * changes, then return the current page of items for the table.
+ */
+export const useGitOpsListPagePagination = <T,>({
+  items,
+  namespace,
+  searchParams,
+}: {
+  items: T[] | undefined;
+  namespace?: string | null;
+  searchParams: URLSearchParams;
+}): {
+  pagination: GitOpsDataViewPagination;
+  pagedItems: T[];
+  itemCount: number;
+} => {
+  const searchParamsKey = searchParams.toString();
+  const paginationResetKey = React.useMemo(
+    () => getGitOpsPaginationResetKey(namespace, new URLSearchParams(searchParamsKey)),
+    [namespace, searchParamsKey],
+  );
+  const itemCount = items?.length ?? 0;
+  const pagination = useGitOpsDataViewPagination({
+    itemCount,
+    resetKey: paginationResetKey,
+  });
+  const pagedItems = React.useMemo(
+    () => paginateItems(items, pagination.page, pagination.perPage),
+    [items, pagination.page, pagination.perPage],
+  );
+
+  return { pagination, pagedItems, itemCount };
 };
 
 type GitOpsSetSearchParams = ReturnType<typeof useSearchParams>[1];
