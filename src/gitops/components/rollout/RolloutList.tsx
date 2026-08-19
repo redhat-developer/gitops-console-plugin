@@ -129,8 +129,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedRollouts, filters);
 
   const filteredByNameAndLabels = React.useMemo(
-    () =>
-      filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
+    () => filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
     [filteredData, nameQuery, labelsParam],
   );
 

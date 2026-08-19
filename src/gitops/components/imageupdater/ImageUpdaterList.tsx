@@ -101,8 +101,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedItems, filters);
 
   const filteredByNameAndLabels = React.useMemo(
-    () =>
-      filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
+    () => filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
     [filteredData, nameQuery, labelsParam],
   );
 

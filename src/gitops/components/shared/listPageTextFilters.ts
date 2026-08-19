@@ -71,9 +71,13 @@ export const matchesLabelSearchQuery = (
   if (!query) {
     return true;
   }
+  const normalizedQuery = query.toLowerCase();
   return Object.entries(labels || {}).some(([key, value]) => {
     const labelSelector = `${key}=${value}`;
-    return labelSelector.includes(query) || key.includes(query);
+    return (
+      labelSelector.toLowerCase().includes(normalizedQuery) ||
+      key.toLowerCase().includes(normalizedQuery)
+    );
   });
 };
 

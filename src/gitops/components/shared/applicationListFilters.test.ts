@@ -11,12 +11,7 @@ import {
 } from './applicationListFilters';
 import { paginateItems } from './DataView/gitOpsDataViewPagination';
 
-const app = (
-  name: string,
-  health?: string,
-  sync?: string,
-  labels?: Record<string, string>,
-) =>
+const app = (name: string, health?: string, sync?: string, labels?: Record<string, string>) =>
   ({
     metadata: { name, labels },
     spec: { project: 'default' },
@@ -53,9 +48,9 @@ describe('application health filter', () => {
     expect(matchesApplicationHealthFilter(selected, app('ok', HealthStatus.HEALTHY))).toBe(true);
     expect(matchesApplicationHealthFilter(selected, app('bad', HealthStatus.DEGRADED))).toBe(true);
     expect(matchesApplicationHealthFilter(selected, app('gone', HealthStatus.MISSING))).toBe(false);
-    expect(
-      matchesApplicationHealthFilter(selected, app('wait', HealthStatus.PROGRESSING)),
-    ).toBe(false);
+    expect(matchesApplicationHealthFilter(selected, app('wait', HealthStatus.PROGRESSING))).toBe(
+      false,
+    );
   });
 
   it('does not keep apps with no health status when Healthy is selected', () => {
