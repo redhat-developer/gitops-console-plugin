@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import * as _ from 'lodash';
-import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
 
 import {
   DetailsTabSectionExtensionHook,
@@ -242,11 +241,6 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
     <>
       <div className="ocs-sidebar-tabsection">
         <div className="co-m-pane__heading-owner">
-          <TechPreviewBadge
-            tooltipContent={t(
-              'plugin__gitops-public~Rollouts in the Topology View is under tech preview',
-            )}
-          />
           <SidebarSectionHeading text={t('plugin__gitops-public~Rollout')} />
         </div>
       </div>

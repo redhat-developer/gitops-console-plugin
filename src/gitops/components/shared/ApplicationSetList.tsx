@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
+import * as YamlFormatter from 'yaml';
 
 import {
   K8sResourceCommon,
@@ -38,6 +38,7 @@ import {
   useShowOperandsInAllNamespaces,
 } from './AllNamespaces';
 import { GitOpsDataViewTable, useGitOpsDataViewSort } from './DataView';
+import MetadataLabels from './MetadataLabels';
 
 const formatCreationTimestamp = (timestamp: string): string => {
   if (!timestamp) return '-';
@@ -147,6 +148,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
         'status',
         'generated-apps',
         'generators',
+        'labels',
         'created-at',
         'actions',
       ].map((key) => ({ key })),
@@ -254,15 +256,6 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
       {showTitle == undefined && (
         <ListPageHeader
           title={t('ApplicationSets')}
-          badge={
-            location.pathname?.includes('openshift-gitops-operator') ? null : (
-              <TechPreviewBadge
-                tooltipContent={t(
-                  'This list page is under tech preview, but not necessarily the resources it represents',
-                )}
-              />
-            )
-          }
           helpText={
             location.pathname?.includes('openshift-gitops-operator') ? (
               <ShowOperandsInAllNamespacesRadioGroup />
@@ -363,6 +356,25 @@ const useApplicationSetRowsDV = (
         cell: <div>{getAppSetGeneratorCount(appSet).toString()}</div>,
       },
       {
+        id: 'labels',
+        dataLabel: 'Labels',
+        cell: (
+          <div>
+            <MetadataLabels
+              kind={
+                ApplicationSetModel.apiGroup +
+                '~' +
+                ApplicationSetModel.apiVersion +
+                '~' +
+                ApplicationSetModel.kind
+              }
+              labels={appSet?.metadata?.labels}
+              numLabels={3}
+            />
+          </div>
+        ),
+      },
+      {
         id: 'created-at-' + index,
         cell: <div>{formatCreationTimestamp(appSet.metadata.creationTimestamp)}</div>,
       },
@@ -428,11 +440,19 @@ const useColumnsDV = (
       },
     },
     {
+      cell: t('Labels'),
+      props: {
+        'aria-label': 'labels',
+        className: 'pf-m-width-20',
+        sort: getSortParams(4 + i),
+      },
+    },
+    {
       cell: t('Created At'),
       props: {
         'aria-label': 'created at',
         className: 'pf-m-width-15',
-        sort: getSortParams(4 + i),
+        sort: getSortParams(5 + i),
       },
     },
     {
@@ -492,10 +512,13 @@ export const sortData = (
         aValue = getGeneratedAppsCount(a, applications, appsLoaded);
         bValue = getGeneratedAppsCount(b, applications, appsLoaded);
         break;
-
       case 'generators':
         aValue = getAppSetGeneratorCount(a);
         bValue = getAppSetGeneratorCount(b);
+        break;
+      case 'labels':
+        aValue = YamlFormatter.stringify(a.metadata?.labels || {});
+        bValue = YamlFormatter.stringify(b.metadata?.labels || {});
         break;
       case 'created-at':
         aValue = new Date(a.metadata?.creationTimestamp || 0).getTime();

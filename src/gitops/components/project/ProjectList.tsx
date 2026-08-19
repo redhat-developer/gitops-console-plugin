@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom-v5-compat';
-import TechPreviewBadge from 'src/plugin/import/badges/TechPreviewBadge';
+import * as YamlFormatter from 'yaml';
 
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
 import { modelToGroupVersionKind, modelToRef } from '@gitops/utils/utils';
@@ -195,15 +195,6 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
       {showTitle == undefined && (
         <ListPageHeader
           title={t('AppProjects')}
-          badge={
-            location?.pathname?.includes('openshift-gitops-operator') ? null : (
-              <TechPreviewBadge
-                tooltipContent={t(
-                  'This list page is under tech preview, but not necessarily the resources it represents',
-                )}
-              />
-            )
-          }
           helpText={
             location.pathname?.includes('openshift-gitops-operator') ? (
               <ShowOperandsInAllNamespacesRadioGroup />
@@ -360,8 +351,8 @@ export const sortData = (
         bValue = getApplicationsCount(b, applications, appsLoaded);
         break;
       case 'labels':
-        aValue = a.metadata?.labels || {};
-        bValue = b.metadata?.labels || {};
+        aValue = YamlFormatter.stringify(a.metadata?.labels || {});
+        bValue = YamlFormatter.stringify(b.metadata?.labels || {});
         break;
       case 'last-updated':
         aValue = getLastUpdateTimestamp(a) || '';
@@ -422,10 +413,7 @@ export const useColumnsDV = (
     },
     {
       cell: t('Labels'),
-      props: {
-        'aria-label': 'labels',
-        className: 'pf-m-width-20',
-      },
+      props: sortableHeaderProps('labels', 'pf-m-width-20', getSortParams(3 + i)),
     },
     {
       cell: t('Last Updated'),
