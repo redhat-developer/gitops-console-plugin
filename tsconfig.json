@@ -8,8 +8,11 @@
     "allowJs": true,
     "strict": false,
     "allowSyntheticDefaultImports": true,
+    //so cjs default imports (git-url-parse) work in jest
+    "esModuleInterop": true,
     "noUnusedLocals": true,
     "lib": ["dom", "es2017"],
+    "types": ["jest"],
     "paths": {
       "@gitops/*": ["src/gitops/*"],
       "@gitops-models/*": ["src/gitops/models/*"],
