@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { useSearchParams } from 'react-router-dom-v5-compat';
 
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { ApplicationKind, ApplicationSource } from '@gitops/models/ApplicationModel';
@@ -25,7 +26,7 @@ import { CubesIcon, GithubIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
 
 import ArgoCDLink from '../shared/ArgoCDLink/ArgoCDLink';
-import { GitOpsDataViewTable } from '../shared/DataView';
+import { GitOpsDataViewTable, useGitOpsListPagePagination } from '../shared/DataView';
 
 type ApplicationDetailsTabProps = RouteComponentProps<{
   ns: string;
@@ -183,7 +184,17 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
 
 export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer }) => {
   const columns = useColumnsDV();
-  const rows = useRowsDV(sources);
+  const [searchParams] = useSearchParams();
+  const {
+    pagination,
+    pagedItems: pagedSources,
+    itemCount,
+  } = useGitOpsListPagePagination({
+    items: sources,
+    namespace: obj?.metadata?.namespace,
+    searchParams,
+  });
+  const rows = useRowsDV(pagedSources);
   const argoUrl = getApplicationArgoUrl(argoServer, obj);
   const empty = (
     <Tbody>
@@ -222,7 +233,9 @@ export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer
         rows={rows}
         columns={columns}
         emptyState={empty}
-        isEmpty={rows.length === 0}
+        isEmpty={sources.length === 0}
+        itemCount={itemCount}
+        pagination={pagination}
       />
     </>
   );

@@ -27,7 +27,11 @@ import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/Dat
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
 
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from '../shared/DataView';
 import ResourceActionsCell from '../shared/ResourceActionsCell/ResourceActionsCell';
 
 import { ApplicationGraphView } from './graph/ApplicationGraphView';
@@ -59,7 +63,8 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
     [],
   );
 
-  const { sortBy, direction, getSortParams } = useGitOpsDataViewSort(columnSortConfig);
+  const { searchParams, sortBy, direction, getSortParams } =
+    useGitOpsDataViewSort(columnSortConfig);
   const columnsDV = useResourceColumnsDV(getSortParams);
   const sortedResources = React.useMemo(
     () => sortData(resources, sortBy, direction),
@@ -81,8 +86,18 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
     resourceFilters,
   );
 
+  const {
+    pagination,
+    pagedItems: pagedResources,
+    itemCount,
+  } = useGitOpsListPagePagination({
+    items: filteredResources,
+    namespace: application?.metadata?.namespace,
+    searchParams,
+  });
+
   const isEmptyResources = filteredResources.length === 0;
-  const rows = useResourceRowsDV(filteredResources, application, argoBaseURL);
+  const rows = useResourceRowsDV(pagedResources, application, argoBaseURL);
   const isListView = viewType === ApplicationResourcesViewType.list;
 
   const empty = (
@@ -148,6 +163,8 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
                 emptyState={empty}
                 isEmpty={isEmptyResources}
                 activeState={isEmptyResources ? DataViewState.empty : null}
+                itemCount={itemCount}
+                pagination={pagination}
               />
             ) : (
               <div className="gitops-graph-list-view__graph">

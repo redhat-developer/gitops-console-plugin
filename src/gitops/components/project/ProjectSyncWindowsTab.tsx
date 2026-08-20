@@ -20,7 +20,11 @@ import { AppProjectKind, SyncWindow } from '../../models/AppProjectModel';
 import { ArgoServer, getArgoServerForProject } from '../../utils/gitops';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
 import { ArgoCDLink } from '../shared/ArgoCDLink/ArgoCDLink';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from '../shared/DataView';
 
 type ProjectSyncWindowsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: AppProjectKind;
@@ -60,13 +64,24 @@ const ProjectSyncWindowsTab: React.FC<ProjectSyncWindowsTabProps> = ({ obj }) =>
     [],
   );
 
-  const { sortBy, direction, getSortParams } = useGitOpsDataViewSort(columnSortConfig);
+  const { searchParams, sortBy, direction, getSortParams } =
+    useGitOpsDataViewSort(columnSortConfig);
   const columnsDV = useSyncWindowsColumnsDV(getSortParams, t);
   const sortedSyncWindows = React.useMemo(() => {
     return sortSyncWindowsData(syncWindows, sortBy, direction);
   }, [syncWindows, sortBy, direction]);
 
-  const rows = useSyncWindowsRowsDV(sortedSyncWindows, t);
+  const {
+    pagination,
+    pagedItems: pagedSyncWindows,
+    itemCount,
+  } = useGitOpsListPagePagination({
+    items: sortedSyncWindows,
+    namespace: obj?.metadata?.namespace,
+    searchParams,
+  });
+
+  const rows = useSyncWindowsRowsDV(pagedSyncWindows, t);
 
   if (!obj) return null;
 
@@ -105,6 +120,8 @@ const ProjectSyncWindowsTab: React.FC<ProjectSyncWindowsTabProps> = ({ obj }) =>
         rows={rows}
         isEmpty={syncWindows.length === 0}
         emptyState={empty}
+        itemCount={itemCount}
+        pagination={pagination}
       />
     </PageSection>
   );

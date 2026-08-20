@@ -19,7 +19,11 @@ import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/Dat
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../../shared/DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from '../../shared/DataView';
 
 import './History.scss';
 
@@ -35,14 +39,26 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
     [],
   );
 
-  const { sortBy, direction, getSortParams } = useGitOpsDataViewSort(columnSortConfig);
+  const { searchParams, sortBy, direction, getSortParams } =
+    useGitOpsDataViewSort(columnSortConfig);
   const columnsDV = useColumnsDV(getSortParams);
 
-  const sortedHistory = React.useMemo(() => {
-    return sortData(history, sortBy, direction);
-  }, [history, sortBy, direction]);
+  const displayHistory = React.useMemo(
+    () => sortData([...history].reverse(), sortBy, direction),
+    [history, sortBy, direction],
+  );
 
-  const rows = useRowsDV(sortedHistory, obj);
+  const {
+    pagination,
+    pagedItems: pagedHistory,
+    itemCount,
+  } = useGitOpsListPagePagination({
+    items: displayHistory,
+    namespace: obj?.metadata?.namespace,
+    searchParams,
+  });
+
+  const rows = useRowsDV(pagedHistory, obj);
 
   const argoServer = useArgoServer(obj);
   const argoUrl = getApplicationArgoUrl(argoServer, obj);
@@ -85,7 +101,9 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
         rows={rows}
         columns={columnsDV}
         emptyState={empty}
-        isEmpty={rows.length === 0}
+        isEmpty={displayHistory.length === 0}
+        itemCount={itemCount}
+        pagination={pagination}
       />
     </div>
   );
@@ -187,7 +205,7 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
       },
     ]);
   });
-  return rows.reverse();
+  return rows;
 };
 
 const useColumnsDV = (getSortParams: (columnIndex: number) => ThProps['sort']) => {

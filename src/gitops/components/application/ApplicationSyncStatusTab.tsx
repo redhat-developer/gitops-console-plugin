@@ -36,7 +36,11 @@ import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
 import { DetailsDescriptionGroup } from '../shared/BaseDetailsSummary/BaseDetailsSummary';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from '../shared/DataView';
 import ResourceActionsCell from '../shared/ResourceActionsCell/ResourceActionsCell';
 
 import { ConditionsPopover } from './Conditions/ConditionsPopover';
@@ -64,13 +68,24 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
     [],
   );
 
-  const { sortBy, direction, getSortParams } = useGitOpsDataViewSort(columnSortConfig);
+  const { searchParams, sortBy, direction, getSortParams } =
+    useGitOpsDataViewSort(columnSortConfig);
   const columnsDV = useResourceColumnsDV(getSortParams);
   const sortedResources = React.useMemo(() => {
     return sortData(resources, sortBy, direction);
   }, [resources, sortBy, direction]);
 
-  const rows = useResourceRowsDV(sortedResources, obj, argoUrl);
+  const {
+    pagination,
+    pagedItems: pagedResources,
+    itemCount,
+  } = useGitOpsListPagePagination({
+    items: sortedResources,
+    namespace: obj?.metadata?.namespace,
+    searchParams,
+  });
+
+  const rows = useResourceRowsDV(pagedResources, obj, argoUrl);
 
   const empty = (
     <Tbody>
@@ -252,6 +267,8 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
           emptyState={empty}
           isEmpty={sortedResources.length === 0}
           activeState={resources.length === 0 ? DataViewState.empty : null}
+          itemCount={itemCount}
+          pagination={pagination}
         />
       </PageSection>
     </div>
