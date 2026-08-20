@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '@gitops/components/shared/DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from '@gitops/components/shared/DataView';
 import { PodTraffic } from '@gitops/topology/console/pod-traffic';
 import { podPhase } from '@gitops/topology/console/PodsOverview';
 import { PodKind } from '@gitops/topology/console/types';
@@ -447,6 +451,16 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
     });
   }, [filteredData, searchQuery]);
 
+  const {
+    pagination,
+    pagedItems: pagedPods,
+    itemCount,
+  } = useGitOpsListPagePagination({
+    items: filteredBySearch,
+    namespace,
+    searchParams,
+  });
+
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
@@ -461,7 +475,7 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
 
   const isEmptyState = !loadError && filteredBySearch.length === 0;
 
-  const rows = usePodRowsDV(filteredBySearch, memResults, cpuResults, namespace);
+  const rows = usePodRowsDV(pagedPods, memResults, cpuResults, namespace);
 
   const topologyUrl = rollout?.metadata?.namespace
     ? '/topology/ns/' +
@@ -490,6 +504,8 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
           isEmpty={isEmptyState}
           emptyState={empty}
           isError={!!loadError}
+          itemCount={itemCount}
+          pagination={pagination}
         />
       </ListPageBody>
     </div>
