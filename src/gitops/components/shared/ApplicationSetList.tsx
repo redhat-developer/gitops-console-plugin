@@ -42,7 +42,16 @@ import {
   ShowOperandsInAllNamespacesRadioGroup,
   useShowOperandsInAllNamespaces,
 } from './AllNamespaces';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from './DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from './DataView';
+import {
+  filterByConsoleNameAndLabels,
+  filterResourcesByLabelQuery,
+  parseLabelFilterParam,
+} from './listPageTextFilters';
 import MetadataLabels from './MetadataLabels';
 
 const formatCreationTimestamp = (timestamp: string): string => {
@@ -165,6 +174,8 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
+  const nameQuery = searchParams.get('name') || '';
+  const labelsParam = searchParams.get('labels') || '';
 
   const columnsDV = useColumnsDV(namespace, getSortParams);
   const sortedApplicationSets = React.useMemo(() => {
@@ -180,21 +191,22 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   const filters = getFilters(t);
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedApplicationSets, filters);
 
-  // Filter by search query if present (after other filters)
-  const filteredBySearch = React.useMemo(() => {
-    if (!searchQuery) return filteredData;
+  const filteredByNameAndLabels = React.useMemo(
+    () => filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
+    [filteredData, nameQuery, labelsParam],
+  );
 
-    return filteredData.filter((appSet) => {
-      const labels = appSet.metadata?.labels || {};
-      // Check if any label matches the search query
-      return Object.entries(labels).some(([key, value]) => {
-        const labelSelector = `${key}=${value}`;
-        return labelSelector.includes(searchQuery) || key.includes(searchQuery);
-      });
-    });
-  }, [filteredData, searchQuery]);
+  const filteredBySearch = React.useMemo(
+    () => filterResourcesByLabelQuery(filteredByNameAndLabels, searchQuery),
+    [filteredByNameAndLabels, searchQuery],
+  );
 
-  const rows = useApplicationSetRowsDV(filteredBySearch, namespace, applications, appsLoaded);
+  const { pagination, pagedItems, itemCount } = useGitOpsListPagePagination({
+    items: filteredBySearch,
+    namespace,
+    searchParams,
+  });
+  const rows = useApplicationSetRowsDV(pagedItems, namespace, applications, appsLoaded);
 
   // Check if there are ApplicationSets initially (before search)
   const hasApplicationSets = React.useMemo(() => {
@@ -290,6 +302,8 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
           isLoading={!loaded}
           isError={!!loadError}
           errorState={error}
+          itemCount={itemCount}
+          pagination={pagination}
           activeState={
             // eslint-disable-next-line no-nested-ternary
             !loaded ? DataViewState.loading : isEmptyState ? DataViewState.empty : undefined
