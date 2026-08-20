@@ -30,7 +30,16 @@ import {
   ShowOperandsInAllNamespacesRadioGroup,
   useShowOperandsInAllNamespaces,
 } from '../shared/AllNamespaces';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from '../shared/DataView';
+import {
+  filterByConsoleNameAndLabels,
+  filterResourcesByLabelQuery,
+  parseLabelFilterParam,
+} from '../shared/listPageTextFilters';
 import { MetadataLabels } from '../shared/MetadataLabels/MetadataLabels';
 
 import { useRolloutActionsProvider } from './hooks/useRolloutActionsProvider';
@@ -106,6 +115,8 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
+  const nameQuery = searchParams.get('name') || '';
+  const labelsParam = searchParams.get('labels') || '';
 
   const { t } = useGitOpsTranslation();
 
@@ -117,22 +128,22 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
   const filters = getFilters(t);
   const [data, filteredData, onFilterChange] = useListPageFilter(sortedRollouts, filters);
 
-  // TODO: use alternate filter since it is deprecated. See DataTableView potentially
-  // Filter by search query if present (after other filters)
-  const filteredBySearch = React.useMemo(() => {
-    if (!searchQuery) return filteredData;
+  const filteredByNameAndLabels = React.useMemo(
+    () => filterByConsoleNameAndLabels(filteredData, nameQuery, parseLabelFilterParam(labelsParam)),
+    [filteredData, nameQuery, labelsParam],
+  );
 
-    return filteredData.filter((app) => {
-      const labels = app.metadata?.labels || {};
-      // Check if any label matches the search query
-      return Object.entries(labels).some(([key, value]) => {
-        const labelSelector = `${key}=${value}`;
-        return labelSelector.includes(searchQuery) || key.includes(searchQuery);
-      });
-    });
-  }, [filteredData, searchQuery]);
+  const filteredBySearch = React.useMemo(
+    () => filterResourcesByLabelQuery(filteredByNameAndLabels, searchQuery),
+    [filteredByNameAndLabels, searchQuery],
+  );
 
-  const rows = useRolloutsRowsDV(filteredBySearch, namespace, t);
+  const { pagination, pagedItems, itemCount } = useGitOpsListPagePagination({
+    items: filteredBySearch,
+    namespace,
+    searchParams,
+  });
+  const rows = useRolloutsRowsDV(pagedItems, namespace, t);
 
   const empty = (
     <Tbody>
@@ -195,7 +206,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
                 onFilterChange={onFilterChange}
               />
             </span>
-            {rows.length > 0 && !loadError && (
+            {filteredBySearch.length > 0 && !loadError && (
               <span className="rollout-list-page__topology-link pf-m-mb-sm">
                 {topologyLink(topologyUrl, t)}
               </span>
@@ -209,6 +220,8 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
           emptyState={empty}
           isError={!!loadError}
           errorState={error || undefined}
+          itemCount={itemCount}
+          pagination={pagination}
         />
       </ListPageBody>
     </>

@@ -9,7 +9,7 @@ import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/Dat
 
 import { ApplicationSetGraphView } from '../appset/graph/ApplicationSetGraphView';
 
-import { GitOpsDataViewTable } from './DataView';
+import { type GitOpsDataViewPagination, GitOpsDataViewTable } from './DataView';
 import GitOpsViewSwitcher from './GitOpsViewSwitcher';
 import { APPLICATION_SET_APPLICATIONS_VIEW_SETTING_KEY, GitOpsViewType } from './GitOpsViewType';
 
@@ -31,6 +31,8 @@ type ApplicationSetApplicationsViewProps = {
   errorState?: React.ReactNode;
   isError?: boolean;
   isEmpty: boolean;
+  itemCount?: number;
+  pagination?: GitOpsDataViewPagination;
 };
 
 const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewProps> = ({
@@ -49,6 +51,8 @@ const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewPro
   errorState,
   isError,
   isEmpty,
+  itemCount,
+  pagination,
 }) => {
   const [savedViewType, setSavedViewType, viewSettingsLoaded] = useUserSettings<GitOpsViewType>(
     APPLICATION_SET_APPLICATIONS_VIEW_SETTING_KEY,
@@ -124,6 +128,8 @@ const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewPro
                 emptyState={emptyState}
                 errorState={errorState}
                 isError={isError}
+                itemCount={itemCount}
+                pagination={pagination}
                 activeState={
                   // eslint-disable-next-line no-nested-ternary
                   isError
