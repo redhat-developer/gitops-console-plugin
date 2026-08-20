@@ -19,7 +19,11 @@ import { AppProjectKind, Role } from '../../models/AppProjectModel';
 import { ArgoServer, getArgoServerForProject } from '../../utils/gitops';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
 import { ArgoCDLink } from '../shared/ArgoCDLink/ArgoCDLink';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from '../shared/DataView';
 
 /**
  * Parses an Argo CD policy string and returns a formatted React element for tooltip
@@ -102,13 +106,24 @@ const ProjectRolesTab: React.FC<ProjectRolesTabProps> = ({ obj }) => {
     [],
   );
 
-  const { sortBy, direction, getSortParams } = useGitOpsDataViewSort(columnSortConfig);
+  const { searchParams, sortBy, direction, getSortParams } =
+    useGitOpsDataViewSort(columnSortConfig);
   const columnsDV = useRolesColumnsDV(getSortParams, t);
   const sortedRoles = React.useMemo(() => {
     return sortRolesData(roles, sortBy, direction);
   }, [roles, sortBy, direction]);
 
-  const rows = useRolesRowsDV(sortedRoles, t);
+  const {
+    pagination,
+    pagedItems: pagedRoles,
+    itemCount,
+  } = useGitOpsListPagePagination({
+    items: sortedRoles,
+    namespace: obj?.metadata?.namespace,
+    searchParams,
+  });
+
+  const rows = useRolesRowsDV(pagedRoles, t);
 
   if (!obj) return null;
 
@@ -142,6 +157,8 @@ const ProjectRolesTab: React.FC<ProjectRolesTabProps> = ({ obj }) => {
         rows={rows}
         isEmpty={roles.length === 0}
         emptyState={empty}
+        itemCount={itemCount}
+        pagination={pagination}
       />
     </PageSection>
   );
