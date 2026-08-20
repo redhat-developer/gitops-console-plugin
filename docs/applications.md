@@ -13,6 +13,7 @@ The Applications list page displays all Applications with the following features
 * **Table columns**: name, namespace, sync status, health, revision, AppProject, and actions
 * **Filtering**: Filter Applications by health status (Healthy, Progressing, Degraded, Missing) and sync status (Synced, OutOfSync, Unknown)
 * **Sorting and search**: Sort columns and search by name
+* **Pagination**: After filters and search, browse results in pages of 10, 20, 50, or 100 items (default 50). Page and page size are stored in the URL. See [Filter and paginate resources](filter-resources.md).
 * **Create action**: Click **Create Application** to open the YAML editor with a starter template that includes repository URL, destination, and sync policy placeholders
 * **Namespace view**: From the GitOps Operator namespace path, an optional control can list operands in all namespaces for operator-focused workflows
 
@@ -22,15 +23,16 @@ The Application details page provides the following tabs:
 
 * **Details tab**: Displays summary information, health and sync indicators, revision links, destination and project information, conditions, toggles for automated sync, self-heal, and prune (when you have update permission), and detection of an Argo CD Route so you can open the Argo CD UI for the same application when routing is configured.
 * **YAML tab**: Provides a live manifest editor for the Application resource.
-* **Sources tab**: Displays repository sources with icons and metadata for Helm, Git, and OCI sources.
+* **Sources tab**: Displays repository sources with icons and metadata for Helm, Git, and OCI sources. The sources table supports pagination.
 * **Resources tab**: Combines a resource table with an interactive topology graph:
   * The graph shows immediate managed resources for the Application, not the full Argo CD resource tree.
   * Use the Argo CD link on the tab to open the complete resource hierarchy in the Argo CD UI.
   * Pan, zoom, and select resources in the graph; status filters apply to both table and graph.
+  * In list view, the resources table supports filtering, sorting, and pagination like other GitOps tables. See [Filter and paginate resources](filter-resources.md).
   * Context-menu actions on graph nodes include viewing details, editing labels and annotations, deleting resources, and viewing resources in Argo CD.
   * Related resources of the same kind can be grouped or ungrouped in the graph.
-* **Sync Status tab**: Provides fine-grained sync and operation status information for the Application.
-* **History tab**: Displays the deployment and sync history for the Application.
+* **Sync Status tab**: Provides fine-grained sync and operation status information for the Application, including a paginated table of resources last synced.
+* **History tab**: Displays the deployment and sync history for the Application in a paginated table (newest first by default; column sort keeps the selected direction).
 * **Events tab**: Shows Kubernetes events for the Application object.
 
 ## Additional features

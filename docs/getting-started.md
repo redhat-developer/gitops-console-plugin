@@ -50,3 +50,4 @@ ImageUpdaters and Rollouts appear when those CRDs are installed on the cluster.
 
 * [Enable the GitOps Console plugin](admin-enable-plugin.md)
 * [Applications](applications.md)
+* [Filter and paginate resources](filter-resources.md)

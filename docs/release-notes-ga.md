@@ -9,11 +9,12 @@ This feature includes:
 +
 * List and details pages for Applications, ApplicationSets, AppProjects, ImageUpdaters, and Rollouts
 * Filters for health, sync, and resource-specific status
+* Client-side pagination for list pages and details tables (10, 20, 50, or 100 items per page; default 50) after filters and search, with page state in the URL
 * Graphical views for Applications and ApplicationSets
 * Rollout topology in the OpenShift Console Topology view, including revision rollback
 * YAML templates for creating resources
 * Links between the OpenShift Console and the Argo CD UI
 +
-Known limitations: The Application kebab does not include Sync or Rollback actions. ApplicationSet creation uses YAML, not a form. The Application resource graph shows immediate managed resources, not the full Argo CD tree.
+Known limitations: The Application kebab does not include Sync or Rollback actions. ApplicationSet creation uses YAML, not a form. The Application resource graph shows immediate managed resources, not the full Argo CD tree. Pagination is client-side on the loaded result set and does not use Kubernetes API `limit` or `continue` tokens.
 
 Support matrix: Technology Preview in 1.21.0. General Availability in 1.22.0.

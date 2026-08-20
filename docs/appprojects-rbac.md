@@ -8,6 +8,7 @@ The AppProjects list page displays all project-scoped AppProjects with the follo
 
 * **Table columns**: Standard columns for custom resources
 * **Filtering**: Filter projects by Description, Applications, Project Type, Source Repositories, and Destinations
+* **Pagination**: After filters and search, browse results in pages of 10, 20, 50, or 100 items (default 50). See [Filter and paginate resources](filter-resources.md).
 * **Create action**: Click **Create AppProject** to open the YAML editor with a default AppProject template
 
 ## Details page
@@ -17,9 +18,9 @@ The AppProject details page provides the following tabs:
 * **Details tab**: Displays project summary, destinations, policies, and related metadata.
 * **YAML tab**: Provides a live manifest editor for the AppProject resource.
 * **Allow/Deny tab**: Displays resource allow and deny lists for cluster-scoped and namespace-scoped kinds.
-* **Applications tab**: Shows Applications that belong to this project. The table provides the same experience as the main Application list, filtered by project.
-* **Roles tab**: Displays Argo CD project roles and bindings.
-* **Sync Windows tab**: Shows configured sync windows for the project.
+* **Applications tab**: Shows Applications that belong to this project. The table provides the same experience as the main Application list, including filtering and pagination, scoped to this project.
+* **Roles tab**: Displays Argo CD project roles and bindings in a paginated table. See [Filter and paginate resources](filter-resources.md).
+* **Sync Windows tab**: Shows configured sync windows for the project in a paginated table.
 * **Events tab**: Shows Kubernetes events for the AppProject object.
 
 ## Mapping OpenShift RBAC to AppProject permissions

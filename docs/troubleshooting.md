@@ -33,7 +33,11 @@ The graph shows immediate children only. Open Argo CD for the full tree. See [To
 
 **List pages are slow**
 
-Filtering and pagination run in the browser. Select a narrower namespace.
+Filtering and pagination run in the browser on the loaded list. Select a narrower namespace or tighten filters. See [Filter and paginate resources](filter-resources.md).
+
+**Pagination shows unexpected totals**
+
+Totals reflect the filtered list, not the full cluster inventory. Clear filters or search, then confirm the namespace selector.
 
 **ImageUpdater shows no recent updates**
 

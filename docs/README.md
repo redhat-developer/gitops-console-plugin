@@ -27,6 +27,7 @@ You can use these pages to:
 * Create resources by using YAML templates
 * Edit labels and annotations
 * Filter resources by status, where applicable
+* Paginate large filtered lists and details tables (10, 20, 50, or 100 items per page; default 50)
 * Access related resources and events
 
 The GitOps Console plugin integrates with the console navigation, allowing you to navigate between related resources and access contextual actions for each resource type.
@@ -46,7 +47,7 @@ The GitOps Console plugin provides search and template capabilities:
 * [AppProjects in the GitOps Console](appprojects-rbac.md)
 * [ImageUpdaters in the GitOps Console](image-updaters.md)
 * [Rollouts in the GitOps Console](rollouts.md)
-* [Filter resources](filter-resources.md)
+* [Filter and paginate resources](filter-resources.md)
 * [Getting started](getting-started.md)
 * [Troubleshooting](troubleshooting.md)
 

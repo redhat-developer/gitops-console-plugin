@@ -8,6 +8,7 @@ The Rollouts list page displays all Argo Rollout resources with the following fe
 
 * **Table columns**: Standard columns for Rollout resources
 * **Filtering**: Filter Rollouts by rollout status (Healthy, Paused, Progressing, Degraded)
+* **Pagination**: After filters and search, browse results in pages of 10, 20, 50, or 100 items (default 50). See [Filter and paginate resources](filter-resources.md).
 * **Create action**: Click **Create Rollout** to open the YAML editor with a default Rollout template
 
 ## Topology integration
@@ -30,5 +31,5 @@ The Rollout details page provides the following tabs:
   * Pod status and health
   
   This view provides the same information as the `oc argo rollouts get rollout` CLI command, including the functionality of the `--watch` option, allowing you to monitor rollout progress directly from the console. **Rollback** is available on a non-current revision when you have patch permission.
-* **Pods tab**: Shows pods for the rollout with pod-level actions.
+* **Pods tab**: Shows pods for the rollout with pod-level actions. The pods table supports filtering, sorting, and pagination. See [Filter and paginate resources](filter-resources.md).
 * **Events tab**: Shows Kubernetes events for the Rollout object.
