@@ -15,7 +15,11 @@ import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
 import { ImageUpdaterKind, ImageUpdaterRecentUpdate } from '../../models/ImageUpdaterModel';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
-import { GitOpsDataViewTable, useGitOpsDataViewSort } from '../shared/DataView';
+import {
+  GitOpsDataViewTable,
+  useGitOpsDataViewSort,
+  useGitOpsListPagePagination,
+} from '../shared/DataView';
 
 type ImageUpdaterRecentUpdatesTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: ImageUpdaterKind;
@@ -32,7 +36,8 @@ const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> 
     [],
   );
 
-  const { sortBy, direction, getSortParams } = useGitOpsDataViewSort(columnSortConfig);
+  const { searchParams, sortBy, direction, getSortParams } =
+    useGitOpsDataViewSort(columnSortConfig);
 
   const columnsDV = useColumnsDV(getSortParams, t);
 
@@ -41,7 +46,17 @@ const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> 
     return sortData(updates, sortBy, direction);
   }, [obj, sortBy, direction]);
 
-  const rows = useRowsDV(sortedUpdates);
+  const {
+    pagination,
+    pagedItems: pagedUpdates,
+    itemCount,
+  } = useGitOpsListPagePagination({
+    items: sortedUpdates,
+    namespace: obj?.metadata?.namespace,
+    searchParams,
+  });
+
+  const rows = useRowsDV(pagedUpdates);
 
   if (!obj) {
     return null;
@@ -74,7 +89,9 @@ const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> 
           rows={rows}
           columns={columnsDV}
           emptyState={empty}
-          isEmpty={rows.length === 0}
+          isEmpty={sortedUpdates.length === 0}
+          itemCount={itemCount}
+          pagination={pagination}
         />
       </PageSection>
     </div>
