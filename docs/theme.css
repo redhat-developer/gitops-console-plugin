@@ -1,0 +1,170 @@
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;700&family=Red+Hat+Text:wght@400;500;700&display=swap");
+
+:root {
+  --theme-color: #0066cc;
+  --docs-text: #151515;
+  --docs-muted: #6a6e73;
+  --docs-border: #d2d2d2;
+  --docs-sidebar-active: #e7f1fa;
+  --docs-important: #ee2100;
+  --docs-note: #4e9fde;
+  --docs-warning: #ec7a09;
+}
+
+body {
+  font-family: "Red Hat Text", Helvetica, Arial, sans-serif;
+  color: var(--docs-text);
+  background: #fff;
+}
+
+.app-name-link,
+.sidebar-nav,
+.markdown-section {
+  font-family: "Red Hat Text", Helvetica, Arial, sans-serif;
+}
+
+.app-name-link {
+  font-family: "Red Hat Display", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  color: var(--docs-text) !important;
+}
+
+.sidebar {
+  background: #fff;
+  border-right: 1px solid var(--docs-border);
+  padding-top: 1.25rem;
+}
+
+.sidebar ul li a {
+  color: #151515;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.sidebar ul li.active > a {
+  background: var(--docs-sidebar-active);
+  color: #002952 !important;
+  font-weight: 700;
+  border-left: 3px solid var(--theme-color);
+  padding-left: calc(1rem - 3px);
+}
+
+.search input {
+  border: 1px solid var(--docs-border);
+  border-radius: 0;
+}
+
+.markdown-section {
+  max-width: 52rem;
+  color: var(--docs-text);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3 {
+  font-family: "Red Hat Display", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  color: #151515;
+  border-bottom: 0;
+}
+
+.markdown-section h1 {
+  font-size: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.markdown-section h2 {
+  font-size: 1.35rem;
+  margin-top: 2rem;
+}
+
+.markdown-section strong {
+  font-weight: 700;
+}
+
+.markdown-section ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.markdown-section ol li {
+  margin: 0.65rem 0;
+}
+
+.markdown-section ul li {
+  margin: 0.35rem 0;
+}
+
+.markdown-section table {
+  border-collapse: collapse;
+  display: table;
+  width: 100%;
+}
+
+.markdown-section th,
+.markdown-section td {
+  border: 1px solid var(--docs-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.markdown-section th {
+  background: #f0f0f0;
+}
+
+.markdown-section pre,
+.markdown-section code {
+  font-size: 0.9em;
+}
+
+.markdown-section blockquote {
+  margin: 1.25rem 0;
+  padding: 0.85rem 1rem 0.85rem 1.1rem;
+  color: var(--docs-text);
+  background: #ee210015;
+  border: 0;
+  border-left: 4px solid var(--docs-important);
+}
+
+.markdown-section blockquote p:first-child strong {
+  display: block;
+  color: var(--docs-important);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.35rem;
+}
+
+.markdown-section blockquote.note {
+  background: #4e9fde15;
+  border-left-color: var(--docs-note);
+}
+
+.markdown-section blockquote.note p:first-child strong {
+  color: #151515;
+}
+
+.markdown-section blockquote.warning {
+  background: #ec7a0915;
+  border-left-color: var(--docs-warning);
+}
+
+.page_toc {
+  font-family: "Red Hat Text", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+.page_toc .title {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--docs-muted);
+  font-size: 12px;
+}
+
+@media (min-width: 1300px) {
+  .content {
+    padding-right: 14rem;
+  }
+}

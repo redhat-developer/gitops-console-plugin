@@ -1,0 +1,19 @@
+# ImageUpdaters in the GitOps Console
+
+The GitOps Console plugin shows Argo CD Image Updater custom resources. You can view and create ImageUpdater resources from the OpenShift web console. The **ImageUpdaters** page is available when the ImageUpdater custom resource definition is installed on the cluster.
+
+## List page
+
+The ImageUpdaters list page displays ImageUpdater resources with the following features:
+
+* **Table columns**: name, namespace, applications matched, images managed, last checked, ready, labels, and actions
+* **Filtering**: Filter by applications (Has Apps, No Apps) and ready status (Ready, Not Ready)
+* **Create action**: Click **Create ImageUpdater** to open the YAML editor with a starter template
+
+## Details page
+
+The ImageUpdater details page provides the following tabs:
+
+* **Details tab**: Displays ready status, applications matched, images managed, last checked and last updated times, observed generation, and conditions.
+* **Recent Updates tab**: Displays updates from the last reconciliation cycle, including alias, image, new version, applications updated, time, and message.
+* **YAML tab**: Provides a live manifest editor for the ImageUpdater resource.
