@@ -47,7 +47,7 @@ The GitOps Console plugin provides search and template capabilities:
 * [AppProjects in the GitOps Console](appprojects-rbac.md)
 * [ImageUpdaters in the GitOps Console](image-updaters.md)
 * [Rollouts in the GitOps Console](rollouts.md)
-* [Filter and paginate resources](filter-resources.md)
+* [Filter, search, and paginate resources](filter-resources.md)
 * [Getting started](getting-started.md)
 * [Troubleshooting](troubleshooting.md)
 
@@ -60,9 +60,3 @@ pnpm serve-docs
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
-
-## Demo
-
-<video src="assets/getting-started-demo.mp4" controls width="100%"></video>
-
-Add `docs/assets/getting-started-demo.mp4` after you record OperatorHub install, plugin enablement if needed, and **Administrator** → **GitOps**.

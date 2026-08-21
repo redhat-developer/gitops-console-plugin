@@ -19,6 +19,11 @@
         relativePath: true,
         auto2top: true,
         search: 'auto',
+        copyCode: {
+          buttonText: ' ',
+          errorText: '!',
+          successText: '✓',
+        },
         toc: {
           tocMaxLevel: 3,
           target: 'h2, h3',
@@ -32,6 +37,105 @@
                   bq.classList.add('note');
                 }
               });
+
+              if (!document.getElementById('docs-lightbox')) {
+                var lightbox = document.createElement('div');
+                lightbox.id = 'docs-lightbox';
+                lightbox.className = 'docs-lightbox';
+                lightbox.hidden = true;
+                lightbox.innerHTML =
+                  '<button type="button" class="docs-lightbox__close" aria-label="Close">&times;</button>' +
+                  '<div class="docs-lightbox__content"></div>';
+                document.body.appendChild(lightbox);
+
+                function closeLightbox() {
+                  var content = lightbox.querySelector('.docs-lightbox__content');
+                  content.innerHTML = '';
+                  lightbox.hidden = true;
+                  document.body.style.overflow = '';
+                }
+
+                lightbox.addEventListener('click', function (event) {
+                  if (
+                    event.target === lightbox ||
+                    event.target.classList.contains('docs-lightbox__close')
+                  ) {
+                    closeLightbox();
+                  }
+                });
+
+                document.addEventListener('keydown', function (event) {
+                  if (event.key === 'Escape' && !lightbox.hidden) {
+                    closeLightbox();
+                  }
+                });
+              }
+
+              function openMediaLightbox(media) {
+                var lightbox = document.getElementById('docs-lightbox');
+                var content = lightbox.querySelector('.docs-lightbox__content');
+                content.innerHTML = '';
+
+                var clone;
+                if (media.tagName === 'VIDEO') {
+                  clone = document.createElement('video');
+                  clone.src = media.currentSrc || media.src;
+                  clone.controls = true;
+                  clone.autoplay = true;
+                  clone.loop = media.loop;
+                  clone.muted = media.muted;
+                  clone.playsInline = true;
+                } else {
+                  clone = document.createElement('img');
+                  clone.src = media.currentSrc || media.src;
+                  clone.alt = media.alt || '';
+                }
+
+                content.appendChild(clone);
+                lightbox.hidden = false;
+                document.body.style.overflow = 'hidden';
+              }
+
+              setTimeout(function () {
+                var copyableLangs = {
+                  bash: true,
+                  sh: true,
+                  shell: true,
+                  console: true,
+                };
+
+                document.querySelectorAll('.markdown-section pre').forEach(function (pre) {
+                  var lang = (pre.getAttribute('data-lang') || '').toLowerCase();
+                  var button = pre.querySelector('.docsify-copy-code-button');
+                  if (!button) {
+                    return;
+                  }
+                  if (!copyableLangs[lang]) {
+                    button.remove();
+                    return;
+                  }
+                  button.setAttribute('aria-label', 'Copy command');
+                  button.setAttribute('title', 'Copy command');
+                });
+              }, 0);
+
+              document
+                .querySelectorAll('.markdown-section img, .markdown-section video')
+                .forEach(function (media) {
+                  if (media.dataset.lightboxBound) {
+                    return;
+                  }
+                  media.dataset.lightboxBound = 'true';
+                  media.style.cursor = 'zoom-in';
+                  media.setAttribute(
+                    'title',
+                    media.tagName === 'VIDEO' ? 'Click to expand video' : 'Click to expand image',
+                  );
+                  media.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    openMediaLightbox(media);
+                  });
+                });
             });
           },
         ],
@@ -40,5 +144,6 @@
     <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
     <script src="https://unpkg.com/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2/dist/docsify-copy-code.min.js"></script>
   </body>
 </html>

@@ -9,7 +9,7 @@ This feature includes:
 +
 * List and details pages for Applications, ApplicationSets, AppProjects, ImageUpdaters, and Rollouts
 * Filters for health, sync, and resource-specific status
-* Client-side pagination for list pages and details tables (10, 20, 50, or 100 items per page; default 50) after filters and search, with page state in the URL
+* Client-side pagination for list pages and details tables (10, 20, 50, or 100 items per page; default 50) with page state in the URL (search and filters change which rows are included)
 * Graphical views for Applications and ApplicationSets
 * Rollout topology in the OpenShift Console Topology view, including revision rollback
 * YAML templates for creating resources

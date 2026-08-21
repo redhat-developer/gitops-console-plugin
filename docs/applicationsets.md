@@ -8,7 +8,7 @@ The ApplicationSets list page follows the same list patterns as other custom res
 
 * **Table columns**: Standard columns for custom resources
 * **Filtering**: Filter ApplicationSets by health status (Healthy, Error, Unknown)
-* **Pagination**: After filters and search, browse results in pages of 10, 20, 50, or 100 items (default 50). See [Filter and paginate resources](filter-resources.md).
+* **Pagination**: Browse results in pages of 10, 20, 50, or 100 items (default 50). Search and filters change which rows are included. See [Filter, search, and paginate resources](filter-resources.md).
 * **Create action**: Click **Create ApplicationSet** to open the YAML editor with a default ApplicationSet template
 
 > **NOTE**

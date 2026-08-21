@@ -6,6 +6,6 @@
 - [AppProjects in the GitOps Console](appprojects-rbac.md)
 - [ImageUpdaters in the GitOps Console](image-updaters.md)
 - [Rollouts in the GitOps Console](rollouts.md)
-- [Filter and paginate resources](filter-resources.md)
+- [Filter, search, and paginate resources](filter-resources.md)
 - [Troubleshooting](troubleshooting.md)
 - [1.22 GA release notes](release-notes-ga.md)

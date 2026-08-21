@@ -33,7 +33,7 @@ The graph shows immediate children only. Open Argo CD for the full tree. See [To
 
 **List pages are slow**
 
-Filtering and pagination run in the browser on the loaded list. Select a narrower namespace or tighten filters. See [Filter and paginate resources](filter-resources.md).
+Search, filtering, and pagination run in the browser on the loaded list. Select a narrower namespace or tighten filters. See [Filter, search, and paginate resources](filter-resources.md).
 
 **Pagination shows unexpected totals**
 

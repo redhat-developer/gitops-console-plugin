@@ -1,23 +1,38 @@
-# Filter and paginate resources
+# Filter, search, and paginate resources
 
-The GitOps Console plugin provides filters to narrow the resource list based on specific properties. Large filtered lists use client-side pagination that matches the OpenShift web console list experience. The available filter options vary by resource type.
+The GitOps Console plugin provides search, filters, and client-side pagination on resource list pages. Pagination improves usability and browser performance for large lists. Available filters vary by resource type.
 
 ## Prerequisites
 
 * You have access to the OpenShift web console.
 * The GitOps Console plugin is enabled.
 
+## Search
+
+1. In the OpenShift web console, navigate to **GitOps** and select a resource type.
+
+2. On the list page, use the search field to match resources by **Name** or **Label**.
+
+3. Choose the search mode from the dropdown next to the field (for example, **Name** with **Search by name...**, or **Label**).
+
+   ![Search mode dropdown with Name and Label options](assets/pics/applications-search-name-label.png)
+
+Search is separate from **Filter**. You can use search and filters together.
+
 ## Filtering
 
 1. In the OpenShift web console, navigate to **GitOps** and select a resource type.
 
-2. On the list page, use the available filter controls to narrow the displayed resources.
-   
+2. On the list page, click **Filter** to narrow the displayed resources by status or other properties.
+
    The following filters are available depending on the resource type:
-   
-   * **Applications**: Filter by health status (Healthy, Progressing, Degraded, Missing) and sync status (Synced, OutOfSync, Unknown).
+
+   * **Applications**: Filter by health status (Healthy, Progressing, Suspended, Degraded, Missing, Unknown) and sync status (Synced, OutOfSync, Unknown).
+
+     ![Applications Filter menu with Sync Status and Health Status](assets/pics/applications-filter-sync-health.png)
+
    * **ApplicationSets**: Filter by health status (Healthy, Error, Unknown).
-   * **AppProjects**: Filter by Description, Applications, Project Type, Source Repositories, and Destinations.
+   * **AppProjects**: Filter by Description (Has Description, No Description), Applications (Has Applications, No Applications), Project Type (Default Project, Custom Projects), Source Repositories (Has Source Repos, No Source Repos), and Destinations (Has Destinations, No Destinations).
    * **ImageUpdaters**: Filter by applications (Has Apps, No Apps) and ready status (Ready, Not Ready).
    * **Rollouts**: Filter by rollout status (Healthy, Paused, Progressing, Degraded).
 
@@ -25,11 +40,17 @@ The GitOps Console plugin provides filters to narrow the resource list based on 
 
 4. To clear filters, click the **Clear all filters** link or remove individual filter selections.
 
+   ![Clear all filters link below active filter chips](assets/pics/clear-all-filters.png)
+
 ## Pagination
 
-List pages for Applications, ApplicationSets, AppProjects, ImageUpdaters, and Rollouts paginate rows after filters and search are applied.
+Pagination keeps large result sets usable and improves browser performance. The console shows only one page of rows at a time so long lists are easier to scan and the browser does not render every row at once.
 
-Pagination also applies to nested and details tables that use the same shared table:
+Pagination is available on the GitOps list pages (Applications, ApplicationSets, AppProjects, ImageUpdaters, and Rollouts) as soon as the table has rows.
+
+When you use search or filters, pagination applies only to the matching resources. Changing the search or filters returns you to page 1.
+
+The same pagination applies to these nested and details tables:
 
 * The **Applications** tab on an ApplicationSet details page
 * The **Applications** tab on an AppProject details page
@@ -41,12 +62,10 @@ Pagination also applies to nested and details tables that use the same shared ta
 ### Behavior
 
 * **Page size**: Choose **10**, **20**, **50**, or **100** items per page. The default is **50**. There is no **All** option.
+
+  ![Page size menu with 10, 20, 50, and 100 per page](assets/pics/pagination-page-size.png)
+
 * **Controls**: Pagination appears above and below the table when the filtered list contains at least one row.
 * **URL state**: The current page and page size are stored in the URL (`page` and `perPage`) so you can refresh or share the view.
-* **Reset**: Changing filters, name or label search, or the selected namespace returns you to page 1. Changing the page size or sorting does not reset the page by itself; if the list shrinks, the page is clamped to the last valid page.
+* **Reset**: Changing filters, name or label search, or the selected project returns you to page 1. Changing the page size or sorting does not reset the page by itself; if the list shrinks, the page is clamped to the last valid page.
 * **Client-side only**: Pagination runs in the browser on the already loaded and filtered list. It does not use Kubernetes API `limit` or `continue` tokens.
-
-## Verification
-
-* Verify that the resource list displays only items matching your selected filter criteria.
-* Verify that the pagination controls show the correct total for the filtered list and that changing the page size updates the table.

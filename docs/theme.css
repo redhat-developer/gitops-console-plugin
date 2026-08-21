@@ -168,3 +168,92 @@ body {
     padding-right: 14rem;
   }
 }
+
+.markdown-section img,
+.markdown-section video {
+  max-width: 100%;
+  height: auto;
+  cursor: zoom-in;
+}
+
+.markdown-section video {
+  display: block;
+  width: 100%;
+  background: #000;
+}
+
+.docs-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.82);
+  cursor: zoom-out;
+}
+
+.docs-lightbox[hidden] {
+  display: none;
+}
+
+.docs-lightbox__content {
+  max-width: min(96vw, 1200px);
+  max-height: 92vh;
+  cursor: default;
+}
+
+.docs-lightbox__content img,
+.docs-lightbox__content video {
+  display: block;
+  width: 100%;
+  max-height: 92vh;
+  height: auto;
+  object-fit: contain;
+  background: #000;
+}
+
+.docs-lightbox__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.docsify-copy-code-button {
+  font-family: "Red Hat Text", Helvetica, Arial, sans-serif !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  min-width: 2rem !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background-color: #6a6e73 !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='13' height='13' rx='2'/%3E%3Cpath d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 1rem 1rem !important;
+  color: transparent !important;
+  opacity: 1 !important;
+}
+
+.docsify-copy-code-button:hover,
+.docsify-copy-code-button:focus {
+  background-color: #4f5255 !important;
+}
+
+.docsify-copy-code-button.success {
+  font-size: 0.95rem !important;
+  line-height: 2rem !important;
+  color: #fff !important;
+  background-color: #6a6e73 !important;
+  background-image: none !important;
+}
