@@ -19,6 +19,8 @@ import {
   paginateItems,
 } from './gitOpsDataViewPagination';
 
+import './GitOpsDataViewTable.scss';
+
 let gitOpsPaginationInstanceCounter = 0;
 
 const useGitOpsPaginationWidgetIdBase = (): string => {
@@ -149,7 +151,7 @@ export const GitOpsDataViewTable: React.FC<GitOpsDataViewTableProps> = ({
   const showPagination = !!pagination && paginationItemCount > 0 && !isError && !isLoading;
 
   return (
-    <DataView activeState={resolvedActiveState}>
+    <DataView activeState={resolvedActiveState} className="gitops-data-view-table">
       {showPagination && pagination && (
         <DataViewToolbar
           pagination={
@@ -171,6 +173,7 @@ export const GitOpsDataViewTable: React.FC<GitOpsDataViewTableProps> = ({
               pagination={pagination}
               variant={PaginationVariant.bottom}
               widgetId={`${paginationWidgetIdBase}-bottom`}
+              isStatic
             />
           }
         />
@@ -184,7 +187,8 @@ const GitOpsPagination: React.FC<{
   pagination: GitOpsDataViewPagination;
   variant: PaginationVariant;
   widgetId: string;
-}> = ({ itemCount, pagination, variant, widgetId }) => {
+  isStatic?: boolean;
+}> = ({ itemCount, pagination, variant, widgetId, isStatic }) => {
   const { t } = useGitOpsTranslation();
 
   return (
@@ -193,6 +197,7 @@ const GitOpsPagination: React.FC<{
       perPageOptions={GITOPS_PER_PAGE_OPTIONS}
       variant={variant}
       widgetId={widgetId}
+      isStatic={isStatic}
       titles={{
         paginationAriaLabel: t('Pagination'),
         toFirstPageAriaLabel: t('Go to first page'),
