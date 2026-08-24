@@ -1,5 +1,5 @@
 {
-  "Show operands in:": "Show operands in:",
-  "All namespaces": "All namespaces",
-  "Current namespace only": "Current namespace only"
+  "Show operands in:": "显示以下的操作项：",
+  "All namespaces": "所有命名空间",
+  "Current namespace only": "仅限当前命名空间"
 }
