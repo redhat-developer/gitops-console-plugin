@@ -1,0 +1,11 @@
+{
+  "Name is required.": "Se requiere el nombre.",
+  "Name can only contain letters, numbers, spaces, and hyphens.": "El nombre solo puede contener letras, números, espacios y guiones.",
+  "The name {{favoriteName}} already exists in your favorites. Choose a unique name to save to your favorites.": "El nombre {{favoriteName}} ya existe en sus favoritos. Elija un nombre único para guardarlo en sus favoritos.",
+  "Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.": "Se alcanzó la cantidad máxima de favoritos ({{maxCount}}). Para añadir otro favorito, elimine una página existente de sus favoritos.",
+  "Remove from favorites": "Eliminar de favoritos",
+  "Add to favorites": "Añadir a favoritos",
+  "Save": "Guardar",
+  "Cancel": "Cancelar",
+  "Name": "Nombre"
+}

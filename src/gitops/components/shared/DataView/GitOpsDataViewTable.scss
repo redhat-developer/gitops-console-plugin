@@ -1,0 +1,8 @@
+// Keep top/bottom pagination aligned horizontally. PatternFly's bottom
+// variant adds spacer--sm inline padding that the top (toolbar) pager does not.
+.gitops-data-view-table {
+  .pf-v6-c-toolbar__item.pf-m-pagination .pf-v6-c-pagination.pf-m-bottom {
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+  }
+}

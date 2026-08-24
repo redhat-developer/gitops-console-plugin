@@ -1,11 +1,11 @@
 {
-  "Name is required.": "Name is required.",
-  "Name can only contain letters, numbers, spaces, and hyphens.": "Name can only contain letters, numbers, spaces, and hyphens.",
-  "The name {{favoriteName}} already exists in your favorites. Choose a unique name to save to your favorites.": "The name {{favoriteName}} already exists in your favorites. Choose a unique name to save to your favorites.",
-  "Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.": "Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.",
-  "Remove from favorites": "Remove from favorites",
-  "Add to favorites": "Add to favorites",
-  "Save": "Save",
-  "Cancel": "Cancel",
-  "Name": "Name"
+  "Name is required.": "이름은 필수 입력 항목입니다.",
+  "Name can only contain letters, numbers, spaces, and hyphens.": "이름에는 문자, 숫자, 공백, 하이픈만 포함할 수 있습니다.",
+  "The name {{favoriteName}} already exists in your favorites. Choose a unique name to save to your favorites.": "{{favoriteName}}이라는 이름이 이미 즐겨 찾기에 있습니다. 즐겨 찾기에 저장할 중복되지 않는 고유한 이름을 선택합니다.",
+  "Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.": "즐겨찾기 최대 개수({{maxCount}})에 도달했습니다. 다른 즐겨 찾기를 추가하려면 즐겨 찾기에서 기존 페이지를 제거하세요.",
+  "Remove from favorites": "즐겨 찾기에서 제거",
+  "Add to favorites": "즐겨 찾기에 추가",
+  "Save": "저장",
+  "Cancel": "취소",
+  "Name": "이름"
 }
