@@ -1,11 +1,11 @@
 {
-  "Name is required.": "Name is required.",
-  "Name can only contain letters, numbers, spaces, and hyphens.": "Name can only contain letters, numbers, spaces, and hyphens.",
-  "The name {{favoriteName}} already exists in your favorites. Choose a unique name to save to your favorites.": "The name {{favoriteName}} already exists in your favorites. Choose a unique name to save to your favorites.",
-  "Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.": "Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.",
-  "Remove from favorites": "Remove from favorites",
-  "Add to favorites": "Add to favorites",
-  "Save": "Save",
-  "Cancel": "Cancel",
-  "Name": "Name"
+  "Name is required.": "名称是必需的。",
+  "Name can only contain letters, numbers, spaces, and hyphens.": "名称只能包含字母、数字、空格和连字符。",
+  "The name {{favoriteName}} already exists in your favorites. Choose a unique name to save to your favorites.": "名称 {{favoriteName}} 已存在于您的收藏中。选择一个唯一的名称保存到您的收藏中。",
+  "Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.": "已达到最大收藏数 ({{maxCount}})。要添加另一个收藏，请从您的收藏中删除一个已有的。",
+  "Remove from favorites": "从喜爱中删除",
+  "Add to favorites": "添加到喜爱",
+  "Save": "保存",
+  "Cancel": "取消",
+  "Name": "名称"
 }

@@ -1,11 +1,11 @@
 {
-  "Name is required.": "Name is required.",
-  "Name can only contain letters, numbers, spaces, and hyphens.": "Name can only contain letters, numbers, spaces, and hyphens.",
-  "The name {{favoriteName}} already exists in your favorites. Choose a unique name to save to your favorites.": "The name {{favoriteName}} already exists in your favorites. Choose a unique name to save to your favorites.",
-  "Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.": "Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.",
-  "Remove from favorites": "Remove from favorites",
-  "Add to favorites": "Add to favorites",
-  "Save": "Save",
-  "Cancel": "Cancel",
-  "Name": "Name"
+  "Name is required.": "名前が必要です。",
+  "Name can only contain letters, numbers, spaces, and hyphens.": "名前には文字、数字、スペース、ハイフンのみ使用できます。",
+  "The name {{favoriteName}} already exists in your favorites. Choose a unique name to save to your favorites.": "名前 {{favoriteName}} はすでにお気に入りに存在します。お気に入りに保存するには、一意の名前を選択してください。",
+  "Maximum number of favorites ({{maxCount}}) reached. To add another favorite, remove an existing page from your favorites.": "お気に入りの最大数 ({{maxCount}}) に達しました。別のお気に入りを追加するには、既存のページをお気に入りから削除してください。",
+  "Remove from favorites": "「お気に入り」から削除",
+  "Add to favorites": "「お気に入り」に追加",
+  "Save": "保存",
+  "Cancel": "キャンセル",
+  "Name": "名前"
 }
