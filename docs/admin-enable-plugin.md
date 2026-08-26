@@ -51,10 +51,19 @@ The console loads plugins listed in `spec.plugins` on `console.operator.openshif
 
 2. To enable **gitops-plugin**:
 
-   ```bash
-   PLUGIN_PATCH='[{"op":"add","path":"/spec/plugins/-","value":"gitops-plugin"}]'
-   oc patch console.operator.openshift.io cluster --type=json -p "${PLUGIN_PATCH}"
-   ```
+   * If step 1 printed a JSON array (for example `["monitoring-plugin"]`), append **gitops-plugin**:
+
+     ```bash
+     PLUGIN_PATCH='[{"op":"add","path":"/spec/plugins/-","value":"gitops-plugin"}]'
+     oc patch console.operator.openshift.io cluster --type=json -p "${PLUGIN_PATCH}"
+     ```
+
+   * If step 1 printed nothing (or only `null`), `spec.plugins` is missing. Create the list:
+
+     ```bash
+     PLUGIN_PATCH='[{"op":"add","path":"/spec/plugins","value":["gitops-plugin"]}]'
+     oc patch console.operator.openshift.io cluster --type=json -p "${PLUGIN_PATCH}"
+     ```
 
    Skip this step if `gitops-plugin` is already in the list from the previous command.
 

@@ -73,7 +73,7 @@ From the row kebab, you can:
 
 > **NOTE**
 >
-> The Application kebab does not include **Sync** or **Rollback**. Use sync policy toggles on the Details tab, the Argo CD UI, the `argocd` CLI, or YAML. Use the History tab as a reference for past revisions, then roll back from the Argo CD UI or CLI if needed.
+> The Application kebab does not include **Sync** or **Rollback**. Sync policy toggles on the Details tab (**Automated**, **Prune**, **Self Heal**) and YAML changes only configure sync policy or the manifest; they do not run a one-time sync. For a manual sync or rollback, use the Argo CD UI or the `argocd` CLI. The History tab lists past revisions for reference; it does not roll back.
 
 ### Favorites
 
