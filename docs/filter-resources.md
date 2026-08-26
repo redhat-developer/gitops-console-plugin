@@ -33,8 +33,11 @@ Search is separate from **Filter**. You can use search and filters together.
 
    * **ApplicationSets**: Filter by health status (Healthy, Error, Unknown).
    * **AppProjects**: Filter by Description (Has Description, No Description), Applications (Has Applications, No Applications), Project Type (Default Project, Custom Projects), Source Repositories (Has Source Repos, No Source Repos), and Destinations (Has Destinations, No Destinations).
-   * **ImageUpdaters**: Filter by applications (Has Apps, No Apps) and ready status (Ready, Not Ready).
-   * **Rollouts**: Filter by rollout status (Healthy, Paused, Progressing, Degraded).
+   * **ImageUpdaters**: Filter by:
+     * **Apps**: Has Apps, No Apps
+     * **Ready**: Ready, Not Ready
+   * **Rollouts**: Filter by:
+     * **Rollout Status**: Healthy, Paused, Progressing, Degraded
 
 3. Optional: Combine multiple filters to narrow the results further.
 

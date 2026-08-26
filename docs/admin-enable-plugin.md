@@ -82,3 +82,8 @@ The GitOps Console plugin is cluster-scoped. A single plugin deployment serves a
 When multiple Argo CD instances exist in different namespaces, their resources appear together in the GitOps pages. Use the namespace selector to limit the view to one namespace or to browse across namespaces.
 
 The **View in Argo CD** action opens the selected application in the Argo CD user interface. This action requires a Route to the Argo CD server.
+
+## Related information
+
+* [Getting started](getting-started.md)
+* [Troubleshooting](troubleshooting.md)

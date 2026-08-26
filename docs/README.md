@@ -48,6 +48,7 @@ The GitOps Console plugin provides search and template capabilities:
 * [ImageUpdaters in the GitOps Console](image-updaters.md)
 * [Rollouts in the GitOps Console](rollouts.md)
 * [Filter, search, and paginate resources](filter-resources.md)
+* [Graphs and topology views](topology.md)
 * [Getting started](getting-started.md)
 * [Troubleshooting](troubleshooting.md)
 

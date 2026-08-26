@@ -20,12 +20,14 @@ The GitOps Console plugin provides list and details pages for Argo CD Applicatio
 
    ![Project dropdown on the Applications list page](assets/pics/applications-project-selector.png)
 
-### Search and filter
+### Filter and search
 
 Use the list page controls to narrow results:
 
+* **Filter**: Use **Filter** to narrow by:
+  * **Sync Status**: Synced, OutOfSync, Unknown
+  * **Health Status**: Healthy, Progressing, Suspended, Degraded, Missing, Unknown
 * **Search**: Use the search field to match by **Name** or **Label**. Choose the mode from the dropdown next to the field (for example, **Name** with **Search by name...**).
-* **Filter**: Use **Filter** to narrow by **Sync Status** (**Synced**, **OutOfSync**, or **Unknown**) and **Health Status** (**Healthy**, **Progressing**, **Suspended**, **Degraded**, **Missing**, or **Unknown**).
 
 You can combine search and filters. Clear individual chips or use **Clear all filters**. Changing filters, search, or project returns pagination to page 1. See [Filter, search, and paginate resources](filter-resources.md).
 
@@ -36,12 +38,12 @@ The Applications table includes:
 | Column | Description |
 | --- | --- |
 | **Name** | Application name, with a link to the details page. |
-| **Namespace** | Namespace of the Application (shown when browsing more than one namespace). |
+| **Namespace** | Namespace of the Application. |
 | **Sync Status** | Current sync state, with quiet operation state when a sync is in progress or recently finished. |
 | **Health Status** | Overall Application health. |
-| **Revision** | Target revision (or **HEAD**). Multi-source Applications can show an additional revision count. |
-| **Labels** | Application labels (a limited set is shown in the row). |
-| **App Project** | Owning AppProject. |
+| **Revision** | Target revision (or **HEAD**). Multi-source Applications may show additional revision count. |
+| **Labels** | Application labels. |
+| **App Project** | AppProject that this Application belongs to. |
 | **Actions** | Row kebab menu. |
 
 ### Pagination
@@ -53,6 +55,8 @@ Browse results in pages of **10**, **20**, **50**, or **100** items (default **5
 1. On the Applications list page, click **Create Application**.
 
 2. The console opens the YAML editor with a starter Application template. The template includes placeholders for name, destination, project, repository URL, path, target revision, and sync policy (`automated`, `prune`, `selfHeal`).
+
+   The editor includes a **Schema** side panel that describes Application fields, and a **Download** control to save the YAML.
 
 3. Edit the YAML for your repository and cluster destination, then create the resource.
 
@@ -89,6 +93,8 @@ The details page includes the following tabs.
 
 The **Details** tab summarizes identity, status, and sync policy.
 
+![Application Details tab with Actions menu](assets/pics/application-details-tab.png)
+
 **Application summary (left)**
 
 * **Name**, with an optional **Argo CD** link when a Route is available
@@ -117,9 +123,13 @@ Without update permission, the sync policy toggles are disabled.
 
 The **YAML** tab provides a live editor for the Application manifest. Use it to inspect or update the full resource definition.
 
+The editor includes a **Schema** side panel that describes Application fields, and a **Download** control to save the YAML.
+
 ### Sources tab
 
 The **Sources** tab lists repository sources for the Application (single-source and multi-source).
+
+![Application Sources tab with multi-source table](assets/pics/application-sources-tab.png)
 
 Section title: **Application sources**.
 
@@ -152,6 +162,9 @@ The graph and table show health and sync status for the Application’s **immedi
   * **Kind**
   * Search by resource name
 * In list view, the table columns include **Name**, **Namespace**, **Sync Wave**, **Sync Status**, **Health Status**, and row actions.
+
+  ![Application Resources list view](assets/pics/application-resources-list-view.png)
+
 * Row actions can include **View in Argo CD** and **Delete**, depending on the resource and your permissions.
 * The list supports sorting and pagination. See [Filter, search, and paginate resources](filter-resources.md).
 
@@ -162,7 +175,7 @@ The graph and table show health and sync status for the Application’s **immedi
 * Group or ungroup resources of the same kind.
 * Context-menu actions on nodes can include viewing details, editing labels and annotations, deleting resources, editing the Application, and opening **View in Argo CD**.
 
-For more about graphical views, see [Topology view](topology.md).
+For more about graph controls, see [Graphs and topology views](topology.md).
 
 ### Sync Status tab
 
@@ -217,7 +230,7 @@ The **Events** tab shows Kubernetes events for the Application object, using the
 ## Related information
 
 * [Filter, search, and paginate resources](filter-resources.md)
-* [Topology view](topology.md)
+* [Graphs and topology views](topology.md)
 * [ApplicationSets in the GitOps Console](applicationsets.md)
 * [AppProjects in the GitOps Console](appprojects-rbac.md)
 * [Troubleshooting](troubleshooting.md)
