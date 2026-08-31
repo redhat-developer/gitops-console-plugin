@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 
 import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -21,7 +20,7 @@ import {
   useGitOpsListPagePagination,
 } from '../shared/DataView';
 
-type ImageUpdaterRecentUpdatesTabProps = RouteComponentProps<{ ns: string; name: string }> & {
+type ImageUpdaterRecentUpdatesTabProps = {
   obj?: ImageUpdaterKind;
 };
 
@@ -105,33 +104,27 @@ const useRowsDV = (updates: ImageUpdaterRecentUpdate[]): DataViewTr[] => {
     rows.push([
       {
         cell: update.alias || '-',
-        id: 'alias',
-        dataLabel: 'Alias',
+        props: { dataLabel: 'Alias' },
       },
       {
         cell: update.image || '-',
-        id: 'image',
-        dataLabel: 'Image',
+        props: { dataLabel: 'Image' },
       },
       {
         cell: update.newVersion || '-',
-        id: 'new-version',
-        dataLabel: 'New Version',
+        props: { dataLabel: 'New Version' },
       },
       {
         cell: update.applicationsUpdated != null ? String(update.applicationsUpdated) : '-',
-        id: 'apps-updated',
-        dataLabel: 'Apps Updated',
+        props: { dataLabel: 'Apps Updated' },
       },
       {
         cell: update.updatedAt ? <Timestamp timestamp={update.updatedAt} /> : '-',
-        id: 'updated-at',
-        dataLabel: 'Updated At',
+        props: { dataLabel: 'Updated At' },
       },
       {
         cell: update.message || '-',
-        id: 'message',
-        dataLabel: 'Message',
+        props: { dataLabel: 'Message' },
       },
     ]);
   });

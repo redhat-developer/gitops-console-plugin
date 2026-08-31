@@ -4,7 +4,7 @@ import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { K8sModel, Selector } from '@openshift-console/dynamic-plugin-sdk/lib/api/common-types';
 import { K8sResourceCondition } from '@openshift-console/dynamic-plugin-sdk-internal/lib/extensions/console-types';
 
-import { Time } from './ApplicationModel';
+import { ApplicationSource, Time } from './ApplicationModel';
 
 export const ApplicationSetModel: K8sModel = {
   label: 'ApplicationSet',
@@ -111,6 +111,16 @@ export type ApplicationSetSpec = GeneratorParent & {
       }>;
     };
   };
+  template?: {
+    spec: {
+      destination?: {
+        namespace?: string;
+        server?: string;
+      };
+      project?: string;
+      source?: ApplicationSource;
+    }
+  }
 };
 
 export interface ApplicationSetResource {

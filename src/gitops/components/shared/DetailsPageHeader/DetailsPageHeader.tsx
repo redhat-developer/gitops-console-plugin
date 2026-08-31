@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom-v5-compat';
+import { Link } from 'react-router';
 
 import FavoriteButton from '@gitops/components/shared/FavoriteButton/FavoriteButton';
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
@@ -23,7 +23,11 @@ import {
 
 import './details-page-header.scss';
 
-const PaneHeading: React.FC = ({ children }) => (
+type PaneHeadingProps = {
+  children?: React.ReactNode;
+};
+
+const PaneHeading: React.FC<PaneHeadingProps> = ({ children }) => (
   <Flex
     alignItems={{ default: 'alignItemsCenter' }}
     justifyContent={{ default: 'justifyContentSpaceBetween' }}
@@ -34,6 +38,7 @@ const PaneHeading: React.FC = ({ children }) => (
 
 type DetailsPageTitleProps = {
   breadcrumb: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 const DetailsPageTitle: React.FC<DetailsPageTitleProps> = ({ breadcrumb, children }) => (

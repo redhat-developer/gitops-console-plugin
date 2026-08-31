@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 
 import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -61,10 +60,7 @@ const renderStringArray = (items: string[] | undefined, t: (key: string) => stri
   }
 };
 
-type ProjectAllowDenyTabProps = RouteComponentProps<{
-  ns: string;
-  name: string;
-}> & {
+type ProjectAllowDenyTabProps = {
   obj?: AppProjectKind;
 };
 

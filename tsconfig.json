@@ -12,7 +12,7 @@
     "esModuleInterop": true,
     "noUnusedLocals": true,
     "lib": ["dom", "es2017"],
-    "types": ["jest"],
+    "types": ["jest", "react-dom"],
     "paths": {
       "@gitops/*": ["src/gitops/*"],
       "@gitops-models/*": ["src/gitops/models/*"],

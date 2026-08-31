@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 
 import { PageSection } from '@patternfly/react-core';
 
@@ -9,7 +8,7 @@ import Generators from './Generators';
 
 import './GeneratorsTab.scss';
 
-type GeneratorsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
+type GeneratorsTabProps = {
   obj?: ApplicationSetKind;
 };
 

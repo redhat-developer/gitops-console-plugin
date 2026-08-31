@@ -12,6 +12,7 @@ type LabelProps = {
   name: string;
   value: string;
   expand: boolean;
+  children?: React.ReactNode;
 };
 
 const LabelL: React.FC<LabelProps> = ({ kind, name, value, expand }) => {

@@ -252,38 +252,31 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
             />
           </span>
         ),
-        id: obj.metadata?.name,
-        dataLabel: 'Name',
+        props: { dataLabel: 'Name' },
       },
       ...(!namespace
         ? [
             {
               cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
-              id: obj.metadata.namespace,
-              dataLabel: 'Namespace',
+              props: { dataLabel: 'Namespace' },
             },
           ]
         : []),
       {
-        id: obj.metadata?.name + '-traffic-' + index,
         cell: (
           <PodTraffic podName={obj.metadata.name} namespace={obj.metadata.namespace} tooltipFlag />
         ),
       },
       {
-        id: obj.status?.phase,
         cell: <StatusComponent status={status} />,
       },
       {
-        id: 'ready-' + index,
         cell: <>{readyCount + '/' + totalContainers}</>,
       },
       {
-        id: 'restart-' + index,
         cell: <>{restartCount}</>,
       },
       {
-        id: 'owner-' + index,
         cell: (
           <>
             {obj.metadata?.ownerReferences
@@ -298,7 +291,6 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
         ),
       },
       {
-        id: 'memory-' + index,
         cell: (
           <>
             {memResults && (
@@ -308,7 +300,6 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
         ),
       },
       {
-        id: 'cpu-' + index,
         cell: (
           <>
             {cpuResults && <span>{formatCPUMetric(getMetric(obj.metadata.name, cpuResults))}</span>}
@@ -316,11 +307,9 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
         ),
       },
       {
-        id: 'created-' + index,
         cell: <Timestamp timestamp={obj.metadata.creationTimestamp} />,
       },
       {
-        id: 'actions-' + index,
         cell: <PodRowActions pod={obj} index={index} />,
         props: { className: 'dropdown-kebab-pf pf-v6-c-table__action' },
       },

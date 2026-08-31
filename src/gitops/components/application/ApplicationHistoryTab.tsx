@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { ApplicationHistory, ApplicationKind } from '@gitops-models/ApplicationModel';
@@ -7,10 +6,7 @@ import { PageSection, PageSectionVariants, Title } from '@patternfly/react-core'
 
 import HistoryList from './History/History';
 
-type ApplicationHistoryTabProps = RouteComponentProps<{
-  ns: string;
-  name: string;
-}> & {
+type ApplicationHistoryTabProps = {
   obj?: ApplicationKind;
 };
 

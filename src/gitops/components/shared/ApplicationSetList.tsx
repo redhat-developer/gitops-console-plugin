@@ -345,33 +345,27 @@ const useApplicationSetRowsDV = (
             />
           </div>
         ),
-        id: appSet.metadata?.name,
-        dataLabel: 'Name',
+        props: { dataLabel: 'Name' },
       },
       ...(!namespace
         ? [
             {
               cell: <ResourceLink kind="Namespace" name={appSet.metadata.namespace} />,
-              id: appSet.metadata.namespace,
-              dataLabel: 'Namespace',
+              props: { dataLabel: 'Namespace' },
             },
           ]
         : []),
       {
-        id: getAppSetStatus(appSet),
         cell: <ApplicationSetStatusFragment status={getAppSetStatus(appSet)} />,
       },
       {
-        id: 'generated-apps-' + index,
         cell: <div>{getGeneratedAppsCount(appSet, applications, appsLoaded).toString()}</div>,
       },
       {
-        id: 'generators-' + index,
         cell: <div>{getAppSetGeneratorCount(appSet).toString()}</div>,
       },
       {
-        id: 'labels',
-        dataLabel: 'Labels',
+        props: { dataLabel: 'Labels' },
         cell: (
           <div>
             <MetadataLabels
@@ -389,11 +383,9 @@ const useApplicationSetRowsDV = (
         ),
       },
       {
-        id: 'created-at-' + index,
         cell: <div>{formatCreationTimestamp(appSet.metadata.creationTimestamp)}</div>,
       },
       {
-        id: 'actions-' + index,
         cell: <ApplicationSetActionsCell appSet={appSet} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },

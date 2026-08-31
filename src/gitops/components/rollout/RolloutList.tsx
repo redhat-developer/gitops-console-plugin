@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom-v5-compat';
+import { Link } from 'react-router';
 import * as YamlFormatter from 'yaml';
 
 import { AppProjectKind } from '@gitops/models/AppProjectModel';
@@ -381,20 +381,17 @@ export const useRolloutsRowsDV = (
             </ResourceLink>
           </div>
         ),
-        id: 'name',
-        dataLabel: 'Name',
+        props: { dataLabel: 'Name' },
       },
       ...(!namespace
         ? [
             {
               cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
-              id: obj.metadata.namespace,
-              dataLabel: 'Namespace',
+              props: { dataLabel: 'Namespace' },
             },
           ]
         : []),
       {
-        id: 'status',
         cell: (
           <RolloutStatusFragment
             status={obj.status?.phase as RolloutStatus}
@@ -409,7 +406,6 @@ export const useRolloutsRowsDV = (
         ),
       },
       {
-        id: 'pods',
         cell: (
           <>
             {obj.status && obj.status.readyReplicas && obj.status.replicas
@@ -419,8 +415,7 @@ export const useRolloutsRowsDV = (
         ),
       },
       {
-        id: 'labels',
-        dataLabel: 'Labels',
+        props: { dataLabel: 'Labels' },
         cell: (
           <div>
             <MetadataLabels
@@ -432,7 +427,6 @@ export const useRolloutsRowsDV = (
         ),
       },
       {
-        id: 'selector',
         cell: (
           <>
             {obj.status && obj.status.selector ? (
@@ -457,7 +451,6 @@ export const useRolloutsRowsDV = (
         ),
       },
       {
-        id: 'last-updated',
         cell: (
           <>
             {obj.status && obj ? <Timestamp timestamp={obj?.metadata?.creationTimestamp} /> : '-'}
@@ -465,7 +458,6 @@ export const useRolloutsRowsDV = (
         ),
       },
       {
-        id: 'actions-' + index,
         cell: <RolloutActionsCell app={obj} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },

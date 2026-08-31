@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
@@ -43,10 +42,7 @@ import ResourceActionsCell from '../shared/ResourceActionsCell/ResourceActionsCe
 
 import { ConditionsPopover } from './Conditions/ConditionsPopover';
 
-type ApplicationSyncStatusTabProps = RouteComponentProps<{
-  ns: string;
-  name: string;
-}> & {
+type ApplicationSyncStatusTabProps = {
   obj?: ApplicationKind;
 };
 
@@ -393,30 +389,24 @@ const useResourceRowsDV = (
             />
           </div>
         ),
-        id: resource.name + '-' + index,
-        dataLabel: 'Name',
+        props: { dataLabel: 'Name' },
       },
       {
         cell: resource.namespace,
-        id: resource.namespace,
-        dataLabel: 'Namespace',
+        props: { dataLabel: 'Namespace' },
       },
       {
-        id: 'status-' + index,
         cell: <>{resource.status ? <SyncStatus status={resource.status} /> : '-'}</>,
-        dataLabel: 'Status',
+        props: { dataLabel: 'Status' },
       },
       {
-        id: 'hook-' + index,
         cell: <>{resource.hookPhase}</>,
       },
       {
-        id: 'message-' + index,
         cell: <>{resource.message}</>,
-        dataLabel: 'Message',
+        props: { dataLabel: 'Message' },
       },
       {
-        id: 'actions-' + index,
         cell: (
           <ResourceActionsCell
             resource={resource}

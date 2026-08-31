@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 
 import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -78,7 +77,7 @@ const formatPolicyDescription = (policy: string, t: (key: string) => string): Re
   );
 };
 
-type ProjectRolesTabProps = RouteComponentProps<{ ns: string; name: string }> & {
+type ProjectRolesTabProps = {
   obj?: AppProjectKind;
 };
 
@@ -272,13 +271,11 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
     rows.push([
       {
         cell: role.name || '-',
-        id: `name-${index}`,
-        dataLabel: t('Name'),
+        props: { dataLabel: t('Name') },
       },
       {
         cell: role.description || '-',
-        id: `description-${index}`,
-        dataLabel: t('Description'),
+        props: { dataLabel: t('Description') },
       },
       {
         cell:
@@ -293,8 +290,7 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
           ) : (
             '-'
           ),
-        id: `groups-${index}`,
-        dataLabel: t('Groups'),
+        props: { dataLabel: t('Groups') },
       },
       {
         cell:
@@ -314,8 +310,7 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
           ) : (
             '-'
           ),
-        id: `policies-${index}`,
-        dataLabel: t('Policies'),
+        props: { dataLabel: t('Policies') },
       },
     ]);
   });

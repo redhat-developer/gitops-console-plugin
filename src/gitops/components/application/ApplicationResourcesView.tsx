@@ -292,25 +292,20 @@ const useResourceRowsDV = (
             />
           </div>
         ),
-        id: resource.name + '-' + index,
-        dataLabel: t('Name'),
+        props: { dataLabel: t('Name') },
       },
       {
         cell: resource.namespace ? resource.namespace : '-',
-        id: resource.namespace,
-        dataLabel: t('Namespace'),
+        props: { dataLabel: t('Namespace') },
       },
       {
-        id: 'sync-wave-' + index,
         cell: <>{resource.syncWave ?? '-'}</>,
-        dataLabel: t('Sync Wave'),
+        props: { dataLabel: t('Sync Wave') },
       },
       {
-        id: 'sync-status-' + index,
         cell: <>{resource.status ? <SyncStatus status={resource.status} /> : '-'}</>,
       },
       {
-        id: 'health-status-' + index,
         cell: (
           <>
             {resource.health?.status && (
@@ -321,7 +316,6 @@ const useResourceRowsDV = (
         ),
       },
       {
-        id: 'actions-' + index,
         cell: (
           <ResourceActionsCell
             resource={resource}

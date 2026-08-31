@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
@@ -35,10 +34,7 @@ import {
 
 import { ConditionsPopover } from './Conditions/ConditionsPopover';
 
-type ApplicationDetailsTabProps = RouteComponentProps<{
-  ns: string;
-  name: string;
-}> & {
+type ApplicationDetailsTabProps = {
   obj?: ApplicationKind;
 };
 

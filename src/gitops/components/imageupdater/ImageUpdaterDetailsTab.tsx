@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
 import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
@@ -19,7 +18,7 @@ import BaseDetailsSummary, {
   DetailsDescriptionGroup,
 } from '../shared/BaseDetailsSummary/BaseDetailsSummary';
 
-type ImageUpdaterDetailsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
+type ImageUpdaterDetailsTabProps = {
   obj?: ImageUpdaterKind;
 };
 

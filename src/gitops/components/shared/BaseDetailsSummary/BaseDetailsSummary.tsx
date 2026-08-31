@@ -59,9 +59,10 @@ type LabelProps = {
   name: string;
   value: string;
   expand: boolean;
+  children?: React.ReactNode;
 };
 
-const LabelL: React.SFC<LabelProps> = ({ kind, name, value, expand }) => {
+const LabelL: React.FC<LabelProps> = ({ kind, name, value, expand }) => {
   const selector = value ? `${name}=${value}` : name;
   const href = getSelectorSearchURL('', kind, selector);
   const kindOf = `co-m-${kindForReference(kind.toLowerCase())}`;

@@ -40,9 +40,8 @@ const HealthStatus: React.FC<HealthProps> = ({ status, message }) => {
       targetIcon = <HealthUnknownIcon />;
   }
 
-  let showStatus: React.ReactFragment;
   if (message) {
-    showStatus = (
+    return (
       <div>
         <Popover
           aria-label="Health Status"
@@ -56,14 +55,12 @@ const HealthStatus: React.FC<HealthProps> = ({ status, message }) => {
       </div>
     );
   } else {
-    showStatus = (
+    return (
       <div>
         {targetIcon} {status}
       </div>
     );
   }
-
-  return <div>{showStatus}</div>;
 };
 
 export type HealthStatusCode =

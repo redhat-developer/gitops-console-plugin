@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 
 import SvgTextWithOverflow from '@gitops/components/graph/SvgTextWithOverflow';
 import { ARGO_GRAY4_COLOR } from '@gitops/components/shared/colors';
@@ -126,7 +125,7 @@ const ApplicationSyncStatusIcon = ({ status }: { status: SyncStatus }) => {
 };
 
 const ApplicationShape: React.FunctionComponent<ShapeProps & { resourceNodeLayout: boolean }> =
-  observer(({ element, className, width, height, filter, dndDropRef, resourceNodeLayout }) => {
+  ({ element, className, width, height, filter, dndDropRef, resourceNodeLayout }) => {
     useAnchor(RectAnchor);
     const data = element.getData();
     const anchorRef = useSvgAnchor();
@@ -172,11 +171,11 @@ const ApplicationShape: React.FunctionComponent<ShapeProps & { resourceNodeLayou
         </g>
       </g>
     );
-  });
+  };
 
-export const ApplicationNode: React.FC<
+  export const ApplicationNode: React.FC<
   CustomNodeProps & WithSelectionProps & WithContextMenuProps
-> = observer(({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
+> = ({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
   const data = element.getData();
   const resourceNodeLayout = data.resourceNodeLayout as boolean;
 
@@ -225,4 +224,4 @@ export const ApplicationNode: React.FC<
       )}
     </DefaultNode>
   );
-});
+};

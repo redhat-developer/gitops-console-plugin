@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router';
 
 // import { PhaseStatus } from 'src/gitops/utils/constants';
 // import { getAppOperationState } from 'src/gitops/utils/gitops';

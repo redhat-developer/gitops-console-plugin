@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 
 import SvgTextWithOverflow from '@gitops/components/graph/SvgTextWithOverflow';
 import { dangerColor, successColor, warningColor } from '@gitops/utils/components/Icons/Icons';
@@ -79,8 +78,14 @@ const ApplicationHealthStatusIcon = ({ status }: { status: HealthStatus }) => {
   );
 };
 
-const ApplicationSetShape: React.FunctionComponent<ShapeProps> = observer(
-  ({ element, className, width, height, filter, dndDropRef }) => {
+const ApplicationSetShape: React.FunctionComponent<ShapeProps> = ({
+  element,
+  className,
+  width,
+  height,
+  filter,
+  dndDropRef,
+}) => {
     useAnchor(RectAnchor);
     const data = element.getData();
     const anchorRef = useSvgAnchor();
@@ -139,12 +144,11 @@ const ApplicationSetShape: React.FunctionComponent<ShapeProps> = observer(
         </g>
       </g>
     );
-  },
-);
+};
 
 export const ApplicationSetNode: React.FC<
   CustomNodeProps & WithSelectionProps & WithContextMenuProps
-> = observer(({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
+> = ({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
   const data = element.getData();
   const resourceNodeLayout = data.resourceNodeLayout as boolean;
   return (
@@ -190,4 +194,4 @@ export const ApplicationSetNode: React.FC<
       )}
     </DefaultNode>
   );
-});
+};

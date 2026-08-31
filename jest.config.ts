@@ -3,6 +3,7 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
+  setupFiles: ['<rootDir>/jest.setup.ts'],
   testRegex: '.*\\.test\\.tsx?$',
   moduleNameMapper: {
     '^src/(.*)': '<rootDir>/src/$1',
