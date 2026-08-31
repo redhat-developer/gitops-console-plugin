@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom-v5-compat';
-import * as YamlFormatter from 'yaml';
 
 import { AppProjectKind } from '@gitops/models/AppProjectModel';
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
@@ -38,6 +37,7 @@ import {
 import {
   filterByConsoleNameAndLabels,
   filterResourcesByLabelQuery,
+  getLabelsSortKey,
   parseLabelFilterParam,
 } from '../shared/listPageTextFilters';
 import { MetadataLabels } from '../shared/MetadataLabels/MetadataLabels';
@@ -254,8 +254,8 @@ export const sortData = (
         bValue = b.status?.readyReplicas || '';
         break;
       case 'labels':
-        aValue = YamlFormatter.stringify(a.metadata?.labels || {});
-        bValue = YamlFormatter.stringify(b.metadata?.labels || {});
+        aValue = getLabelsSortKey(a.metadata?.labels);
+        bValue = getLabelsSortKey(b.metadata?.labels);
         break;
       case 'selector':
         aValue = a.status?.selector || '';
