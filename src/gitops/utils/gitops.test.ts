@@ -118,6 +118,27 @@ describe('getOperationType', () => {
   });
 });
 
+const healthyApplicationSetConditions = [
+  {
+    type: 'ErrorOccurred',
+    status: 'False',
+    reason: 'ApplicationSetUpToDate',
+    message: 'All applications have been generated successfully',
+  },
+  {
+    type: 'ParametersGenerated',
+    status: 'True',
+    reason: 'ParametersGenerated',
+    message: 'Successfully generated parameters for all Applications',
+  },
+  {
+    type: 'ResourcesUpToDate',
+    status: 'True',
+    reason: 'ApplicationSetUpToDate',
+    message: 'All applications have been generated successfully',
+  },
+];
+
 describe('getAppSetStatus', () => {
   it('determines ApplicationSet status', () => {
     expect(
@@ -139,5 +160,35 @@ describe('getAppSetStatus', () => {
     ).toMatchInlineSnapshot(`"Unknown"`);
 
     expect(getAppSetStatus({} as any)).toMatchInlineSnapshot(`"Unknown"`);
+  });
+
+  it('returns Healthy for realistic upstream conditions (ResourcesUpToDate=True)', () => {
+    expect(
+      getAppSetStatus({
+        status: { conditions: healthyApplicationSetConditions },
+      } as any),
+    ).toBe('Healthy');
+  });
+
+  it('returns Error when ResourcesUpToDate is False', () => {
+    expect(
+      getAppSetStatus({
+        status: {
+          conditions: [
+            { type: 'ErrorOccurred', status: 'False' },
+            { type: 'ParametersGenerated', status: 'True' },
+            { type: 'ResourcesUpToDate', status: 'False', reason: 'ErrorOccurred' },
+          ],
+        },
+      } as any),
+    ).toBe('Error');
+  });
+
+  it('does not treat ApplicationSetUpToDate reason as a condition type', () => {
+    expect(
+      getAppSetStatus({
+        status: { conditions: [{ type: 'ApplicationSetUpToDate', status: 'True' }] },
+      } as any),
+    ).toBe('Healthy');
   });
 });

@@ -192,8 +192,8 @@ export function getAppSetStatus(appset: ApplicationSetKind): ApplicationSetStatu
       ) {
         status = ApplicationSetStatus.ERROR;
       } else if (
-        condition.type == 'ApplicationSetUpToDate' &&
-        condition.status == K8sResourceConditionStatus.True
+        condition.type == 'ResourcesUpToDate' &&
+        condition.status != K8sResourceConditionStatus.True
       ) {
         status = ApplicationSetStatus.ERROR;
       }
