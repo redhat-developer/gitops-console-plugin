@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom-v5-compat';
+import { useLocation } from 'react-router';
 import * as YamlFormatter from 'yaml';
 
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
@@ -475,28 +475,24 @@ export const useProjectsRowsDV = (
             inline={true}
           />
         ),
-        id: 'name',
-        dataLabel: 'Name',
+        props: { dataLabel: 'Name' },
       },
       ...(showNamespace
         ? [
             {
               cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
-              id: obj.metadata.namespace,
-              dataLabel: 'Namespace',
+              props: { dataLabel: 'Namespace' },
             },
           ]
         : []),
       {
-        id: 'description',
-        dataLabel: 'Description',
+        props: { dataLabel: 'Description' },
         cell: (
           <span className="gitops-project-list__description">{obj.spec?.description || '-'}</span>
         ),
       },
       {
-        id: 'applications',
-        dataLabel: 'Applications',
+        props: { dataLabel: 'Applications' },
         cell: (
           <span className="gitops-project-list__applications-count">
             {appsLoaded ? appsCount.toString() : '-'}
@@ -504,8 +500,7 @@ export const useProjectsRowsDV = (
         ),
       },
       {
-        id: 'labels',
-        dataLabel: 'Labels',
+        props: { dataLabel: 'Labels' },
         cell: (
           <div>
             <MetadataLabels
@@ -523,7 +518,6 @@ export const useProjectsRowsDV = (
         ),
       },
       {
-        id: 'last-updated',
         cell: (() => {
           const lastUpdate = getLastUpdateTimestamp(obj);
           return (
@@ -534,7 +528,6 @@ export const useProjectsRowsDV = (
         })(),
       },
       {
-        id: 'actions-' + index,
         cell: <ProjectActionsCell project={obj} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },

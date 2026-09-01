@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
-import { Link, useLocation } from 'react-router-dom-v5-compat';
+import { Link, useLocation } from 'react-router';
 
 import { ResourceLink, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { DescriptionList, Flex, FlexItem, PageSection, Title } from '@patternfly/react-core';
@@ -17,28 +16,20 @@ import BaseDetailsSummary, {
 
 import './AppSetDetailsTab.scss';
 
-type AppSetDetailsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
+type AppSetDetailsTabProps = {
   obj?: ApplicationSetKind;
+  customData?: {
+    step?: string | number;
+  };
 };
 
-const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj, match }) => {
+const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj, customData }) => {
   const { t } = useGitOpsTranslation();
   const location = useLocation();
   const namespace = obj?.metadata?.namespace;
 
   const getTabUrl = (tab: string) => {
     const knownTabs = new Set(['yaml', 'generators', 'applications', 'events']);
-
-    let baseUrl = match?.url;
-
-    if (baseUrl) {
-      const segments = baseUrl.split('/');
-      const lastSegment = segments.at(-1) || '';
-      if (knownTabs.has(lastSegment)) {
-        baseUrl = segments.slice(0, -1).join('/');
-      }
-      return `${baseUrl}/${tab}`;
-    }
 
     const currentPath = location.pathname;
     const segments = currentPath.split('/');
@@ -61,7 +52,7 @@ const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj, match }) => {
   if (!obj) return null;
 
   const status = obj.status || {};
-  const spec = obj.spec || {};
+  const spec = obj.spec;
   const totalGenerators = getAppSetGeneratorCount(obj);
   const appSetStatus = getAppSetStatus(obj);
 
@@ -91,6 +82,14 @@ const AppSetDetailsTab: React.FC<AppSetDetailsTabProps> = ({ obj, match }) => {
           <Flex flex={{ default: 'flex_2' }} direction={{ default: 'column' }}>
             <FlexItem>
               <DescriptionList className="pf-v6-c-description-list">
+                {customData?.step !== undefined && (
+                  <DetailsDescriptionGroup
+                    title={t('Progressive Sync Step')}
+                    help={t('Currently selected progressive sync step from graph context.')}
+                  >
+                    {String(customData.step)}
+                  </DetailsDescriptionGroup>
+                )}
                 <DetailsDescriptionGroup
                   title={t('Status')}
                   help={t('Current health status of the ApplicationSet.')}

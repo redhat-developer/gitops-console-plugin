@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
-import { useSearchParams } from 'react-router-dom-v5-compat';
 
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import { ApplicationKind, ApplicationSource } from '@gitops/models/ApplicationModel';
@@ -25,11 +23,9 @@ import { Tbody, Td, Tr } from '@patternfly/react-table';
 
 import ArgoCDLink from '../shared/ArgoCDLink/ArgoCDLink';
 import { GitOpsDataViewTable, useGitOpsListPagePagination } from '../shared/DataView';
+import { useSearchParams } from 'react-router';
 
-type ApplicationDetailsTabProps = RouteComponentProps<{
-  ns: string;
-  name: string;
-}> & {
+type ApplicationDetailsTabProps = {
   obj?: ApplicationKind;
 };
 
@@ -42,10 +38,9 @@ interface SourceListProps {
 export const useColumnsDV = () => {
   const columns: DataViewTh[] = [
     {
-      id: 'type',
       cell: t('Type'),
       props: {
-        key: 'type',
+        id: 'type',
         'aria-label': 'type',
         className: 'pf-v6-u-max-width',
         style: { maxWidth: '2ch' },
@@ -53,9 +48,8 @@ export const useColumnsDV = () => {
     },
     {
       cell: t('Repository'),
-      id: 'repository',
       props: {
-        key: 'repository',
+        id: 'repository',
         'aria-label': 'repository',
         className: 'pf-v6-u-max-width',
         style: { maxWidth: '50ch' },
@@ -63,9 +57,8 @@ export const useColumnsDV = () => {
     },
     {
       cell: t('Target Revision'),
-      id: 'targetRevision',
       props: {
-        key: 'targetRevision',
+        id: 'targetRevision',
         'aria-label': 'targetRevision',
         className: 'pf-v6-u-min-width pf-v6-u-max-width',
         style: { minWidth: '20ch', maxWidth: '20ch' },
@@ -73,9 +66,8 @@ export const useColumnsDV = () => {
     },
     {
       cell: t('Path / Chart'),
-      id: 'path',
       props: {
-        key: 'path',
+        id: 'path',
         'aria-label': 'path',
         className: 'pf-v6-u-min-width pf-v6-u-max-width',
         style: { minWidth: '20ch', maxWidth: '25ch' },
@@ -83,7 +75,6 @@ export const useColumnsDV = () => {
     },
     {
       cell: t('Ref'),
-      id: 'ref',
     },
   ];
 
@@ -107,7 +98,6 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
     const isOci = source?.repoURL?.startsWith('oci://');
     rows.push([
       {
-        id: index + '-type',
         cell: (
           // eslint-disable-next-line no-nested-ternary
           <Tooltip content={source.chart ? 'Helm' : isOci ? 'OCI' : 'Git'}>
@@ -117,10 +107,9 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
             </div>
           </Tooltip>
         ),
-        dataLabel: 'Type',
+        props: { dataLabel: 'Type' },
       },
       {
-        id: index + '-repository',
         cell: (
           <div>
             {/* eslint-disable-next-line no-nested-ternary */}
@@ -136,15 +125,13 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
             )}
           </div>
         ),
-        dataLabel: 'Repository',
+        props: { dataLabel: 'Repository' },
       },
       {
-        id: index + '-revision',
         cell: <div>{source.targetRevision}</div>,
-        dataLabel: 'TargetRevision',
+        props: { dataLabel: 'TargetRevision' },
       },
       {
-        id: index + '-path',
         cell: (
           <div>
             {/* eslint-disable-next-line no-nested-ternary */}
@@ -168,12 +155,11 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
             )}
           </div>
         ),
-        dataLabel: 'Chart / Path',
+        props: { dataLabel: 'Chart / Path' },
       },
       {
-        id: index + '-ref',
         cell: <div>{source.ref ? source.ref : '-'}</div>,
-        dataLabel: 'Ref',
+        props: { dataLabel: 'Ref' },
       },
     ]);
   });

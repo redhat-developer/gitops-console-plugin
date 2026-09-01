@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { RootStateOrAny, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
   K8sGroupVersionKind,
@@ -32,9 +32,9 @@ export type FlagsObject = { [key: string]: boolean };
 
 export const getFlagsObject = ({
   [featureReducerName]: featureState,
-}: RootStateOrAny): FlagsObject => featureState.toObject();
+}: any): FlagsObject => featureState.toObject();
 
-const getClusterVersionFlag = (state: RootStateOrAny) => getFlagsObject(state)?.['CLUSTER_VERSION'];
+const getClusterVersionFlag = (state: any) => getFlagsObject(state)?.['CLUSTER_VERSION'];
 
 export const useClusterVersion = (): ClusterVersionKind => {
   const isClusterVersion = useSelector(getClusterVersionFlag);

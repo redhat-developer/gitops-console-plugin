@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 import * as YamlFormatter from 'yaml';
 
 import { SidebarSectionHeading } from '@gitops/topology/sidebar/DeploymentSideBarDetails';
@@ -10,9 +9,9 @@ import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
 
 import './AppSetDetailsTab.scss';
 
-type AppSetMatchExpressionsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
+type AppSetMatchExpressionsTabProps = {
   obj?: ApplicationSetKind;
-  customData?: object;
+  customData?: { step: number };
 };
 
 const AppSetMatchExpressionsTab: React.FC<AppSetMatchExpressionsTabProps> = ({

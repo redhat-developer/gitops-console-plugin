@@ -419,20 +419,17 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
             </ResourceLink>
           </div>
         ),
-        id: app.metadata?.name,
-        dataLabel: 'Name',
+        props: { dataLabel: 'Name' },
       },
       ...(!namespace
         ? [
             {
               cell: <ResourceLink kind="Namespace" name={app.metadata.namespace} />,
-              id: app.metadata.namespace,
-              dataLabel: 'Namespace',
+              props: { dataLabel: 'Namespace' },
             },
           ]
         : []),
       {
-        id: app.status?.sync?.status,
         cell: (
           <div className="pf-m-width-40">
             <Flex>
@@ -447,11 +444,9 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         ),
       },
       {
-        id: app.status?.health?.status,
         cell: <HealthStatusFragment status={app.status?.health?.status || HealthStatus.UNKNOWN} />,
       },
       {
-        id: app?.status?.sync?.revision,
         cell: (
           <>
             {sources[0]?.targetRevision ? sources[0].targetRevision : 'HEAD'}&nbsp;
@@ -467,8 +462,7 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         ),
       },
       {
-        id: 'labels',
-        dataLabel: 'Labels',
+        props: { dataLabel: 'Labels' },
         cell: (
           <div>
             <MetadataLabels
@@ -486,7 +480,6 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         ),
       },
       {
-        id: app.spec?.project,
         cell: app.spec?.project && (
           <ResourceLink
             namespace={
@@ -500,7 +493,6 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
         ),
       },
       {
-        id: 'actions-' + index,
         cell: <ApplicationActionsCell app={app} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },

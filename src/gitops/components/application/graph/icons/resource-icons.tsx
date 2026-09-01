@@ -102,6 +102,7 @@ interface StatusIconProps {
   y?: number;
   width?: number;
   height?: number;
+  children?: React.ReactNode;
 }
 
 export const StatusSvgIcon: React.FC<StatusIconProps> = ({ status }) => {

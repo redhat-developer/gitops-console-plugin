@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom-v5-compat';
+import { Link } from 'react-router';
 import moment from 'moment';
 
 import { getPodStatus } from '@gitops/components/shared/pod-utils';

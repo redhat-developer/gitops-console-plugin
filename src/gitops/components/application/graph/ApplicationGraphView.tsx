@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { NavigateFunction, useNavigate } from 'react-router-dom-v5-compat';
-import { observer } from 'mobx-react';
+import { NavigateFunction, useNavigate } from 'react-router';
 
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import {
@@ -289,13 +288,13 @@ const customComponentFactory =
     }
   };
 
-const TransparentGroup: React.FC<{ element: TopologyNode }> = observer(({}) => {
+const TransparentGroup: React.FC<{ element: TopologyNode }> = ({}) => {
   return (
     <Layer id={GROUPS_LAYER}>
       <g></g>
     </Layer>
   );
-});
+};
 
 interface DataEdgeProps {
   element: Edge;

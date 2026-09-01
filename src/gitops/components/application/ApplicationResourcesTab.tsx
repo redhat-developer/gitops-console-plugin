@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
@@ -24,10 +23,7 @@ import {
   ApplicationResourcesViewType,
 } from './ApplicationResourcesViewType';
 
-type ApplicationResourcesTabProps = RouteComponentProps<{
-  ns: string;
-  name: string;
-}> & {
+type ApplicationResourcesTabProps = {
   obj?: ApplicationKind;
 };
 

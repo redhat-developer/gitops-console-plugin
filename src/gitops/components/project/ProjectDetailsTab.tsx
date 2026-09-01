@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
-import { Link, useLocation } from 'react-router-dom-v5-compat';
+import { Link, useLocation } from 'react-router';
 import classNames from 'classnames';
 
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
@@ -22,11 +21,11 @@ import BaseDetailsSummary, {
   DetailsDescriptionGroup,
 } from '../shared/BaseDetailsSummary/BaseDetailsSummary';
 
-type ProjectDetailsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
+type ProjectDetailsTabProps = {
   obj?: AppProjectKind;
 };
 
-const ProjectDetailsTab: React.FC<ProjectDetailsTabProps> = ({ obj, match }) => {
+const ProjectDetailsTab: React.FC<ProjectDetailsTabProps> = ({ obj }) => {
   const { t } = useGitOpsTranslation();
   const location = useLocation();
   const namespace = obj?.metadata?.namespace;
@@ -40,17 +39,6 @@ const ProjectDetailsTab: React.FC<ProjectDetailsTabProps> = ({ obj, match }) => 
       'syncWindows',
       'events',
     ]);
-
-    let baseUrl = match?.url;
-
-    if (baseUrl) {
-      const segments = baseUrl.split('/');
-      const lastSegment = segments.at(-1) || '';
-      if (knownTabs.has(lastSegment)) {
-        baseUrl = segments.slice(0, -1).join('/');
-      }
-      return `${baseUrl}/${tab}`;
-    }
 
     const currentPath = location.pathname;
     const segments = currentPath.split('/');

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 
 import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import { Badge, EmptyState, EmptyStateBody, PageSection, Title } from '@patternfly/react-core';
@@ -18,7 +17,7 @@ import {
   useGitOpsListPagePagination,
 } from '../shared/DataView';
 
-type ProjectSyncWindowsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
+type ProjectSyncWindowsTabProps = {
   obj?: AppProjectKind;
 };
 
@@ -326,18 +325,15 @@ const useSyncWindowsRowsDV = (
             {window.kind || '-'}
           </Badge>
         ),
-        id: `kind-${index}`,
-        dataLabel: t('Kind'),
+        props: { dataLabel: t('Kind') },
       },
       {
         cell: window.schedule || '-',
-        id: `schedule-${index}`,
-        dataLabel: t('Schedule'),
+        props: { dataLabel: t('Schedule') },
       },
       {
         cell: window.duration || '-',
-        id: `duration-${index}`,
-        dataLabel: t('Duration'),
+        props: { dataLabel: t('Duration') },
       },
       {
         cell:
@@ -352,8 +348,7 @@ const useSyncWindowsRowsDV = (
           ) : (
             <span className="pf-v6-u-text-color-subtle">{t('All')}</span>
           ),
-        id: `applications-${index}`,
-        dataLabel: t('Applications'),
+        props: { dataLabel: t('Applications') },
       },
       {
         cell:
@@ -368,8 +363,7 @@ const useSyncWindowsRowsDV = (
           ) : (
             <span className="pf-v6-u-text-color-subtle">{t('All')}</span>
           ),
-        id: `clusters-${index}`,
-        dataLabel: t('Clusters'),
+        props: { dataLabel: t('Clusters') },
       },
       {
         cell:
@@ -384,8 +378,7 @@ const useSyncWindowsRowsDV = (
           ) : (
             <span className="pf-v6-u-text-color-subtle">{t('All')}</span>
           ),
-        id: `namespaces-${index}`,
-        dataLabel: t('Namespaces'),
+        props: { dataLabel: t('Namespaces') },
       },
       {
         cell:
@@ -396,13 +389,11 @@ const useSyncWindowsRowsDV = (
           ) : (
             '-'
           ),
-        id: `manualSync-${index}`,
-        dataLabel: t('Manual Sync'),
+        props: { dataLabel: t('Manual Sync') },
       },
       {
         cell: window.timeZone || '-',
-        id: `timeZone-${index}`,
-        dataLabel: t('Time Zone'),
+        props: { dataLabel: t('Time Zone') },
       },
     ]);
   });

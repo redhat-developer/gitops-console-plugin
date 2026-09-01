@@ -135,6 +135,7 @@ export type OperationState = {
 
 export type CurrentSyncStatus = {
   revision?: string;
+  revisions?: string[];
   status?: SyncStatus;
 };
 

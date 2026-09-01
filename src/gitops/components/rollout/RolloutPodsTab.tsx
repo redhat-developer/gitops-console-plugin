@@ -1,16 +1,12 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
+import { RolloutKind } from '@gitops/topology/types';
 import { PageSection, Title } from '@patternfly/react-core';
 
 import { PodList } from './components/PodList/PodList';
-import { RolloutKind } from './model/RolloutModel';
 
-type RolloutPodsTabProps = RouteComponentProps<{
-  ns: string;
-  name: string;
-}> & {
+type RolloutPodsTabProps = {
   obj?: RolloutKind;
 };
 

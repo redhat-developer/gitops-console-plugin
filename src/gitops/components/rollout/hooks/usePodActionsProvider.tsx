@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router';
 
 import { PodKind } from '@gitops/topology/console/types';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';

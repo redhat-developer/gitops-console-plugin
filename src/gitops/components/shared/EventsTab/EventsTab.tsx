@@ -1,13 +1,9 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 
 import { K8sResourceCommon, ResourceEventStream } from '@openshift-console/dynamic-plugin-sdk';
 import { PageSection, Title } from '@patternfly/react-core';
 
-type EventsTabProps = RouteComponentProps<{
-  ns: string;
-  name: string;
-}> & {
+type EventsTabProps = {
   obj?: K8sResourceCommon;
 };
 

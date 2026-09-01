@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom-v5-compat';
+import { Link } from 'react-router';
 
 import { Decorator as PfDecorator } from '@patternfly/react-topology';
 
 import './Decorator.scss';
 
 type DecoratorTypes = {
+  children?: React.ReactNode;
   x: number;
   y: number;
   radius: number;

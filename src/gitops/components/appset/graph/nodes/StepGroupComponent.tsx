@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 
 import {
   RESOURCE_BADGE_COLORS,
@@ -269,7 +268,7 @@ const DummyShape: React.FunctionComponent<RectangleProps> = ({
 // This is the collapsible group of applications that have the same step, determined by the matched expression defined in the ApplicationSet
 export const StepGroupComponent: React.FC<
   WithContextMenuProps & WithSelectionProps & { element: TopologyNode }
-> = observer(({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
+> = ({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
   useAnchor(RightAnchor, AnchorEnd.source, 'task-edge');
   useAnchor(LeftAnchor, AnchorEnd.target, 'task-edge');
 
@@ -334,6 +333,6 @@ export const StepGroupComponent: React.FC<
       <CollapsedGroup element={element} width={300} height={50} selected={selected} />
     </DefaultGroup>
   );
-});
+};
 
 export default StepGroupComponent;

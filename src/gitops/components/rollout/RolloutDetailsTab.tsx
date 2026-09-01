@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 import classNames from 'classnames';
 
 import Conditions from '@gitops/utils/components/Conditions/Conditions';
@@ -26,10 +25,7 @@ import CanaryServices from './strategy/CanaryServices';
 import { topologyLink } from './utils/TopologyLink';
 import { RolloutStatusFragment } from './RolloutStatus';
 
-type RolloutDetailsTabProps = RouteComponentProps<{
-  ns: string;
-  name: string;
-}> & {
+type RolloutDetailsTabProps = {
   obj?: any;
 };
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom-v5-compat';
+import { useLocation } from 'react-router';
 import * as YamlFormatter from 'yaml';
 
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
@@ -385,31 +385,26 @@ export const useImageUpdaterRowsDV = (
             />
           </div>
         ),
-        id: 'name',
-        dataLabel: 'Name',
+        props: { dataLabel: 'Name' },
       },
       ...(showNamespace
         ? [
             {
               cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
-              id: obj.metadata.namespace,
-              dataLabel: 'Namespace',
+              props: { dataLabel: 'Namespace' },
             },
           ]
         : []),
       {
-        id: 'apps',
         cell:
           obj.status?.applicationsMatched != null ? String(obj.status.applicationsMatched) : '-',
-        dataLabel: 'Apps',
+        props: { dataLabel: 'Apps' },
       },
       {
-        id: 'images',
         cell: obj.status?.imagesManaged != null ? String(obj.status.imagesManaged) : '-',
-        dataLabel: 'Images',
+        props: { dataLabel: 'Images' },
       },
       {
-        id: 'last-checked',
         cell: obj.status?.lastCheckedAt ? (
           <div className="gitops-imageupdater-list__timestamp">
             <Timestamp timestamp={obj.status.lastCheckedAt} />
@@ -417,16 +412,14 @@ export const useImageUpdaterRowsDV = (
         ) : (
           '-'
         ),
-        dataLabel: 'Last Checked',
+        props: { dataLabel: 'Last Checked' },
       },
       {
-        id: 'ready',
         cell: readyCondition ? String(isReady) : '-',
-        dataLabel: 'Ready',
+        props: { dataLabel: 'Ready' },
       },
       {
-        id: 'labels',
-        dataLabel: 'Labels',
+        props: { dataLabel: 'Labels' },
         cell: (
           <div>
             <MetadataLabels
@@ -444,7 +437,6 @@ export const useImageUpdaterRowsDV = (
         ),
       },
       {
-        id: 'actions-' + index,
         cell: <ImageUpdaterActionsCell imageUpdater={obj} index={index} />,
         props: { className: 'gitops-imageupdater-list__actions-cell' },
       },

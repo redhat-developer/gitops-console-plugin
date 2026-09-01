@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 
 import SvgTextWithOverflow from '@gitops/components/graph/SvgTextWithOverflow';
 import { dangerColor, successColor, warningColor } from '@gitops/utils/components/Icons/Icons';
@@ -30,7 +29,7 @@ interface CustomNodeProps {
 
 export const ResourceGroupNode: React.FC<
   CustomNodeProps & WithSelectionProps & WithContextMenuProps
-> = observer(({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
+> = ({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
   const data = element.getData();
   // const Icon = data.icon ? data.icon : null;
   const kind = data.icon as string;
@@ -242,4 +241,4 @@ export const ResourceGroupNode: React.FC<
       )}
     </DefaultNode>
   );
-});
+};

@@ -1,7 +1,13 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import { SVGIconProps } from '@patternfly/react-icons/dist/esm/createIcon';
+import { ButtonProps } from '@patternfly/react-core';
 
-type ExternalLinkProps = {
+interface ExternalLinkButtonProps extends ButtonProps {
+  iconProps?: SVGIconProps;
+}
+
+type ExternalLinkProps = ExternalLinkButtonProps & {
   href: string;
   text?: React.ReactNode;
   additionalClassName?: string;

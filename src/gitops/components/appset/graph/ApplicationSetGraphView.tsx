@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { NavigateFunction, useNavigate } from 'react-router-dom-v5-compat';
-import { observer } from 'mobx-react';
+import { NavigateFunction, useNavigate } from 'react-router';
 
 import { ApplicationKind, ApplicationModel } from '@gitops/models/ApplicationModel';
 import { ApplicationSetKind, applicationSetModelRef } from '@gitops/models/ApplicationSetModel';
@@ -119,7 +118,7 @@ interface DataEdgeProps {
   element: Edge;
 }
 
-const DataEdge: React.FC<DataEdgeProps> = observer(({ element, ...rest }) => {
+const DataEdge: React.FC<DataEdgeProps> = ({ element, ...rest }) => {
   const overallState = element.getData()?.overallState;
   return (
     <DefaultEdge
@@ -142,11 +141,11 @@ const DataEdge: React.FC<DataEdgeProps> = observer(({ element, ...rest }) => {
       {...rest}
     />
   );
-});
+};
 
-const GitOpsTaskEdge: React.FC<DataEdgeProps> = observer(({ element, ...rest }) => {
+const GitOpsTaskEdge: React.FC<DataEdgeProps> = ({ element, ...rest }) => {
   return <TaskEdge element={element} {...rest} />;
-});
+};
 
 interface AppSetContextMenuItemProps {
   routeModel: K8sModel;
@@ -356,14 +355,6 @@ type TopologySideBarParams = {
   applicationSet: ApplicationSetKind;
 };
 
-const PAGES = [
-  {
-    href: '',
-    name: t('Match Expressions'),
-    component: AppSetMatchExpressionsTab,
-  },
-];
-
 const getTopologySideBar = ({
   show,
   onClose,
@@ -381,13 +372,19 @@ const getTopologySideBar = ({
   const renderSidebarContent = () => {
     if (selectedNode === undefined) return <div></div>;
     if (isStepGroup) {
+      const selectedStep = selectedNode?.getData().step;
+      const pages = [
+        {
+          href: '',
+          name: t('Match Expressions'),
+          component: (props) => (
+            <AppSetMatchExpressionsTab {...props} customData={{ step: selectedStep }} />
+          ),
+        },
+      ];
       return (
         <div>
-          <HorizontalNav
-            pages={PAGES}
-            resource={applicationSet}
-            customData={{ step: selectedNode?.getData().step }}
-          />
+          <HorizontalNav pages={pages} resource={applicationSet} />
         </div>
       );
     }

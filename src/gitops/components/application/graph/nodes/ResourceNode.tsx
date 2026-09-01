@@ -2,8 +2,7 @@
  * Resource Node for Argo CD Resources
  */
 import * as React from 'react';
-import { Link } from 'react-router-dom-v5-compat';
-import { observer } from 'mobx-react';
+import { Link } from 'react-router';
 
 import SvgTextWithOverflow from '@gitops/components/graph/SvgTextWithOverflow';
 import { ApplicationModel } from '@gitops/models/ApplicationModel';
@@ -33,7 +32,7 @@ interface CustomNodeProps {
 }
 
 export const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithContextMenuProps> =
-  observer(({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
+  ({ element, onContextMenu, contextMenuOpen, onSelect, selected }) => {
     const data = element.getData();
     const kind = data.kind as string;
     const resourceNodeLayout = data.resourceNodeLayout as boolean;
@@ -154,4 +153,4 @@ export const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithC
         )}
       </DefaultNode>
     );
-  });
+  };

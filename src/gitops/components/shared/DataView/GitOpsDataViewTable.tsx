@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSearchParams } from 'react-router-dom-v5-compat';
+import { useSearchParams } from 'react-router';
 
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { Pagination, PaginationVariant } from '@patternfly/react-core';

@@ -47,7 +47,7 @@ export const isGroupVersionKind = (ref: GroupVersionKind | string) => ref?.split
 export const kindForReference = (ref: K8sResourceKindReference) =>
   isGroupVersionKind(ref) ? ref.split('~')[2] : ref;
 
-export const Label: React.SFC<LabelProps> = ({ kind, name, value, expand }) => {
+export const Label: React.FC<LabelProps> = ({ kind, name, value, expand }) => {
   const href = `/search?kind=${kind}&q=${value ? encodeURIComponent(`${name}=${value}`) : name}`;
   const kindOf = `co-m-${kindForReference(kind.toLowerCase())}`;
   const klass = classNames(kindOf, { 'co-m-expand': expand }, 'co-label');
@@ -111,6 +111,7 @@ const EditButton: React.FunctionComponent<EditButtonProps> = (props) => {
 };
 
 export type DetailsItemProps = {
+  children?: React.ReactNode;
   canEdit?: boolean;
   defaultValue?: React.ReactNode;
   description?: string;
@@ -365,7 +366,7 @@ export type SectionHeadingProps = {
   id?: string;
 };
 
-export const SidebarSectionHeading: React.SFC<SidebarSectionHeadingProps> = ({
+export const SidebarSectionHeading: React.FC<SidebarSectionHeadingProps> = ({
   text,
   children,
   style,

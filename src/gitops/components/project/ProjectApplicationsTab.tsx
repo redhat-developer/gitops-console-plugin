@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 
 import { AppProjectKind } from '../../models/AppProjectModel';
 import ApplicationList from '../shared/ApplicationList';
 
-type ProjectApplicationsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
+type ProjectApplicationsTabProps = {
   obj?: AppProjectKind;
 };
 

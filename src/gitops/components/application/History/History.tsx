@@ -170,28 +170,23 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
     rows.push([
       {
         cell: obj.id,
-        id: 'id',
-        dataLabel: 'ID',
+        props: { dataLabel: 'ID' },
       },
       {
         cell: <Timestamp timestamp={obj.deployStartedAt} />,
-        id: 'started-at',
-        dataLabel: 'Deployed Started At',
+        props: { dataLabel: 'Deployed Started At' },
       },
       {
         cell: <Timestamp timestamp={obj.deployedAt} />,
-        id: 'deployed-at',
-        dataLabel: 'Depoyed At',
+        props: { dataLabel: 'Depoyed At' },
       },
       {
         cell: <>{initByString}</>,
-        id: 'initiated-by',
-        dataLabel: 'Initiated By',
+        props: { dataLabel: 'Initiated By' },
       },
       {
         cell: <>{revisionValue}</>,
-        id: 'revision',
-        dataLabel: 'Revision',
+        props: { dataLabel: 'Revision' },
       },
     ]);
   });
@@ -232,7 +227,7 @@ const useColumnsDV = (getSortParams: (columnIndex: number) => ThProps['sort']) =
     {
       cell: t('Revision(s) and Source Repo URL(s)'),
       props: {
-        key: 'revision',
+        id: 'revision',
         className: 'gitops-plugin__history-id-column pf-m-width-50',
         sort: getSortParams(4),
       },

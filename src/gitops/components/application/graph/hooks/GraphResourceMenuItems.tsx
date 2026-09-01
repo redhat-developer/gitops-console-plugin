@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate } from 'react-router';
 
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { modelToRef } from '@gitops/utils/utils';
