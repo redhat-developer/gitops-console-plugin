@@ -1,7 +1,7 @@
 {
   "name": "gitops-plugin",
   "description": "OpenShift Console plugin for GitOps.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "packageManager": "pnpm@10.33.2",
   "license": "Apache-2.0",
@@ -110,7 +110,7 @@
   },
   "consolePlugin": {
     "name": "gitops-plugin",
-    "version": "0.0.17",
+    "version": "1.0.0",
     "displayName": "GitOps Plugin",
     "description": "OpenShift Console plugin for GitOps.",
     "dependencies": {
