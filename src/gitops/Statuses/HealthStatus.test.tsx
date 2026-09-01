@@ -20,9 +20,27 @@ describe('HealthStatus', () => {
     );
   });
 
+  it('renders Suspended', () => {
+    expect(renderToStaticMarkup(<HealthStatus status="Suspended" />)).toMatchInlineSnapshot(
+      `"<div><div><svg data-icon="OutlinedPauseCircleIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> Suspended</div></div>"`,
+    );
+  });
+
+  it('renders Missing', () => {
+    expect(renderToStaticMarkup(<HealthStatus status="Missing" />)).toMatchInlineSnapshot(
+      `"<div><div><svg data-icon="GhostIcon" style="color:var(--pf-t--global--icon--color--status--warning--default)"></svg> Missing</div></div>"`,
+    );
+  });
+
   it('renders Unknown for unrecognized status', () => {
     expect(renderToStaticMarkup(<HealthStatus status="SomethingElse" />)).toMatchInlineSnapshot(
       `"<div><div><svg data-icon="UnknownIcon" style="color:var(--pf-v5-global--disabled-color--100)"></svg> SomethingElse</div></div>"`,
+    );
+  });
+
+  it('renders Unknown for undefined status', () => {
+    expect(renderToStaticMarkup(<HealthStatus status={undefined as any} />)).toMatchInlineSnapshot(
+      `"<div><div><svg data-icon="UnknownIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> </div></div>"`,
     );
   });
 
@@ -63,6 +81,14 @@ describe('HealthStatusIcon', () => {
   it('renders Progressing icon (spinning)', () => {
     expect(renderToStaticMarkup(<HealthStatusIcon status="Progressing" />)).toMatchInlineSnapshot(
       `"<svg data-icon="CircleNotchIcon" class="undefined fa-spin" style="color:#0DADEA" aria-label="Progressing"></svg>"`,
+    );
+  });
+
+  it('renders Unknown icon for unrecognised status', () => {
+    expect(
+      renderToStaticMarkup(<HealthStatusIcon status={'SomethingElse' as any} />),
+    ).toMatchInlineSnapshot(
+      `"<i title="SomethingElse" class="fa fa-question-circle utils-health-status-icon" style="color:#CCD6DD"></i>"`,
     );
   });
 });
