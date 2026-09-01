@@ -80,7 +80,8 @@ export type ApplicationHistory = {
   deployedAt?: string;
   revision?: string;
   revisions?: string[];
-  source: ApplicationSource;
+  source?: ApplicationSource;
+  sources?: ApplicationSource[];
 };
 
 export type Resource = {
