@@ -25,4 +25,10 @@ describe('SyncStatus', () => {
       `"<span> </span>"`,
     );
   });
+
+  it('renders Unknown icon for undefined status', () => {
+    expect(renderToStaticMarkup(<SyncStatus status={undefined as any} />)).toMatchInlineSnapshot(
+      `"<span> </span>"`,
+    );
+  });
 });
