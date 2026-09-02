@@ -26,13 +26,8 @@ import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
 import { useApplicationSetActionsProvider } from '../../hooks/useApplicationSetActionsProvider';
 import { ApplicationSetKind, ApplicationSetModel } from '../../models/ApplicationSetModel';
+import ApplicationSetStatusFragment from '../../Statuses/ApplicationSetStatus';
 import ActionsDropdown from '../../utils/components/ActionDropDown/ActionDropDown';
-// Import status icons for consistency with ApplicationList
-import {
-  HealthDegradedIcon,
-  HealthHealthyIcon,
-  HealthUnknownIcon,
-} from '../../utils/components/Icons/Icons';
 import { ApplicationSetStatus } from '../../utils/constants';
 import { getAppSetGeneratorCount, getAppSetStatus } from '../../utils/gitops';
 import { modelToGroupVersionKind, modelToRef } from '../../utils/utils';
@@ -88,27 +83,6 @@ const getGeneratedAppsCount = (
       (owner: any) => owner.kind === 'ApplicationSet' && owner.name === appSet.metadata.name,
     );
   }).length;
-};
-
-const ApplicationSetStatusFragment: React.FC<{ status: string }> = ({ status }) => {
-  let targetIcon: React.ReactNode;
-
-  switch (status) {
-    case ApplicationSetStatus.HEALTHY:
-      targetIcon = <HealthHealthyIcon />;
-      break;
-    case ApplicationSetStatus.ERROR:
-      targetIcon = <HealthDegradedIcon />;
-      break;
-    default:
-      targetIcon = <HealthUnknownIcon />;
-  }
-
-  return (
-    <span>
-      {targetIcon} {status}
-    </span>
-  );
 };
 
 interface ApplicationSetProps {
