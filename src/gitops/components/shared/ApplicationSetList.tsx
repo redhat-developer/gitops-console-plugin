@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import * as YamlFormatter from 'yaml';
 
 import {
   K8sResourceCommon,
@@ -50,6 +49,7 @@ import {
 import {
   filterByConsoleNameAndLabels,
   filterResourcesByLabelQuery,
+  getLabelsSortKey,
   parseLabelFilterParam,
 } from './listPageTextFilters';
 import MetadataLabels from './MetadataLabels';
@@ -536,8 +536,8 @@ export const sortData = (
         bValue = getAppSetGeneratorCount(b);
         break;
       case 'labels':
-        aValue = YamlFormatter.stringify(a.metadata?.labels || {});
-        bValue = YamlFormatter.stringify(b.metadata?.labels || {});
+        aValue = getLabelsSortKey(a.metadata?.labels);
+        bValue = getLabelsSortKey(b.metadata?.labels);
         break;
       case 'created-at':
         aValue = new Date(a.metadata?.creationTimestamp || 0).getTime();

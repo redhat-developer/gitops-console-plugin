@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom-v5-compat';
-import * as YamlFormatter from 'yaml';
 
 import ActionsDropdown from '@gitops/utils/components/ActionDropDown/ActionDropDown';
 import { modelToGroupVersionKind } from '@gitops/utils/utils';
@@ -43,7 +42,7 @@ import {
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from '../shared/DataView';
-import { filterByConsoleNameAndLabels, parseLabelFilterParam } from '../shared/listPageTextFilters';
+import { filterByConsoleNameAndLabels, getLabelsSortKey, parseLabelFilterParam } from '../shared/listPageTextFilters';
 import MetadataLabels from '../shared/MetadataLabels';
 
 import { useImageUpdaterActionsProvider } from './hooks/useImageUpdaterActionsProvider';
@@ -269,8 +268,8 @@ export const sortData = (
         bValue = b.status?.conditions?.find((c) => c.type === 'Ready')?.status || '';
         break;
       case 'labels':
-        aValue = YamlFormatter.stringify(a.metadata?.labels || {});
-        bValue = YamlFormatter.stringify(b.metadata?.labels || {});
+        aValue = getLabelsSortKey(a.metadata?.labels);
+        bValue = getLabelsSortKey(b.metadata?.labels);
         break;
       default:
         return 0;

@@ -3,6 +3,7 @@ import {
   filterByConsoleNameAndLabels,
   filterResourcesByLabelQuery,
   fuzzySearch,
+  getLabelsSortKey,
   matchesConsoleLabelFilter,
   matchesConsoleNameFilter,
   matchesLabelSearchQuery,
@@ -80,6 +81,25 @@ describe('matchesLabelSearchQuery (GitOps q param)', () => {
     expect(matchesLabelSearchQuery('env', labels)).toBe(true);
     expect(matchesLabelSearchQuery('missing', labels)).toBe(false);
     expect(matchesLabelSearchQuery('guestbook', undefined)).toBe(false);
+  });
+});
+
+describe('getLabelsSortKey', () => {
+  it('returns the same key regardless of label key insertion order', () => {
+    const first = { app: 'foo', env: 'prod' };
+    const second = { env: 'prod', app: 'foo' };
+    expect(getLabelsSortKey(first)).toBe('app=foo,env=prod');
+    expect(getLabelsSortKey(second)).toBe('app=foo,env=prod');
+    expect(getLabelsSortKey(first)).toBe(getLabelsSortKey(second));
+  });
+
+  it('sorts keys alphabetically', () => {
+    expect(getLabelsSortKey({ z: '1', a: '2', m: '3' })).toBe('a=2,m=3,z=1');
+  });
+
+  it('returns an empty string when labels are missing or empty', () => {
+    expect(getLabelsSortKey(undefined)).toBe('');
+    expect(getLabelsSortKey({})).toBe('');
   });
 });
 
