@@ -101,3 +101,9 @@ export const filterResourcesByLabelQuery = <T extends LabeledResource>(
   }
   return (items ?? []).filter((item) => matchesLabelSearchQuery(query, item.metadata?.labels));
 };
+
+export const getLabelsSortKey = (labels: Record<string, string> | undefined): string =>
+  Object.keys(labels ?? {})
+    .sort()
+    .map((key) => `${key}=${labels?.[key] ?? ''}`)
+    .join(',');

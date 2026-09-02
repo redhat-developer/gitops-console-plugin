@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import ExternalLink from '@gitops/utils/components/ExternalLink/ExternalLink';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
-import argoImage from '@images/argo.png';
 import { Tooltip } from '@patternfly/react-core';
 
 type ArgoCDLinkProps = {
@@ -12,14 +11,7 @@ type ArgoCDLinkProps = {
 export const ArgoCDLink: React.FC<ArgoCDLinkProps> = ({ href }) => {
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-      <img
-        loading="lazy"
-        src={argoImage}
-        alt="Argo CD"
-        width="22px"
-        height="22px"
-        style={{ marginRight: '4px' }}
-      />
+      <i className="fas fa-link" style={{ marginRight: '4px' }}></i>
       <Tooltip content={t('View in Argo CD')}>
         <ExternalLink stopPropagation={true} href={href}>
           <span>Argo CD</span>
