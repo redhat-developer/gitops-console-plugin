@@ -6,7 +6,7 @@ Use the OpenShift web console to install GitOps, enable the Console plugin, and 
 
 ## Prerequisites
 
-* You have access to an OpenShift Container Platform 4.19 or later cluster.
+* You have access to an OpenShift Container Platform 4.18 or later cluster.
 * You can log in to the web console with cluster-admin permission to install the Operator and enable the plugin.
 
 ## Install the OpenShift GitOps Operator
@@ -29,7 +29,7 @@ If **GitOps** is already in the navigation, skip this step. Otherwise follow [En
 
 ## Open the GitOps pages
 
-1. In the **Administrator** perspective, click **GitOps**.
+1. In the **Administrator** or **Core platform** perspective, click **GitOps**.
 
 2. Verify that you can open the following pages:
 

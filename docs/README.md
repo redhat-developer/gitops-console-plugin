@@ -2,7 +2,7 @@
 
 The GitOps Console plugin extends the OpenShift Container Platform web console by adding GitOps resources. The plugin is available as part of the Red Hat OpenShift GitOps Operator and provides a console UI for managing Argo CD and Argo Rollouts custom resources.
 
-After you install the Red Hat OpenShift GitOps Operator, the OpenShift web console displays a **GitOps** navigation tab in the **Administrator** perspective. The plugin is enabled by default. The GitOps navigation tab replaces the previous **Environments** tab and related pages in the **Developer** perspective.
+After you install the Red Hat OpenShift GitOps Operator, the OpenShift web console displays a **GitOps** navigation tab in the **Administrator** or **Core platform** perspective. The plugin is enabled by default. The GitOps navigation tab replaces the previous **Environments** tab and related pages in the **Developer** perspective.
 
 The GitOps navigation tab provides access to the following Argo CD and Argo Rollouts resources:
 
@@ -14,7 +14,7 @@ The GitOps navigation tab provides access to the following Argo CD and Argo Roll
 
 ## Prerequisites
 
-* You have access to OpenShift Container Platform 4.19 or later.
+* You have access to OpenShift Container Platform 4.18 or later.
 * You have installed the Red Hat OpenShift GitOps Operator.
 
 ## GitOps resources in the web console

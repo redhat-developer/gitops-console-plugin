@@ -1,19 +1,18 @@
 # Rollouts in the GitOps Console
 
-The GitOps Console plugin provides list and details pages for Argo Rollouts in the OpenShift web console. You can search and filter Rollouts, create them from a YAML template, scale replicas, inspect revisions and pods, and open Rollouts in the Developer Topology view.
+The GitOps Console plugin provides list and details pages for Argo Rollouts in the OpenShift web console. You can search and filter Rollouts, create them from a YAML template, scale replicas, inspect revisions and pods, and open Rollouts in the Topology view.
 
-The **Rollouts** page is available when the Rollout custom resource definition is installed on the cluster.
+The **Rollouts** page is available after you install the Red Hat OpenShift GitOps Operator.
 
 ## Prerequisites
 
 * You have access to the OpenShift web console.
 * The GitOps Console plugin is enabled. See [Enable the GitOps Console plugin](admin-enable-plugin.md).
-* The Rollout CRD is installed on the cluster.
 * You can list Rollouts in the selected namespace (or across namespaces, depending on your permissions).
 
 ## List page
 
-1. In the **Administrator** perspective, navigate to **GitOps** → **Rollouts**.
+1. In the **Administrator** or **Core platform** perspective, navigate to **GitOps** → **Rollouts**.
 
 2. Optional: Use the **Project** dropdown to limit the list to one project (namespace), or choose all projects.
 
@@ -26,7 +25,7 @@ The Rollouts list page includes:
 * **Table columns**: **Name**, **Namespace**, **Status**, **Pods**, **Labels**, **Selector**, **Last Updated**, and row actions
 * **Pagination**: Browse results in pages of 10, 20, 50, or 100 items (default 50). Search and filters change which rows are included. See [Filter, search, and paginate resources](filter-resources.md).
 
-When the list has results, a **Topology view** control opens the Developer Topology graph for the current namespace (or all namespaces).
+When the list has results, a **Topology view** control opens the Topology graph for the current namespace (or all namespaces).
 
 > **NOTE**
 >
@@ -43,10 +42,16 @@ From the row kebab, you can:
 
 ## Topology integration
 
-In the **Developer** perspective, the OpenShift Console **Topology** view can show Rollout workloads when:
+Rollout topology requires OpenShift Container Platform **4.19** or later (not available in the release-4.18 plugin).
 
-* The Rollout CRD is installed
-* The cluster is OpenShift Container Platform **4.19** or later
+| Perspective | Navigation |
+| --- | --- |
+| **Core platform** | **Workloads** → **Topology** |
+| **Developer** | **Topology** |
+
+The cluster-wide perspective may be labeled **Administrator** or **Core platform** depending on your OpenShift version.
+
+See [Rollouts in Topology](topology.md#rollouts-in-topology) for the full Topology page layout.
 
 When those conditions are met:
 
@@ -58,7 +63,7 @@ Use the **Topology view** control on the Rollouts list, Details tab, or Pods tab
 
 ![Topology view control on the Rollouts list](assets/pics/rollouts-topology-view-control.png)
 
-From Details or Pods, the Rollout is selected in the graph. For more detail, see [Rollouts in Developer Topology](topology.md#rollouts-in-developer-topology).
+From Details or Pods, the Rollout is selected in the graph. For more detail, see [Rollouts in Topology](topology.md#rollouts-in-topology).
 
 ## Rollout details page
 
@@ -78,7 +83,7 @@ Section title: **Rollout details**.
 
 **Summary (left)**
 
-* **Name**, with a **Topology view** control that opens the Developer Topology graph for this Rollout
+* **Name**, with a **Topology view** control that opens the Topology graph for this Rollout
 * **Namespace**
 * **Labels**, with **Edit**
 * **Annotations**
@@ -142,5 +147,5 @@ The **Events** tab shows Kubernetes events for the Rollout object, using the sta
 ## Related information
 
 * [Filter, search, and paginate resources](filter-resources.md)
-* [Rollouts in Developer Topology](topology.md#rollouts-in-developer-topology)
+* [Rollouts in Topology](topology.md#rollouts-in-topology)
 * [Troubleshooting](troubleshooting.md)

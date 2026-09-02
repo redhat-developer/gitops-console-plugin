@@ -13,7 +13,7 @@ The **ImageUpdaters** page is available when the ImageUpdater custom resource de
 
 ## List page
 
-1. In the **Administrator** perspective, navigate to **GitOps** → **ImageUpdaters**.
+1. In the **Administrator** or **Core platform** perspective, navigate to **GitOps** → **ImageUpdaters**.
 
 2. Optional: Use the **Project** dropdown to limit the list to one project (namespace), or choose all projects.
 

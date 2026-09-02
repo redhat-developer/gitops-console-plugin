@@ -3,7 +3,7 @@
 The GitOps Console plugin provides two kinds of graphical experience:
 
 * **Graph view** — In-plugin graphs on Application **Resources** and ApplicationSet **Applications** tabs
-* **Topology** — The OpenShift **Developer** perspective Topology page for Rollout workloads, opened with the **Topology view** control
+* **Topology** — Rollout workloads on the console **Topology** page (path depends on OpenShift version; see [Rollouts in Topology](#rollouts-in-topology))
 
 ## Application resource graph
 
@@ -116,14 +116,20 @@ The `template.metadata.labels` values must match the `rollingSync.steps` selecto
 
 This step-based flow is separate from **sync waves** on an Application's managed resources (the **Sync Wave** column on an Application **Resources** tab). Progressive sync controls the order in which Applications sync; sync waves control the order of resources within a single Application sync.
 
-## Rollouts in Developer Topology
+## Rollouts in Topology
 
-In the **Developer** perspective, open **Topology** to see Rollout workloads in **graph** or **list** view.
+Rollout topology integration requires OpenShift Container Platform **4.19** or later (not available in the release-4.18 plugin).
 
-Rollout topology integration requires:
+Open Topology using the path that matches your console layout:
 
-* The Rollout CRD installed on the cluster
-* OpenShift Container Platform **4.19** or later
+| Perspective | Navigation |
+| --- | --- |
+| **Core platform** | **Workloads** → **Topology** |
+| **Developer** | **Topology** |
+
+The cluster-wide perspective may be labeled **Administrator** or **Core platform** depending on your OpenShift version.
+
+From GitOps **Rollouts** pages, the **Topology view** control opens the same graph without using the navigation paths above.
 
 When available, the Topology page includes the following, from top to bottom:
 

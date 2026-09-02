@@ -3,18 +3,18 @@
 ## Prerequisites
 
 * You have access to the OpenShift web console.
-* You have access to an OpenShift Container Platform 4.19 or later cluster.
+* You have access to an OpenShift Container Platform 4.18 or later cluster.
 * The GitOps Console plugin is enabled. See [Enable the GitOps Console plugin](admin-enable-plugin.md).
 
 ## Common issues
 
 **GitOps is missing from the navigation**
 
-The plugin is disabled, the cluster is older than OpenShift 4.19, or the plugin pods are not running. See [Enable the GitOps Console plugin](admin-enable-plugin.md). Refresh the browser after you enable the plugin.
+The plugin is disabled, the cluster is older than OpenShift 4.18, or the plugin pods are not running. See [Enable the GitOps Console plugin](admin-enable-plugin.md). Refresh the browser after you enable the plugin.
 
 **ImageUpdaters or Rollouts are missing**
 
-Those list pages appear only when the matching CRDs are installed. Rollouts in the Developer **Topology** view also require OpenShift 4.19 or later. See [Rollouts in Developer Topology](topology.md#rollouts-in-developer-topology).
+Those list pages appear when the Red Hat OpenShift GitOps Operator is installed (it installs the Rollout and ImageUpdater CRDs). Rollouts in the **Topology** view require OpenShift 4.19 or later and are not available in the release-4.18 plugin. See [Rollouts in Topology](topology.md#rollouts-in-topology).
 
 **Empty lists or disabled actions**
 

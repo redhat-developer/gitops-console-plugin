@@ -10,7 +10,7 @@ The GitOps Console plugin shows list and details pages for Argo CD ApplicationSe
 
 ## List page
 
-1. In the **Administrator** perspective, navigate to **GitOps** → **ApplicationSets**.
+1. In the **Administrator** or **Core platform** perspective, navigate to **GitOps** → **ApplicationSets**.
 
 2. Optional: Use the **Project** dropdown to limit the list to one project (namespace), or choose all projects.
 
