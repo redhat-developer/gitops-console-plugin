@@ -1,6 +1,9 @@
 # OpenShift Console GitOps Plugin
 Based on [Openshift Console dynamic plugin](https://github.com/openshift/console/tree/master/frontend/packages/console-dynamic-plugin-sdk), this plugin implement the console elements for GitOps.
 
+## Documentation
+
+[docs/](docs/) provide description of what the UI does. Preview with `pnpm serve-docs` (http://localhost:3000).
 
 ## Building
 ### Option 1: Without running Console locally

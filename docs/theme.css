@@ -1,0 +1,288 @@
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;700&family=Red+Hat+Text:wght@400;500;700&display=swap");
+
+:root {
+  --theme-color: #0066cc;
+  --docs-text: #151515;
+  --docs-muted: #6a6e73;
+  --docs-border: #d2d2d2;
+  --docs-sidebar-active: #e7f1fa;
+  --docs-important: #ee2100;
+  --docs-note: #4e9fde;
+  --docs-warning: #ec7a09;
+}
+
+body {
+  font-family: "Red Hat Text", Helvetica, Arial, sans-serif;
+  color: var(--docs-text);
+  background: #fff;
+}
+
+.app-name-link,
+.sidebar-nav,
+.markdown-section {
+  font-family: "Red Hat Text", Helvetica, Arial, sans-serif;
+}
+
+.app-name-link {
+  font-family: "Red Hat Display", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  color: var(--docs-text) !important;
+}
+
+.sidebar {
+  background: #fff;
+  border-right: 1px solid var(--docs-border);
+  padding-top: 1.25rem;
+}
+
+.sidebar ul li a {
+  color: #151515;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.sidebar ul li.active > a {
+  background: var(--docs-sidebar-active);
+  color: #002952 !important;
+  font-weight: 700;
+  border-left: 3px solid var(--theme-color);
+  padding-left: calc(1rem - 3px);
+}
+
+.search input {
+  border: 1px solid var(--docs-border);
+  border-radius: 0;
+}
+
+.markdown-section {
+  max-width: 52rem;
+  color: var(--docs-text);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3 {
+  font-family: "Red Hat Display", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  color: #151515;
+  border-bottom: 0;
+}
+
+.markdown-section h1 {
+  font-size: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.markdown-section h2 {
+  font-size: 1.35rem;
+  margin-top: 2rem;
+}
+
+.markdown-section strong {
+  font-weight: 700;
+}
+
+.markdown-section ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.markdown-section ol li {
+  margin: 0.65rem 0;
+}
+
+.markdown-section ul li {
+  margin: 0.35rem 0;
+}
+
+.markdown-section table {
+  border-collapse: collapse;
+  display: table;
+  width: 100%;
+}
+
+.markdown-section th,
+.markdown-section td {
+  border: 1px solid var(--docs-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.markdown-section th {
+  background: #f0f0f0;
+}
+
+.markdown-section pre,
+.markdown-section code {
+  font-size: 0.9em;
+}
+
+.markdown-section blockquote {
+  margin: 1.25rem 0;
+  padding: 0.85rem 1rem 0.85rem 1.1rem;
+  color: var(--docs-text);
+  background: #ee210015;
+  border: 0;
+  border-left: 4px solid var(--docs-important);
+}
+
+.markdown-section blockquote p:first-child strong {
+  display: block;
+  color: var(--docs-important);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.35rem;
+}
+
+.markdown-section blockquote.note {
+  background: #4e9fde15;
+  border-left-color: var(--docs-note);
+}
+
+.markdown-section blockquote.note p:first-child strong {
+  color: #151515;
+}
+
+.markdown-section blockquote.warning {
+  background: #ec7a0915;
+  border-left-color: var(--docs-warning);
+}
+
+.page_toc {
+  font-family: "Red Hat Text", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+.page_toc .title {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--docs-muted);
+  font-size: 12px;
+}
+
+@media (min-width: 1300px) {
+  .content {
+    padding-right: 14rem;
+  }
+}
+
+.markdown-section img,
+.markdown-section video {
+  max-width: 100%;
+  height: auto;
+  cursor: zoom-in;
+}
+
+.markdown-section video {
+  display: block;
+  width: 100%;
+  background: #000;
+}
+
+.docs-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.82);
+  cursor: zoom-out;
+}
+
+.docs-lightbox[hidden] {
+  display: none;
+}
+
+.docs-lightbox__content {
+  max-width: min(96vw, 1200px);
+  max-height: 92vh;
+  cursor: default;
+}
+
+.docs-lightbox__content img,
+.docs-lightbox__content video {
+  display: block;
+  width: 100%;
+  max-height: 92vh;
+  height: auto;
+  object-fit: contain;
+  background: #000;
+}
+
+.docs-lightbox__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.docsify-copy-code-button {
+  font-family: "Red Hat Text", Helvetica, Arial, sans-serif !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  min-width: 2rem !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background-color: #6a6e73 !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='13' height='13' rx='2'/%3E%3Cpath d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 1rem 1rem !important;
+  color: transparent !important;
+  opacity: 1 !important;
+}
+
+.docsify-copy-code-button:hover,
+.docsify-copy-code-button:focus {
+  background-color: #4f5255 !important;
+}
+
+.docsify-copy-code-button.success {
+  font-size: 0.95rem !important;
+  line-height: 2rem !important;
+  color: #fff !important;
+  background-color: #6a6e73 !important;
+  background-image: none !important;
+}
+
+.docsify-pagination-container {
+  margin: 2.5rem 0 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--docs-border);
+  font-family: "Red Hat Text", Helvetica, Arial, sans-serif;
+}
+
+.pagination-item a {
+  color: var(--theme-color) !important;
+  text-decoration: none;
+}
+
+.pagination-item a:hover {
+  text-decoration: underline;
+}
+
+.pagination-item-label {
+  color: var(--docs-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pagination-item-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--docs-text);
+}
