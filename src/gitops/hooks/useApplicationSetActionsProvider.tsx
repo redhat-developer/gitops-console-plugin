@@ -81,6 +81,7 @@ export const useApplicationSetActionsProvider: UseApplicationSetActionsProvider 
           group: ApplicationSetModel.apiGroup,
           verb: 'delete' as K8sVerb,
           resource: ApplicationSetModel.plural,
+          namespace: applicationSet?.metadata?.namespace,
         },
         cta: () => launchDeleteModal(),
       },
