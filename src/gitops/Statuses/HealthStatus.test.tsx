@@ -22,13 +22,13 @@ describe('HealthStatus', () => {
 
   it('renders Suspended', () => {
     expect(renderToStaticMarkup(<HealthStatus status="Suspended" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="OutlinedPauseCircleIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> Suspended</div></div>"`,
+      `"<div><div><svg data-icon="OutlinedPauseCircleIcon" style="color:var(--pf-v5-global--disabled-color--100)"></svg> Suspended</div></div>"`,
     );
   });
 
   it('renders Missing', () => {
     expect(renderToStaticMarkup(<HealthStatus status="Missing" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="GhostIcon" style="color:var(--pf-t--global--icon--color--status--warning--default)"></svg> Missing</div></div>"`,
+      `"<div><div><svg data-icon="GhostIcon" style="color:var(--pf-v5-global--warning-color--100)"></svg> Missing</div></div>"`,
     );
   });
 
@@ -40,7 +40,7 @@ describe('HealthStatus', () => {
 
   it('renders Unknown for undefined status', () => {
     expect(renderToStaticMarkup(<HealthStatus status={undefined as any} />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="UnknownIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> </div></div>"`,
+      `"<div><div><svg data-icon="UnknownIcon" style="color:var(--pf-v5-global--disabled-color--100)"></svg> </div></div>"`,
     );
   });
 
