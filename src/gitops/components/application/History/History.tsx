@@ -109,6 +109,16 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
   );
 };
 
+const renderRepoUrl = (repoURL?: string) => {
+  if (!repoURL) {
+    return '-';
+  }
+  if (repoURL.startsWith('oci://')) {
+    return repoURL;
+  }
+  return <ExternalLink href={repoURL}>{repoUrl(repoURL)}</ExternalLink>;
+};
+
 const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataViewTr[] => {
   const rows: DataViewTr[] = [];
 
@@ -121,61 +131,55 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
       ? 'Automated'
       : '' + (initBy.username ? initBy.username : '-');
 
-    const isOci = obj.source?.repoURL?.startsWith('oci://');
-    let revisionValue = <>-</>;
+    let revisionValue: React.ReactNode = '-';
     if (obj.revision) {
+      const source = obj.source;
       revisionValue = (
         <>
           <Revision
-            revision={obj.revision || ''}
-            repoURL={obj.source.repoURL || ''}
-            helm={obj.source.helm ? true : false}
+            revision={obj.revision}
+            repoURL={source?.repoURL || ''}
+            helm={Boolean(source?.helm)}
           />
-          {!isOci ? (
-            <span style={{ marginLeft: '5px' }}>
-              {'('}
-              <ExternalLink href={obj.source.repoURL}>{repoUrl(obj.source.repoURL)}</ExternalLink>
-              {')'}
-            </span>
-          ) : (
-            <span style={{ marginLeft: '5px' }}>
-              {'('}
-              {obj.source.repoURL}
-              {')'}
-            </span>
-          )}
+          <span style={{ marginLeft: '5px' }}>
+            {'('}
+            {renderRepoUrl(source?.repoURL)}
+            {')'}
+          </span>
         </>
       );
-    } else if (obj.revisions && app.spec.sources) {
-      const rv: React.ReactNode[] = [];
-      obj.revisions?.forEach((revision, index) => {
-        rv.push(
-          <>
-            <Revision
-              revision={revision || ''}
-              repoURL={app.spec.sources[index].repoURL || ''}
-              helm={app.spec.sources[index].helm && app.spec.sources[index].chart ? true : false}
-            />
-            <span style={{ marginLeft: '10px' }}>{'('}</span>
-            <>
-              <ExternalLink href={app.spec.sources[index].repoURL}>
-                {repoUrl(app.spec.sources[index].repoURL)}
-              </ExternalLink>
-              {')'}
-            </>
-            <span
-              style={{
-                display: 'inline-block',
-                width: '100%',
-                borderBottom: '1px solid darkgray',
-                marginBottom: '2px',
-              }}
-            />
-            <br />
-          </>,
-        );
-      });
-      revisionValue = <>{rv}</>;
+    } else if (obj.revisions?.length) {
+      const historySources = obj.sources?.length ? obj.sources : app.spec?.sources;
+      revisionValue = (
+        <>
+          {obj.revisions.map((revision, index) => {
+            const source = historySources?.[index];
+            return (
+              <React.Fragment key={`${obj.id ?? 'history'}-${index}-${revision}`}>
+                <Revision
+                  revision={revision || ''}
+                  repoURL={source?.repoURL || ''}
+                  helm={Boolean(source?.helm && source?.chart)}
+                />
+                <span style={{ marginLeft: '10px' }}>
+                  {'('}
+                  {renderRepoUrl(source?.repoURL)}
+                  {')'}
+                </span>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '100%',
+                    borderBottom: '1px solid darkgray',
+                    marginBottom: '2px',
+                  }}
+                />
+                <br />
+              </React.Fragment>
+            );
+          })}
+        </>
+      );
     }
     rows.push([
       {
