@@ -31,7 +31,8 @@ The GitOps Console plugin is enabled by default after you install the Red Hat Op
 
 ## Verification
 
-* Navigate to **GitOps** in the navigation menu and verify that you can access Applications, ApplicationSets, AppProjects, ImageUpdaters, and Rollouts pages.
+* Navigate to **GitOps** in the navigation menu and verify that you can access **Applications**, **ApplicationSets**, and **AppProjects**.
+* If the ImageUpdater and Rollout CRDs are installed on the cluster, also verify that you can access **ImageUpdaters** and **Rollouts**.
 
   ![GitOps navigation with Applications, ApplicationSets, AppProjects, ImageUpdaters, and Rollouts](assets/pics/enable-console-plugin-verification-gitops-nav.png)
 
