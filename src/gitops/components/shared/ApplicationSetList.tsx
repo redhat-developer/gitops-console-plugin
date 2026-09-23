@@ -14,8 +14,9 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
 import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
-import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
 import { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
+import type { DataViewTd } from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
@@ -32,10 +33,20 @@ import {
   useShowOperandsInAllNamespaces,
 } from './AllNamespaces';
 import {
+  APPLICATION_SET_LIST_COLUMN_MANAGEMENT_ID,
+  getApplicationSetManagedColumns,
+} from './applicationSetListColumns';
+import {
+  type GitOpsManagedColumn,
+  NAMESPACE_COLUMN_ID,
+  useGitOpsColumnManagement,
+} from './ColumnManagement';
+import {
   GitOpsDataViewTable,
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from './DataView';
+import { GitOpsListPageToolbar } from './GitOpsListPageToolbar';
 import {
   filterByConsoleNameAndLabels,
   filterResourcesByLabelQuery,
@@ -122,20 +133,21 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   });
 
   const { t } = useTranslation('plugin__gitops-plugin');
+  const includeNamespaceColumn = !namespace;
+  const managedColumns = React.useMemo(() => getApplicationSetManagedColumns(true, t), [t]);
+
+  const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
+    columnManagementID: APPLICATION_SET_LIST_COLUMN_MANAGEMENT_ID,
+    columns: managedColumns,
+    resourceType: t('ApplicationSet'),
+    includeNamespaceColumn,
+    showNamespaceHelp: includeNamespaceColumn,
+  });
 
   const columnSortConfig = React.useMemo(
     () =>
-      [
-        'name',
-        ...(!listAllNamespaces || !namespace ? ['namespace'] : []),
-        'status',
-        'generated-apps',
-        'generators',
-        'labels',
-        'created-at',
-        'actions',
-      ].map((key) => ({ key })),
-    [listAllNamespaces, namespace],
+      managedColumns.filter((column) => !column.alwaysShown).map((column) => ({ key: column.id })),
+    [managedColumns],
   );
 
   const { searchParams, sortBy, direction, getSortParams } =
@@ -146,7 +158,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   const nameQuery = searchParams.get('name') || '';
   const labelsParam = searchParams.get('labels') || '';
 
-  const columnsDV = useColumnsDV(namespace, getSortParams);
+  const columnsDV = useColumnsDV(managedColumns, getSortParams, columnSortConfig);
   const sortedApplicationSets = React.useMemo(() => {
     return sortData(
       applicationSets as ApplicationSetKind[],
@@ -175,7 +187,15 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     namespace,
     searchParams,
   });
-  const rows = useApplicationSetRowsDV(pagedItems, namespace, applications, appsLoaded);
+  const rows = useApplicationSetRowsDV(pagedItems, managedColumns, applications, appsLoaded);
+  const columnIds = React.useMemo(
+    () => managedColumns.map((column) => column.id),
+    [managedColumns],
+  );
+  const { columns: visibleColumnsDV, rows: visibleRows } = React.useMemo(
+    () => filterDataView(columnsDV, rows, columnIds, activeColumnIds),
+    [filterDataView, columnsDV, rows, columnIds, activeColumnIds],
+  );
 
   // Check if there are ApplicationSets initially (before search)
   const hasApplicationSets = React.useMemo(() => {
@@ -200,7 +220,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={visibleColumnsDV.length || columnsDV.length}>
           <EmptyState
             headingLevel="h4"
             icon={CubesIcon}
@@ -220,7 +240,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   const error = loadError && (
     <Tbody>
       <Tr key="loading" ouiaId={'table-tr-loading'}>
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={visibleColumnsDV.length || columnsDV.length}>
           <ErrorState
             titleText={t('Unable to load data')}
             bodyText={t(
@@ -236,6 +256,15 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
     applicationSets.length === 0 ||
     sortedApplicationSets.length === 0 ||
     filteredBySearch.length === 0;
+
+  const listPageFilter = !hideNameLabelFilters && hasApplicationSets && (
+    <ListPageFilter
+      data={data}
+      loaded={loaded}
+      rowFilters={filters}
+      onFilterChange={onFilterChange}
+    />
+  );
 
   return (
     <div>
@@ -255,17 +284,12 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
         </ListPageHeader>
       )}
       <ListPageBody>
-        {!hideNameLabelFilters && hasApplicationSets && (
-          <ListPageFilter
-            data={data}
-            loaded={loaded}
-            rowFilters={filters}
-            onFilterChange={onFilterChange}
-          />
+        {hasApplicationSets && (
+          <GitOpsListPageToolbar filters={listPageFilter} columnManagement={columnManagement} />
         )}
         <GitOpsDataViewTable
-          rows={rows}
-          columns={columnsDV}
+          rows={visibleRows}
+          columns={visibleColumnsDV}
           isEmpty={isEmptyState}
           emptyState={empty}
           isLoading={!loaded}
@@ -300,15 +324,15 @@ const ApplicationSetActionsCell: React.FC<{ appSet: ApplicationSetKind; index: n
 };
 
 const useApplicationSetRowsDV = (
-  applicationSetsList,
-  namespace,
-  applications,
-  appsLoaded,
+  applicationSetsList: ApplicationSetKind[],
+  managedColumns: GitOpsManagedColumn[],
+  applications: K8sResourceCommon[],
+  appsLoaded: boolean,
 ): DataViewTr[] => {
   const rows: DataViewTr[] = [];
   applicationSetsList.forEach((appSet: ApplicationSetKind, index: number) => {
-    rows.push([
-      {
+    const cellsById: Record<string, DataViewTd> = {
+      name: {
         cell: (
           <div>
             <ResourceLink
@@ -322,28 +346,24 @@ const useApplicationSetRowsDV = (
         id: appSet.metadata?.name,
         dataLabel: 'Name',
       },
-      ...(!namespace
-        ? [
-            {
-              cell: <ResourceLink kind="Namespace" name={appSet.metadata.namespace} />,
-              id: appSet.metadata.namespace,
-              dataLabel: 'Namespace',
-            },
-          ]
-        : []),
-      {
+      [NAMESPACE_COLUMN_ID]: {
+        cell: <ResourceLink kind="Namespace" name={appSet.metadata.namespace} />,
+        id: appSet.metadata.namespace,
+        dataLabel: 'Namespace',
+      },
+      status: {
         id: getAppSetStatus(appSet),
         cell: <ApplicationSetStatusFragment status={getAppSetStatus(appSet)} />,
       },
-      {
+      'generated-apps': {
         id: 'generated-apps-' + index,
         cell: <div>{getGeneratedAppsCount(appSet, applications, appsLoaded).toString()}</div>,
       },
-      {
+      generators: {
         id: 'generators-' + index,
         cell: <div>{getAppSetGeneratorCount(appSet).toString()}</div>,
       },
-      {
+      labels: {
         id: 'labels',
         dataLabel: 'Labels',
         cell: (
@@ -362,93 +382,67 @@ const useApplicationSetRowsDV = (
           </div>
         ),
       },
-      {
+      'created-at': {
         id: 'created-at-' + index,
         cell: <div>{formatCreationTimestamp(appSet.metadata.creationTimestamp)}</div>,
       },
-      {
+      actions: {
         id: 'actions-' + index,
         cell: <ApplicationSetActionsCell appSet={appSet} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
   return rows;
 };
 
 const useColumnsDV = (
-  namespace: string,
+  managedColumns: GitOpsManagedColumn[],
   getSortParams: (columnIndex: number) => ThProps['sort'],
+  columnSortConfig: { key: string }[],
 ): DataViewTh[] => {
-  const i: number = namespace ? 0 : 1;
   const { t } = useTranslation('plugin__gitops-plugin');
-  const columns: DataViewTh[] = [
-    {
-      cell: t('Name'),
+
+  const titleById: Record<string, string> = {
+    name: t('Name'),
+    [NAMESPACE_COLUMN_ID]: t('Namespace'),
+    status: t('Health Status'),
+    'generated-apps': t('Generated Apps'),
+    generators: t('Generators'),
+    labels: t('Labels'),
+    'created-at': t('Created At'),
+    actions: '',
+  };
+
+  const widthById: Record<string, string> = {
+    name: 'pf-m-width-25',
+    [NAMESPACE_COLUMN_ID]: 'pf-m-width-15',
+    status: 'pf-m-width-15',
+    'generated-apps': 'pf-m-width-15',
+    generators: 'pf-m-width-15',
+    labels: 'pf-m-width-20',
+    'created-at': 'pf-m-width-15',
+  };
+
+  return managedColumns.map((column) => {
+    if (column.id === 'actions') {
+      return {
+        cell: '',
+        props: { 'aria-label': 'actions' },
+      };
+    }
+    const sortIndex = columnSortConfig.findIndex((entry) => entry.key === column.id);
+    return {
+      cell: titleById[column.id] ?? column.title,
       props: {
-        'aria-label': 'name',
-        className: 'pf-m-width-25',
-        sort: getSortParams(0),
+        'aria-label': column.id,
+        className: widthById[column.id],
+        ...(sortIndex >= 0 ? { sort: getSortParams(sortIndex) } : {}),
       },
-    },
-    ...(!namespace
-      ? [
-          {
-            cell: t('Namespace'),
-            props: {
-              'aria-label': 'namespace',
-              className: 'pf-m-width-15',
-              sort: getSortParams(1),
-            },
-          },
-        ]
-      : []),
-    {
-      cell: t('Health Status'),
-      props: {
-        'aria-label': 'health status',
-        className: 'pf-m-width-15',
-        sort: getSortParams(1 + i),
-      },
-    },
-    {
-      cell: t('Generated Apps'),
-      props: {
-        'aria-label': 'generated apps',
-        className: 'pf-m-width-15',
-        sort: getSortParams(2 + i),
-      },
-    },
-    {
-      cell: t('Generators'),
-      props: {
-        'aria-label': 'generators',
-        className: 'pf-m-width-15',
-        sort: getSortParams(3 + i),
-      },
-    },
-    {
-      cell: t('Labels'),
-      props: {
-        'aria-label': 'labels',
-        className: 'pf-m-width-20',
-        sort: getSortParams(4 + i),
-      },
-    },
-    {
-      cell: t('Created At'),
-      props: {
-        'aria-label': 'created at',
-        className: 'pf-m-width-15',
-        sort: getSortParams(5 + i),
-      },
-    },
-    {
-      cell: '',
-      props: { 'aria-label': 'actions' },
-    },
-  ];
-  return columns;
+    };
+  });
 };
 
 const getFilters = (t: (key: string) => string): RowFilter[] => [

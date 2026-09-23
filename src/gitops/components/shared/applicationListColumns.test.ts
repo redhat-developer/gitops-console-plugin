@@ -20,7 +20,18 @@ describe('getApplicationManagedColumns', () => {
     expect(byId.name.isUntoggleable).toBe(true);
     expect(byId.labels.isShownByDefault).toBe(true);
     expect(byId.actions.alwaysShown).toBe(true);
-    expect(columns.some((column) => column.additional)).toBe(false);
+  });
+
+  it('puts Revision and App Project under Additional columns', () => {
+    const columns = getApplicationManagedColumns(true, t);
+    const byId = Object.fromEntries(columns.map((column) => [column.id, column]));
+
+    expect(byId.revision).toMatchObject({ isShownByDefault: false, additional: true });
+    expect(byId.project).toMatchObject({ isShownByDefault: false, additional: true });
+    expect(columns.filter((column) => column.additional).map((column) => column.id)).toEqual([
+      'revision',
+      'project',
+    ]);
   });
 
   it('includes Namespace only for All projects', () => {
@@ -45,16 +56,14 @@ describe('getApplicationManagedColumns', () => {
     ]);
   });
 
-  it('defaults to every non-additional column visible', () => {
+  it('defaults to Default columns only (excludes Additional)', () => {
     const columns = getApplicationManagedColumns(true, t);
     expect(getDefaultActiveColumnIds(columns)).toEqual([
       'name',
       'namespace',
       'sync-status',
       'health-status',
-      'revision',
       'labels',
-      'project',
       'actions',
     ]);
   });
