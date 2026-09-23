@@ -8,7 +8,6 @@ export type GitOpsListPageToolbarProps = {
   actions?: React.ReactNode;
 };
 
-/** Filters + manage-columns control on one row; optional trailing actions. */
 export const GitOpsListPageToolbar: React.FC<GitOpsListPageToolbarProps> = ({
   filters,
   columnManagement,

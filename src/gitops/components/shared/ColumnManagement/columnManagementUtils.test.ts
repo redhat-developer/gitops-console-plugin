@@ -169,23 +169,38 @@ describe('getSavableColumnIds', () => {
   });
 
   it('keeps previously saved ids that the current modal does not manage', () => {
-    const projectScopedColumns = baseColumns.filter(
-      (column) => column.id !== NAMESPACE_COLUMN_ID,
-    );
     const modalColumns = toColumnManagementModalColumns(
-      projectScopedColumns,
+      baseColumns,
       new Set(['name', 'status', 'actions']),
       false,
     );
 
     expect(
-      getSavableColumnIds(projectScopedColumns, modalColumns, [
-        'name',
-        'namespace',
-        'labels',
-        'extra',
-      ]),
+      getSavableColumnIds(baseColumns, modalColumns, ['name', 'namespace', 'labels', 'extra']),
     ).toEqual(['namespace', 'name', 'status']);
+  });
+
+  it('preserves Namespace after a first save in a project-scoped view', () => {
+    const defaultIds = getDefaultActiveColumnIds(baseColumns);
+    expect(defaultIds).toContain('namespace');
+
+    const projectModalColumns = toColumnManagementModalColumns(
+      baseColumns,
+      new Set(['name', 'status', 'labels', 'actions']),
+      false,
+    );
+    expect(projectModalColumns.map((column) => column.id)).not.toContain('namespace');
+
+    const savedAfterProjectEdit = getSavableColumnIds(baseColumns, projectModalColumns, defaultIds);
+    expect(savedAfterProjectEdit).toContain('namespace');
+
+    expect(
+      resolveActiveColumnIds({
+        columns: baseColumns,
+        savedColumnIds: savedAfterProjectEdit,
+        includeNamespaceColumn: true,
+      }),
+    ).toContain('namespace');
   });
 });
 

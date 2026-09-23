@@ -83,9 +83,7 @@ export const getSavableColumnIds = (
     modalColumns.filter((column) => column.isShown).map((column) => column.id),
   );
 
-  // Keep prefs for columns this modal did not offer (e.g. namespace while project-scoped).
-  const preserved =
-    previouslySavedIds?.filter((id) => !managedByModal.has(id)) ?? [];
+  const preserved = previouslySavedIds?.filter((id) => !managedByModal.has(id)) ?? [];
 
   const fromModal = getManageableColumns(columns)
     .map((column) => column.id)

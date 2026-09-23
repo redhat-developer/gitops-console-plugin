@@ -31,3 +31,12 @@ export type ResolveActiveColumnIdsOptions = {
   /** When false, omit the namespace column (project-scoped views). */
   includeNamespaceColumn?: boolean;
 };
+
+export type UseGitOpsColumnManagementOptions = {
+  columnManagementID: string;
+  /** Full catalog for prefs; use includeNamespaceColumn to hide Namespace in project views. */
+  columns: GitOpsManagedColumn[];
+  resourceType: string;
+  includeNamespaceColumn?: boolean;
+  showNamespaceHelp?: boolean;
+};

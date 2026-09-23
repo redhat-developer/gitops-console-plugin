@@ -13,16 +13,11 @@ import { GitOpsColumnManagementControl } from './GitOpsColumnManagementControl';
 import {
   type GitOpsColumnManagementModalColumn,
   type GitOpsManagedColumn,
+  type UseGitOpsColumnManagementOptions,
   getGitOpsColumnManagementSettingKey,
 } from './types';
 
-export type UseGitOpsColumnManagementOptions = {
-  columnManagementID: string;
-  columns: GitOpsManagedColumn[];
-  resourceType: string;
-  includeNamespaceColumn?: boolean;
-  showNamespaceHelp?: boolean;
-};
+export type { UseGitOpsColumnManagementOptions };
 
 export type UseGitOpsColumnManagementResult = {
   loaded: boolean;

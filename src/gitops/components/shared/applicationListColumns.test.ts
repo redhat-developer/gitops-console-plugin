@@ -1,9 +1,8 @@
-import { getDefaultActiveColumnIds } from './ColumnManagement';
-
 import {
   APPLICATION_LIST_COLUMN_MANAGEMENT_ID,
   getApplicationManagedColumns,
 } from './applicationListColumns';
+import { getDefaultActiveColumnIds } from './ColumnManagement';
 
 const t = (key: string) => key;
 

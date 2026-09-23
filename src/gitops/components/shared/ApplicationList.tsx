@@ -42,6 +42,10 @@ import {
   useShowOperandsInAllNamespaces,
 } from './AllNamespaces';
 import {
+  APPLICATION_LIST_COLUMN_MANAGEMENT_ID,
+  getApplicationManagedColumns,
+} from './applicationListColumns';
+import {
   APPLICATION_HEALTH_FILTER_PARAM,
   APPLICATION_SYNC_FILTER_PARAM,
   filterApplicationsByStatus,
@@ -49,10 +53,6 @@ import {
   parseRowFilterParam,
 } from './applicationListFilters';
 import ApplicationSetApplicationsView from './ApplicationSetApplicationsView';
-import {
-  APPLICATION_LIST_COLUMN_MANAGEMENT_ID,
-  getApplicationManagedColumns,
-} from './applicationListColumns';
 import {
   type GitOpsManagedColumn,
   NAMESPACE_COLUMN_ID,
@@ -126,10 +126,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
 
   const { t } = useTranslation('plugin__gitops-plugin');
   const includeNamespaceColumn = !namespace;
-  const managedColumns = React.useMemo(
-    () => getApplicationManagedColumns(includeNamespaceColumn, t),
-    [includeNamespaceColumn, t],
-  );
+  const managedColumns = React.useMemo(() => getApplicationManagedColumns(true, t), [t]);
 
   const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
     columnManagementID: APPLICATION_LIST_COLUMN_MANAGEMENT_ID,

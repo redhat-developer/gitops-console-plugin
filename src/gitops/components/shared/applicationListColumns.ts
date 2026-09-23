@@ -1,9 +1,7 @@
-import type { GitOpsManagedColumn } from './ColumnManagement';
-import { NAMESPACE_COLUMN_ID } from './ColumnManagement';
+import { type GitOpsManagedColumn, NAMESPACE_COLUMN_ID } from './ColumnManagement/types';
 
 export const APPLICATION_LIST_COLUMN_MANAGEMENT_ID = 'gitops.applications';
 
-/** Column management metadata for the Applications list (and shared AppSet/Project app tables). */
 export const getApplicationManagedColumns = (
   includeNamespaceColumn: boolean,
   t: (key: string) => string,

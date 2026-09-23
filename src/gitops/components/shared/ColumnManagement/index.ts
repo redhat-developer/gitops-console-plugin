@@ -15,14 +15,12 @@ export type {
   GitOpsColumnManagementModalColumn,
   GitOpsManagedColumn,
   ResolveActiveColumnIdsOptions,
+  UseGitOpsColumnManagementOptions,
 } from './types';
 export {
   getGitOpsColumnManagementSettingKey,
   GITOPS_COLUMN_MANAGEMENT_SETTING_PREFIX,
   NAMESPACE_COLUMN_ID,
 } from './types';
-export type {
-  UseGitOpsColumnManagementOptions,
-  UseGitOpsColumnManagementResult,
-} from './useGitOpsColumnManagement';
+export type { UseGitOpsColumnManagementResult } from './useGitOpsColumnManagement';
 export { useGitOpsColumnManagement } from './useGitOpsColumnManagement';

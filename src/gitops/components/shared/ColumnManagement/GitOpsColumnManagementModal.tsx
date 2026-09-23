@@ -63,9 +63,6 @@ const ColumnRow: React.FC<{
   );
 };
 
-/**
- * Manage columns modal with Default / Additional sections (console list-page layout).
- */
 export const GitOpsColumnManagementModal: React.FC<GitOpsColumnManagementModalProps> = ({
   isOpen,
   onClose,
