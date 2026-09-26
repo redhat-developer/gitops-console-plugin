@@ -1,0 +1,24 @@
+.gitops-column-management-modal {
+  &__description,
+  &__namespace-help {
+    margin-block-end: var(--pf-t--global--spacer--md);
+  }
+
+  &__namespace-help {
+    color: var(--pf-t--global--text--color--subtle);
+  }
+
+  &__section-title {
+    display: inline-block;
+    font-weight: var(--pf-t--global--font--weight--body--bold);
+    margin-block-end: var(--pf-t--global--spacer--sm);
+  }
+
+  &__list {
+    --pf-v6-c-data-list--BorderTopWidth: 0;
+  }
+
+  &__grid {
+    margin-block-start: var(--pf-t--global--spacer--sm);
+  }
+}

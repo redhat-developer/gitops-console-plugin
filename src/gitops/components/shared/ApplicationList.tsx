@@ -15,6 +15,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
 import { EmptyState, EmptyStateBody, Flex, FlexItem, Spinner, Title } from '@patternfly/react-core';
+import type { DataViewTd } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
@@ -41,6 +42,10 @@ import {
   useShowOperandsInAllNamespaces,
 } from './AllNamespaces';
 import {
+  APPLICATION_LIST_COLUMN_MANAGEMENT_ID,
+  getApplicationManagedColumns,
+} from './applicationListColumns';
+import {
   APPLICATION_HEALTH_FILTER_PARAM,
   APPLICATION_SYNC_FILTER_PARAM,
   filterApplicationsByStatus,
@@ -49,10 +54,16 @@ import {
 } from './applicationListFilters';
 import ApplicationSetApplicationsView from './ApplicationSetApplicationsView';
 import {
+  type GitOpsManagedColumn,
+  NAMESPACE_COLUMN_ID,
+  useGitOpsColumnManagement,
+} from './ColumnManagement';
+import {
   GitOpsDataViewTable,
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from './DataView';
+import { GitOpsListPageToolbar } from './GitOpsListPageToolbar';
 import {
   filterByConsoleNameAndLabels,
   filterResourcesByLabelQuery,
@@ -114,19 +125,21 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   });
 
   const { t } = useTranslation('plugin__gitops-plugin');
+  const includeNamespaceColumn = !namespace;
+  const managedColumns = React.useMemo(() => getApplicationManagedColumns(true, t), [t]);
+
+  const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
+    columnManagementID: APPLICATION_LIST_COLUMN_MANAGEMENT_ID,
+    columns: managedColumns,
+    resourceType: t('Application'),
+    includeNamespaceColumn,
+    showNamespaceHelp: includeNamespaceColumn,
+  });
+
   const columnSortConfig = React.useMemo(
     () =>
-      [
-        'name',
-        ...(!listAllNamespaces || !namespace ? ['namespace'] : []),
-        'sync-status',
-        'health-status',
-        'revision',
-        'labels',
-        'project',
-        'actions',
-      ].map((key) => ({ key })),
-    [listAllNamespaces, namespace],
+      managedColumns.filter((column) => !column.alwaysShown).map((column) => ({ key: column.id })),
+    [managedColumns],
   );
 
   const { searchParams, sortBy, direction, getSortParams } =
@@ -135,7 +148,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
 
-  const columnsDV = useColumnsDV(namespace, getSortParams);
+  const columnsDV = useColumnsDV(managedColumns, getSortParams, columnSortConfig);
   const sortedApplications = React.useMemo(() => {
     return sortData(applications, sortBy, direction);
   }, [applications, sortBy, direction]);
@@ -185,14 +198,22 @@ const ApplicationList: React.FC<ApplicationProps> = ({
     namespace,
     searchParams,
   });
-  const rows = useApplicationRowsDV(pagedApplications, namespace);
+  const rows = useApplicationRowsDV(pagedApplications, managedColumns);
+  const columnIds = React.useMemo(
+    () => managedColumns.map((column) => column.id),
+    [managedColumns],
+  );
+  const { columns: visibleColumnsDV, rows: visibleRows } = React.useMemo(
+    () => filterDataView(columnsDV, rows, columnIds, activeColumnIds),
+    [filterDataView, columnsDV, rows, columnIds, activeColumnIds],
+  );
 
   // Check if there are applications owned by this ApplicationSet initially (before filters/search)
   const hasOwnedApplications = ownedApps.length > 0;
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={visibleColumnsDV.length || columnsDV.length}>
           <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No Argo CD Applications')}>
             <EmptyStateBody>
               {(() => {
@@ -228,7 +249,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   const error = loadError && (
     <Tbody>
       <Tr key="loading-error" ouiaId={'table-tr-loading-error'}>
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={visibleColumnsDV.length || columnsDV.length}>
           <ErrorState
             titleText={t('Unable to load data')}
             bodyText={t(
@@ -239,6 +260,17 @@ const ApplicationList: React.FC<ApplicationProps> = ({
       </Tr>
     </Tbody>
   );
+
+  const listPageFilter = !hideNameLabelFilters && hasOwnedApplications && (
+    <ListPageFilter
+      data={data}
+      loaded={loaded}
+      rowFilters={filters}
+      onFilterChange={onFilterChange}
+      nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
+    />
+  );
+
   return (
     <div>
       {showTitle == undefined && (project == undefined || appset == undefined) && (
@@ -270,14 +302,8 @@ const ApplicationList: React.FC<ApplicationProps> = ({
             </FlexItem>
           </Flex>
         )}
-        {!appset && !hideNameLabelFilters && hasOwnedApplications && (
-          <ListPageFilter
-            data={data}
-            loaded={loaded}
-            rowFilters={filters}
-            onFilterChange={onFilterChange}
-            nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
-          />
+        {!appset && hasOwnedApplications && (
+          <GitOpsListPageToolbar filters={listPageFilter} columnManagement={columnManagement} />
         )}
         {appset && (
           <ApplicationSetApplicationsView
@@ -290,8 +316,9 @@ const ApplicationList: React.FC<ApplicationProps> = ({
             onFilterChange={onFilterChange}
             nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
             loaded={loaded}
-            columns={columnsDV}
-            rows={rows}
+            columns={visibleColumnsDV}
+            rows={visibleRows}
+            columnManagement={columnManagement}
             isEmpty={filteredBySearch.length === 0}
             emptyState={empty}
             errorState={error || undefined}
@@ -302,8 +329,8 @@ const ApplicationList: React.FC<ApplicationProps> = ({
         )}
         {!appset && (
           <GitOpsDataViewTable
-            columns={columnsDV}
-            rows={rows}
+            columns={visibleColumnsDV}
+            rows={visibleRows}
             isEmpty={filteredBySearch.length === 0}
             emptyState={empty}
             errorState={error || undefined}
@@ -387,7 +414,11 @@ const ApplicationActionsCell: React.FC<{ app: ApplicationKind; index: number }> 
   );
 };
 
-const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
+const useApplicationRowsDV = (
+  applicationsList: ApplicationKind[],
+  managedColumns: GitOpsManagedColumn[],
+): DataViewTr[] => {
+  const includeNamespaceColumn = managedColumns.some((column) => column.id === NAMESPACE_COLUMN_ID);
   const rows: DataViewTr[] = [];
   applicationsList.forEach((app, index) => {
     let sources: ApplicationSource[];
@@ -403,8 +434,9 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
       sources = [];
       revisions = [];
     }
-    rows.push([
-      {
+
+    const cellsById: Record<string, DataViewTd> = {
+      name: {
         cell: (
           <div>
             <ResourceLink
@@ -419,20 +451,20 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
             </ResourceLink>
           </div>
         ),
-        id: app.metadata?.name,
+        id: 'name',
         dataLabel: 'Name',
       },
-      ...(!namespace
-        ? [
-            {
+      ...(includeNamespaceColumn
+        ? {
+            [NAMESPACE_COLUMN_ID]: {
               cell: <ResourceLink kind="Namespace" name={app.metadata.namespace} />,
-              id: app.metadata.namespace,
+              id: NAMESPACE_COLUMN_ID,
               dataLabel: 'Namespace',
             },
-          ]
-        : []),
-      {
-        id: app.status?.sync?.status,
+          }
+        : {}),
+      'sync-status': {
+        id: 'sync-status',
         cell: (
           <div className="pf-m-width-40">
             <Flex>
@@ -446,12 +478,12 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
           </div>
         ),
       },
-      {
-        id: app.status?.health?.status,
+      'health-status': {
+        id: 'health-status',
         cell: <HealthStatusFragment status={app.status?.health?.status || HealthStatus.UNKNOWN} />,
       },
-      {
-        id: app?.status?.sync?.revision,
+      revision: {
+        id: 'revision',
         cell: (
           <>
             {sources[0]?.targetRevision ? sources[0].targetRevision : 'HEAD'}&nbsp;
@@ -466,7 +498,7 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
           </>
         ),
       },
-      {
+      labels: {
         id: 'labels',
         dataLabel: 'Labels',
         cell: (
@@ -485,8 +517,8 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
           </div>
         ),
       },
-      {
-        id: app.spec?.project,
+      project: {
+        id: 'project',
         cell: app.spec?.project && (
           <ResourceLink
             namespace={
@@ -499,89 +531,63 @@ const useApplicationRowsDV = (applicationsList, namespace): DataViewTr[] => {
           />
         ),
       },
-      {
-        id: 'actions-' + index,
+      actions: {
+        id: 'actions',
         cell: <ApplicationActionsCell app={app} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
   return rows;
 };
 
 const useColumnsDV = (
-  namespace: string,
+  managedColumns: GitOpsManagedColumn[],
   getSortParams: (columnIndex: number) => ThProps['sort'],
+  columnSortConfig: { key: string }[],
 ): DataViewTh[] => {
-  const i: number = namespace ? 0 : 1;
   const { t } = useTranslation('plugin__gitops-plugin');
-  const columns: DataViewTh[] = [
-    {
-      cell: t('Name'),
+
+  const titleById: Record<string, string> = {
+    name: t('Name'),
+    [NAMESPACE_COLUMN_ID]: t('Namespace'),
+    'sync-status': t('Sync Status'),
+    'health-status': t('Health Status'),
+    revision: t('Revision'),
+    labels: t('Labels'),
+    project: t('App Project'),
+    actions: '',
+  };
+
+  const widthById: Record<string, string> = {
+    name: 'pf-m-width-25',
+    [NAMESPACE_COLUMN_ID]: 'pf-m-width-15',
+    'sync-status': 'pf-m-width-15',
+    'health-status': 'pf-m-width-15',
+    revision: 'pf-m-width-12',
+    labels: 'pf-m-width-20',
+    project: 'pf-m-width-20',
+  };
+
+  return managedColumns.map((column) => {
+    if (column.id === 'actions') {
+      return {
+        cell: '',
+        props: { 'aria-label': 'actions' },
+      };
+    }
+    const sortIndex = columnSortConfig.findIndex((entry) => entry.key === column.id);
+    return {
+      cell: titleById[column.id] ?? column.title,
       props: {
-        'aria-label': 'name',
-        className: 'pf-m-width-25',
-        sort: getSortParams(0),
+        'aria-label': column.id,
+        className: widthById[column.id],
+        ...(sortIndex >= 0 ? { sort: getSortParams(sortIndex) } : {}),
       },
-    },
-    ...(!namespace
-      ? [
-          {
-            cell: t('Namespace'),
-            props: {
-              'aria-label': 'namespace',
-              className: 'pf-m-width-15',
-              sort: getSortParams(1),
-            },
-          },
-        ]
-      : []),
-    {
-      cell: t('Sync Status'),
-      props: {
-        'aria-label': 'sync status',
-        className: 'pf-m-width-15',
-        sort: getSortParams(1 + i),
-      },
-    },
-    {
-      cell: t('Health Status'),
-      props: {
-        'aria-label': 'health status',
-        className: 'pf-m-width-15',
-        sort: getSortParams(2 + i),
-      },
-    },
-    {
-      cell: t('Revision'),
-      props: {
-        'aria-label': 'revision',
-        className: 'pf-m-width-12',
-        sort: getSortParams(3 + i),
-      },
-    },
-    {
-      cell: t('Labels'),
-      props: {
-        'aria-label': 'labels',
-        className: 'pf-m-width-20',
-        sort: getSortParams(4 + i),
-      },
-    },
-    {
-      cell: t('App Project'),
-      props: {
-        'aria-label': 'project',
-        className: 'pf-m-width-20',
-        sort: getSortParams(5 + i),
-      },
-    },
-    {
-      cell: '',
-      props: { 'aria-label': 'actions' },
-    },
-  ];
-  return columns;
+    };
+  });
 };
 
 export default ApplicationList;
