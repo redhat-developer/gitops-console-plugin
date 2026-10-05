@@ -11,7 +11,7 @@ export const getArgoRolloutNodeDecorator: React.ReactFragment = (
   y: number,
 ) => {
   if (element.getType() !== 'rollout' || element.isCollapsed()) {
-    return <></>;
+    return null;
   }
   return <ArgoRolloutNodeDecorator element={element} radius={radius} x={x} y={y} />;
 };
