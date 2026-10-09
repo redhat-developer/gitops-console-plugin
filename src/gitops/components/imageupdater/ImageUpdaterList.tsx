@@ -19,6 +19,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
 import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import type { DataViewTd } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
@@ -33,11 +34,25 @@ import {
   useShowOperandsInAllNamespaces,
 } from '../shared/AllNamespaces';
 import {
+  type GitOpsManagedColumn,
+  NAMESPACE_COLUMN_ID,
+  useGitOpsColumnManagement,
+} from '../shared/ColumnManagement';
+import {
   GitOpsDataViewTable,
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from '../shared/DataView';
-import { filterByConsoleNameAndLabels, getLabelsSortKey, parseLabelFilterParam } from '../shared/listPageTextFilters';
+import { GitOpsListPageToolbar } from '../shared/GitOpsListPageToolbar';
+import {
+  getImageUpdaterManagedColumns,
+  IMAGE_UPDATER_LIST_COLUMN_MANAGEMENT_ID,
+} from '../shared/imageUpdaterListColumns';
+import {
+  filterByConsoleNameAndLabels,
+  getLabelsSortKey,
+  parseLabelFilterParam,
+} from '../shared/listPageTextFilters';
 import MetadataLabels from '../shared/MetadataLabels';
 
 import { useImageUpdaterActionsProvider } from './hooks/useImageUpdaterActionsProvider';
@@ -67,19 +82,23 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
     namespace: effectiveNamespace,
   });
 
-  const showNamespaceColumn = !effectiveNamespace || effectiveNamespace === '';
-  const columnSortConfig = React.useMemo(() => {
-    return [
-      'name',
-      ...(showNamespaceColumn ? ['namespace'] : []),
-      'apps',
-      'images',
-      'last-checked',
-      'ready',
-      'labels',
-      'actions',
-    ].map((key) => ({ key }));
-  }, [showNamespaceColumn]);
+  const { t } = useTranslation('plugin__gitops-plugin');
+  const includeNamespaceColumn = !effectiveNamespace || effectiveNamespace === '';
+  const managedColumns = React.useMemo(() => getImageUpdaterManagedColumns(true, t), [t]);
+
+  const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
+    columnManagementID: IMAGE_UPDATER_LIST_COLUMN_MANAGEMENT_ID,
+    columns: managedColumns,
+    resourceType: t('ImageUpdaters'),
+    includeNamespaceColumn,
+    showNamespaceHelp: includeNamespaceColumn,
+  });
+
+  const columnSortConfig = React.useMemo(
+    () =>
+      managedColumns.filter((column) => !column.alwaysShown).map((column) => ({ key: column.id })),
+    [managedColumns],
+  );
 
   const { searchParams, sortBy, direction, getSortParams } =
     useGitOpsDataViewSort(columnSortConfig);
@@ -89,9 +108,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
   const nameQuery = searchParams.get('name') || '';
   const labelsParam = searchParams.get('labels') || '';
 
-  const { t } = useTranslation('plugin__gitops-plugin');
-
-  const columnsDV = useColumnsDV(effectiveNamespace, getSortParams);
+  const columnsDV = useColumnsDV(managedColumns, getSortParams, columnSortConfig);
   const sortedItems = React.useMemo(() => {
     return sortData(imageUpdaters as ImageUpdaterKind[], sortBy, direction);
   }, [imageUpdaters, sortBy, direction]);
@@ -129,7 +146,15 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
     namespace: effectiveNamespace,
     searchParams,
   });
-  const rows = useImageUpdaterRowsDV(pagedItems, effectiveNamespace);
+  const rows = useImageUpdaterRowsDV(pagedItems, managedColumns);
+  const columnIds = React.useMemo(
+    () => managedColumns.map((column) => column.id),
+    [managedColumns],
+  );
+  const { columns: visibleColumnsDV, rows: visibleRows } = React.useMemo(
+    () => filterDataView(columnsDV, rows, columnIds, activeColumnIds),
+    [filterDataView, columnsDV, rows, columnIds, activeColumnIds],
+  );
 
   const hasItems = React.useMemo(() => {
     return sortedItems.length > 0;
@@ -156,7 +181,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={visibleColumnsDV.length || columnsDV.length}>
           <EmptyState
             headingLevel="h4"
             icon={CubesIcon}
@@ -171,7 +196,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
   const error = loadError && (
     <Tbody>
       <Tr key="loading" ouiaId={'table-tr-loading'}>
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={visibleColumnsDV.length || columnsDV.length}>
           <ErrorState
             titleText={t('Unable to load data')}
             bodyText={t(
@@ -182,7 +207,17 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
       </Tr>
     </Tbody>
   );
-  const isEmptyState = !loadError && rows.length === 0;
+  const isEmptyState = !loadError && visibleRows.length === 0;
+
+  const listPageFilter = !hideNameLabelFilters && hasItems && (
+    <ListPageFilter
+      data={data}
+      loaded={loaded}
+      rowFilters={filters}
+      onFilterChange={onFilterChange}
+      nameFilterPlaceholder={t('Search by name...')}
+    />
+  );
 
   return (
     <div>
@@ -202,18 +237,12 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
         </ListPageHeader>
       )}
       <ListPageBody>
-        {!hideNameLabelFilters && hasItems && (
-          <ListPageFilter
-            data={data}
-            loaded={loaded}
-            rowFilters={filters}
-            onFilterChange={onFilterChange}
-            nameFilterPlaceholder={t('Search by name...')}
-          />
+        {hasItems && (
+          <GitOpsListPageToolbar filters={listPageFilter} columnManagement={columnManagement} />
         )}
         <GitOpsDataViewTable
-          columns={columnsDV}
-          rows={rows}
+          columns={visibleColumnsDV}
+          rows={visibleRows}
           isEmpty={isEmptyState}
           emptyState={empty}
           isError={!!loadError}
@@ -281,99 +310,72 @@ export const sortData = (
 };
 
 export const useColumnsDV = (
-  namespace: string | null | undefined,
+  managedColumns: GitOpsManagedColumn[],
   getSortParams: (columnIndex: number) => ThProps['sort'],
+  columnSortConfig: { key: string }[],
 ): DataViewTh[] => {
-  const showNamespace = !namespace || namespace === '';
-  const i: number = showNamespace ? 1 : 0;
   const { t } = useTranslation('plugin__gitops-plugin');
-  const columns: DataViewTh[] = [
-    {
-      cell: t('Name'),
-      props: {
-        'aria-label': 'name',
-        className: 'pf-m-width-30',
-        sort: getSortParams(0),
-        style: { minWidth: '200px' },
-      },
-    },
-    ...(showNamespace
-      ? [
-          {
-            cell: t('Namespace'),
-            props: {
-              'aria-label': 'namespace',
-              className: 'pf-m-width-15',
-              sort: getSortParams(1),
-              style: { minWidth: '150px' },
-            },
-          },
-        ]
-      : []),
-    {
-      cell: t('Apps'),
-      props: {
-        'aria-label': 'apps',
-        className: 'pf-m-width-20',
-        sort: getSortParams(1 + i),
-      },
-    },
-    {
-      cell: t('Images'),
-      props: {
-        'aria-label': 'images',
-        className: 'pf-m-width-20',
-        sort: getSortParams(2 + i),
-      },
-    },
-    {
-      cell: t('Last Checked'),
-      props: {
-        'aria-label': 'last checked',
-        className: 'pf-m-width-20',
-        sort: getSortParams(3 + i),
-      },
-    },
-    {
-      cell: t('Ready'),
-      props: {
-        'aria-label': 'ready',
-        className: 'pf-m-width-10',
-        sort: getSortParams(4 + i),
-      },
-    },
-    {
-      cell: t('Labels'),
-      props: {
-        'aria-label': 'labels',
-        className: 'pf-m-width-10',
-        sort: getSortParams(5 + i),
-      },
-    },
-    {
-      cell: '',
-      props: { 'aria-label': 'actions' },
-    },
-  ];
 
-  return columns;
+  const titleById: Record<string, string> = {
+    name: t('Name'),
+    [NAMESPACE_COLUMN_ID]: t('Namespace'),
+    apps: t('Apps'),
+    images: t('Images'),
+    'last-checked': t('Last Checked'),
+    ready: t('Ready'),
+    labels: t('Labels'),
+    actions: '',
+  };
+
+  const widthById: Record<string, string> = {
+    name: 'pf-m-width-30',
+    [NAMESPACE_COLUMN_ID]: 'pf-m-width-15',
+    apps: 'pf-m-width-20',
+    images: 'pf-m-width-20',
+    'last-checked': 'pf-m-width-20',
+    ready: 'pf-m-width-10',
+    labels: 'pf-m-width-10',
+  };
+
+  const styleById: Record<string, React.CSSProperties | undefined> = {
+    name: { minWidth: '200px' },
+    [NAMESPACE_COLUMN_ID]: { minWidth: '150px' },
+  };
+
+  return managedColumns.map((column) => {
+    if (column.id === 'actions') {
+      return {
+        cell: '',
+        props: { 'aria-label': 'actions' },
+      };
+    }
+    const sortIndex = columnSortConfig.findIndex((entry) => entry.key === column.id);
+    return {
+      cell: titleById[column.id] ?? column.title,
+      props: {
+        'aria-label': column.id,
+        className: widthById[column.id],
+        ...(styleById[column.id] ? { style: styleById[column.id] } : {}),
+        ...(sortIndex >= 0 ? { sort: getSortParams(sortIndex) } : {}),
+      },
+    };
+  });
 };
 
 export const useImageUpdaterRowsDV = (
   imageUpdaterList: ImageUpdaterKind[],
-  namespace: string | null | undefined,
+  managedColumns: GitOpsManagedColumn[],
 ): DataViewTr[] => {
   const rows: DataViewTr[] = [];
   if (imageUpdaterList === undefined || imageUpdaterList.length === 0) {
     return rows;
   }
-  const showNamespace = !namespace || namespace === '';
   imageUpdaterList.forEach((obj, index) => {
     const readyCondition = obj.status?.conditions?.find((c) => c.type === 'Ready');
     const isReady = readyCondition?.status === 'True';
 
-    rows.push([
-      {
+    const cellsById: Record<string, DataViewTd> = {
+      name: {
         cell: (
           <div>
             <ResourceLink
@@ -387,27 +389,23 @@ export const useImageUpdaterRowsDV = (
         id: 'name',
         dataLabel: 'Name',
       },
-      ...(showNamespace
-        ? [
-            {
-              cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
-              id: obj.metadata.namespace,
-              dataLabel: 'Namespace',
-            },
-          ]
-        : []),
-      {
+      [NAMESPACE_COLUMN_ID]: {
+        cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
+        id: obj.metadata.namespace,
+        dataLabel: 'Namespace',
+      },
+      apps: {
         id: 'apps',
         cell:
           obj.status?.applicationsMatched != null ? String(obj.status.applicationsMatched) : '-',
         dataLabel: 'Apps',
       },
-      {
+      images: {
         id: 'images',
         cell: obj.status?.imagesManaged != null ? String(obj.status.imagesManaged) : '-',
         dataLabel: 'Images',
       },
-      {
+      'last-checked': {
         id: 'last-checked',
         cell: obj.status?.lastCheckedAt ? (
           <div className="gitops-imageupdater-list__timestamp">
@@ -418,12 +416,12 @@ export const useImageUpdaterRowsDV = (
         ),
         dataLabel: 'Last Checked',
       },
-      {
+      ready: {
         id: 'ready',
         cell: readyCondition ? String(isReady) : '-',
         dataLabel: 'Ready',
       },
-      {
+      labels: {
         id: 'labels',
         dataLabel: 'Labels',
         cell: (
@@ -442,12 +440,14 @@ export const useImageUpdaterRowsDV = (
           </div>
         ),
       },
-      {
+      actions: {
         id: 'actions-' + index,
         cell: <ImageUpdaterActionsCell imageUpdater={obj} index={index} />,
         props: { className: 'gitops-imageupdater-list__actions-cell' },
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
   return rows;
 };

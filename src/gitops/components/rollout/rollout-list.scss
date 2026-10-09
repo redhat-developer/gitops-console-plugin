@@ -1,6 +1,14 @@
 .rollout-list-page {
-    &__topology-link {
-        margin-bottom: 15px;
-        margin-left: 10px;
-    }
+  &__column-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pf-t--global--spacer--sm);
+    min-height: var(--pf-t--global--spacer--2xl);
+  }
+
+  &__topology-link {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
 }
