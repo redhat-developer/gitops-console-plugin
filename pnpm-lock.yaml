@@ -82,7 +82,7 @@ importers:
         version: 0.0.3(react@17.0.2)
       '@patternfly/quickstarts':
         specifier: ^6.4.0
-        version: 6.4.0(@patternfly/react-core@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(marked@15.0.12)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 6.4.0(@patternfly/react-core@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(marked@18.1.0)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-charts':
         specifier: ^8.4.0
         version: 8.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -210,8 +210,8 @@ importers:
         specifier: ^4.18.1
         version: 4.18.1
       marked:
-        specifier: 15.0.12
-        version: 15.0.12
+        specifier: 18.1.0
+        version: 18.1.0
       mobx-react:
         specifier: ^7.6.0
         version: 7.6.0(mobx@6.13.6)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -2227,6 +2227,7 @@ packages:
   clone-buffer@1.0.0:
     resolution: {integrity: sha512-KLLTJWrvwIP+OPfMn0x2PheDEP20RPUcGXj/ERegTgdmPEZylALQldygiqrPPu8P45uNuPs7ckmReLY6v/iA5g==}
     engines: {node: '>= 0.10'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   clone-deep@4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}
@@ -4096,9 +4097,9 @@ packages:
   makeerror@1.0.12:
     resolution: {integrity: sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==}
 
-  marked@15.0.12:
-    resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
-    engines: {node: '>= 18'}
+  marked@18.1.0:
+    resolution: {integrity: sha512-PamYXWWWg2nboG3oX5Ffzpy3EFZROqZJK9hSlMmUnekp7TxPs5DcT95vwd46m73/exfKCRVMtgXoPMI4FEJL6w==}
+    engines: {node: '>= 20'}
     hasBin: true
 
   matcher-collection@2.0.1:
@@ -7086,12 +7087,12 @@ snapshots:
       '@parcel/watcher-win32-x64': 2.5.6
     optional: true
 
-  '@patternfly/quickstarts@6.4.0(@patternfly/react-core@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(marked@15.0.12)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+  '@patternfly/quickstarts@6.4.0(@patternfly/react-core@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(marked@18.1.0)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
       '@patternfly/react-core': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       dompurify: 3.3.0
       history: 5.3.0
-      marked: 15.0.12
+      marked: 18.1.0
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
 
@@ -10657,7 +10658,7 @@ snapshots:
     dependencies:
       tmpl: 1.0.5
 
-  marked@15.0.12: {}
+  marked@18.1.0: {}
 
   matcher-collection@2.0.1:
     dependencies:
