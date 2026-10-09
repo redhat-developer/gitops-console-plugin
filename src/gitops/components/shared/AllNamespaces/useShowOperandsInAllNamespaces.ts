@@ -7,7 +7,9 @@ type UseShowOperandsInAllNamespaces = () => [boolean, (value: boolean) => void];
 export const useShowOperandsInAllNamespaces: UseShowOperandsInAllNamespaces = () => {
   const dispatch = useDispatch();
   const showOperandsInAllNamespaces = useSelector((state: RootStateOrAny) =>
-    state.UI.get('showOperandsInAllNamespaces'),
+    typeof state.UI?.get === 'function'
+      ? state.UI.get('showOperandsInAllNamespaces')
+      : state.UI?.showOperandsInAllNamespaces,
   );
   const setShowOperandsInAllNamespaces = useCallback(
     (value: boolean) => dispatch(uiActionsSetShowOperandsInAllNamespaces(value)),
