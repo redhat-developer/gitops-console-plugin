@@ -3,6 +3,7 @@ import * as React from 'react';
 import ClusterGenerator from './generators/ClusterGenerator';
 import GenericGenerator from './generators/GenericGenerator';
 import GitGenerator from './generators/GitGenerator';
+import OCIGenerator from './generators/OCIGenerator';
 import ListGenerator from './generators/ListGenerator';
 import MatrixGenerator from './generators/MatrixGenerator';
 import MergeGenerator from './generators/MergeGenerator';
@@ -22,6 +23,8 @@ const Generators: React.FC<GeneratorsProps> = ({ generators }) => {
         return <ClusterGenerator key={index} generator={generatorData} />;
       case 'git':
         return <GitGenerator key={index} generator={generatorData} />;
+      case 'oci':
+        return <OCIGenerator key={index} generator={generatorData} />;
       case 'list':
         return <ListGenerator key={index} generator={generatorData} />;
       case 'merge':

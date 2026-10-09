@@ -8,6 +8,7 @@ export { default as GeneratorsTab } from './GeneratorsTab';
 export { default as ClusterGenerator } from './generators/ClusterGenerator';
 export { default as GenericGenerator } from './generators/GenericGenerator';
 export { default as GitGenerator } from './generators/GitGenerator';
+export { default as OCIGenerator } from './generators/OCIGenerator';
 export { default as ListGenerator } from './generators/ListGenerator';
 export { default as MatrixGenerator } from './generators/MatrixGenerator';
 export { default as MergeGenerator } from './generators/MergeGenerator';

@@ -102,7 +102,7 @@ The editor includes a **Schema** side panel that describes ApplicationSet fields
 
 The **Generators** tab shows the ApplicationSet generator configuration in a structured view.
 
-Supported generator presentations include **List**, **Cluster**, **git**, **Matrix**, **Merge**, and **Union**. Other generator types use a generic view that shows the configuration as JSON.
+Supported generator presentations include **List**, **Cluster**, **git**, **OCI**, **Matrix**, **Merge**, and **Union**. Other generator types use a generic view that shows the configuration as JSON.
 
 If no generators are configured, the tab shows an empty state.
 

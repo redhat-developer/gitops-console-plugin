@@ -6,19 +6,19 @@ import {
   DescriptionListGroup,
   DescriptionListTerm,
 } from '@patternfly/react-core';
-import { GitAltIcon } from '@patternfly/react-icons';
-
+import { ContainerNodeIcon } from '@patternfly/react-icons';
+import { OCIAppSetGenerator } from "@gitops/models/ApplicationSetModel";
 import GeneratorView from './GeneratorView';
 
-interface GitGeneratorProps {
-  generator: any;
+interface OCIGeneratorProps {
+  generator: OCIAppSetGenerator;
 }
 
-const GitGenerator: React.FC<GitGeneratorProps> = ({ generator }) => {
+const OCIGenerator: React.FC<OCIGeneratorProps> = ({ generator }) => {
   const generatorType = generator.files?.length ? 'File' : 'Directory';
 
   return (
-    <GeneratorView icon={<GitAltIcon />} title={`git (${generatorType})`}>
+    <GeneratorView icon={<ContainerNodeIcon />} title={`OCI (${generatorType})`}>
       <DescriptionList isHorizontal isCompact>
         {generator.repoURL && (
           <DescriptionListGroup>
@@ -53,4 +53,4 @@ const GitGenerator: React.FC<GitGeneratorProps> = ({ generator }) => {
   );
 };
 
-export default GitGenerator;
+export default OCIGenerator;
