@@ -153,8 +153,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1(webpack@5.105.2)
       css-loader:
-        specifier: ^5.2.7
-        version: 5.2.7(webpack@5.105.2)
+        specifier: ^7.0.0
+        version: 7.1.5(webpack@5.105.2)
       eslint:
         specifier: 7.32.0
         version: 7.32.0
@@ -2376,11 +2376,17 @@ packages:
   css-jss@10.10.0:
     resolution: {integrity: sha512-YyMIS/LsSKEGXEaVJdjonWe18p4vXLo8CMA4FrW/kcaEyqdIGKCFXao31gbJddXEdIxSXFFURWrenBJPlKTgAA==}
 
-  css-loader@5.2.7:
-    resolution: {integrity: sha512-Q7mOvpBNBG7YrVGMxRxcBJZFL75o+cH2abNASdibkj/fffYD8qWbInZrD0S9ccI6vZclF3DsHE7njGlLtaHbhg==}
-    engines: {node: '>= 10.13.0'}
+  css-loader@7.1.5:
+    resolution: {integrity: sha512-Q7iAfQkU2twNBryKX/vGAlE+GAmkF7quhSzAGNK8fBimxk3+tqg245rH52UPb9dioBolBc8rP0ihmHBaDTJQBA==}
+    engines: {node: '>= 18.12.0'}
     peerDependencies:
-      webpack: ^4.27.0 || ^5.0.0
+      '@rspack/core': 0.x || ^1.0.0 || ^2.0.0-0
+      webpack: ^5.27.0
+    peerDependenciesMeta:
+      '@rspack/core':
+        optional: true
+      webpack:
+        optional: true
 
   css-select@5.1.0:
     resolution: {integrity: sha512-nwoRF1rvRRnnCqqY7updORDsuqKzqYJ28+oSMaJMMgOauh3fvwHqMS7EZpIPqK8GL+g9mKxF1vP/ZjSeNjEVHg==}
@@ -7709,7 +7715,7 @@ snapshots:
       debug: 4.4.3
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.7.3
+      semver: 7.8.5
       tsutils: 3.21.0(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
@@ -8446,18 +8452,17 @@ snapshots:
       jss: 10.10.0
       jss-preset-default: 10.10.0
 
-  css-loader@5.2.7(webpack@5.105.2):
+  css-loader@7.1.5(webpack@5.105.2):
     dependencies:
       icss-utils: 5.1.0(postcss@8.5.6)
-      loader-utils: 2.0.4
       postcss: 8.5.6
       postcss-modules-extract-imports: 3.1.0(postcss@8.5.6)
       postcss-modules-local-by-default: 4.2.0(postcss@8.5.6)
       postcss-modules-scope: 3.2.1(postcss@8.5.6)
       postcss-modules-values: 4.0.0(postcss@8.5.6)
       postcss-value-parser: 4.2.0
-      schema-utils: 3.3.0
-      semver: 7.7.3
+      semver: 7.8.5
+    optionalDependencies:
       webpack: 5.105.2(webpack-cli@4.10.0)
 
   css-select@5.1.0:
