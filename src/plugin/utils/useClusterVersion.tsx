@@ -32,7 +32,7 @@ export type FlagsObject = { [key: string]: boolean };
 
 export const getFlagsObject = ({
   [featureReducerName]: featureState,
-}: RootStateOrAny): FlagsObject => featureState.toObject();
+}: RootStateOrAny): FlagsObject => featureState?.toObject?.() ?? featureState;
 
 const getClusterVersionFlag = (state: RootStateOrAny) => getFlagsObject(state)?.['CLUSTER_VERSION'];
 
