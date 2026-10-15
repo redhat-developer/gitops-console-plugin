@@ -7,7 +7,7 @@ import {
   DescriptionListTerm,
 } from '@patternfly/react-core';
 import { ContainerNodeIcon } from '@patternfly/react-icons';
-import { OCIAppSetGenerator } from "@gitops/models/ApplicationSetModel";
+import { OCIAppSetGenerator } from '@gitops/models/ApplicationSetModel';
 import GeneratorView from './GeneratorView';
 
 interface OCIGeneratorProps {
@@ -32,7 +32,7 @@ const OCIGenerator: React.FC<OCIGeneratorProps> = ({ generator }) => {
             <DescriptionListDescription>{generator.revision}</DescriptionListDescription>
           </DescriptionListGroup>
         )}
-        {generator.directories && (
+        {generator.directories?.length > 0 && (
           <DescriptionListGroup>
             <DescriptionListTerm>Directories</DescriptionListTerm>
             <DescriptionListDescription>
@@ -40,7 +40,7 @@ const OCIGenerator: React.FC<OCIGeneratorProps> = ({ generator }) => {
             </DescriptionListDescription>
           </DescriptionListGroup>
         )}
-        {generator.files && (
+        {generator.files?.length > 0 && (
           <DescriptionListGroup>
             <DescriptionListTerm>Files</DescriptionListTerm>
             <DescriptionListDescription>
