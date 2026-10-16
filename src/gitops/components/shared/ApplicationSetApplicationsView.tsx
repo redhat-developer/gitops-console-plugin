@@ -3,13 +3,14 @@ import * as React from 'react';
 import { ApplicationKind } from '@gitops/models/ApplicationModel';
 import { ApplicationSetKind } from '@gitops/models/ApplicationSetModel';
 import { ListPageFilter, RowFilter, useUserSettings } from '@openshift-console/dynamic-plugin-sdk';
-import { Flex, FlexItem, Stack, StackItem } from '@patternfly/react-core';
+import { Stack, StackItem } from '@patternfly/react-core';
 import { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 
 import { ApplicationSetGraphView } from '../appset/graph/ApplicationSetGraphView';
 
 import { type GitOpsDataViewPagination, GitOpsDataViewTable } from './DataView';
+import { GitOpsListPageToolbar } from './GitOpsListPageToolbar';
 import GitOpsViewSwitcher from './GitOpsViewSwitcher';
 import { APPLICATION_SET_APPLICATIONS_VIEW_SETTING_KEY, GitOpsViewType } from './GitOpsViewType';
 
@@ -27,6 +28,7 @@ type ApplicationSetApplicationsViewProps = {
   loaded: boolean;
   columns: DataViewTh[];
   rows: DataViewTr[];
+  columnManagement?: React.ReactNode;
   emptyState: React.ReactNode;
   errorState?: React.ReactNode;
   isError?: boolean;
@@ -47,6 +49,7 @@ const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewPro
   loaded,
   columns,
   rows,
+  columnManagement,
   emptyState,
   errorState,
   isError,
@@ -92,9 +95,9 @@ const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewPro
     >
       <Stack>
         <StackItem isFilled={false} className="gitops-graph-list-view__toolbar-row">
-          <Flex alignItems={{ default: 'alignItemsCenter' }}>
-            <FlexItem flex={{ default: 'flex_1' }}>
-              {!hideNameLabelFilters && hasOwnedApplications && (
+          <GitOpsListPageToolbar
+            filters={
+              !hideNameLabelFilters && hasOwnedApplications ? (
                 <ListPageFilter
                   data={listPageFilterData}
                   loaded={loaded}
@@ -102,16 +105,17 @@ const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewPro
                   onFilterChange={onFilterChange}
                   nameFilterPlaceholder={nameFilterPlaceholder}
                 />
-              )}
-            </FlexItem>
-            <FlexItem className="gitops-graph-list-view__header">
+              ) : undefined
+            }
+            columnManagement={hasOwnedApplications ? columnManagement : undefined}
+            actions={
               <GitOpsViewSwitcher
                 viewType={viewType}
                 onViewChange={onViewChange}
                 testId="application-set-applications-view-switcher"
               />
-            </FlexItem>
-          </Flex>
+            }
+          />
         </StackItem>
         <StackItem isFilled className="gitops-graph-list-view__content">
           <div

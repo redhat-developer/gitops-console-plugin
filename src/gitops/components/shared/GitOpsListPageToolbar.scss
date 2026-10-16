@@ -1,0 +1,53 @@
+.gitops-list-page-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pf-t--global--spacer--sm);
+  margin-bottom: var(--pf-t--global--spacer--sm);
+
+  &__primary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--pf-t--global--spacer--sm);
+    min-width: 0;
+  }
+
+  &__filters {
+    flex: 0 1 auto;
+    min-width: 0;
+
+    // ListPageFilter's toolbar is full-width by default; shrink so columns sit beside search.
+    .pf-v6-c-toolbar,
+    .pf-c-toolbar {
+      width: auto;
+      padding-block: 0;
+    }
+
+    .pf-v6-c-toolbar__content,
+    .pf-c-toolbar__content {
+      padding-inline: 0;
+    }
+
+    .pf-v6-c-toolbar__content-section,
+    .pf-c-toolbar__content-section {
+      flex-wrap: wrap;
+      row-gap: var(--pf-t--global--spacer--sm);
+    }
+  }
+
+  &__columns {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    min-height: var(--pf-t--global--spacer--2xl);
+  }
+
+  &__actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    margin-inline-start: auto;
+  }
+}

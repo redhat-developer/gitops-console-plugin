@@ -21,6 +21,7 @@ import {
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
 import { EmptyState, EmptyStateBody, Spinner } from '@patternfly/react-core';
+import type { DataViewTd } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon, SearchIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
@@ -30,10 +31,16 @@ import {
   useShowOperandsInAllNamespaces,
 } from '../shared/AllNamespaces';
 import {
+  type GitOpsManagedColumn,
+  NAMESPACE_COLUMN_ID,
+  useGitOpsColumnManagement,
+} from '../shared/ColumnManagement';
+import {
   GitOpsDataViewTable,
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from '../shared/DataView';
+import { GitOpsListPageToolbar } from '../shared/GitOpsListPageToolbar';
 import {
   filterByConsoleNameAndLabels,
   filterResourcesByLabelQuery,
@@ -41,6 +48,10 @@ import {
   parseLabelFilterParam,
 } from '../shared/listPageTextFilters';
 import { MetadataLabels } from '../shared/MetadataLabels/MetadataLabels';
+import {
+  getRolloutManagedColumns,
+  ROLLOUT_LIST_COLUMN_MANAGEMENT_ID,
+} from '../shared/rolloutListColumns';
 
 import { useRolloutActionsProvider } from './hooks/useRolloutActionsProvider';
 import { RolloutKind, RolloutModel } from './model/RolloutModel';
@@ -95,19 +106,23 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
     namespaced: !listAllNamespaces,
     namespace,
   });
+
+  const { t } = useGitOpsTranslation();
+  const includeNamespaceColumn = !namespace;
+  const managedColumns = React.useMemo(() => getRolloutManagedColumns(true, t), [t]);
+
+  const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
+    columnManagementID: ROLLOUT_LIST_COLUMN_MANAGEMENT_ID,
+    columns: managedColumns,
+    resourceType: t('Rollouts'),
+    includeNamespaceColumn,
+    showNamespaceHelp: includeNamespaceColumn,
+  });
+
   const columnSortConfig = React.useMemo(
     () =>
-      [
-        'name',
-        ...(!listAllNamespaces || !namespace ? ['namespace'] : []),
-        'status',
-        'pods',
-        'labels',
-        'selector',
-        'last-updated',
-        'actions',
-      ].map((key) => ({ key })),
-    [listAllNamespaces, namespace],
+      managedColumns.filter((column) => !column.alwaysShown).map((column) => ({ key: column.id })),
+    [managedColumns],
   );
 
   const { searchParams, sortBy, direction, getSortParams } =
@@ -118,11 +133,9 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
   const nameQuery = searchParams.get('name') || '';
   const labelsParam = searchParams.get('labels') || '';
 
-  const { t } = useGitOpsTranslation();
-
-  const columnsDV = useColumnsDV(namespace, getSortParams, t);
+  const columnsDV = useColumnsDV(managedColumns, getSortParams, columnSortConfig, t);
   const sortedRollouts = React.useMemo(() => {
-    return sortData(rollouts, sortBy, direction);
+    return sortData(rollouts as RolloutKind[], sortBy, direction);
   }, [rollouts, sortBy, direction]);
 
   const filters = getFilters(t);
@@ -143,12 +156,22 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
     namespace,
     searchParams,
   });
-  const rows = useRolloutsRowsDV(pagedItems, namespace, t);
+  const rows = useRolloutsRowsDV(pagedItems, managedColumns, t);
+  const columnIds = React.useMemo(
+    () => managedColumns.map((column) => column.id),
+    [managedColumns],
+  );
+  const { columns: visibleColumnsDV, rows: visibleRows } = React.useMemo(
+    () => filterDataView(columnsDV, rows, columnIds, activeColumnIds),
+    [filterDataView, columnsDV, rows, columnIds, activeColumnIds],
+  );
+
+  const hasRollouts = sortedRollouts.length > 0;
 
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={visibleColumnsDV.length || columnsDV.length}>
           <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No Argo Rollouts')}>
             <EmptyStateBody>
               {namespace
@@ -163,7 +186,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
   const error = loadError && (
     <Tbody>
       <Tr key="loading" ouiaId={'table-tr-loading'}>
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={visibleColumnsDV.length || columnsDV.length}>
           <ErrorState
             titleText={t('Unable to load data')}
             bodyText={t(
@@ -174,10 +197,32 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
       </Tr>
     </Tbody>
   );
-  const isEmptyState = !loadError && rows.length === 0;
+  const isEmptyState = !loadError && visibleRows.length === 0;
   const topologyUrl = namespace
     ? '/topology/ns/' + namespace + '?view=graph'
     : '/topology/all-namespaces?view=graph';
+
+  const listPageFilter = !hideNameLabelFilters && (
+    <ListPageFilter
+      data={data}
+      loaded={loaded}
+      rowFilters={filters}
+      onFilterChange={onFilterChange}
+    />
+  );
+
+  const topologyControl =
+    filteredBySearch.length > 0 && !loadError ? (
+      <span className="rollout-list-page__topology-link">{topologyLink(topologyUrl, t)}</span>
+    ) : null;
+
+  const columnAndTopologyControls =
+    hasRollouts || topologyControl ? (
+      <span className="rollout-list-page__column-controls">
+        {hasRollouts ? columnManagement : null}
+        {topologyControl}
+      </span>
+    ) : undefined;
 
   return (
     <>
@@ -196,26 +241,15 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
         </ListPageHeader>
       )}
       <ListPageBody>
-        {!hideNameLabelFilters && (
-          <span style={{ display: 'flex', alignItems: 'center' }}>
-            <span>
-              <ListPageFilter
-                data={data}
-                loaded={loaded}
-                rowFilters={filters}
-                onFilterChange={onFilterChange}
-              />
-            </span>
-            {filteredBySearch.length > 0 && !loadError && (
-              <span className="rollout-list-page__topology-link pf-m-mb-sm">
-                {topologyLink(topologyUrl, t)}
-              </span>
-            )}
-          </span>
+        {(hasRollouts || !hideNameLabelFilters) && (
+          <GitOpsListPageToolbar
+            filters={listPageFilter}
+            columnManagement={columnAndTopologyControls}
+          />
         )}
         <GitOpsDataViewTable
-          columns={columnsDV}
-          rows={rows}
+          columns={visibleColumnsDV}
+          rows={visibleRows}
           isEmpty={isEmptyState}
           emptyState={empty}
           isError={!!loadError}
@@ -280,84 +314,54 @@ export const sortData = (
 };
 
 export const useColumnsDV = (
-  namespace: string,
+  managedColumns: GitOpsManagedColumn[],
   getSortParams: (columnIndex: number) => ThProps['sort'],
+  columnSortConfig: { key: string }[],
   t: (key: string) => string,
-) => {
-  const i: number = namespace ? 0 : 1;
-  const columns: DataViewTh[] = [
-    {
-      cell: t('Name'),
-      props: {
-        'aria-label': 'name',
-        className: 'pf-m-width-25',
-        sort: getSortParams(0),
-      },
-    },
-    ...(!namespace
-      ? [
-          {
-            cell: t('Namespace'),
-            props: {
-              'aria-label': 'namespace',
-              className: 'pf-m-width-15',
-              sort: getSortParams(1),
-            },
-          },
-        ]
-      : []),
-    {
-      cell: t('Status'),
-      props: {
-        'aria-label': 'status',
-        className: 'pf-m-width-10',
-        sort: getSortParams(1 + i),
-      },
-    },
-    {
-      cell: t('Pods'),
-      props: {
-        'aria-label': 'pods',
-        className: 'pf-m-width-10',
-        sort: getSortParams(2 + i),
-      },
-    },
-    {
-      cell: t('Labels'),
-      props: {
-        'aria-label': 'labels',
-        className: 'pf-m-width-15',
-        sort: getSortParams(3 + i),
-      },
-    },
-    {
-      cell: t('Selector'),
-      props: {
-        'aria-label': 'selector',
-        className: 'pf-m-width-15',
-        sort: getSortParams(4 + i),
-      },
-    },
-    {
-      cell: t('Last Updated'),
-      props: {
-        'aria-label': 'last updated',
-        className: 'pf-m-width-15',
-        sort: getSortParams(5 + i),
-      },
-    },
-    {
-      cell: '',
-      props: { 'aria-label': 'actions' },
-    },
-  ];
+): DataViewTh[] => {
+  const titleById: Record<string, string> = {
+    name: t('Name'),
+    [NAMESPACE_COLUMN_ID]: t('Namespace'),
+    status: t('Status'),
+    pods: t('Pods'),
+    labels: t('Labels'),
+    selector: t('Selector'),
+    'last-updated': t('Last Updated'),
+    actions: '',
+  };
 
-  return columns;
+  const widthById: Record<string, string> = {
+    name: 'pf-m-width-25',
+    [NAMESPACE_COLUMN_ID]: 'pf-m-width-15',
+    status: 'pf-m-width-10',
+    pods: 'pf-m-width-10',
+    labels: 'pf-m-width-15',
+    selector: 'pf-m-width-15',
+    'last-updated': 'pf-m-width-15',
+  };
+
+  return managedColumns.map((column) => {
+    if (column.id === 'actions') {
+      return {
+        cell: '',
+        props: { 'aria-label': 'actions' },
+      };
+    }
+    const sortIndex = columnSortConfig.findIndex((entry) => entry.key === column.id);
+    return {
+      cell: titleById[column.id] ?? column.title,
+      props: {
+        'aria-label': column.id,
+        className: widthById[column.id],
+        ...(sortIndex >= 0 ? { sort: getSortParams(sortIndex) } : {}),
+      },
+    };
+  });
 };
 
 export const useRolloutsRowsDV = (
-  rolloutsList,
-  namespace,
+  rolloutsList: RolloutKind[],
+  managedColumns: GitOpsManagedColumn[],
   t: (key: string) => string,
 ): DataViewTr[] => {
   const rows: DataViewTr[] = [];
@@ -365,8 +369,8 @@ export const useRolloutsRowsDV = (
     return rows;
   }
   rolloutsList.forEach((obj, index) => {
-    rows.push([
-      {
+    const cellsById: Record<string, DataViewTd> = {
+      name: {
         cell: (
           <div>
             <ResourceLink
@@ -384,16 +388,12 @@ export const useRolloutsRowsDV = (
         id: 'name',
         dataLabel: 'Name',
       },
-      ...(!namespace
-        ? [
-            {
-              cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
-              id: obj.metadata.namespace,
-              dataLabel: 'Namespace',
-            },
-          ]
-        : []),
-      {
+      [NAMESPACE_COLUMN_ID]: {
+        cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
+        id: obj.metadata.namespace,
+        dataLabel: 'Namespace',
+      },
+      status: {
         id: 'status',
         cell: (
           <RolloutStatusFragment
@@ -408,7 +408,7 @@ export const useRolloutsRowsDV = (
           />
         ),
       },
-      {
+      pods: {
         id: 'pods',
         cell: (
           <>
@@ -418,7 +418,7 @@ export const useRolloutsRowsDV = (
           </>
         ),
       },
-      {
+      labels: {
         id: 'labels',
         dataLabel: 'Labels',
         cell: (
@@ -431,7 +431,7 @@ export const useRolloutsRowsDV = (
           </div>
         ),
       },
-      {
+      selector: {
         id: 'selector',
         cell: (
           <>
@@ -456,7 +456,7 @@ export const useRolloutsRowsDV = (
           </>
         ),
       },
-      {
+      'last-updated': {
         id: 'last-updated',
         cell: (
           <>
@@ -464,12 +464,14 @@ export const useRolloutsRowsDV = (
           </>
         ),
       },
-      {
+      actions: {
         id: 'actions-' + index,
         cell: <RolloutActionsCell app={obj} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
   return rows;
 };

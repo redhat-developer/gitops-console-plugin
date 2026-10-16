@@ -19,6 +19,7 @@ import {
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { ErrorState } from '@patternfly/react-component-groups';
 import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import type { DataViewTd } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { ThProps } from '@patternfly/react-table';
@@ -31,12 +32,26 @@ import {
   useShowOperandsInAllNamespaces,
 } from '../shared/AllNamespaces';
 import {
+  type GitOpsManagedColumn,
+  NAMESPACE_COLUMN_ID,
+  useGitOpsColumnManagement,
+} from '../shared/ColumnManagement';
+import {
   GitOpsDataViewTable,
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from '../shared/DataView';
-import { filterByConsoleNameAndLabels, getLabelsSortKey, parseLabelFilterParam } from '../shared/listPageTextFilters';
+import { GitOpsListPageToolbar } from '../shared/GitOpsListPageToolbar';
+import {
+  filterByConsoleNameAndLabels,
+  getLabelsSortKey,
+  parseLabelFilterParam,
+} from '../shared/listPageTextFilters';
 import { MetadataLabels } from '../shared/MetadataLabels/MetadataLabels';
+import {
+  getProjectManagedColumns,
+  PROJECT_LIST_COLUMN_MANAGEMENT_ID,
+} from '../shared/projectListColumns';
 
 import { useProjectActionsProvider } from './hooks/useProjectActionsProvider';
 
@@ -83,17 +98,23 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
     namespace,
   });
 
-  const columnSortConfig = React.useMemo(() => {
-    return [
-      'name',
-      ...(!listAllNamespaces || !namespace || namespace === '' ? ['namespace'] : []),
-      'description',
-      'applications',
-      'labels',
-      'last-updated',
-      'actions',
-    ].map((key) => ({ key }));
-  }, [listAllNamespaces, namespace]);
+  const { t } = useTranslation('plugin__gitops-plugin');
+  const includeNamespaceColumn = !namespace || namespace === '';
+  const managedColumns = React.useMemo(() => getProjectManagedColumns(true, t), [t]);
+
+  const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
+    columnManagementID: PROJECT_LIST_COLUMN_MANAGEMENT_ID,
+    columns: managedColumns,
+    resourceType: t('AppProjects'),
+    includeNamespaceColumn,
+    showNamespaceHelp: includeNamespaceColumn,
+  });
+
+  const columnSortConfig = React.useMemo(
+    () =>
+      managedColumns.filter((column) => !column.alwaysShown).map((column) => ({ key: column.id })),
+    [managedColumns],
+  );
 
   const { searchParams, sortBy, direction, getSortParams } =
     useGitOpsDataViewSort(columnSortConfig);
@@ -103,9 +124,7 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
   const nameQuery = searchParams.get('name') || '';
   const labelsParam = searchParams.get('labels') || '';
 
-  const { t } = useTranslation('plugin__gitops-plugin');
-
-  const columnsDV = useColumnsDV(namespace, getSortParams);
+  const columnsDV = useColumnsDV(managedColumns, getSortParams, columnSortConfig);
   const sortedProjects = React.useMemo(() => {
     return sortData(appProjects as AppProjectKind[], sortBy, direction, applications, appsLoaded);
   }, [appProjects, sortBy, direction, applications, appsLoaded]);
@@ -149,8 +168,15 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
     namespace,
     searchParams,
   });
-  const rows = useProjectsRowsDV(pagedItems, namespace, applications, appsLoaded);
-  const showNamespaceColumn = !namespace || namespace === '';
+  const rows = useProjectsRowsDV(pagedItems, managedColumns, applications, appsLoaded);
+  const columnIds = React.useMemo(
+    () => managedColumns.map((column) => column.id),
+    [managedColumns],
+  );
+  const { columns: visibleColumnsDV, rows: visibleRows } = React.useMemo(
+    () => filterDataView(columnsDV, rows, columnIds, activeColumnIds),
+    [filterDataView, columnsDV, rows, columnIds, activeColumnIds],
+  );
 
   // Check if there are projects initially (before search)
   const hasProjects = React.useMemo(() => {
@@ -176,7 +202,7 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={visibleColumnsDV.length || columnsDV.length}>
           <EmptyState
             headingLevel="h4"
             icon={CubesIcon}
@@ -193,7 +219,7 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
   const error = loadError && (
     <Tbody>
       <Tr key="loading" ouiaId={'table-tr-loading'}>
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={visibleColumnsDV.length || columnsDV.length}>
           <ErrorState
             titleText={t('Unable to load data')}
             bodyText={t(
@@ -204,7 +230,17 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
       </Tr>
     </Tbody>
   );
-  const isEmptyState = !loadError && rows.length === 0;
+  const isEmptyState = !loadError && visibleRows.length === 0;
+
+  const listPageFilter = !hideNameLabelFilters && hasProjects && (
+    <ListPageFilter
+      data={data}
+      loaded={loaded}
+      rowFilters={filters}
+      onFilterChange={onFilterChange}
+      nameFilterPlaceholder={t('Search by name...')}
+    />
+  );
 
   return (
     <div>
@@ -224,25 +260,19 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
         </ListPageHeader>
       )}
       <ListPageBody>
-        {!hideNameLabelFilters && hasProjects && (
-          <ListPageFilter
-            data={data}
-            loaded={loaded}
-            rowFilters={filters}
-            onFilterChange={onFilterChange}
-            nameFilterPlaceholder={t('Search by name...')}
-          />
+        {hasProjects && (
+          <GitOpsListPageToolbar filters={listPageFilter} columnManagement={columnManagement} />
         )}
         <div
           className={
-            showNamespaceColumn
+            includeNamespaceColumn
               ? 'gitops-project-list gitops-project-list--with-namespace'
               : 'gitops-project-list'
           }
         >
           <GitOpsDataViewTable
-            columns={columnsDV}
-            rows={rows}
+            columns={visibleColumnsDV}
+            rows={visibleRows}
             isEmpty={isEmptyState}
             emptyState={empty}
             isError={!!loadError}
@@ -390,69 +420,55 @@ export const sortData = (
   });
 };
 
-const sortableHeaderProps = (
-  ariaLabel: string,
-  className: string,
-  sort: ThProps['sort'],
-): ThProps => ({
-  'aria-label': ariaLabel,
-  className,
-  sort,
-  tooltip: '',
-});
-
 export const useColumnsDV = (
-  namespace: string | undefined,
+  managedColumns: GitOpsManagedColumn[],
   getSortParams: (columnIndex: number) => ThProps['sort'],
+  columnSortConfig: { key: string }[],
 ): DataViewTh[] => {
-  const showNamespace = !namespace || namespace === '';
-  const i: number = showNamespace ? 1 : 0;
   const { t } = useTranslation('plugin__gitops-plugin');
-  const columns: DataViewTh[] = [
-    {
-      cell: t('Name'),
-      props: sortableHeaderProps('name', 'pf-m-width-20', getSortParams(0)),
-    },
-    ...(showNamespace
-      ? [
-          {
-            cell: t('Namespace'),
-            props: sortableHeaderProps('namespace', 'pf-m-width-15', getSortParams(1)),
-          },
-        ]
-      : []),
-    {
-      cell: t('Description'),
-      props: sortableHeaderProps('description', 'pf-m-width-10', getSortParams(1 + i)),
-    },
-    {
-      cell: t('Applications'),
-      props: sortableHeaderProps('applications', 'pf-m-width-15', getSortParams(2 + i)),
-    },
-    {
-      cell: t('Labels'),
-      props: sortableHeaderProps('labels', 'pf-m-width-20', getSortParams(3 + i)),
-    },
-    {
-      cell: t('Last Updated'),
-      props: sortableHeaderProps(
-        'last updated',
-        'pf-m-width-15',
-        getSortParams(showNamespace ? 5 : 4),
-      ),
-    },
-    {
-      cell: '',
-      props: { 'aria-label': 'actions' },
-    },
-  ];
 
-  return columns;
+  const titleById: Record<string, string> = {
+    name: t('Name'),
+    [NAMESPACE_COLUMN_ID]: t('Namespace'),
+    description: t('Description'),
+    applications: t('Applications'),
+    labels: t('Labels'),
+    'last-updated': t('Last Updated'),
+    actions: '',
+  };
+
+  const widthById: Record<string, string> = {
+    name: 'pf-m-width-20',
+    [NAMESPACE_COLUMN_ID]: 'pf-m-width-15',
+    description: 'pf-m-width-10',
+    applications: 'pf-m-width-15',
+    labels: 'pf-m-width-20',
+    'last-updated': 'pf-m-width-15',
+  };
+
+  return managedColumns.map((column) => {
+    if (column.id === 'actions') {
+      return {
+        cell: '',
+        props: { 'aria-label': 'actions' },
+      };
+    }
+    const sortIndex = columnSortConfig.findIndex((entry) => entry.key === column.id);
+    return {
+      cell: titleById[column.id] ?? column.title,
+      props: {
+        'aria-label': column.id,
+        className: widthById[column.id],
+        tooltip: '',
+        ...(sortIndex >= 0 ? { sort: getSortParams(sortIndex) } : {}),
+      },
+    };
+  });
 };
 
 export const useProjectsRowsDV = (
   projectsList: AppProjectKind[],
-  namespace: string | undefined,
+  managedColumns: GitOpsManagedColumn[],
   applications: ApplicationKind[],
   appsLoaded: boolean,
 ): DataViewTr[] => {
@@ -460,12 +476,11 @@ export const useProjectsRowsDV = (
   if (projectsList == undefined || projectsList.length == 0) {
     return rows;
   }
-  const showNamespace = !namespace || namespace === '';
   projectsList.forEach((obj, index) => {
     const appsCount = getApplicationsCount(obj, applications, appsLoaded);
 
-    rows.push([
-      {
+    const cellsById: Record<string, DataViewTd> = {
+      name: {
         cell: (
           <ResourceLink
             groupVersionKind={modelToGroupVersionKind(AppProjectModel)}
@@ -477,23 +492,19 @@ export const useProjectsRowsDV = (
         id: 'name',
         dataLabel: 'Name',
       },
-      ...(showNamespace
-        ? [
-            {
-              cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
-              id: obj.metadata.namespace,
-              dataLabel: 'Namespace',
-            },
-          ]
-        : []),
-      {
+      [NAMESPACE_COLUMN_ID]: {
+        cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
+        id: obj.metadata.namespace,
+        dataLabel: 'Namespace',
+      },
+      description: {
         id: 'description',
         dataLabel: 'Description',
         cell: (
           <span className="gitops-project-list__description">{obj.spec?.description || '-'}</span>
         ),
       },
-      {
+      applications: {
         id: 'applications',
         dataLabel: 'Applications',
         cell: (
@@ -502,7 +513,7 @@ export const useProjectsRowsDV = (
           </span>
         ),
       },
-      {
+      labels: {
         id: 'labels',
         dataLabel: 'Labels',
         cell: (
@@ -521,7 +532,7 @@ export const useProjectsRowsDV = (
           </div>
         ),
       },
-      {
+      'last-updated': {
         id: 'last-updated',
         cell: (() => {
           const lastUpdate = getLastUpdateTimestamp(obj);
@@ -532,12 +543,14 @@ export const useProjectsRowsDV = (
           );
         })(),
       },
-      {
+      actions: {
         id: 'actions-' + index,
         cell: <ProjectActionsCell project={obj} index={index} />,
         props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
   return rows;
 };
