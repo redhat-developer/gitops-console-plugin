@@ -15,7 +15,7 @@ interface GitGeneratorProps {
 }
 
 const GitGenerator: React.FC<GitGeneratorProps> = ({ generator }) => {
-  const generatorType = generator.files ? 'File' : 'Directory';
+  const generatorType = generator.files?.length ? 'File' : 'Directory';
 
   return (
     <GeneratorView icon={<GitAltIcon />} title={`git (${generatorType})`}>
@@ -32,7 +32,7 @@ const GitGenerator: React.FC<GitGeneratorProps> = ({ generator }) => {
             <DescriptionListDescription>{generator.revision}</DescriptionListDescription>
           </DescriptionListGroup>
         )}
-        {generator.directories && (
+        {generator.directories?.length > 0 && (
           <DescriptionListGroup>
             <DescriptionListTerm>Directories</DescriptionListTerm>
             <DescriptionListDescription>
@@ -40,7 +40,7 @@ const GitGenerator: React.FC<GitGeneratorProps> = ({ generator }) => {
             </DescriptionListDescription>
           </DescriptionListGroup>
         )}
-        {generator.files && (
+        {generator.files?.length > 0 && (
           <DescriptionListGroup>
             <DescriptionListTerm>Files</DescriptionListTerm>
             <DescriptionListDescription>

@@ -53,6 +53,18 @@ export type GitAppSetGenerator = {
   }[];
 };
 
+export type OCIAppSetGenerator = {
+  repoURL: string;
+  revision?: string;
+  files?: {
+    path: string;
+  }[];
+  directories?: {
+    exclude: boolean;
+    path: string;
+  }[];
+};
+
 export type SCMProviderAppSetGenerator = {
   awsCodeCommit?: object;
   azureDevOps?: object;
@@ -89,6 +101,7 @@ export type ClusterDecisionresource = {
 export type AppSetGenerator = {
   clusters?: ClusterAppSetGenerator;
   git?: GitAppSetGenerator;
+  oci?: OCIAppSetGenerator;
   list?: ListAppSetGenerator;
   matrix?: MatrixAppSetGenerator;
   merge?: MergeAppSetGenerator;
