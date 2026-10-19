@@ -12,6 +12,7 @@ const metadata: ConsolePluginBuildMetadata = {
     "gitopsFlags": "./plugin/utils/flags",
     "topology": "./gitops/topology",
     ApplicationList: "./gitops/components/application/ApplicationListTab.tsx",
+    DashboardOverviewPage: "./gitops/components/overview/DashboardOverviewPage.tsx",
     ApplicationDetails: "./gitops/components/application/ApplicationNavPage.tsx",
     RolloutList: "./gitops/components/rollout/RolloutListTab.tsx",
     RolloutDetails: "./gitops/components/rollout/RolloutNavPage.tsx",
