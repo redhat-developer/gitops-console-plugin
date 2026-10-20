@@ -1,0 +1,64 @@
+// Overview dashboard cards in grid layout
+.gitops-dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--pf-t--global--spacer--gutter--default);
+}
+
+.gitops-dashboard__chart-card {
+  min-width: 300px;
+}
+
+// Fix the donut to set size so it doesn't grow as the card grows.
+.gitops-dashboard__donut-container {
+  height: 270px;
+  width: 270px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.gitops-dashboard__donut-card-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.gitops-dashboard__fixed-height-row-card {
+  @media (min-width: 768px) {
+    height: 350px;
+  }
+}
+.gitops-dashboard__chart-container {
+  @media (min-width: 768px) {
+    width: 100%;
+  }
+}
+
+.gitops-dashboard__reconcile-card-body {
+  height: 100%;
+}
+
+.gitops-dashboard__reconcile-card {
+  @media (min-width: 768px) {
+    height: 310px;
+  }
+}
+
+.gitops-dashboard__half-size-empty-state {
+  --pf-v6-c-empty-state__title-text--FontSize: 0.8rem;
+  --pf-v6-c-empty-state--PaddingBlockEnd: 4rem;
+  .pf-v6-c-spinner {
+    --pf-v6-c-spinner--diameter: 1.75rem;
+  }
+}
+
+.gitops-dashboard__label-with-external-link {
+  padding-inline-start: 10px;
+  padding-inline-end: 10px;
+  min-width: 40px;
+}
+
+.gitops-dashboard__link {
+  --pf-t--global--text-decoration--style--200: dashed;
+}

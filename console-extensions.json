@@ -318,6 +318,33 @@
     }
   },
   {
+    "type": "console.navigation/href",
+    "properties": {
+        "id": "openshift-gitops-overview",
+        "href": "/gitops/overview",
+        "name": "Dashboard",
+        "perspective": "admin",
+        "section": "gitops-navigation-section",
+        "namespaced": true
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": "/gitops/overview",
+      "component": { "$codeRef": "DashboardOverviewPage.GitOpsOverviewRedirect" }
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": ["/gitops/overview/all-namespaces", "/gitops/overview/ns/:ns"],
+      "component": { "$codeRef": "DashboardOverviewPage" }
+    }
+  },
+  {
     "type": "console.navigation/resource-ns",
     "properties": {
         "id": "application",
