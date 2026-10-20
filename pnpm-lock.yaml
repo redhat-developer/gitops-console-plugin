@@ -73,7 +73,7 @@ importers:
         version: 4.20.0(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))
       '@openshift-console/dynamic-plugin-sdk-internal':
         specifier: ^4.19.1
-        version: 4.20.0(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))
+        version: 4.23.0(react@17.0.2)
       '@openshift-console/dynamic-plugin-sdk-webpack':
         specifier: ^4.19.1
         version: 4.20.0(typescript@5.9.3)(webpack-cli@4.10.0)
@@ -1098,8 +1098,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@openshift-console/dynamic-plugin-sdk-internal@4.20.0':
-    resolution: {integrity: sha512-QEV0XiydJBA33gtVz1g92HLTvG1n99igQ3FR+UBr+ufzl3DvW0hwXH+EZgskff3WBVnEHWlOAI2SGy8ujdfdjg==}
+  '@openshift-console/dynamic-plugin-sdk-internal@4.23.0':
+    resolution: {integrity: sha512-Vr26pTgtmdXDWak7l2DFUNNUxsQt3xoH53gIE+n2jw38zh9xfnRtkuDEgjoLWPmLOvckYZqjVNddZWdQZTBjXA==}
 
   '@openshift-console/dynamic-plugin-sdk-webpack@4.20.0':
     resolution: {integrity: sha512-cTpBy8Jz2C65Qy/3fXIRv8IehvKRkms8rMcjz0KGo7DRoaDPnSyMXi5gH0BIA01nr5U6sBncNSbaD/3PXaZaig==}
@@ -1120,6 +1120,11 @@ packages:
     engines: {node: '>=16'}
     peerDependencies:
       webpack: ^5.75.0
+
+  '@openshift/dynamic-plugin-sdk@9.1.0':
+    resolution: {integrity: sha512-R6nkUuWXGy7GpYUurV94ahahI4/JBMW6DGC3B3vGl+mmc8R23uaDCAGCDGfj3SeCIIxrVSEtIV21ncvziEEpXg==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@parcel/watcher-android-arm64@2.5.6':
     resolution: {integrity: sha512-YQxSS34tPF/6ZG7r/Ih9xy+kP/WwediEUsqmtf0cuCV5TPPKw/PQHRhueUo6JdeFJaqV3pyjm0GdYjZotbRt/A==}
@@ -2227,6 +2232,7 @@ packages:
   clone-buffer@1.0.0:
     resolution: {integrity: sha512-KLLTJWrvwIP+OPfMn0x2PheDEP20RPUcGXj/ERegTgdmPEZylALQldygiqrPPu8P45uNuPs7ckmReLY6v/iA5g==}
     engines: {node: '>= 0.10'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   clone-deep@4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}
@@ -3465,6 +3471,10 @@ packages:
 
   immutable@3.8.2:
     resolution: {integrity: sha512-15gZoQ38eYjEjxkorfbcgBKBL6R7T459OuK+CpcWt7O3KF4uPCx2tD0uFETlUDIyo+1789crbMhTvQBSR5yBMg==}
+    engines: {node: '>=0.10.0'}
+
+  immutable@3.8.4:
+    resolution: {integrity: sha512-ZQv17KolYrYmsDoDB8N67zhIKsNi9mGYlk96y/yuxyAqJB2hLzSGSM7k/sB0/ZvO4kx27U9+fBeD/XlLGh/uXQ==}
     engines: {node: '>=0.10.0'}
 
   immutable@5.1.4:
@@ -5841,6 +5851,9 @@ packages:
     resolution: {integrity: sha512-Z2Fe1bn+eLstG8DRR6FTavGD+MeAwyfmouhHsIUgaADz8jvFKbO/fXc2trJKZg+5EBjh4gGm3iU/t3onKlXHIg==}
     engines: {node: '>=10'}
 
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+
 snapshots:
 
   '@babel/code-frame@7.12.11':
@@ -6954,22 +6967,12 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.18.0
 
-  '@openshift-console/dynamic-plugin-sdk-internal@4.20.0(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))':
+  '@openshift-console/dynamic-plugin-sdk-internal@4.23.0(react@17.0.2)':
     dependencies:
-      '@patternfly/react-topology': 6.2.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      immutable: 3.8.2
-      react: 17.0.2
-      react-i18next: 11.18.6(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      react-redux: 7.2.9(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      react-router: 5.3.4(react@17.0.2)
-      react-router-dom: 5.3.4(react@17.0.2)
-      react-router-dom-v5-compat: 6.30.0(react-dom@17.0.2(react@17.0.2))(react-router-dom@5.3.4(react@17.0.2))(react@17.0.2)
-      redux: 4.0.1
-      redux-thunk: 2.4.0(redux@4.0.1)
+      '@openshift/dynamic-plugin-sdk': 9.1.0(react@17.0.2)
+      immutable: 3.8.4
     transitivePeerDependencies:
-      - i18next
-      - react-dom
-      - react-native
+      - react
 
   '@openshift-console/dynamic-plugin-sdk-webpack@4.20.0(typescript@5.9.3)(webpack-cli@4.10.0)':
     dependencies:
@@ -7024,6 +7027,13 @@ snapshots:
       semver: 7.7.3
       webpack: 5.105.2(webpack-cli@4.10.0)
       yup: 0.32.11
+
+  '@openshift/dynamic-plugin-sdk@9.1.0(react@17.0.2)':
+    dependencies:
+      lodash: 4.18.1
+      react: 17.0.2
+      semver: 7.7.3
+      zod: 3.25.76
 
   '@parcel/watcher-android-arm64@2.5.6':
     optional: true
@@ -9794,6 +9804,8 @@ snapshots:
 
   immutable@3.8.2: {}
 
+  immutable@3.8.4: {}
+
   immutable@5.1.4: {}
 
   import-fresh@3.3.1:
@@ -10036,7 +10048,7 @@ snapshots:
       '@babel/parser': 7.29.0
       '@istanbuljs/schema': 0.1.6
       istanbul-lib-coverage: 3.2.2
-      semver: 7.8.5
+      semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
 
@@ -10340,7 +10352,7 @@ snapshots:
       jest-util: 29.7.0
       natural-compare: 1.4.0
       pretty-format: 29.7.0
-      semver: 7.8.5
+      semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
 
@@ -10649,7 +10661,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.8.5
+      semver: 7.7.3
 
   make-error@1.3.6: {}
 
@@ -12558,3 +12570,5 @@ snapshots:
       nanoclone: 0.2.1
       property-expr: 2.0.6
       toposort: 2.0.2
+
+  zod@3.25.76: {}
