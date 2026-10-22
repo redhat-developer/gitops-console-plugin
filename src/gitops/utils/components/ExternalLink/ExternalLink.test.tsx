@@ -41,4 +41,30 @@ describe('ExternalLink', () => {
       `"<a class="co-external-link" href="https://example.com" target="_blank" rel="noopener noreferrer" data-test-id="test-link">Link</a>"`,
     );
   });
+
+  it('renders href and target without text', () => {
+    expect(renderToStaticMarkup(<ExternalLink href="https://example.com" />)).toMatchInlineSnapshot(
+      `"<a class="co-external-link" href="https://example.com" target="_blank" rel="noopener noreferrer"></a>"`,
+    );
+  });
+
+  it('uses children instead of text when both are set', () => {
+    expect(
+      renderToStaticMarkup(
+        <ExternalLink href="https://example.com" text="Ignored">
+          Visible
+        </ExternalLink>,
+      ),
+    ).toMatchInlineSnapshot(
+      `"<a class="co-external-link" href="https://example.com" target="_blank" rel="noopener noreferrer">Visible</a>"`,
+    );
+  });
+
+  it('renders an empty link when children are empty', () => {
+    expect(
+      renderToStaticMarkup(<ExternalLink href="https://example.com">{''}</ExternalLink>),
+    ).toMatchInlineSnapshot(
+      `"<a class="co-external-link" href="https://example.com" target="_blank" rel="noopener noreferrer"></a>"`,
+    );
+  });
 });

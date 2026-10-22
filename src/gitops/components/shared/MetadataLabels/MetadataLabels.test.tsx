@@ -42,4 +42,14 @@ describe('MetadataLabels', () => {
       `"<div data-testid="label-group" class="co-label-group metadata-labels-group" data-num-labels="10"><span data-testid="label" class="co-m-pod co-m-expand co-label" data-color="blue" data-href="/search?kind=Pod&amp;q=no-value-label"><span class="co-label__key" data-test="label-key">no-value-label</span></span></div>"`,
     );
   });
+
+  it('renders with a custom numLabels', () => {
+    expect(
+      renderToStaticMarkup(
+        <MetadataLabels kind="Deployment" labels={{ app: 'frontend' }} numLabels={3} />,
+      ),
+    ).toMatchInlineSnapshot(
+      `"<div data-testid="label-group" class="co-label-group metadata-labels-group" data-num-labels="3"><span data-testid="label" class="co-m-deployment co-m-expand co-label" data-color="blue" data-href="/search?kind=Deployment&amp;q=app=frontend"><span class="co-label__key" data-test="label-key">app</span><span class="co-label__eq">=</span><span class="co-label__value">frontend</span></span></div>"`,
+    );
+  });
 });
