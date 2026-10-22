@@ -1,6 +1,9 @@
 import type { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 
+import { APPLICATION_LIST_COLUMN_MANAGEMENT_ID } from '../applicationListColumns';
+
 import {
+  buildGitOpsManagedColumns,
   filterDataViewColumnsAndRows,
   getDefaultActiveColumnIds,
   getManageableColumns,
@@ -14,6 +17,8 @@ import {
   NAMESPACE_COLUMN_ID,
 } from './types';
 
+const t = (key: string) => key;
+
 const baseColumns: GitOpsManagedColumn[] = [
   { id: 'name', title: 'Name', isShownByDefault: true, isUntoggleable: true },
   { id: NAMESPACE_COLUMN_ID, title: 'Namespace', isShownByDefault: true },
@@ -25,9 +30,37 @@ const baseColumns: GitOpsManagedColumn[] = [
 
 describe('getGitOpsColumnManagementSettingKey', () => {
   it('prefixes the table id', () => {
-    expect(getGitOpsColumnManagementSettingKey('applications')).toBe(
-      'gitops.columnManagement.applications',
+    expect(getGitOpsColumnManagementSettingKey(APPLICATION_LIST_COLUMN_MANAGEMENT_ID)).toBe(
+      'gitops.columnManagement.gitops.applications',
     );
+  });
+});
+
+describe('buildGitOpsManagedColumns', () => {
+  it('adds Name, optional Namespace, middle columns, and always-shown actions', () => {
+    const middle: GitOpsManagedColumn[] = [
+      { id: 'status', title: t('Status'), isShownByDefault: true },
+      { id: 'extra', title: t('Extra'), isShownByDefault: false, additional: true },
+    ];
+
+    expect(buildGitOpsManagedColumns(true, t, middle).map((column) => column.id)).toEqual([
+      'name',
+      'namespace',
+      'status',
+      'extra',
+      'actions',
+    ]);
+    expect(buildGitOpsManagedColumns(false, t, middle).map((column) => column.id)).toEqual([
+      'name',
+      'status',
+      'extra',
+      'actions',
+    ]);
+
+    const withNamespace = buildGitOpsManagedColumns(true, t, middle);
+    const byId = Object.fromEntries(withNamespace.map((column) => [column.id, column]));
+    expect(byId.name).toMatchObject({ isUntoggleable: true, isShownByDefault: true });
+    expect(byId.actions.alwaysShown).toBe(true);
   });
 });
 

@@ -107,7 +107,7 @@ const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewPro
                 />
               ) : undefined
             }
-            columnManagement={hasOwnedApplications ? columnManagement : undefined}
+            columnManagement={hasOwnedApplications && isListView ? columnManagement : undefined}
             actions={
               <GitOpsViewSwitcher
                 viewType={viewType}

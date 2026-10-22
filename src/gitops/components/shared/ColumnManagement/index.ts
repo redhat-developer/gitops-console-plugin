@@ -1,4 +1,5 @@
 export {
+  buildGitOpsManagedColumns,
   filterDataViewColumnsAndRows,
   getAlwaysShownColumnIds,
   getDefaultActiveColumnIds,

@@ -7,6 +7,31 @@ import {
   NAMESPACE_COLUMN_ID,
 } from './types';
 
+/** Shared Name / Namespace / actions scaffolding for list column catalogs. */
+export const buildGitOpsManagedColumns = (
+  includeNamespaceColumn: boolean,
+  t: (key: string) => string,
+  middleColumns: GitOpsManagedColumn[],
+): GitOpsManagedColumn[] => {
+  const columns: GitOpsManagedColumn[] = [
+    { id: 'name', title: t('Name'), isShownByDefault: true, isUntoggleable: true },
+  ];
+  if (includeNamespaceColumn) {
+    columns.push({
+      id: NAMESPACE_COLUMN_ID,
+      title: t('Namespace'),
+      isShownByDefault: true,
+    });
+  }
+  columns.push(...middleColumns, {
+    id: 'actions',
+    title: '',
+    isShownByDefault: true,
+    alwaysShown: true,
+  });
+  return columns;
+};
+
 export const getManageableColumns = (columns: GitOpsManagedColumn[]): GitOpsManagedColumn[] =>
   columns.filter((column) => !column.alwaysShown);
 

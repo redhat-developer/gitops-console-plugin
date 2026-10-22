@@ -89,7 +89,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
   const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
     columnManagementID: IMAGE_UPDATER_LIST_COLUMN_MANAGEMENT_ID,
     columns: managedColumns,
-    resourceType: t('ImageUpdaters'),
+    resourceType: t('ImageUpdater'),
     includeNamespaceColumn,
     showNamespaceHelp: includeNamespaceColumn,
   });

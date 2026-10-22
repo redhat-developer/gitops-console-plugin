@@ -105,7 +105,7 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
   const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
     columnManagementID: PROJECT_LIST_COLUMN_MANAGEMENT_ID,
     columns: managedColumns,
-    resourceType: t('AppProjects'),
+    resourceType: t('AppProject'),
     includeNamespaceColumn,
     showNamespaceHelp: includeNamespaceColumn,
   });

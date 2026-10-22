@@ -114,7 +114,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
   const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
     columnManagementID: ROLLOUT_LIST_COLUMN_MANAGEMENT_ID,
     columns: managedColumns,
-    resourceType: t('Rollouts'),
+    resourceType: t('Rollout'),
     includeNamespaceColumn,
     showNamespaceHelp: includeNamespaceColumn,
   });
