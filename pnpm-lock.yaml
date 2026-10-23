@@ -94,7 +94,7 @@ importers:
         version: 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-data-view':
         specifier: ^6.4.0
-        version: 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-icons':
         specifier: ^6.4.0
         version: 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -1290,8 +1290,8 @@ packages:
       react: ^17 || ^18 || ^19
       react-dom: ^17 || ^18 || ^19
 
-  '@patternfly/react-data-view@6.4.0':
-    resolution: {integrity: sha512-AYIJvWLSoZaf3askvBjyyFQEvSCiquw5PFzEOiTsNoM2pDYkRagzppjclpI+MRJr44ZrfpljC6ZKE4f5Ni2p+w==}
+  '@patternfly/react-data-view@6.7.0':
+    resolution: {integrity: sha512-IlXXUYQritdz8WACDSJ8C9gDEOqpgJnhG++OrJFVgA+mVUh/XfPWcZOprRWWOtxJF4jhGxYu7vgsNOTCWzL3cQ==}
     peerDependencies:
       react: ^17 || ^18 || ^19
       react-dom: ^17 || ^18 || ^19
@@ -2227,6 +2227,7 @@ packages:
   clone-buffer@1.0.0:
     resolution: {integrity: sha512-KLLTJWrvwIP+OPfMn0x2PheDEP20RPUcGXj/ERegTgdmPEZylALQldygiqrPPu8P45uNuPs7ckmReLY6v/iA5g==}
     engines: {node: '>= 0.10'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   clone-deep@4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}
@@ -7126,7 +7127,7 @@ snapshots:
       react-dropzone: 14.3.8(react@17.0.2)
       tslib: 2.8.1
 
-  '@patternfly/react-data-view@6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+  '@patternfly/react-data-view@6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
       '@patternfly/react-component-groups': 6.3.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-core': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
