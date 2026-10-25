@@ -135,8 +135,8 @@ importers:
         specifier: 17.0.91
         version: 17.0.91
       '@types/react-redux':
-        specifier: 7.1.34
-        version: 7.1.34
+        specifier: 7.1.35
+        version: 7.1.35
       '@types/semver':
         specifier: 7.7.1
         version: 7.7.1
@@ -1658,14 +1658,11 @@ packages:
   '@types/react-measure@2.0.12':
     resolution: {integrity: sha512-Y6V11CH6bU7RhqrIdENPwEUZlPXhfXNGylMNnGwq5TAEs2wDoBA3kSVVM/EQ8u72sz5r9ja+7W8M8PIVcS841Q==}
 
-  '@types/react-redux@7.1.34':
-    resolution: {integrity: sha512-GdFaVjEbYv4Fthm2ZLvj1VSCedV7TqE5y1kNwnjSdBOTXuRSgowux6J8TAct15T3CKBr63UMk+2CO7ilRhyrAQ==}
+  '@types/react-redux@7.1.35':
+    resolution: {integrity: sha512-iA6Q3vvIh0O5lm/E41bwvXMTVmUb0FW7HYAEt2k1SljUZV4Q9jTtEC17Bg/4t2pttPzJRZ0fxP/j0YhMNGjIFQ==}
 
   '@types/react@17.0.91':
     resolution: {integrity: sha512-xauZca6qMeCU3Moy0KxCM9jtf1vyk6qRYK39Ryf3afUqwgNUjRIGoDdS9BcGWgAMGSg1hvP4XcmlYrM66PtqeA==}
-
-  '@types/react@19.0.7':
-    resolution: {integrity: sha512-MoFsEJKkAtZCrC1r6CM8U22GzhG7u2Wir8ons/aCKH6MBdD1ibV24zOSSkdZVUKqN5i396zG5VKLYZ3yaUZdLA==}
 
   '@types/retry@0.12.0':
     resolution: {integrity: sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==}
@@ -2227,6 +2224,7 @@ packages:
   clone-buffer@1.0.0:
     resolution: {integrity: sha512-KLLTJWrvwIP+OPfMn0x2PheDEP20RPUcGXj/ERegTgdmPEZylALQldygiqrPPu8P45uNuPs7ckmReLY6v/iA5g==}
     engines: {node: '>= 0.10'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   clone-deep@4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}
@@ -4743,9 +4741,6 @@ packages:
 
   redux@4.0.1:
     resolution: {integrity: sha512-R7bAtSkk7nY6O/OYMVR9RiBI+XghjF9rlbl5806HJbQph0LJVHZrU5oaO4q70eUKiqMRqm4y07KLTlMZ2BlVmg==}
-
-  redux@4.2.1:
-    resolution: {integrity: sha512-LAUYz4lc+Do8/g7aeRa8JkyDErK6ekstQaqWQrNRW//MY1TvCEpMtpTWvlQ+FPbWCx+Xixu/6SHt5N0HR+SB4w==}
 
   reflect.getprototypeof@1.0.10:
     resolution: {integrity: sha512-00o4I+DVrefhv+nX0ulyi3biSHCPDe+yLv5o/p6d/UVlirijB8E16FtfwSAi4g3tcqrQ4lRAqQSoFEZJehYEcw==}
@@ -7514,7 +7509,7 @@ snapshots:
 
   '@types/hoist-non-react-statics@3.3.6':
     dependencies:
-      '@types/react': 19.0.7
+      '@types/react': 17.0.91
       hoist-non-react-statics: 3.3.2
 
   '@types/http-errors@2.0.4': {}
@@ -7576,21 +7571,17 @@ snapshots:
     dependencies:
       '@types/react': 17.0.91
 
-  '@types/react-redux@7.1.34':
+  '@types/react-redux@7.1.35':
     dependencies:
       '@types/hoist-non-react-statics': 3.3.6
-      '@types/react': 19.0.7
+      '@types/react': 17.0.91
       hoist-non-react-statics: 3.3.2
-      redux: 4.2.1
+      redux: 4.0.1
 
   '@types/react@17.0.91':
     dependencies:
       '@types/prop-types': 15.7.14
       '@types/scheduler': 0.16.8
-      csstype: 3.2.3
-
-  '@types/react@19.0.7':
-    dependencies:
       csstype: 3.2.3
 
   '@types/retry@0.12.0': {}
@@ -11193,7 +11184,7 @@ snapshots:
   react-redux@7.2.9(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
     dependencies:
       '@babel/runtime': 7.28.4
-      '@types/react-redux': 7.1.34
+      '@types/react-redux': 7.1.35
       hoist-non-react-statics: 3.3.2
       loose-envify: 1.4.0
       prop-types: 15.8.1
@@ -11296,10 +11287,6 @@ snapshots:
     dependencies:
       loose-envify: 1.4.0
       symbol-observable: 1.2.0
-
-  redux@4.2.1:
-    dependencies:
-      '@babel/runtime': 7.28.4
 
   reflect.getprototypeof@1.0.10:
     dependencies:
