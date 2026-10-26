@@ -97,6 +97,8 @@ export const getDayOfWeek = (day: number): string => {
       return 'Fri';
     case 6:
       return 'Sat';
+    default:
+      return '';
   }
 };
 

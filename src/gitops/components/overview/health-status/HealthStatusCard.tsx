@@ -161,7 +161,7 @@ const HealthStatusCard: React.FC<OverviewCardProps> = ({ namespace }) => {
           <div>
             {errorState(
               t('Unable to retrieve applications'),
-              t('Error retrieving applications: ', loadError),
+              t('Error retrieving applications: {{x}}', { x: String(loadError) }),
             )}
           </div>
         ) : (

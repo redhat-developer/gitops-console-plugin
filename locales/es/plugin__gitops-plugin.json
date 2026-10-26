@@ -169,7 +169,7 @@
   "Suspended": "Suspended",
   "Health status": "Health status",
   "Unable to retrieve applications": "Unable to retrieve applications",
-  "Error retrieving applications: ": "Error retrieving applications: ",
+  "Error retrieving applications: {{x}}": "Error retrieving applications: {{x}}",
   "Error fetching metric data. Click to view metrics dashboard.": "Error fetching metric data. Click to view metrics dashboard.",
   "Operational metrics": "Operational metrics",
   "Last update time.  Updated every 10 seconds.": "Last update time.  Updated every 10 seconds.",

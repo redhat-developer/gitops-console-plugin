@@ -8,7 +8,7 @@ import {
   NamespaceBar,
   useActiveNamespace,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Grid, GridItem, PageSection } from '@patternfly/react-core';
+import { Grid, GridItem } from '@patternfly/react-core';
 
 import HealthStatusCard from './health-status/HealthStatusCard';
 import OperationalMetricsCard from './operational-metrics/OperationalMetricsCard';
@@ -56,7 +56,6 @@ const DashboardOverviewPage: React.FC<DashboardOverviewPageProps> = ({
       <NamespaceBar onNamespaceChange={handleNamespaceChange} />
       <ListPageHeader title={t('GitOps Overview')} hideFavoriteButton={false}></ListPageHeader>
       <ListPageBody>
-        <PageSection></PageSection>
         <Grid hasGutter md={2} wrap="true">
           <GridItem span={12} md={6} lg={4} rowSpan={1}>
             <SyncStatusCard namespace={namespace} />

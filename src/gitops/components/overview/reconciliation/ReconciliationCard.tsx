@@ -89,7 +89,7 @@ const ReconciliationCard: React.FC<OverviewCardProps> = ({ namespace }) => {
           <div>
             {errorState(
               t('Unable to retrieve metrics data'),
-              t('Error occurrend running query ono reconciliation metric: ' + promError),
+              t('Error occurred running query on reconciliation metric: ' + promError),
             )}
           </div>
         ) : (
