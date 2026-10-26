@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 import { TSpan } from 'victory-core';
 
+import { ApplicationKind } from '@gitops/models/ApplicationModel';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { ChartLabel, ChartLegendTooltip } from '@patternfly/react-charts/victory';
 import { ErrorState } from '@patternfly/react-component-groups';
@@ -223,6 +224,13 @@ export function useChartContainerWidth(
 // All of our cards will accept a namespace since the project can be specific or All Projects.
 export interface OverviewCardProps {
   namespace?: string;
+}
+
+export interface OverviewCardForApplicationsProps {
+  namespace?: string;
+  applications: ApplicationKind[];
+  isAppsLoaded: boolean;
+  appsLoadedError: any;
 }
 
 // For legendData property of a ChartDonut

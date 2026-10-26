@@ -3,7 +3,6 @@ import * as React from 'react';
 import { ApplicationKind } from '@gitops/models/ApplicationModel';
 import { HealthStatus } from '@gitops/utils/constants';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
-import { K8sResourceCommon, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { ChartDonut, ChartLegend, ChartTooltip } from '@patternfly/react-charts/victory';
 import { Card, CardBody, CardTitle } from '@patternfly/react-core';
 
@@ -13,7 +12,7 @@ import {
   getNamespacePath,
   LegendData,
   loadingState,
-  OverviewCardProps,
+  OverviewCardForApplicationsProps,
   StatusChartLegendLabel,
 } from '../chartHelpers';
 
@@ -21,18 +20,12 @@ import {
 import '../DashboardOverviewPage.scss';
 
 // Self-contained "Health status" dashboard card, that watches Applications
-const HealthStatusCard: React.FC<OverviewCardProps> = ({ namespace }) => {
-  const [applications, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
-    isList: true,
-    groupVersionKind: {
-      group: 'argoproj.io',
-      kind: 'Application',
-      version: 'v1alpha1',
-    },
-    namespaced: !!namespace,
-    namespace,
-  });
-
+const HealthStatusCard: React.FC<OverviewCardForApplicationsProps> = ({
+  namespace,
+  applications,
+  isAppsLoaded,
+  appsLoadedError,
+}) => {
   const namespacePath = getNamespacePath(namespace);
   const appsCount = applications.length ? applications.length : 0;
   const healthStatus = applications.map(
@@ -155,13 +148,13 @@ const HealthStatusCard: React.FC<OverviewCardProps> = ({ namespace }) => {
       <CardTitle>{t('Health status')}</CardTitle>
       <CardBody className="gitops-dashboard__donut-card-body">
         {/* eslint-disable-next-line no-nested-ternary */}
-        {!loaded && !loadError ? (
+        {!isAppsLoaded && !appsLoadedError ? (
           <div>{loadingState()}</div>
-        ) : loadError ? (
+        ) : appsLoadedError ? (
           <div>
             {errorState(
               t('Unable to retrieve applications'),
-              t('Error retrieving applications: {{x}}', { x: String(loadError) }),
+              t('Error retrieving applications: {{x}}', { x: String(appsLoadedError) }),
             )}
           </div>
         ) : (

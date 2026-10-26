@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom-v5-compat';
 
+import { ApplicationKind } from '@gitops/models/ApplicationModel';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import {
   ListPageBody,
   ListPageHeader,
   NamespaceBar,
   useActiveNamespace,
+  useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Grid, GridItem } from '@patternfly/react-core';
 
@@ -51,6 +53,17 @@ const DashboardOverviewPage: React.FC<DashboardOverviewPageProps> = ({
     navigate(buildOverviewPath(newNamespace));
   };
 
+  const [applications, isAppsLoaded, appsLoadedError] = useK8sWatchResource<ApplicationKind[]>({
+    isList: true,
+    groupVersionKind: {
+      group: 'argoproj.io',
+      kind: 'Application',
+      version: 'v1alpha1',
+    },
+    namespaced: !!namespace,
+    namespace,
+  });
+
   return (
     <div>
       <NamespaceBar onNamespaceChange={handleNamespaceChange} />
@@ -58,10 +71,20 @@ const DashboardOverviewPage: React.FC<DashboardOverviewPageProps> = ({
       <ListPageBody>
         <Grid hasGutter md={2} wrap="true">
           <GridItem span={12} md={6} lg={4} rowSpan={1}>
-            <SyncStatusCard namespace={namespace} />
+            <SyncStatusCard
+              namespace={namespace}
+              applications={applications}
+              isAppsLoaded={isAppsLoaded}
+              appsLoadedError={appsLoadedError}
+            />
           </GridItem>
           <GridItem span={12} md={6} lg={4} rowSpan={1}>
-            <HealthStatusCard namespace={namespace} />
+            <HealthStatusCard
+              namespace={namespace}
+              applications={applications}
+              isAppsLoaded={isAppsLoaded}
+              appsLoadedError={appsLoadedError}
+            />
           </GridItem>
           <GridItem span={12} md={6} lg={4} rowSpan={1} smRowSpan={1} mdRowSpan={1}>
             <OperationalMetricsCard namespace={namespace} />
