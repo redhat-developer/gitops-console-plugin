@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { APPLICATION_SYNC_UNKNOWN_FILTER_ID } from '@gitops/components/shared/applicationListFilters';
 import { ApplicationKind } from '@gitops/models/ApplicationModel';
 import { SyncStatus } from '@gitops/utils/constants';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
@@ -77,7 +78,11 @@ const SyncStatusCard: React.FC<OverviewCardForApplicationsProps> = ({
     {
       name: `Unknown: ${actualSyncUnknownCount} (${syncUnknownPercentage.toFixed(0)}%)`,
       symbol: { type: 'circle' },
-      url: '/k8s/' + namespacePath + '/argoproj.io~v1alpha1~Application?rowFilter-app-sync=Unknown',
+      url:
+        '/k8s/' +
+        namespacePath +
+        '/argoproj.io~v1alpha1~Application?rowFilter-app-sync=' +
+        APPLICATION_SYNC_UNKNOWN_FILTER_ID,
       linkText: `Unknown`,
       suffixText: `: ${actualSyncUnknownCount} (${syncUnknownPercentage.toFixed(0)}%)`,
     },
