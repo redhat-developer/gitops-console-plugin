@@ -88,7 +88,7 @@
     "jest-environment-jsdom": "^29.0.0",
     "ts-jest": "^29.0.0",
     "typesafe-actions": "^4.4.2",
-    "typescript": "5.9.3",
+    "typescript": "7.0.2",
     "victory-area": "^37.3.6",
     "victory-axis": "^37.3.6",
     "victory-bar": "^37.3.6",
