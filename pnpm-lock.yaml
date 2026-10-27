@@ -70,7 +70,7 @@ importers:
         version: 29.6.3
       '@openshift-console/dynamic-plugin-sdk':
         specifier: ^4.19.1
-        version: 4.20.0(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))
+        version: 4.23.0(@patternfly/react-topology@6.2.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-i18next@11.18.6(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-redux@7.2.9(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-router@5.3.4(react@17.0.2))(react@17.0.2)(redux@4.0.1)
       '@openshift-console/dynamic-plugin-sdk-internal':
         specifier: ^4.19.1
         version: 4.20.0(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))
@@ -1157,8 +1157,31 @@ packages:
     peerDependencies:
       typescript: '>=5.7.2'
 
-  '@openshift-console/dynamic-plugin-sdk@4.20.0':
-    resolution: {integrity: sha512-Rf6XfWweXccmz10UpBT0tJTXBDf6jqRaiwQjzXGJ4W+ewVh5BQwxXIeBwzxjuAr3Bt972MhIqksHrlh54moERA==}
+  '@openshift-console/dynamic-plugin-sdk@4.23.0':
+    resolution: {integrity: sha512-hTEeNeP+ZPLxbjLp2iReVT+oENloLXAQsj17twWXWpxZ5aGIviMs47729BejW1SljWEkHpSmqFzJnqKunoMimw==}
+    peerDependencies:
+      '@patternfly/react-topology': ~6.6.0
+      react: ^18.3.1
+      react-i18next: ~16.5.8
+      react-redux: ~9.2.0
+      react-router: ~7.18.1
+      redux: ~5.0.1
+      redux-thunk: ~3.1.0
+    peerDependenciesMeta:
+      '@patternfly/react-topology':
+        optional: true
+      react:
+        optional: true
+      react-i18next:
+        optional: true
+      react-redux:
+        optional: true
+      react-router:
+        optional: true
+      redux:
+        optional: true
+      redux-thunk:
+        optional: true
 
   '@openshift-console/plugin-shared@0.0.3':
     resolution: {integrity: sha512-shQvhPGXS5WyU2Af+d4JAoQ2pf9vFHrqS8WdGkKn/HGis26I44dsgVIwYb8ZKw07FreP+yjInT2KXpilq4yWvA==}
@@ -1166,11 +1189,19 @@ packages:
     peerDependencies:
       react: ^17.0.1
 
+  '@openshift/api-types@1.0.0':
+    resolution: {integrity: sha512-LUWH0raMvKQUN63inYmA8+73iKAwLPDYqkTKncSoHEgjZ2YNvuqvcyHOvLkczFdx9ALWuAU9NIMatjGJ9zpe6w==}
+
   '@openshift/dynamic-plugin-sdk-webpack@4.1.0':
     resolution: {integrity: sha512-Pkq6R+fkoE0llgv9WJBcotViAPywrzDkpWK0HSTmrVyfEuWS5cuZUs8ono6L5w9BqDBRXm3ceEuUAZA/Zrar1w==}
     engines: {node: '>=16'}
     peerDependencies:
       webpack: ^5.75.0
+
+  '@openshift/dynamic-plugin-sdk@9.1.0':
+    resolution: {integrity: sha512-R6nkUuWXGy7GpYUurV94ahahI4/JBMW6DGC3B3vGl+mmc8R23uaDCAGCDGfj3SeCIIxrVSEtIV21ncvziEEpXg==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@parcel/watcher-android-arm64@2.5.6':
     resolution: {integrity: sha512-YQxSS34tPF/6ZG7r/Ih9xy+kP/WwediEUsqmtf0cuCV5TPPKw/PQHRhueUo6JdeFJaqV3pyjm0GdYjZotbRt/A==}
@@ -2278,6 +2309,7 @@ packages:
   clone-buffer@1.0.0:
     resolution: {integrity: sha512-KLLTJWrvwIP+OPfMn0x2PheDEP20RPUcGXj/ERegTgdmPEZylALQldygiqrPPu8P45uNuPs7ckmReLY6v/iA5g==}
     engines: {node: '>= 0.10'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   clone-deep@4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}
@@ -3522,6 +3554,10 @@ packages:
 
   immutable@3.8.2:
     resolution: {integrity: sha512-15gZoQ38eYjEjxkorfbcgBKBL6R7T459OuK+CpcWt7O3KF4uPCx2tD0uFETlUDIyo+1789crbMhTvQBSR5yBMg==}
+    engines: {node: '>=0.10.0'}
+
+  immutable@3.8.4:
+    resolution: {integrity: sha512-ZQv17KolYrYmsDoDB8N67zhIKsNi9mGYlk96y/yuxyAqJB2hLzSGSM7k/sB0/ZvO4kx27U9+fBeD/XlLGh/uXQ==}
     engines: {node: '>=0.10.0'}
 
   immutable@5.1.4:
@@ -4867,8 +4903,8 @@ packages:
   requires-port@1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
 
-  reselect@4.1.8:
-    resolution: {integrity: sha512-ab9EmR80F/zQTMNeneUr4cv+jSwPJgIlvEmVwLerwrWVbpLlBuls9XHzIeTFy4cegU2NHBp3va0LKOzU5qFEYQ==}
+  reselect@5.3.0:
+    resolution: {integrity: sha512-XGoLeRAVzUTcJ1qkxPQhDJyIZ5d6zzZD9nT7AEZOaaU9UbWclhycElmhO+VD5bFeLuzhPBaOV2oXC8uG35ZSpg==}
 
   reserved-identifiers@1.2.0:
     resolution: {integrity: sha512-yE7KUfFvaBFzGPs5H3Ops1RevfUEsDc5Iz65rOwWg4lE8HJSYtle77uul3+573457oHvBKuHYDl/xqUkKpEEdw==}
@@ -5525,6 +5561,10 @@ packages:
     resolution: {integrity: sha512-QW61P4cOX8dCNmrfpcUMjvU/MF/sFTC8/PlG9215W1gKDzZUBjRGdyYSO6ZcEUNsn491S2VpryJOHSIVSDqJrg==}
     engines: {node: '>= 4'}
 
+  typesafe-actions@5.1.0:
+    resolution: {integrity: sha512-bna6Yi1pRznoo6Bz1cE6btB/Yy8Xywytyfrzu/wc+NFW3ZF0I+2iCGImhBsoYYCOWuICtRO4yHcnDlzgo1AdNg==}
+    engines: {node: '>= 4'}
+
   typescript@4.9.5:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
@@ -6029,6 +6069,9 @@ packages:
   yup@0.32.11:
     resolution: {integrity: sha512-Z2Fe1bn+eLstG8DRR6FTavGD+MeAwyfmouhHsIUgaADz8jvFKbO/fXc2trJKZg+5EBjh4gGm3iU/t3onKlXHIg==}
     engines: {node: '>=10'}
+
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
 snapshots:
 
@@ -7179,25 +7222,21 @@ snapshots:
       - uglify-js
       - webpack-cli
 
-  '@openshift-console/dynamic-plugin-sdk@4.20.0(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))':
+  '@openshift-console/dynamic-plugin-sdk@4.23.0(@patternfly/react-topology@6.2.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-i18next@11.18.6(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-redux@7.2.9(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-router@5.3.4(react@17.0.2))(react@17.0.2)(redux@4.0.1)':
     dependencies:
-      '@patternfly/react-topology': 6.2.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      immutable: 3.8.2
+      '@openshift/api-types': 1.0.0
+      '@openshift/dynamic-plugin-sdk': 9.1.0(react@17.0.2)
+      immutable: 3.8.4
       lodash: 4.18.1
+      reselect: 5.3.0
+      typesafe-actions: 5.1.0
+    optionalDependencies:
+      '@patternfly/react-topology': 6.2.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react: 17.0.2
       react-i18next: 11.18.6(i18next@19.9.2)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react-redux: 7.2.9(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react-router: 5.3.4(react@17.0.2)
-      react-router-dom: 5.3.4(react@17.0.2)
-      react-router-dom-v5-compat: 6.30.0(react-dom@17.0.2(react@17.0.2))(react-router-dom@5.3.4(react@17.0.2))(react@17.0.2)
       redux: 4.0.1
-      redux-thunk: 2.4.0(redux@4.0.1)
-      reselect: 4.1.8
-      typesafe-actions: 4.4.2
-    transitivePeerDependencies:
-      - i18next
-      - react-dom
-      - react-native
 
   '@openshift-console/plugin-shared@0.0.3(react@17.0.2)':
     dependencies:
@@ -7207,12 +7246,21 @@ snapshots:
       sanitize-html: 2.17.0
       showdown: 2.1.0
 
+  '@openshift/api-types@1.0.0': {}
+
   '@openshift/dynamic-plugin-sdk-webpack@4.1.0(webpack@5.105.2)':
     dependencies:
       lodash: 4.18.1
       semver: 7.7.3
       webpack: 5.105.2(webpack-cli@4.10.0)
       yup: 0.32.11
+
+  '@openshift/dynamic-plugin-sdk@9.1.0(react@17.0.2)':
+    dependencies:
+      lodash: 4.18.1
+      react: 17.0.2
+      semver: 7.7.3
+      zod: 3.25.76
 
   '@parcel/watcher-android-arm64@2.5.6':
     optional: true
@@ -10007,6 +10055,8 @@ snapshots:
 
   immutable@3.8.2: {}
 
+  immutable@3.8.4: {}
+
   immutable@5.1.4: {}
 
   import-fresh@3.3.1:
@@ -10249,7 +10299,7 @@ snapshots:
       '@babel/parser': 7.29.0
       '@istanbuljs/schema': 0.1.6
       istanbul-lib-coverage: 3.2.2
-      semver: 7.8.5
+      semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
 
@@ -10553,7 +10603,7 @@ snapshots:
       jest-util: 29.7.0
       natural-compare: 1.4.0
       pretty-format: 29.7.0
-      semver: 7.8.5
+      semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
 
@@ -10864,7 +10914,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.8.5
+      semver: 7.7.3
 
   make-error@1.3.6: {}
 
@@ -11582,7 +11632,7 @@ snapshots:
 
   requires-port@1.0.0: {}
 
-  reselect@4.1.8: {}
+  reselect@5.3.0: {}
 
   reserved-identifiers@1.2.0: {}
 
@@ -12308,6 +12358,8 @@ snapshots:
 
   typesafe-actions@4.4.2: {}
 
+  typesafe-actions@5.1.0: {}
+
   typescript@4.9.5: {}
 
   typescript@5.9.3: {}
@@ -12941,3 +12993,5 @@ snapshots:
       nanoclone: 0.2.1
       property-expr: 2.0.6
       toposort: 2.0.2
+
+  zod@3.25.76: {}
