@@ -103,4 +103,26 @@ describe('getPodStatus', () => {
       ),
     ).toMatchInlineSnapshot(`"Succeeded"`);
   });
+
+  it('marks the pod Not Ready when containerStatuses is missing', () => {
+    const pod = makePod();
+    delete pod.status.containerStatuses;
+    expect(getPodStatus(pod)).toMatchInlineSnapshot(`"Not Ready"`);
+  });
+
+  it('ignores an unrecognised waiting reason instead of CrashLoopBackOff', () => {
+    expect(
+      getPodStatus(
+        makePod({
+          containerStatuses: [
+            {
+              name: 'main',
+              ready: false,
+              state: { waiting: { reason: 'ContainerCreating' } },
+            },
+          ],
+        }),
+      ),
+    ).toMatchInlineSnapshot(`"Not Ready"`);
+  });
 });

@@ -132,6 +132,26 @@ describe('getReplicaSetInfo', () => {
     expect(result[0].status).toMatchInlineSnapshot(`"ScaledDown"`);
   });
 
+  it('marks the replica set Progressing when replicas are still catching up', async () => {
+    const rollout = makeRollout();
+    const rs = makeRS('rs-scaling', 'scaling-hash', '3', 3);
+    rs.status.availableReplicas = 1;
+    rs.status.readyReplicas = 1;
+    rs.status.replicas = 2;
+    const result = await getReplicaSetInfo(rollout, [rs], [], []);
+    expect(result[0].status).toMatchInlineSnapshot(`"Progressing"`);
+  });
+
+  it('picks up the scale-down deadline from the annotation', async () => {
+    const rollout = makeRollout();
+    const rs = makeRS('rs-old', 'old-hash', '0', 0);
+    rs.status.replicas = 0;
+    rs.status.availableReplicas = 0;
+    rs.metadata.annotations['scale-down-deadline'] = '2026-10-22T12:00:00Z';
+    const result = await getReplicaSetInfo(rollout, [rs], [], []);
+    expect(result[0].replicaSetScaleDownDeadline).toMatchInlineSnapshot(`"2026-10-22T12:00:00Z"`);
+  });
+
   it('assigns pods to their owning RS', async () => {
     const rollout = makeRollout();
     const rs = makeRS('rs-1', 'hash-1', '1');
