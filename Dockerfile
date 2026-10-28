@@ -1,4 +1,4 @@
-FROM docker.io/library/node:23 AS build
+FROM docker.io/library/node:26 AS build
 
 RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 
