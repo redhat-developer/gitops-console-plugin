@@ -88,13 +88,13 @@ importers:
         version: 8.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)(victory-area@37.3.6(react@17.0.2))(victory-axis@37.3.6(react@17.0.2))(victory-bar@37.3.6(react@17.0.2))(victory-box-plot@37.3.6(react@17.0.2))(victory-chart@37.3.6(react@17.0.2))(victory-core@37.3.6(react@17.0.2))(victory-create-container@37.3.6(react@17.0.2))(victory-cursor-container@37.3.6(react@17.0.2))(victory-group@37.3.6(react@17.0.2))(victory-legend@37.3.6(react@17.0.2))(victory-line@37.3.6(react@17.0.2))(victory-pie@37.3.6(react@17.0.2))(victory-scatter@37.3.6(react@17.0.2))(victory-stack@37.3.6(react@17.0.2))(victory-tooltip@37.3.6(react@17.0.2))(victory-voronoi-container@37.3.6(react@17.0.2))(victory-zoom-container@37.3.6(react@17.0.2))
       '@patternfly/react-component-groups':
         specifier: ^6.3.0
-        version: 6.3.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 6.7.0(@patternfly/react-drag-drop@6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-core':
         specifier: ^6.4.0
         version: 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-data-view':
         specifier: ^6.4.0
-        version: 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 6.4.0(@patternfly/react-drag-drop@6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-icons':
         specifier: ^6.4.0
         version: 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -946,6 +946,10 @@ packages:
     resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/runtime@7.29.10':
+    resolution: {integrity: sha512-NpugTzbKgGrNe45Ui32cN8vCFFMxVtP/9rtfwv0nP5FRDAjvYBxJcLVpYA9mr1jxP6cnIT7x9LUzuDTbWYYNRA==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/template@7.28.6':
     resolution: {integrity: sha512-YA6Ma2KsCdGb+WC6UpBVFJGXL58MDA6oyONbjyF/+5sBgxY/dwkhLogbMT2GXXyU84/IhRw/2D1Os1B/giz+BQ==}
     engines: {node: '>=6.9.0'}
@@ -982,6 +986,34 @@ packages:
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
+
+  '@dnd-kit/accessibility@3.1.1':
+    resolution: {integrity: sha512-2P+YgaXF+gRsIihwwY1gCsQSYnu9Zyj2py8kY5fFvUM1qm2WA2u639R6YNVfU4GWr+ZM5mqEsfHZZLoRONbemw==}
+    peerDependencies:
+      react: '>=16.8.0'
+
+  '@dnd-kit/core@6.3.1':
+    resolution: {integrity: sha512-xkGBRQQab4RLwgXxoqETICr6S5JlogafbhNsidmrkVv2YRs5MLwpjoF2qpiGjQt8S9AoxtIV603s0GIUpY5eYQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
+  '@dnd-kit/modifiers@9.0.0':
+    resolution: {integrity: sha512-ybiLc66qRGuZoC20wdSSG6pDXFikui/dCNGthxv4Ndy8ylErY0N3KVxY2bgo7AWwIbxDmXDg3ylAFmnrjcbVvw==}
+    peerDependencies:
+      '@dnd-kit/core': ^6.3.0
+      react: '>=16.8.0'
+
+  '@dnd-kit/sortable@10.0.0':
+    resolution: {integrity: sha512-+xqhmIIzvAYMGfBYYnbKuNicfSsk4RksY2XdmJhT+HAC01nix6fHCztU68jooFiMUB01Ky3F0FyOvhG/BZrWkg==}
+    peerDependencies:
+      '@dnd-kit/core': ^6.3.0
+      react: '>=16.8.0'
+
+  '@dnd-kit/utilities@3.2.2':
+    resolution: {integrity: sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg==}
+    peerDependencies:
+      react: '>=16.8.0'
 
   '@emotion/is-prop-valid@0.7.3':
     resolution: {integrity: sha512-uxJqm/sqwXw3YPA5GXX365OBcJGFtxUVkB6WyezqFHlNe9jqUWH5ur2O2M8dGBz61kn1g3ZBlzUunFQXQIClhA==}
@@ -1329,14 +1361,21 @@ packages:
       victory-zoom-container:
         optional: true
 
-  '@patternfly/react-component-groups@6.3.0':
-    resolution: {integrity: sha512-W8vSYD4KrAhDnjRLCPK+irVhG9GORQ7PveBFJ9FAvjCc4lGv73smDY4M1Lv2peNHQaXQpn6DSPsuynaReRvIhg==}
+  '@patternfly/react-component-groups@6.7.0':
+    resolution: {integrity: sha512-uBxJel7Vi7gV/yRgxCfDMI3ztnK8L0SHUU2AVYomAjCs/zEXu9B9thqlYJaRgCTxD3B29Ne43cAx3Ysux33+qQ==}
     peerDependencies:
+      '@patternfly/react-drag-drop': ^6.6.2
       react: ^17 || ^18 || ^19
       react-dom: ^17 || ^18 || ^19
 
   '@patternfly/react-core@6.4.1':
     resolution: {integrity: sha512-EUSV76Eifkt4R3q2JIaiB6/FHeQqOCttK1DQMXNoOCNa3ODkZ7H+KlMdminufMDfRzhwAgTVihZ62K9PFfc8Vg==}
+    peerDependencies:
+      react: ^17 || ^18 || ^19
+      react-dom: ^17 || ^18 || ^19
+
+  '@patternfly/react-core@6.7.0':
+    resolution: {integrity: sha512-3C256WUiQ3GzFdCKyjGCF/JVdp4xngLf0QHASAm1WHrJCPKRDnxgZIgPgvNrOKeficRR6yysQxJGitFk5DAK0A==}
     peerDependencies:
       react: ^17 || ^18 || ^19
       react-dom: ^17 || ^18 || ^19
@@ -1347,8 +1386,20 @@ packages:
       react: ^17 || ^18 || ^19
       react-dom: ^17 || ^18 || ^19
 
+  '@patternfly/react-drag-drop@6.7.0':
+    resolution: {integrity: sha512-SHKAFU7jN97h1nRv6xnN8Nxn33GcyyBqkWBw5TNmF291Sn4406F/zRW3dvbWQbrOCqCBisdnhdZlEKdG5g9bDw==}
+    peerDependencies:
+      react: ^17 || ^18 || ^19
+      react-dom: ^17 || ^18 || ^19
+
   '@patternfly/react-icons@6.4.0':
     resolution: {integrity: sha512-SPjzatm73NUYv/BL6A/cjRA5sFQ15NkiyPAcT8gmklI7HY+ptd6/eg49uBDFmxTQcSwbb5ISW/R6wwCQBY2M+Q==}
+    peerDependencies:
+      react: ^17 || ^18 || ^19
+      react-dom: ^17 || ^18 || ^19
+
+  '@patternfly/react-icons@6.7.0':
+    resolution: {integrity: sha512-dqMuCtQvPKgCX+7JhRjwxF+0S1A0pJ04VPBrpEw4ss6el+1Mp5VHpwYQFUi2iJlt5vEF5NL1eHhnGoVEg7MjEw==}
     peerDependencies:
       react: ^17 || ^18 || ^19
       react-dom: ^17 || ^18 || ^19
@@ -1356,14 +1407,26 @@ packages:
   '@patternfly/react-styles@6.4.0':
     resolution: {integrity: sha512-EXmHA67s5sy+Wy/0uxWoUQ52jr9lsH2wV3QcgtvVc5zxpyBX89gShpqv4jfVqaowznHGDoL6fVBBrSe9BYOliQ==}
 
+  '@patternfly/react-styles@6.7.0':
+    resolution: {integrity: sha512-qW7ytJYZ/4QZ8bCF31nvoJsgMS6cVxdJL2NUTSAbajwODMf/PBJVKlWEodLCRwHXXQCTpVSvlrY+PLvqYITrAA==}
+
   '@patternfly/react-table@6.4.1':
     resolution: {integrity: sha512-dceS5X1I5gmhRfEf6gsLIdFhrQd5hY+SWRIYzEvI19rrdN9VwCVWg+bhSsNv05pQnGs8uOlzYVBI25p7PJtFeA==}
     peerDependencies:
       react: ^17 || ^18 || ^19
       react-dom: ^17 || ^18 || ^19
 
+  '@patternfly/react-table@6.7.0':
+    resolution: {integrity: sha512-ygVZtt18flNAaU3CjAvWdMO5zgVT+9NvFYkwrXvEiTKOFV6Vsh7OnP9VGzbv9hfm83eLpG0/LNa2diBogStSeg==}
+    peerDependencies:
+      react: ^17 || ^18 || ^19
+      react-dom: ^17 || ^18 || ^19
+
   '@patternfly/react-tokens@6.4.0':
     resolution: {integrity: sha512-iZthBoXSGQ/+PfGTdPFJVulaJZI3rwE+7A/whOXPGp3Jyq3k6X52pr1+5nlO6WHasbZ9FyeZGqXf4fazUZNjbw==}
+
+  '@patternfly/react-tokens@6.7.0':
+    resolution: {integrity: sha512-jH96EUmjSUSTabxkBvxb95Fr+7baMACNlGBSUwOYJJcJQTE2N78lhRf8muoUKBFzpkmzn/w0KThoiBQRD2TdMw==}
 
   '@patternfly/react-topology@6.2.0':
     resolution: {integrity: sha512-tqLW9MBJOVq+R1b7MtHsz9zh+kjQ6wW5Ef3ub4cRJPHS3+2kVLv/943MdvSfHDa4uwsjT854Wr0roxlfRtRtvA==}
@@ -2278,6 +2341,7 @@ packages:
   clone-buffer@1.0.0:
     resolution: {integrity: sha512-KLLTJWrvwIP+OPfMn0x2PheDEP20RPUcGXj/ERegTgdmPEZylALQldygiqrPPu8P45uNuPs7ckmReLY6v/iA5g==}
     engines: {node: '>= 0.10'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   clone-deep@4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}
@@ -3187,6 +3251,9 @@ packages:
 
   focus-trap@7.6.4:
     resolution: {integrity: sha512-xx560wGBk7seZ6y933idtjJQc1l+ck+pI3sKvhKozdBV1dRZoKhkW5xoCaFv9tQiX5RH1xfSxjuNu6g+lmN/gw==}
+
+  focus-trap@7.6.6:
+    resolution: {integrity: sha512-v/Z8bvMCajtx4mEXmOo7QEsIzlIOqRXTIwgUfsFOF9gEsespdbD0AkPIka1bSXZ8Y8oZ+2IVDQZePkTfEHZl7Q==}
 
   follow-redirects@1.15.9:
     resolution: {integrity: sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==}
@@ -4681,6 +4748,12 @@ packages:
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
 
+  react-dropzone@14.4.1:
+    resolution: {integrity: sha512-QDuV76v3uKbHiH34SpwifZ+gOLi1+RdsCO1kl5vxMT4wW8R82+sthjvBw4th3NHF/XX6FBsqDYZVNN+pnhaw0g==}
+    engines: {node: '>= 10.13'}
+    peerDependencies:
+      react: '>= 16.8 || 18.0.0'
+
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
 
@@ -5291,6 +5364,9 @@ packages:
   tabbable@6.3.0:
     resolution: {integrity: sha512-EIHvdY5bPLuWForiR/AN2Bxngzpuwn1is4asboytXtpTgsArc+WmSJKVLlhdh71u7jFcryDqB2A8lQvj78MkyQ==}
 
+  tabbable@6.5.1:
+    resolution: {integrity: sha512-dMCuwDUY6Noz3zVKLefBC4wq+aJV20yc7vWmM7uTNGwtQSFF5kX7OUIUsxuVajz/bdt5Xqdah3/0NLjth+cM5A==}
+
   table@6.9.0:
     resolution: {integrity: sha512-9kY+CygyYM6j02t5YFHbNz2FN5QmYGv9zAjVp4lCDjlCw7amdckXlEt/bjMhUIfj4ThGRE4gCUH5+yGnNuPo5A==}
     engines: {node: '>=10.0.0'}
@@ -5467,6 +5543,9 @@ packages:
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
+  tslib@2.9.1:
+    resolution: {integrity: sha512-a4Ux9VKuIMHsOS7ENbEq6hK2ZGYIT27Rtl0E4eD9KqwxhKiQeMZE/9xb3IdYwWaSOyIBQLExhQgXDTYoiCxnWA==}
 
   tsutils@3.21.0:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
@@ -6822,6 +6901,8 @@ snapshots:
 
   '@babel/runtime@7.28.4': {}
 
+  '@babel/runtime@7.29.10': {}
+
   '@babel/template@7.28.6':
     dependencies:
       '@babel/code-frame': 7.29.0
@@ -6864,6 +6945,38 @@ snapshots:
   '@dagrejs/graphlib@2.2.4': {}
 
   '@discoveryjs/json-ext@0.5.7': {}
+
+  '@dnd-kit/accessibility@3.1.1(react@17.0.2)':
+    dependencies:
+      react: 17.0.2
+      tslib: 2.9.1
+
+  '@dnd-kit/core@6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+    dependencies:
+      '@dnd-kit/accessibility': 3.1.1(react@17.0.2)
+      '@dnd-kit/utilities': 3.2.2(react@17.0.2)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      tslib: 2.9.1
+
+  '@dnd-kit/modifiers@9.0.0(@dnd-kit/core@6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react@17.0.2)':
+    dependencies:
+      '@dnd-kit/core': 6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@dnd-kit/utilities': 3.2.2(react@17.0.2)
+      react: 17.0.2
+      tslib: 2.9.1
+
+  '@dnd-kit/sortable@10.0.0(@dnd-kit/core@6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react@17.0.2)':
+    dependencies:
+      '@dnd-kit/core': 6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@dnd-kit/utilities': 3.2.2(react@17.0.2)
+      react: 17.0.2
+      tslib: 2.9.1
+
+  '@dnd-kit/utilities@3.2.2(react@17.0.2)':
+    dependencies:
+      react: 17.0.2
+      tslib: 2.9.1
 
   '@emotion/is-prop-valid@0.7.3':
     dependencies:
@@ -7113,21 +7226,21 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@jsonjoy.com/base64@1.1.2(tslib@2.8.1)':
+  '@jsonjoy.com/base64@1.1.2(tslib@2.9.1)':
     dependencies:
-      tslib: 2.8.1
+      tslib: 2.9.1
 
-  '@jsonjoy.com/json-pack@1.1.1(tslib@2.8.1)':
+  '@jsonjoy.com/json-pack@1.1.1(tslib@2.9.1)':
     dependencies:
-      '@jsonjoy.com/base64': 1.1.2(tslib@2.8.1)
-      '@jsonjoy.com/util': 1.5.0(tslib@2.8.1)
+      '@jsonjoy.com/base64': 1.1.2(tslib@2.9.1)
+      '@jsonjoy.com/util': 1.5.0(tslib@2.9.1)
       hyperdyperid: 1.2.0
-      thingies: 1.21.0(tslib@2.8.1)
-      tslib: 2.8.1
+      thingies: 1.21.0(tslib@2.9.1)
+      tslib: 2.9.1
 
-  '@jsonjoy.com/util@1.5.0(tslib@2.8.1)':
+  '@jsonjoy.com/util@1.5.0(tslib@2.9.1)':
     dependencies:
-      tslib: 2.8.1
+      tslib: 2.9.1
 
   '@leichtgewicht/ip-codec@2.0.5': {}
 
@@ -7312,12 +7425,13 @@ snapshots:
       victory-voronoi-container: 37.3.6(react@17.0.2)
       victory-zoom-container: 37.3.6(react@17.0.2)
 
-  '@patternfly/react-component-groups@6.3.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+  '@patternfly/react-component-groups@6.7.0(@patternfly/react-drag-drop@6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
-      '@patternfly/react-core': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@patternfly/react-core': 6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@patternfly/react-drag-drop': 6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-icons': 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-styles': 6.4.0
-      '@patternfly/react-table': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@patternfly/react-table': 6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       react-jss: 10.10.0(react@17.0.2)
@@ -7333,9 +7447,20 @@ snapshots:
       react-dropzone: 14.3.8(react@17.0.2)
       tslib: 2.8.1
 
-  '@patternfly/react-data-view@6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+  '@patternfly/react-core@6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
-      '@patternfly/react-component-groups': 6.3.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@patternfly/react-icons': 6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@patternfly/react-styles': 6.7.0
+      '@patternfly/react-tokens': 6.7.0
+      focus-trap: 7.6.6
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-dropzone: 14.4.1(react@17.0.2)
+      tslib: 2.9.1
+
+  '@patternfly/react-data-view@6.4.0(@patternfly/react-drag-drop@6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+    dependencies:
+      '@patternfly/react-component-groups': 6.7.0(@patternfly/react-drag-drop@6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-core': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-icons': 6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@patternfly/react-table': 6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -7343,13 +7468,35 @@ snapshots:
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       react-jss: 10.10.0(react@17.0.2)
+    transitivePeerDependencies:
+      - '@patternfly/react-drag-drop'
+
+  '@patternfly/react-drag-drop@6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+    dependencies:
+      '@dnd-kit/core': 6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@dnd-kit/modifiers': 9.0.0(@dnd-kit/core@6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react@17.0.2)
+      '@dnd-kit/sortable': 10.0.0(@dnd-kit/core@6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react@17.0.2)
+      '@patternfly/react-core': 6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@patternfly/react-icons': 6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@patternfly/react-styles': 6.7.0
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      resize-observer-polyfill: 1.5.1
 
   '@patternfly/react-icons@6.4.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
 
+  '@patternfly/react-icons@6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+    dependencies:
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      tslib: 2.9.1
+
   '@patternfly/react-styles@6.4.0': {}
+
+  '@patternfly/react-styles@6.7.0': {}
 
   '@patternfly/react-table@6.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
@@ -7362,7 +7509,20 @@ snapshots:
       react-dom: 17.0.2(react@17.0.2)
       tslib: 2.8.1
 
+  '@patternfly/react-table@6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+    dependencies:
+      '@patternfly/react-core': 6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@patternfly/react-icons': 6.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      '@patternfly/react-styles': 6.7.0
+      '@patternfly/react-tokens': 6.7.0
+      lodash: 4.18.1
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      tslib: 2.9.1
+
   '@patternfly/react-tokens@6.4.0': {}
+
+  '@patternfly/react-tokens@6.7.0': {}
 
   '@patternfly/react-topology@6.2.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
@@ -8649,7 +8809,7 @@ snapshots:
 
   css-jss@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
       jss-preset-default: 10.10.0
 
@@ -8687,7 +8847,7 @@ snapshots:
 
   css-vendor@2.0.8:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       is-in-browser: 1.1.3
 
   css-what@6.1.0: {}
@@ -9029,7 +9189,7 @@ snapshots:
   dot-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.8.1
+      tslib: 2.9.1
 
   dunder-proto@1.0.1:
     dependencies:
@@ -9547,7 +9707,7 @@ snapshots:
 
   file-selector@2.1.2:
     dependencies:
-      tslib: 2.8.1
+      tslib: 2.9.1
 
   fill-range@7.1.1:
     dependencies:
@@ -9588,6 +9748,10 @@ snapshots:
   focus-trap@7.6.4:
     dependencies:
       tabbable: 6.3.0
+
+  focus-trap@7.6.6:
+    dependencies:
+      tabbable: 6.5.1
 
   follow-redirects@1.15.9: {}
 
@@ -9987,7 +10151,7 @@ snapshots:
 
   i18next@20.6.1:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
 
   iconv-lite@0.4.24:
     dependencies:
@@ -10693,75 +10857,75 @@ snapshots:
 
   jss-plugin-camel-case@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       hyphenate-style-name: 1.1.0
       jss: 10.10.0
 
   jss-plugin-compose@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
       tiny-warning: 1.0.3
 
   jss-plugin-default-unit@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
 
   jss-plugin-expand@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
 
   jss-plugin-extend@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
       tiny-warning: 1.0.3
 
   jss-plugin-global@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
 
   jss-plugin-nested@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
       tiny-warning: 1.0.3
 
   jss-plugin-props-sort@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
 
   jss-plugin-rule-value-function@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
       tiny-warning: 1.0.3
 
   jss-plugin-rule-value-observable@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
       symbol-observable: 1.2.0
 
   jss-plugin-template@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
       tiny-warning: 1.0.3
 
   jss-plugin-vendor-prefixer@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       css-vendor: 2.0.8
       jss: 10.10.0
 
   jss-preset-default@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       jss: 10.10.0
       jss-plugin-camel-case: 10.10.0
       jss-plugin-compose: 10.10.0
@@ -10778,7 +10942,7 @@ snapshots:
 
   jss@10.10.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       csstype: 3.2.3
       is-in-browser: 1.1.3
       tiny-warning: 1.0.3
@@ -10852,7 +11016,7 @@ snapshots:
 
   lower-case@2.0.2:
     dependencies:
-      tslib: 2.8.1
+      tslib: 2.9.1
 
   lru-cache@5.1.1:
     dependencies:
@@ -10893,10 +11057,10 @@ snapshots:
 
   memfs@4.17.0:
     dependencies:
-      '@jsonjoy.com/json-pack': 1.1.1(tslib@2.8.1)
-      '@jsonjoy.com/util': 1.5.0(tslib@2.8.1)
-      tree-dump: 1.0.2(tslib@2.8.1)
-      tslib: 2.8.1
+      '@jsonjoy.com/json-pack': 1.1.1(tslib@2.9.1)
+      '@jsonjoy.com/util': 1.5.0(tslib@2.9.1)
+      tree-dump: 1.0.2(tslib@2.9.1)
+      tslib: 2.9.1
 
   merge-descriptors@1.0.3: {}
 
@@ -10978,7 +11142,7 @@ snapshots:
   no-case@3.0.4:
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.8.1
+      tslib: 2.9.1
 
   node-addon-api@7.1.1:
     optional: true
@@ -11356,6 +11520,13 @@ snapshots:
       prop-types: 15.8.1
       react: 17.0.2
 
+  react-dropzone@14.4.1(react@17.0.2):
+    dependencies:
+      attr-accept: 2.2.5
+      file-selector: 2.1.2
+      prop-types: 15.8.1
+      react: 17.0.2
+
   react-fast-compare@3.2.2: {}
 
   react-helmet@6.1.0(react@17.0.2):
@@ -11383,7 +11554,7 @@ snapshots:
 
   react-jss@10.10.0(react@17.0.2):
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       '@emotion/is-prop-valid': 0.7.3
       css-jss: 10.10.0
       hoist-non-react-statics: 3.3.2
@@ -11868,7 +12039,7 @@ snapshots:
   snake-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.8.1
+      tslib: 2.9.1
 
   sockjs@0.3.24:
     dependencies:
@@ -12066,6 +12237,8 @@ snapshots:
 
   tabbable@6.3.0: {}
 
+  tabbable@6.5.1: {}
+
   table@6.9.0:
     dependencies:
       ajv: 8.18.0
@@ -12108,9 +12281,9 @@ snapshots:
       react-display-name: 0.2.5
       tiny-warning: 1.0.3
 
-  thingies@1.21.0(tslib@2.8.1):
+  thingies@1.21.0(tslib@2.9.1):
     dependencies:
-      tslib: 2.8.1
+      tslib: 2.9.1
 
   through2-filter@3.1.0:
     dependencies:
@@ -12171,9 +12344,9 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  tree-dump@1.0.2(tslib@2.8.1):
+  tree-dump@1.0.2(tslib@2.9.1):
     dependencies:
-      tslib: 2.8.1
+      tslib: 2.9.1
 
   ts-jest@29.4.11(@babel/core@7.29.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.29.0))(jest-util@29.7.0)(jest@29.7.0(@types/node@17.0.45)(ts-node@10.9.2(@types/node@17.0.45)(typescript@5.9.3)))(typescript@5.9.3):
     dependencies:
@@ -12246,6 +12419,8 @@ snapshots:
   tslib@1.14.1: {}
 
   tslib@2.8.1: {}
+
+  tslib@2.9.1: {}
 
   tsutils@3.21.0(typescript@5.9.3):
     dependencies:
@@ -12934,7 +13109,7 @@ snapshots:
 
   yup@0.32.11:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.10
       '@types/lodash': 4.17.16
       lodash: 4.18.1
       lodash-es: 4.18.1
