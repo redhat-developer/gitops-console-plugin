@@ -129,7 +129,6 @@
         "version": "v1alpha1",
         "kind": "Rollout"
       },
-      "badge": "dev",
       "color": "#E9654B",
       "label": "Argo Rollout",
       "labelPlural": "Argo Rollouts",
@@ -147,14 +146,13 @@
         "version": "v1alpha1",
         "kind": "RolloutManager"
       },
-      "badge": "dev",
       "color": "#E9654B",
       "label": "Argo Rollout Manager",
       "labelPlural": "Argo Rollout Managers",
       "abbr": "ARM"
     },
     "flags": {
-      "required": ["ARGO_ROLLOUT", "GITOPS_ENABLE_TOPOLOGY"]
+      "required": ["ARGO_ROLLOUT"]
     }
   },
   {
@@ -183,10 +181,26 @@
     "properties": {
       "model": {
         "group": "argoproj.io",
+        "version": "v1beta1",
+        "kind": "ArgoCD"
+      },
+      "color": "#E9654B",
+      "label": "Argo CD Instance",
+      "labelPlural": "Argo CD Instances",
+      "abbr": "ACD"
+    },
+    "flags": {
+      "required": ["ARGOCD"]
+    }
+  },
+  {
+    "type": "console.model-metadata",
+    "properties": {
+      "model": {
+        "group": "argoproj.io",
         "version": "v1alpha1",
         "kind": "Application"
       },
-      "badge": "dev",
       "color": "#E9654B",
       "label": "Argo CD Application",
       "labelPlural": "Argo CD Applications",
@@ -221,7 +235,6 @@
         "version": "v1alpha1",
         "kind": "ApplicationSet"
       },
-      "badge": "dev",
       "color": "#E9654B",
       "label": "Argo CD ApplicationSet",
       "labelPlural": "Argo CD ApplicationSets",
@@ -239,7 +252,6 @@
         "version": "v1alpha1",
         "kind": "AnalysisTemplate"
       },
-      "badge": "dev",
       "color": "#E9654B",
       "label": "Analysis Template",
       "labelPlural": "Application Templates",
@@ -257,7 +269,6 @@
         "version": "v1alpha1",
         "kind": "ClusterAnalysisTemplate"
       },
-      "badge": "dev",
       "color": "#E9654B",
       "label": "Cluster Analysis Template",
       "labelPlural": "Cluster Application Templates",
@@ -282,6 +293,17 @@
     },
     "flags": {
       "required": ["IMAGEUPDATER"]
+    }
+  },
+  {
+    "type": "console.flag/model",
+    "properties": {
+      "flag": "ARGOCD",
+      "model": {
+        "group": "argoproj.io",
+        "version": "v1beta1",
+        "kind": "ArgoCD"
+      }
     }
   },
   {
@@ -322,7 +344,7 @@
     "properties": {
         "id": "openshift-gitops-overview",
         "href": "/gitops/overview",
-        "name": "Dashboard",
+        "name": "Overview",
         "perspective": "admin",
         "section": "gitops-navigation-section",
         "namespaced": true
@@ -339,7 +361,7 @@
   {
     "type": "console.page/route",
     "properties": {
-      "exact": true,
+      "exact": false,
       "path": ["/gitops/overview/all-namespaces", "/gitops/overview/ns/:ns"],
       "component": { "$codeRef": "DashboardOverviewPage" }
     }

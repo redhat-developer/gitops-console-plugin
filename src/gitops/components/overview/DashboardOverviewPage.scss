@@ -15,6 +15,8 @@
   width: 270px;
   overflow: hidden;
   flex-shrink: 0;
+  margin-top: 0px;
+  padding-top: 0px;
 }
 
 .gitops-dashboard__donut-card-body {
@@ -22,6 +24,28 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  overflow-y: hidden;
+}
+
+.gitops-dashboard__fixed-height-application-firstrow-card {
+  @media (min-width: 768px) {
+    height: 300px;
+  }
+}
+
+.gitops-dashboard__operational-metrics-card-body {
+  // height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.gitops-dashboard__operational-metrics-card {
+  @media (min-width: 768px) {
+    height: 300px;
+  }
+  overflow: visible;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .gitops-dashboard__fixed-height-row-card {
@@ -29,6 +53,67 @@
     height: 350px;
   }
 }
+
+.gitops-dashboard-overview-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+
+  // overflow: visible;
+  &__content {
+    display: flex;
+    // flex: 1;
+    flex-direction: column;
+    position: relative;
+    overflow: auto;
+  }
+}
+
+// PatternFly's `.pf-v6-c-card` sets `overflow: auto` unconditionally on the whole card (title +
+// body together). Once we give the card a fixed height below, that turns the *entire* card into
+// one scrollable box, so scrolling the body also drags the title/border along with it. Override
+// `overflow` back to `visible` here and make only the body scrollable via
+// `.gitops-dashboard__infrastructure-card-body`, so the title/border stay fixed in place while
+// just the body's content scrolls internally.
+.gitops-dashboard__infrastructure-card {
+  .pf-v6-c-card__title {
+    margin-bottom: 1px;
+    padding-bottom: 1px;
+  }
+  @media (min-width: 768px) {
+    height: 200px;
+  }
+  overflow: visible;
+
+  &__loading-condition {
+    height: 80%;
+  }
+
+  &__error-condition {
+    height: 60%;
+  }
+}
+
+.gitops-dashboard__infrastructure-card-applications-needing-attention {
+  .pf-v6-c-card__title {
+    margin-bottom: 1px;
+    padding-bottom: 1px;
+  }
+
+  @media (min-width: 768px) {
+    height: 300px;
+  }
+  overflow: visible;
+}
+
+.gitops-dashboard__infrastructure-card-body {
+  // Allow the body to shrink within the card's fixed height instead of growing to fit its
+  // content (flex items default to `min-height: auto`, which otherwise prevents shrinking).
+  min-height: 0;
+  overflow-y: auto;
+}
+
 .gitops-dashboard__chart-container {
   @media (min-width: 768px) {
     width: 100%;

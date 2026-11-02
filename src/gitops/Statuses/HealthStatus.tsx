@@ -57,7 +57,7 @@ const HealthStatus: React.FC<HealthProps> = ({ status, message }) => {
     );
   } else {
     showStatus = (
-      <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
         {targetIcon} {status}
       </div>
     );

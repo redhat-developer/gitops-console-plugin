@@ -89,7 +89,7 @@ const SyncStatusCard: React.FC<OverviewCardForApplicationsProps> = ({
   ];
 
   return (
-    <Card className="gitops-dashboard__fixed-height-row-card">
+    <Card className="gitops-dashboard__fixed-height-application-firstrow-card">
       <CardTitle>{t('Sync status')}</CardTitle>
       <CardBody className="gitops-dashboard__donut-card-body">
         {/* eslint-disable-next-line no-nested-ternary */}
@@ -114,7 +114,7 @@ const SyncStatusCard: React.FC<OverviewCardForApplicationsProps> = ({
               width={270}
               labels={({ datum }) => `${datum.x}: ${datum.y}`}
               legendData={syncStatusLegendData}
-              legendPosition="bottom"
+              legendPosition="right"
               legendOrientation="vertical"
               colorScale={[
                 'var(--pf-t--global--dark--color--status--success--100)',
@@ -123,9 +123,9 @@ const SyncStatusCard: React.FC<OverviewCardForApplicationsProps> = ({
               ]}
               name="SyncStatus"
               padding={{
-                bottom: 150,
+                bottom: 20,
                 left: 20,
-                right: 20,
+                right: 150,
                 top: 20,
               }}
               labelComponent={
