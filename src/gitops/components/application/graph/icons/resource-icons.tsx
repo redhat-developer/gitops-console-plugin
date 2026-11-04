@@ -19,7 +19,6 @@ import { Tooltip } from '@patternfly/react-core';
 import {
   ArrowCircleUpIcon,
   CheckCircleIcon,
-  CircleNotchIcon,
   GhostIcon,
   HeartBrokenIcon,
   HeartIcon,
@@ -167,10 +166,7 @@ export const SyncStatusSvgIcon: React.FC<StatusIconProps> = ({ status, x, y, wid
   } else if (status === SyncStatus.OUT_OF_SYNC) {
     icon = <ArrowCircleUpIcon style={{ fill: `${warningColor}` }} />;
   } else {
-    // status === SyncStatus.UNKNOWN)
-    icon = (
-      <CircleNotchIcon className={'fa-spin'} title={t('Unknown')} style={{ fill: 'lightblue' }} />
-    );
+    icon = <OutlinedCircleIcon style={{ fill: 'gray' }} />;
   }
   return (
     <foreignObject x={x} y={y} width={width} height={height}>
@@ -183,7 +179,7 @@ export const SyncStatusSvgIcon: React.FC<StatusIconProps> = ({ status, x, y, wid
           justifyContent: 'center',
         }}
       >
-        <Tooltip content={status}>
+        <Tooltip content={status || t('There is no sync status for this resource')}>
           <>{icon}</>
         </Tooltip>
       </div>

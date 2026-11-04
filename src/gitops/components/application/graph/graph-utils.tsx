@@ -355,7 +355,7 @@ export const getInitialNodes = (
             indent: 100,
             healthStatus: healthStatus,
             resourceHealthStatus: resource.health?.status || undefined,
-            syncStatus: resource.status,
+            syncStatus: resource.status || undefined,
             rank: 5,
             badgeColor: color,
             badgeTextColor: 'white',
