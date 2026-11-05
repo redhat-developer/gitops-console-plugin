@@ -215,21 +215,18 @@ const useColumnsDV = (getSortParams: (columnIndex: number) => ThProps['sort']) =
     {
       cell: t('Deploy Started At'),
       props: {
-        className: 'pf-m-width-15',
         sort: getSortParams(1),
       },
     },
     {
       cell: t('Deployed At'),
       props: {
-        className: 'pf-m-width-15',
         sort: getSortParams(2),
       },
     },
     {
       cell: t('Initiated By'),
       props: {
-        className: 'pf-m-width-15',
         sort: getSortParams(3),
       },
     },
@@ -237,7 +234,7 @@ const useColumnsDV = (getSortParams: (columnIndex: number) => ThProps['sort']) =
       cell: t('Revision(s) and Source Repo URL(s)'),
       props: {
         key: 'revision',
-        className: 'gitops-plugin__history-id-column pf-m-width-50',
+        className: 'gitops-plugin__history-id-column',
         sort: getSortParams(4),
       },
     },

@@ -247,7 +247,6 @@ export const useSyncWindowsColumnsDV = (
       cell: t('Kind'),
       props: {
         'aria-label': 'kind',
-        className: 'pf-m-width-10',
         sort: getSortParams(0),
       },
     },
@@ -255,7 +254,6 @@ export const useSyncWindowsColumnsDV = (
       cell: t('Schedule'),
       props: {
         'aria-label': 'schedule',
-        className: 'pf-m-width-15',
         sort: getSortParams(1),
       },
     },
@@ -263,7 +261,6 @@ export const useSyncWindowsColumnsDV = (
       cell: t('Duration'),
       props: {
         'aria-label': 'duration',
-        className: 'pf-m-width-10',
         sort: getSortParams(2),
       },
     },
@@ -271,7 +268,6 @@ export const useSyncWindowsColumnsDV = (
       cell: t('Applications'),
       props: {
         'aria-label': 'applications',
-        className: 'pf-m-width-15',
         sort: getSortParams(3),
       },
     },
@@ -279,7 +275,6 @@ export const useSyncWindowsColumnsDV = (
       cell: t('Clusters'),
       props: {
         'aria-label': 'clusters',
-        className: 'pf-m-width-15',
         sort: getSortParams(4),
       },
     },
@@ -287,7 +282,6 @@ export const useSyncWindowsColumnsDV = (
       cell: t('Namespaces'),
       props: {
         'aria-label': 'namespaces',
-        className: 'pf-m-width-15',
         sort: getSortParams(5),
       },
     },
@@ -295,7 +289,6 @@ export const useSyncWindowsColumnsDV = (
       cell: t('Manual Sync'),
       props: {
         'aria-label': 'manual sync',
-        className: 'pf-m-width-10',
         sort: getSortParams(6),
       },
     },
@@ -303,7 +296,6 @@ export const useSyncWindowsColumnsDV = (
       cell: t('Time Zone'),
       props: {
         'aria-label': 'time zone',
-        className: 'pf-m-width-10',
         sort: getSortParams(7),
       },
     },

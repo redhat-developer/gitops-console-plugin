@@ -128,7 +128,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
   const includeNamespaceColumn = !namespace;
   const managedColumns = React.useMemo(() => getApplicationManagedColumns(true, t), [t]);
 
-  const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
+  const { activeColumnIds, columnManagement, filterDataView, tableID } = useGitOpsColumnManagement({
     columnManagementID: APPLICATION_LIST_COLUMN_MANAGEMENT_ID,
     columns: managedColumns,
     resourceType: t('Application'),
@@ -319,6 +319,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
             columns={visibleColumnsDV}
             rows={visibleRows}
             columnManagement={columnManagement}
+            tableID={tableID}
             isEmpty={filteredBySearch.length === 0}
             emptyState={empty}
             errorState={error || undefined}
@@ -331,6 +332,7 @@ const ApplicationList: React.FC<ApplicationProps> = ({
           <GitOpsDataViewTable
             columns={visibleColumnsDV}
             rows={visibleRows}
+            tableID={tableID}
             isEmpty={filteredBySearch.length === 0}
             emptyState={empty}
             errorState={error || undefined}
@@ -403,14 +405,13 @@ const ApplicationActionsCell: React.FC<{ app: ApplicationKind; index: number }> 
 }) => {
   const actionList: [actions: Action[]] = useApplicationActionsProvider(app);
 
+  // Match Console LazyActionMenu: no wrapper div — pf-v6-c-table__action sizes the column.
   return (
-    <div style={{ textAlign: 'right' }}>
-      <ActionsDropdown
-        actions={actionList ? actionList[0] : []}
-        id={'gitops-application-actions-' + index}
-        isKebabToggle={true}
-      />
-    </div>
+    <ActionsDropdown
+      actions={actionList ? actionList[0] : []}
+      id={'gitops-application-actions-' + index}
+      isKebabToggle={true}
+    />
   );
 };
 
@@ -534,7 +535,6 @@ const useApplicationRowsDV = (
       actions: {
         id: 'actions',
         cell: <ApplicationActionsCell app={app} index={index} />,
-        props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     };
 
@@ -561,16 +561,6 @@ const useColumnsDV = (
     actions: '',
   };
 
-  const widthById: Record<string, string> = {
-    name: 'pf-m-width-25',
-    [NAMESPACE_COLUMN_ID]: 'pf-m-width-15',
-    'sync-status': 'pf-m-width-15',
-    'health-status': 'pf-m-width-15',
-    revision: 'pf-m-width-12',
-    labels: 'pf-m-width-20',
-    project: 'pf-m-width-20',
-  };
-
   return managedColumns.map((column) => {
     if (column.id === 'actions') {
       return {
@@ -583,7 +573,6 @@ const useColumnsDV = (
       cell: titleById[column.id] ?? column.title,
       props: {
         'aria-label': column.id,
-        className: widthById[column.id],
         ...(sortIndex >= 0 ? { sort: getSortParams(sortIndex) } : {}),
       },
     };

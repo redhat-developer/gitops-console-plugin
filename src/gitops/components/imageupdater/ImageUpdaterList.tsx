@@ -86,7 +86,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
   const includeNamespaceColumn = !effectiveNamespace || effectiveNamespace === '';
   const managedColumns = React.useMemo(() => getImageUpdaterManagedColumns(true, t), [t]);
 
-  const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
+  const { activeColumnIds, columnManagement, filterDataView, tableID } = useGitOpsColumnManagement({
     columnManagementID: IMAGE_UPDATER_LIST_COLUMN_MANAGEMENT_ID,
     columns: managedColumns,
     resourceType: t('ImageUpdater'),
@@ -243,6 +243,7 @@ const ImageUpdaterList: React.FC<ImageUpdaterListTabProps> = ({
         <GitOpsDataViewTable
           columns={visibleColumnsDV}
           rows={visibleRows}
+          tableID={tableID}
           isEmpty={isEmptyState}
           emptyState={empty}
           isError={!!loadError}
@@ -327,21 +328,6 @@ export const useColumnsDV = (
     actions: '',
   };
 
-  const widthById: Record<string, string> = {
-    name: 'pf-m-width-30',
-    [NAMESPACE_COLUMN_ID]: 'pf-m-width-15',
-    apps: 'pf-m-width-20',
-    images: 'pf-m-width-20',
-    'last-checked': 'pf-m-width-20',
-    ready: 'pf-m-width-10',
-    labels: 'pf-m-width-10',
-  };
-
-  const styleById: Record<string, React.CSSProperties | undefined> = {
-    name: { minWidth: '200px' },
-    [NAMESPACE_COLUMN_ID]: { minWidth: '150px' },
-  };
-
   return managedColumns.map((column) => {
     if (column.id === 'actions') {
       return {
@@ -354,8 +340,6 @@ export const useColumnsDV = (
       cell: titleById[column.id] ?? column.title,
       props: {
         'aria-label': column.id,
-        className: widthById[column.id],
-        ...(styleById[column.id] ? { style: styleById[column.id] } : {}),
         ...(sortIndex >= 0 ? { sort: getSortParams(sortIndex) } : {}),
       },
     };
@@ -443,7 +427,6 @@ export const useImageUpdaterRowsDV = (
       actions: {
         id: 'actions-' + index,
         cell: <ImageUpdaterActionsCell imageUpdater={obj} index={index} />,
-        props: { className: 'gitops-imageupdater-list__actions-cell' },
       },
     };
 

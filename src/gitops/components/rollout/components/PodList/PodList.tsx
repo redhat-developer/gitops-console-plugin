@@ -47,7 +47,6 @@ const useColumnsDV = (
       cell: t('Name'),
       props: {
         'aria-label': 'name',
-        className: 'pf-m-width-20',
         sort: getSortParams(0),
       },
     },
@@ -57,7 +56,6 @@ const useColumnsDV = (
             cell: t('Namespace'),
             props: {
               'aria-label': 'namespace',
-              className: 'pf-m-width-10',
               sort: getSortParams(1),
             },
           },
@@ -67,14 +65,12 @@ const useColumnsDV = (
       cell: t('Traffic'),
       props: {
         'aria-label': 'traffic',
-        className: 'pf-m-fit-content',
       },
     },
     {
       cell: t('Status'),
       props: {
         'aria-label': 'status',
-        className: 'pf-m-fit-content',
         sort: getSortParams(1 + i),
       },
     },
@@ -82,7 +78,6 @@ const useColumnsDV = (
       cell: t('Ready'),
       props: {
         'aria-label': 'ready',
-        className: 'pf-m-fit-content',
         sort: getSortParams(2 + i),
       },
     },
@@ -90,7 +85,6 @@ const useColumnsDV = (
       cell: t('Restarts'),
       props: {
         'aria-label': 'restarts',
-        className: 'pf-m-fit-content',
         sort: getSortParams(3 + i),
       },
     },
@@ -98,7 +92,6 @@ const useColumnsDV = (
       cell: t('Owner'),
       props: {
         'aria-label': 'owner',
-        className: 'pf-m-width-20',
         sort: getSortParams(4 + i),
       },
     },
@@ -106,7 +99,6 @@ const useColumnsDV = (
       cell: t('Memory'),
       props: {
         'aria-label': 'memory',
-        className: 'pf-m-fit-content',
         sort: getSortParams(5 + i),
       },
     },
@@ -114,7 +106,6 @@ const useColumnsDV = (
       cell: t('CPU'),
       props: {
         'aria-label': 'cpu',
-        className: 'pf-m-fit-content',
         sort: getSortParams(6 + i),
       },
     },
@@ -122,7 +113,6 @@ const useColumnsDV = (
       cell: t('Created At'),
       props: {
         'aria-label': 'created',
-        className: 'pf-m-fit-content',
         sort: getSortParams(7 + i),
       },
     },
@@ -130,7 +120,6 @@ const useColumnsDV = (
       cell: ' ',
       props: {
         'aria-label': 'actions',
-        className: 'pf-m-fit-content',
       },
     },
   ];
@@ -322,7 +311,6 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
       {
         id: 'actions-' + index,
         cell: <PodRowActions pod={obj} index={index} />,
-        props: { className: 'dropdown-kebab-pf pf-v6-c-table__action' },
       },
     ]);
   });
