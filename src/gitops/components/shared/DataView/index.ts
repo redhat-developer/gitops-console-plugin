@@ -1,3 +1,4 @@
+export { getGitOpsDataViewColumnId } from './gitOpsDataViewColumnId';
 export {
   getGitOpsPaginationResetKey,
   GITOPS_DEFAULT_PER_PAGE,
@@ -15,3 +16,10 @@ export {
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from './GitOpsDataViewTable';
+export { GitOpsResetColumnWidthsButton } from './GitOpsResetColumnWidthsButton';
+export {
+  type GitOpsColumnWidthSettings,
+  GITOPS_COLUMN_WIDTH_SETTING_KEY,
+  useGitOpsDataViewResizableColumns,
+  useGitOpsResetColumnWidths,
+} from './useGitOpsDataViewResizableColumns';

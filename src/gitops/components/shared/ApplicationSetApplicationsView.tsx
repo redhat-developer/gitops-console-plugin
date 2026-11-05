@@ -29,6 +29,7 @@ type ApplicationSetApplicationsViewProps = {
   columns: DataViewTh[];
   rows: DataViewTr[];
   columnManagement?: React.ReactNode;
+  tableID?: string;
   emptyState: React.ReactNode;
   errorState?: React.ReactNode;
   isError?: boolean;
@@ -50,6 +51,7 @@ const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewPro
   columns,
   rows,
   columnManagement,
+  tableID,
   emptyState,
   errorState,
   isError,
@@ -127,6 +129,7 @@ const ApplicationSetApplicationsView: React.FC<ApplicationSetApplicationsViewPro
               <GitOpsDataViewTable
                 columns={columns}
                 rows={rows}
+                tableID={tableID}
                 isEmpty={isEmpty}
                 isLoading={!loaded}
                 emptyState={emptyState}

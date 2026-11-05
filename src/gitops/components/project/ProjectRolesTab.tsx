@@ -230,25 +230,20 @@ export const useRolesColumnsDV = (
       cell: t('Name'),
       props: {
         'aria-label': 'name',
-        className: 'pf-m-width-20',
         sort: getSortParams(0),
-        style: { minWidth: '150px' },
       },
     },
     {
       cell: t('Description'),
       props: {
         'aria-label': 'description',
-        className: 'pf-m-width-30',
         sort: getSortParams(1),
-        style: { minWidth: '200px' },
       },
     },
     {
       cell: t('Groups'),
       props: {
         'aria-label': 'groups',
-        className: 'pf-m-width-25',
         sort: getSortParams(2),
       },
     },
@@ -256,7 +251,6 @@ export const useRolesColumnsDV = (
       cell: t('Policies'),
       props: {
         'aria-label': 'policies',
-        className: 'pf-m-width-25',
         sort: getSortParams(3),
       },
     },

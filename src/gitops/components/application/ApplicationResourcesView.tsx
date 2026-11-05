@@ -222,7 +222,6 @@ export const useResourceColumnsDV = (getSortParams) => {
       cell: t('Name'),
       props: {
         'aria-label': 'name',
-        className: 'pf-m-width-25',
         sort: getSortParams(0),
       },
     },
@@ -230,7 +229,6 @@ export const useResourceColumnsDV = (getSortParams) => {
       cell: t('Namespace'),
       props: {
         'aria-label': 'namespace',
-        className: 'pf-m-width-20',
         sort: getSortParams(1),
       },
     },
@@ -238,7 +236,6 @@ export const useResourceColumnsDV = (getSortParams) => {
       cell: t('Sync Wave'),
       props: {
         'aria-label': 'sync wave',
-        className: 'pf-m-width-15',
         sort: getSortParams(2),
       },
     },
@@ -246,7 +243,6 @@ export const useResourceColumnsDV = (getSortParams) => {
       cell: t('Sync Status'),
       props: {
         'aria-label': 'sync status',
-        className: 'pf-m-width-15',
         sort: getSortParams(3),
       },
     },
@@ -254,7 +250,6 @@ export const useResourceColumnsDV = (getSortParams) => {
       cell: t('Health Status'),
       props: {
         'aria-label': 'health status',
-        className: 'pf-m-width-15',
         sort: getSortParams(4),
       },
     },
@@ -330,7 +325,6 @@ const useResourceRowsDV = (
             index={index}
           />
         ),
-        props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     ]);
   });

@@ -321,7 +321,6 @@ export const useResourceColumnsDV = (getSortParams: (columnIndex: number) => ThP
       cell: t('plugin__gitops-plugin~Name'),
       props: {
         'aria-label': 'name',
-        className: 'pf-m-width-25',
         sort: getSortParams(0),
       },
     },
@@ -329,7 +328,6 @@ export const useResourceColumnsDV = (getSortParams: (columnIndex: number) => ThP
       cell: t('Namespace'),
       props: {
         'aria-label': 'namespace',
-        className: 'pf-m-width-20',
         sort: getSortParams(1),
       },
     },
@@ -337,7 +335,6 @@ export const useResourceColumnsDV = (getSortParams: (columnIndex: number) => ThP
       cell: t('Status'),
       props: {
         'aria-label': 'status',
-        className: 'pf-m-width-15',
         sort: getSortParams(2),
       },
     },
@@ -345,7 +342,6 @@ export const useResourceColumnsDV = (getSortParams: (columnIndex: number) => ThP
       cell: t('Hook'),
       props: {
         'aria-label': 'hook',
-        className: 'pf-m-width-15',
         sort: getSortParams(3),
       },
     },
@@ -353,16 +349,12 @@ export const useResourceColumnsDV = (getSortParams: (columnIndex: number) => ThP
       cell: t('Message'),
       props: {
         'aria-label': 'message',
-        className: 'pf-m-width-15',
         sort: getSortParams(4),
       },
     },
     {
       cell: '',
-      props: {
-        'aria-label': 'actions',
-        className: 'dropdown-kebab-pf pf-v6-c-table__action',
-      },
+      props: { 'aria-label': 'actions' },
     },
   ];
   return columns;
@@ -425,10 +417,6 @@ const useResourceRowsDV = (
             index={index}
           />
         ),
-        props: {
-          style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 },
-          className: 'dropdown-kebab-pf pf-v6-c-table__action',
-        },
       },
     ]);
   });

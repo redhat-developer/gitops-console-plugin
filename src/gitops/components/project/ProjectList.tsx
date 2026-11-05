@@ -102,7 +102,7 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
   const includeNamespaceColumn = !namespace || namespace === '';
   const managedColumns = React.useMemo(() => getProjectManagedColumns(true, t), [t]);
 
-  const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
+  const { activeColumnIds, columnManagement, filterDataView, tableID } = useGitOpsColumnManagement({
     columnManagementID: PROJECT_LIST_COLUMN_MANAGEMENT_ID,
     columns: managedColumns,
     resourceType: t('AppProject'),
@@ -263,16 +263,11 @@ const ProjectList: React.FC<ProjectListTabProps> = ({
         {hasProjects && (
           <GitOpsListPageToolbar filters={listPageFilter} columnManagement={columnManagement} />
         )}
-        <div
-          className={
-            includeNamespaceColumn
-              ? 'gitops-project-list gitops-project-list--with-namespace'
-              : 'gitops-project-list'
-          }
-        >
+        <div className="gitops-project-list">
           <GitOpsDataViewTable
             columns={visibleColumnsDV}
             rows={visibleRows}
+            tableID={tableID}
             isEmpty={isEmptyState}
             emptyState={empty}
             isError={!!loadError}
@@ -437,15 +432,6 @@ export const useColumnsDV = (
     actions: '',
   };
 
-  const widthById: Record<string, string> = {
-    name: 'pf-m-width-20',
-    [NAMESPACE_COLUMN_ID]: 'pf-m-width-15',
-    description: 'pf-m-width-10',
-    applications: 'pf-m-width-15',
-    labels: 'pf-m-width-20',
-    'last-updated': 'pf-m-width-15',
-  };
-
   return managedColumns.map((column) => {
     if (column.id === 'actions') {
       return {
@@ -458,7 +444,6 @@ export const useColumnsDV = (
       cell: titleById[column.id] ?? column.title,
       props: {
         'aria-label': column.id,
-        className: widthById[column.id],
         tooltip: '',
         ...(sortIndex >= 0 ? { sort: getSortParams(sortIndex) } : {}),
       },
@@ -546,7 +531,6 @@ export const useProjectsRowsDV = (
       actions: {
         id: 'actions-' + index,
         cell: <ProjectActionsCell project={obj} index={index} />,
-        props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     };
 

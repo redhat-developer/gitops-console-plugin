@@ -1,26 +1,34 @@
 import {
   createRevisionURL,
   getApplicationArgoUrl,
-  getFriendlyClusterName,
-  getDuration,
-  isApplicationRefreshing,
-  getOperationType,
   getAppSetStatus,
+  getDuration,
+  getFriendlyClusterName,
+  getOperationType,
+  isApplicationRefreshing,
 } from './gitops';
 
 describe('getApplicationArgoUrl', () => {
   it('builds application URLs', () => {
     expect(
-      getApplicationArgoUrl({ protocol: 'https', host: 'openshift-gitops-server-openshift-gitops' }, {
-        metadata: { name: 'guestbook', namespace: 'openshift-gitops' },
-      } as any),
-    ).toBe('https://openshift-gitops-server-openshift-gitops/applications/openshift-gitops/guestbook');
+      getApplicationArgoUrl(
+        { protocol: 'https', host: 'openshift-gitops-server-openshift-gitops' },
+        {
+          metadata: { name: 'guestbook', namespace: 'openshift-gitops' },
+        } as any,
+      ),
+    ).toBe(
+      'https://openshift-gitops-server-openshift-gitops/applications/openshift-gitops/guestbook',
+    );
   });
 
   it('returns undefined when server or app metadata is missing', () => {
     expect(getApplicationArgoUrl({ protocol: 'https', host: '' }, {} as any)).toBe(undefined);
     expect(
-      getApplicationArgoUrl({ protocol: 'https', host: 'openshift-gitops-server-openshift-gitops' }, undefined),
+      getApplicationArgoUrl(
+        { protocol: 'https', host: 'openshift-gitops-server-openshift-gitops' },
+        undefined,
+      ),
     ).toBe(undefined);
   });
 });

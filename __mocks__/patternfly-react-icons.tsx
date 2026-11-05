@@ -2,11 +2,19 @@ import * as React from 'react';
 
 const icon = (name: string): React.FC<any> => {
   const Icon: React.FC<any> = ({ className, title, color }) => (
-    <svg data-icon={name} className={className} style={color ? { color } : undefined} aria-label={title} />
+    <svg
+      data-icon={name}
+      className={className}
+      style={color ? { color } : undefined}
+      aria-label={title}
+    />
   );
   Icon.displayName = name;
   return Icon;
 };
+
+/** Jest maps createIcon deep imports to this mock. */
+export const createIcon = ({ name }: { name: string }) => icon(name);
 
 export const ArrowCircleUpIcon = icon('ArrowCircleUpIcon');
 export const BanIcon = icon('BanIcon');

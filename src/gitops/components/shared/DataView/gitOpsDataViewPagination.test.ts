@@ -124,10 +124,7 @@ describe('GitOps detail-tab pagination contract', () => {
     ].sort((a, b) => a.name.localeCompare(b.name));
 
     expect(paginateItems(roles, 1, 2).map((role) => role.name)).toEqual(['admin', 'ci-role']);
-    expect(paginateItems(roles, 2, 2).map((role) => role.name)).toEqual([
-      'developer',
-      'read-only',
-    ]);
+    expect(paginateItems(roles, 2, 2).map((role) => role.name)).toEqual(['developer', 'read-only']);
   });
 
   it('paginates AppProject sync windows', () => {

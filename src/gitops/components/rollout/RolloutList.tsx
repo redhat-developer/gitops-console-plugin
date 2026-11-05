@@ -111,7 +111,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
   const includeNamespaceColumn = !namespace;
   const managedColumns = React.useMemo(() => getRolloutManagedColumns(true, t), [t]);
 
-  const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
+  const { activeColumnIds, columnManagement, filterDataView, tableID } = useGitOpsColumnManagement({
     columnManagementID: ROLLOUT_LIST_COLUMN_MANAGEMENT_ID,
     columns: managedColumns,
     resourceType: t('Rollout'),
@@ -250,6 +250,7 @@ const RolloutList: React.FC<RolloutListTabProps> = ({
         <GitOpsDataViewTable
           columns={visibleColumnsDV}
           rows={visibleRows}
+          tableID={tableID}
           isEmpty={isEmptyState}
           emptyState={empty}
           isError={!!loadError}
@@ -330,16 +331,6 @@ export const useColumnsDV = (
     actions: '',
   };
 
-  const widthById: Record<string, string> = {
-    name: 'pf-m-width-25',
-    [NAMESPACE_COLUMN_ID]: 'pf-m-width-15',
-    status: 'pf-m-width-10',
-    pods: 'pf-m-width-10',
-    labels: 'pf-m-width-15',
-    selector: 'pf-m-width-15',
-    'last-updated': 'pf-m-width-15',
-  };
-
   return managedColumns.map((column) => {
     if (column.id === 'actions') {
       return {
@@ -352,7 +343,6 @@ export const useColumnsDV = (
       cell: titleById[column.id] ?? column.title,
       props: {
         'aria-label': column.id,
-        className: widthById[column.id],
         ...(sortIndex >= 0 ? { sort: getSortParams(sortIndex) } : {}),
       },
     };
@@ -467,7 +457,6 @@ export const useRolloutsRowsDV = (
       actions: {
         id: 'actions-' + index,
         cell: <RolloutActionsCell app={obj} index={index} />,
-        props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     };
 

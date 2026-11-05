@@ -150,7 +150,7 @@ const useColumnsDV = (
     },
     {
       cell: t('Image'),
-      props: { 'aria-label': 'image', className: 'pf-m-width-20', sort: getSortParams(1) },
+      props: { 'aria-label': 'image', sort: getSortParams(1) },
     },
     {
       cell: t('New Version'),
@@ -162,11 +162,11 @@ const useColumnsDV = (
     },
     {
       cell: t('Updated At'),
-      props: { 'aria-label': 'updated at', className: 'pf-m-width-15', sort: getSortParams(4) },
+      props: { 'aria-label': 'updated at', sort: getSortParams(4) },
     },
     {
       cell: t('Message'),
-      props: { 'aria-label': 'message', className: 'pf-m-width-30', sort: getSortParams(5) },
+      props: { 'aria-label': 'message', sort: getSortParams(5) },
     },
   ];
 };
