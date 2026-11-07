@@ -144,7 +144,7 @@ const HealthStatusCard: React.FC<OverviewCardForApplicationsProps> = ({
   ];
 
   return (
-    <Card className="gitops-dashboard__fixed-height-row-card">
+    <Card className="gitops-dashboard__fixed-height-application-firstrow-card">
       <CardTitle>{t('Health status')}</CardTitle>
       <CardBody className="gitops-dashboard__donut-card-body">
         {/* eslint-disable-next-line no-nested-ternary */}
@@ -169,7 +169,7 @@ const HealthStatusCard: React.FC<OverviewCardForApplicationsProps> = ({
               width={270}
               labels={({ datum }) => `${datum.x}: ${datum.y}`}
               legendData={healthStatusLegendData}
-              legendPosition="bottom"
+              legendPosition="right"
               legendOrientation="vertical"
               colorScale={[
                 'var(--pf-t--global--color--status--success--default)',
@@ -181,9 +181,9 @@ const HealthStatusCard: React.FC<OverviewCardForApplicationsProps> = ({
               ]}
               name="HealthStatus"
               padding={{
-                bottom: 150,
+                bottom: 20,
                 left: 10,
-                right: 10,
+                right: 150,
                 top: 20,
               }}
               labelComponent={

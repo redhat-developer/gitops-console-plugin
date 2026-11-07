@@ -159,7 +159,9 @@ const SyncActivityCard: React.FC<OverviewCardProps> = ({ namespace }) => {
           <div>
             {errorState(
               t('Unable to retrieve metrics data'),
-              t('Error occurred running query on Sync count: ' + errorNumberOfSyncsPQ),
+              t(
+                'Cannot retrieve data for the number of Syncs performed. Check that the cluster metrics monitoring is enabled.',
+              ),
             )}
           </div>
         ) : /* eslint-disable-next-line no-nested-ternary */
@@ -167,14 +169,18 @@ const SyncActivityCard: React.FC<OverviewCardProps> = ({ namespace }) => {
           <div>
             {errorState(
               t('Unable to retrieve metrics data'),
-              t('Error occurred running query on Synced apps: ' + errorAppsSyncedPQ),
+              t(
+                'Cannot retrieve data for the number of Synced apps. Check that the cluster metrics monitoring is enabled.',
+              ),
             )}
           </div>
         ) : errorAppsOutOfSyncPQ ? (
           <div>
             {errorState(
               t('Unable to retrieve metrics data'),
-              t('Error occurred running query on Out of Sync apps: ' + errorAppsOutOfSyncPQ),
+              t(
+                'Cannot retrieve data for the number of OutOfSync apps. Check that the cluster metrics monitoring is enabled.',
+              ),
             )}
           </div>
         ) : (
