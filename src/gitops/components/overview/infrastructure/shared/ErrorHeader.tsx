@@ -12,7 +12,7 @@ const ErrorHeader: React.FC<{ title: string; error: string }> = ({ title, error 
             {title}
           </span>
         </FlexItem>
-        <FlexItem alignSelf={{ default: 'alignSelfCenter' }}>{error}</FlexItem>
+        <FlexItem alignSelf={{ default: 'alignSelfCenter' }}>{String(error)}</FlexItem>
       </Flex>
     </CardHeader>
   );

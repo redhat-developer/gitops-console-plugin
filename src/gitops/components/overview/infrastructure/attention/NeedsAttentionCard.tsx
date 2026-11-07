@@ -67,6 +67,7 @@ const NeedsAttentionCard: React.FC<OverviewCardForApplicationsProps> = ({
     <Card className="gitops-dashboard__infrastructure-card-applications-needing-attention">
       <InfrastructureCardTitle
         title={t('Applications Needing Attention')}
+        titleDescription={t('(Not Healthy or not Synced)')}
         total={applicationsNeedingAttention?.length}
         showDivider={false}
       />
@@ -154,14 +155,27 @@ const NeedsAttentionCard: React.FC<OverviewCardForApplicationsProps> = ({
   );
 };
 
+/*
+ * This function finds the app's resources that are not healthy or missing and shows them in the "details column" to help users
+ * identify the issues. It also shows the operation state message and conditions of the application to also help users identify the issues.
+ * @param isLast - Whether the resource is the last in the list.
+ * @param instance - The application instance.
+ * @param model - The model of the resource.
+ * @param projectNamespace - The namespace of the project.
+ * @param healthStatus - The health status of the application to be shown in the "status column"
+ * @param syncStatus - The sync status of the application to be shown in the "status column"
+ */
 const createApplicationResourceEntry = (
   isLast: boolean,
   instance: ApplicationKind,
   model: K8sModel,
   projectNamespace: string,
-  healthStatus?: string,
-  syncStatus?: string,
 ) => {
+  const statusOfInstance = instance.status;
+  const healthStatus = instance.status?.health?.status;
+  const syncStatus = instance.status?.sync?.status;
+
+  const totalAppResources = instance.status?.resources?.length ?? 0;
   const unhealthyResources = instance.status?.resources?.filter(
     (resource: ApplicationResourceStatus) =>
       resource.health && resource.health.status !== HS.HEALTHY,
@@ -171,7 +185,6 @@ const createApplicationResourceEntry = (
       resource.health && resource.health.status === HS.MISSING,
   );
   const operationStateMessage = instance.status?.operationState?.message;
-
   return (
     <div
       key={instance.metadata?.uid ?? `${instance.metadata?.namespace}/${instance.metadata?.name}`}
@@ -209,9 +222,7 @@ const createApplicationResourceEntry = (
             {unhealthyResources && unhealthyResources.length > 0 && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <span style={{ display: 'inline', flexDirection: 'row', fontSize: '90%' }}>
-                  {missingResources &&
-                  unhealthyResources &&
-                  missingResources.length !== unhealthyResources.length ? (
+                  {missingResources && missingResources.length !== totalAppResources ? (
                     unhealthyResources.map((resource: ApplicationResourceStatus) => (
                       <div key={resource.name + resource.kind}>
                         <span style={{ display: 'inline', flexDirection: 'row', fontSize: '90%' }}>
@@ -274,9 +285,17 @@ const createApplicationResourceEntry = (
                 {instance.status?.operationState?.phase && (
                   <Flex style={{ fontSize: '90%' }}>
                     {instance.status?.operationState?.operation?.sync && (
-                      <span style={{ display: 'flex', fontSize: '90%' }}>
-                        <Flex direction={{ default: 'row' }}>
-                          <FlexItem>
+                      <FlexItem>
+                        <Flex
+                          display={{ default: 'inlineFlex' }}
+                          rowGap={{ default: 'rowGapNone' }}
+                          columnGap={{
+                            default: 'columnGapNone',
+                            lg: 'columnGapXs',
+                            md: 'columnGapXs',
+                          }}
+                        >
+                          <FlexItem style={{ fontSize: '90%' }}>
                             {t('Operation: Sync')} {instance.status?.operationState?.phase}
                             {' - '}
                             {t('Finished At: {{x}}', {
@@ -291,49 +310,77 @@ const createApplicationResourceEntry = (
                                 : '-',
                             })}
                           </FlexItem>
-                        </Flex>
-                      </span>
-                    )}
-                    {operationStateMessage && (
-                      <span style={{ paddingLeft: '10px', display: 'flex', fontSize: '90%' }}>
-                        {operationStateMessage.length > 200 ? (
-                          <span>
-                            {t('Message: {{x}}', { x: operationStateMessage.slice(0, 200) })}
-                            <Tooltip content={operationStateMessage}>
-                              <Label isCompact>{'...'}</Label>
-                            </Tooltip>
-                          </span>
-                        ) : (
-                          t('Message: {{x}}.', { x: operationStateMessage })
-                        )}
-                      </span>
-                    )}
-
-                    {instance.status?.conditions && instance.status.conditions.length > 0 && (
-                      <span style={{ display: 'inline', flexDirection: 'row', fontSize: '90%' }}>
-                        {instance.status?.conditions.map((condition: ApplicationCondition) => (
-                          <span
-                            key={condition.type}
-                            style={{ display: 'flex', flexDirection: 'row', fontSize: '90%' }}
-                          >
-                            {condition.type && condition.type.toLowerCase() + '.'}
-                            {condition.message && condition.message.length > 200 ? (
-                              <span>
-                                <span>{condition.message.slice(0, 200)}</span>
-                                <Tooltip content={condition.message}>
-                                  <Label isCompact>{'...'}</Label>
-                                </Tooltip>
-                              </span>
-                            ) : (
-                              condition.message.toLowerCase() + '.'
+                          <FlexItem>
+                            {operationStateMessage && (
+                              <Flex
+                                flexWrap={{ default: 'nowrap' }}
+                                columnGap={{ default: 'columnGapXs' }}
+                              >
+                                <Flex>{'-'}</Flex>
+                                <Flex style={{ fontSize: '90%' }}>
+                                  {operationStateMessage.length > 200 ? (
+                                    <span>
+                                      {t('Message: {{x}}', {
+                                        x: operationStateMessage.slice(0, 200),
+                                      })}
+                                      <Tooltip content={operationStateMessage}>
+                                        <Label isCompact>{'...'}</Label>
+                                      </Tooltip>
+                                    </span>
+                                  ) : (
+                                    t('Message: {{x}}', { x: operationStateMessage })
+                                  )}
+                                </Flex>
+                              </Flex>
                             )}
-                          </span>
-                        ))}
-                      </span>
+                          </FlexItem>
+                        </Flex>
+                      </FlexItem>
                     )}
                   </Flex>
                 )}
               </div>
+            )}
+            {!statusOfInstance && (
+              <div
+                style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '90%' }}
+              >
+                {/* <span style={{ display: 'inline', flexDirection: 'row', fontSize: '90%' }}> */}
+                <Flex style={{ fontSize: '90%' }}>
+                  {t(
+                    'Application has no status field. Check that Argo CD is watching this application in the namespace {{x}}.',
+                    { x: instance.metadata?.namespace },
+                  )}
+                </Flex>
+                {/* </span> */}
+              </div>
+            )}
+            {instance.status?.conditions && instance.status.conditions.length > 0 && (
+              <Flex>
+                {instance.status?.conditions.map((condition: ApplicationCondition) => (
+                  <Flex
+                    display={{ default: 'inlineFlex' }}
+                    rowGap={{ default: 'rowGapNone' }}
+                    columnGap={{ default: 'columnGapNone', lg: 'columnGapXs', md: 'columnGapXs' }}
+                    key={condition.type}
+                    style={{ fontSize: '90%' }}
+                  >
+                    <FlexItem style={{ fontSize: '90%' }}>
+                      {condition.type && condition.type}
+                    </FlexItem>
+                    {(condition.message ?? t('No message')).length > 200 ? (
+                      <FlexItem style={{ fontSize: '90%' }}>
+                        <span>{condition.message.slice(0, 200)}</span>
+                        <Tooltip content={condition.message}>
+                          <Label isCompact>{'...'}</Label>
+                        </Tooltip>
+                      </FlexItem>
+                    ) : (
+                      <FlexItem style={{ fontSize: '90%' }}>{condition.message}</FlexItem>
+                    )}
+                  </Flex>
+                ))}
+              </Flex>
             )}
           </FlexItem>
         </Flex>
@@ -351,8 +398,16 @@ const createApplicationResourceEntry = (
                 flexDirection: 'row',
               }}
             >
-              {healthStatus && <HealthStatus status={healthStatus} />}
-              {syncStatus && <SyncStatus status={syncStatus} />}
+              {
+                <Tooltip content={t('Health Status')}>
+                  <HealthStatus status={healthStatus || HS.UNKNOWN} />
+                </Tooltip>
+              }
+              {
+                <Tooltip content={t('Sync Status')}>
+                  <SyncStatus status={syncStatus || SS.UNKNOWN} />
+                </Tooltip>
+              }
             </span>
           </FlexItem>
         </Flex>
@@ -375,7 +430,7 @@ const createApplicationResourceEntries = (
   projectNamespace: string,
   listLimit?: number,
 ) => {
-  const LIST_LIMIT = listLimit || 10;
+  const LIST_LIMIT = listLimit || 20;
   const onlyNeedsAttention = resources.filter(
     (instance) =>
       instance.status?.health?.status !== HS.HEALTHY || instance.status?.sync?.status !== SS.SYNCED,
@@ -388,8 +443,6 @@ const createApplicationResourceEntries = (
         instance,
         k8sModel,
         projectNamespace,
-        instance.status?.health?.status,
-        instance.status?.sync?.status,
       ),
     );
     return entries;
@@ -397,14 +450,7 @@ const createApplicationResourceEntries = (
   const entries = onlyNeedsAttention
     .slice(0, LIST_LIMIT)
     .map((instance, index) =>
-      createApplicationResourceEntry(
-        index == LIST_LIMIT - 1,
-        instance,
-        k8sModel,
-        projectNamespace,
-        instance.status?.health?.status,
-        instance.status?.sync?.status,
-      ),
+      createApplicationResourceEntry(index == LIST_LIMIT - 1, instance, k8sModel, projectNamespace),
     );
 
   entries.push(

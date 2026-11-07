@@ -191,7 +191,7 @@ const GitOpsOperatorCard: React.FC<OverviewCardProps> = ({ namespace }) => {
               </FlexItem>
               <FlexItem>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  {t('Namspace: {{x}}', { x: gitopsOperator.currentNamespace })}
+                  {t('Namespace: {{x}}', { x: gitopsOperator.currentNamespace })}
                 </span>
               </FlexItem>
               <FlexItem>

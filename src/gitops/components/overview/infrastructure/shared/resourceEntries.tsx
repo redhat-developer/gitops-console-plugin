@@ -1,3 +1,5 @@
+import { HealthStatus as HS, SyncStatus as SS } from 'src/gitops/utils/constants';
+
 import { RolloutModel } from '@gitops/components/rollout/model/RolloutModel';
 import { RolloutStatusFragment } from '@gitops/components/rollout/RolloutStatus';
 import { RolloutStatus } from '@gitops/components/rollout/utils/rollout-utils';
@@ -77,10 +79,18 @@ export const createK8sResourceEntry = (
       <Flex alignSelf={{ default: 'alignSelfFlexStart' }}>
         <FlexItem>
           {/* eslint-disable no-nested-ternary */}
-          {model.kind === ApplicationModel.kind ? (
+          {model.kind === ApplicationModel.kind ? ( // TODO: this started out to be for a generic resource entry, but then status is different
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              {healthStatus && <HealthStatus status={healthStatus} />}
-              {syncStatus && <SyncStatus status={syncStatus} />}
+              {
+                <Tooltip content={t('Health Status')}>
+                  <HealthStatus status={healthStatus || HS.UNKNOWN} />
+                </Tooltip>
+              }
+              {
+                <Tooltip content={t('Sync Status')}>
+                  <SyncStatus status={syncStatus || SS.UNKNOWN} />
+                </Tooltip>
+              }
             </span>
           ) : model.kind === RolloutModel.kind ? (
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>

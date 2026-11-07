@@ -111,7 +111,7 @@ const ResourcesStatus: React.FC<ResourcesStatusProps> = ({ namespace, name, reso
                       })
                     : ''}
                 </span>
-                {condition.message.length > 200 ? (
+                {(condition.message ?? '').length > 200 ? (
                   <span>
                     {condition.message.slice(0, 200)}
                     <Tooltip content={condition.message}>
