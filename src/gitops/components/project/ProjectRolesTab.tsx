@@ -10,7 +10,7 @@ import {
   Title,
   Tooltip,
 } from '@patternfly/react-core';
-import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import { DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { ThProps } from '@patternfly/react-table';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
@@ -20,10 +20,20 @@ import { ArgoServer, getArgoServerForProject } from '../../utils/gitops';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
 import { ArgoCDLink } from '../shared/ArgoCDLink/ArgoCDLink';
 import {
+  type GitOpsManagedColumn,
+  buildManagedDataViewColumns,
+  useGitOpsManagedDataView,
+} from '../shared/ColumnManagement';
+import {
   GitOpsDataViewTable,
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from '../shared/DataView';
+import { GitOpsListPageToolbar } from '../shared/GitOpsListPageToolbar';
+import {
+  getProjectRolesManagedColumns,
+  PROJECT_ROLES_COLUMN_MANAGEMENT_ID,
+} from '../shared/projectRolesColumns';
 
 /**
  * Parses an Argo CD policy string and returns a formatted React element for tooltip
@@ -101,14 +111,15 @@ const ProjectRolesTab: React.FC<ProjectRolesTabProps> = ({ obj }) => {
 
   const roles = React.useMemo(() => obj?.spec?.roles || [], [obj?.spec?.roles]);
 
+  const managedColumns = React.useMemo(() => getProjectRolesManagedColumns(t), [t]);
   const columnSortConfig = React.useMemo(
-    () => ['name', 'description', 'groups', 'policies'].map((key) => ({ key })),
-    [],
+    () => managedColumns.map((column) => ({ key: column.id })),
+    [managedColumns],
   );
 
   const { searchParams, sortBy, direction, getSortParams } =
     useGitOpsDataViewSort(columnSortConfig);
-  const columnsDV = useRolesColumnsDV(getSortParams, t);
+  const columnsDV = useColumnsDV(managedColumns, getSortParams, columnSortConfig, t);
   const sortedRoles = React.useMemo(() => {
     return sortRolesData(roles, sortBy, direction);
   }, [roles, sortBy, direction]);
@@ -123,14 +134,26 @@ const ProjectRolesTab: React.FC<ProjectRolesTabProps> = ({ obj }) => {
     searchParams,
   });
 
-  const rows = useRolesRowsDV(pagedRoles, t);
+  const rows = useRolesRowsDV(pagedRoles, t, managedColumns);
+  const {
+    columns,
+    rows: visibleRows,
+    columnManagement,
+    tableID,
+  } = useGitOpsManagedDataView({
+    columnManagementID: PROJECT_ROLES_COLUMN_MANAGEMENT_ID,
+    managedColumns,
+    resourceType: t('Role'),
+    columns: columnsDV,
+    rows,
+  });
 
   if (!obj) return null;
 
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={columns.length}>
           <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No roles configured')}>
             <EmptyStateBody>
               {t('This AppProject does not have any roles configured.')}
@@ -151,10 +174,14 @@ const ProjectRolesTab: React.FC<ProjectRolesTabProps> = ({ obj }) => {
       <Title headingLevel="h2" className="co-section-heading">
         {t('Roles')}
       </Title>
-      {argoCDUrl && <ArgoCDLink href={argoCDUrl} />}
+      <GitOpsListPageToolbar
+        filters={argoCDUrl ? <ArgoCDLink href={argoCDUrl} /> : undefined}
+        columnManagement={columnManagement}
+      />
       <GitOpsDataViewTable
-        columns={columnsDV}
-        rows={rows}
+        columns={columns}
+        rows={visibleRows}
+        tableID={tableID}
         isEmpty={roles.length === 0}
         emptyState={empty}
         itemCount={itemCount}
@@ -221,60 +248,44 @@ const sortRolesData = (
   });
 };
 
-export const useRolesColumnsDV = (
+const useColumnsDV = (
+  managedColumns: GitOpsManagedColumn[],
   getSortParams: (columnIndex: number) => ThProps['sort'],
+  columnSortConfig: { key: string }[],
   t: (key: string) => string,
-): DataViewTh[] => {
-  const columns: DataViewTh[] = [
+) =>
+  buildManagedDataViewColumns(
+    managedColumns,
     {
-      cell: t('Name'),
-      props: {
-        'aria-label': 'name',
-        sort: getSortParams(0),
-      },
+      name: t('Name'),
+      description: t('Description'),
+      groups: t('Groups'),
+      policies: t('Policies'),
     },
-    {
-      cell: t('Description'),
-      props: {
-        'aria-label': 'description',
-        sort: getSortParams(1),
-      },
-    },
-    {
-      cell: t('Groups'),
-      props: {
-        'aria-label': 'groups',
-        sort: getSortParams(2),
-      },
-    },
-    {
-      cell: t('Policies'),
-      props: {
-        'aria-label': 'policies',
-        sort: getSortParams(3),
-      },
-    },
-  ];
+    getSortParams,
+    columnSortConfig,
+  );
 
-  return columns;
-};
-
-const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[] => {
+const useRolesRowsDV = (
+  roles: Role[],
+  t: (key: string) => string,
+  managedColumns: GitOpsManagedColumn[],
+): DataViewTr[] => {
   const rows: DataViewTr[] = [];
 
   roles.forEach((role, index) => {
-    rows.push([
-      {
+    const cellsById = {
+      name: {
         cell: role.name || '-',
         id: `name-${index}`,
         dataLabel: t('Name'),
       },
-      {
+      description: {
         cell: role.description || '-',
         id: `description-${index}`,
         dataLabel: t('Description'),
       },
-      {
+      groups: {
         cell:
           role.groups && role.groups.length > 0 ? (
             <div>
@@ -290,7 +301,7 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
         id: `groups-${index}`,
         dataLabel: t('Groups'),
       },
-      {
+      policies: {
         cell:
           role.policies && role.policies.length > 0 ? (
             <div>
@@ -311,7 +322,9 @@ const useRolesRowsDV = (roles: Role[], t: (key: string) => string): DataViewTr[]
         id: `policies-${index}`,
         dataLabel: t('Policies'),
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
 
   return rows;

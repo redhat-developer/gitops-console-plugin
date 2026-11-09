@@ -2,10 +2,20 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
+  type GitOpsManagedColumn,
+  buildManagedDataViewColumns,
+  useGitOpsManagedDataView,
+} from '@gitops/components/shared/ColumnManagement';
+import {
   GitOpsDataViewTable,
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from '@gitops/components/shared/DataView';
+import { GitOpsListPageToolbar } from '@gitops/components/shared/GitOpsListPageToolbar';
+import {
+  getRolloutPodsManagedColumns,
+  ROLLOUT_PODS_COLUMN_MANAGEMENT_ID,
+} from '@gitops/components/shared/rolloutPodColumns';
 import { PodTraffic } from '@gitops/topology/console/pod-traffic';
 import { podPhase } from '@gitops/topology/console/PodsOverview';
 import { PodKind } from '@gitops/topology/console/types';
@@ -29,7 +39,7 @@ import {
   usePrometheusPoll,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
-import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import { DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
@@ -37,94 +47,29 @@ import { usePodActionsProvider } from '../../hooks/usePodActionsProvider';
 import { topologyLink } from '../../utils/TopologyLink';
 
 const useColumnsDV = (
-  namespace: string,
+  managedColumns: GitOpsManagedColumn[],
   getSortParams: (columnIndex: number) => ThProps['sort'],
-): DataViewTh[] => {
-  const i: number = namespace ? 0 : 1;
-  const { t } = useTranslation('plugin__gitops-plugin');
-  const columns: DataViewTh[] = [
+  columnSortConfig: { key: string }[],
+  t: (key: string) => string,
+) =>
+  buildManagedDataViewColumns(
+    managedColumns,
     {
-      cell: t('Name'),
-      props: {
-        'aria-label': 'name',
-        sort: getSortParams(0),
-      },
+      name: t('Name'),
+      namespace: t('Namespace'),
+      traffic: t('Traffic'),
+      status: t('Status'),
+      ready: t('Ready'),
+      restarts: t('Restarts'),
+      owner: t('Owner'),
+      memory: t('Memory'),
+      cpu: t('CPU'),
+      created: t('Created At'),
+      actions: '',
     },
-    ...(!namespace
-      ? [
-          {
-            cell: t('Namespace'),
-            props: {
-              'aria-label': 'namespace',
-              sort: getSortParams(1),
-            },
-          },
-        ]
-      : []),
-    {
-      cell: t('Traffic'),
-      props: {
-        'aria-label': 'traffic',
-      },
-    },
-    {
-      cell: t('Status'),
-      props: {
-        'aria-label': 'status',
-        sort: getSortParams(1 + i),
-      },
-    },
-    {
-      cell: t('Ready'),
-      props: {
-        'aria-label': 'ready',
-        sort: getSortParams(2 + i),
-      },
-    },
-    {
-      cell: t('Restarts'),
-      props: {
-        'aria-label': 'restarts',
-        sort: getSortParams(3 + i),
-      },
-    },
-    {
-      cell: t('Owner'),
-      props: {
-        'aria-label': 'owner',
-        sort: getSortParams(4 + i),
-      },
-    },
-    {
-      cell: t('Memory'),
-      props: {
-        'aria-label': 'memory',
-        sort: getSortParams(5 + i),
-      },
-    },
-    {
-      cell: t('CPU'),
-      props: {
-        'aria-label': 'cpu',
-        sort: getSortParams(6 + i),
-      },
-    },
-    {
-      cell: t('Created At'),
-      props: {
-        'aria-label': 'created',
-        sort: getSortParams(7 + i),
-      },
-    },
-    {
-      cell: ' ',
-      props: {
-        'aria-label': 'actions',
-      },
-    },
-  ];
-  return columns;
-};
+    getSortParams,
+    columnSortConfig,
+  );
 
 const sortData = (
   data: PodKind[],
@@ -223,14 +168,19 @@ const getFilters = (t: (key: string) => string): RowFilter[] => [
   },
 ];
 
-const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): DataViewTr[] => {
+const usePodRowsDV = (
+  podsList: PodKind[],
+  memResults,
+  cpuResults,
+  managedColumns: GitOpsManagedColumn[],
+): DataViewTr[] => {
   const rows: DataViewTr[] = [];
 
   podsList.forEach((obj, index) => {
     const status = podPhase(obj);
     const { readyCount, totalContainers, restartCount } = podContainerStatuses(obj);
-    rows.push([
-      {
+    const cellsById = {
+      name: {
         cell: (
           <span>
             <ResourceLink
@@ -244,34 +194,30 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
         id: obj.metadata?.name,
         dataLabel: 'Name',
       },
-      ...(!namespace
-        ? [
-            {
-              cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
-              id: obj.metadata.namespace,
-              dataLabel: 'Namespace',
-            },
-          ]
-        : []),
-      {
+      namespace: {
+        cell: <ResourceLink kind="Namespace" name={obj.metadata.namespace} />,
+        id: obj.metadata.namespace,
+        dataLabel: 'Namespace',
+      },
+      traffic: {
         id: obj.metadata?.name + '-traffic-' + index,
         cell: (
           <PodTraffic podName={obj.metadata.name} namespace={obj.metadata.namespace} tooltipFlag />
         ),
       },
-      {
+      status: {
         id: obj.status?.phase,
         cell: <StatusComponent status={status} />,
       },
-      {
+      ready: {
         id: 'ready-' + index,
         cell: <>{readyCount + '/' + totalContainers}</>,
       },
-      {
+      restarts: {
         id: 'restart-' + index,
         cell: <>{restartCount}</>,
       },
-      {
+      owner: {
         id: 'owner-' + index,
         cell: (
           <>
@@ -286,7 +232,7 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
           </>
         ),
       },
-      {
+      memory: {
         id: 'memory-' + index,
         cell: (
           <>
@@ -296,7 +242,7 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
           </>
         ),
       },
-      {
+      cpu: {
         id: 'cpu-' + index,
         cell: (
           <>
@@ -304,15 +250,17 @@ const usePodRowsDV = (podsList: PodKind[], memResults, cpuResults, namespace): D
           </>
         ),
       },
-      {
+      created: {
         id: 'created-' + index,
         cell: <Timestamp timestamp={obj.metadata.creationTimestamp} />,
       },
-      {
+      actions: {
         id: 'actions-' + index,
         cell: <PodRowActions pod={obj} index={index} />,
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
   return rows;
 };
@@ -373,6 +321,11 @@ const podContainerStatuses = (
 
 export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }) => {
   const { t } = useTranslation('plugin__gitops-plugin');
+  const includeNamespaceColumn = !namespace;
+  const managedColumns = React.useMemo(
+    () => getRolloutPodsManagedColumns(includeNamespaceColumn, t),
+    [includeNamespaceColumn, t],
+  );
 
   const [pods, loaded, loadError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
@@ -384,19 +337,10 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
 
   const columnSortConfig = React.useMemo(
     () =>
-      [
-        'name',
-        ...(!namespace ? ['namespace'] : []),
-        'status',
-        'ready',
-        'restarts',
-        'owner',
-        'memory',
-        'cpu',
-        'created',
-        'actions',
-      ].map((key) => ({ key })),
-    [namespace],
+      managedColumns
+        .filter((column) => !column.alwaysShown && column.id !== 'traffic')
+        .map((column) => ({ key: column.id })),
+    [managedColumns],
   );
   const { searchParams, sortBy, direction, getSortParams } =
     useGitOpsDataViewSort(columnSortConfig);
@@ -417,7 +361,7 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
     query: "pod:container_cpu_usage:sum{namespace='" + namespace + "'}",
   });
 
-  const columnsDV = useColumnsDV(namespace, getSortParams);
+  const columnsDV = useColumnsDV(managedColumns, getSortParams, columnSortConfig, t);
   const sortedPods = React.useMemo(() => {
     return sortData(pods as PodKind[], sortBy, direction, memResults, cpuResults);
   }, [pods, sortBy, direction, memResults, cpuResults]);
@@ -449,10 +393,25 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
     searchParams,
   });
 
+  const rows = usePodRowsDV(pagedPods, memResults, cpuResults, managedColumns);
+  const {
+    columns,
+    rows: visibleRows,
+    columnManagement,
+    tableID,
+  } = useGitOpsManagedDataView({
+    columnManagementID: ROLLOUT_PODS_COLUMN_MANAGEMENT_ID,
+    managedColumns,
+    resourceType: t('Pod'),
+    includeNamespaceColumn,
+    columns: columnsDV,
+    rows,
+  });
+
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={columns.length}>
           <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No pods')}>
             <EmptyStateBody>{t('There are no pods associated with the rollout.')}</EmptyStateBody>
           </EmptyState>
@@ -462,8 +421,6 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
   );
 
   const isEmptyState = !loadError && filteredBySearch.length === 0;
-
-  const rows = usePodRowsDV(pagedPods, memResults, cpuResults, namespace);
 
   const topologyUrl = rollout?.metadata?.namespace
     ? '/topology/ns/' +
@@ -480,15 +437,21 @@ export const PodList: React.FC<PodListProps> = ({ rollout, namespace, selector }
         badge={topologyLink(topologyUrl, t)}
       />
       <ListPageBody>
-        <ListPageFilter
-          data={data}
-          loaded={loaded}
-          rowFilters={podFilters}
-          onFilterChange={onFilterChange}
+        <GitOpsListPageToolbar
+          filters={
+            <ListPageFilter
+              data={data}
+              loaded={loaded}
+              rowFilters={podFilters}
+              onFilterChange={onFilterChange}
+            />
+          }
+          columnManagement={columnManagement}
         />
         <GitOpsDataViewTable
-          columns={columnsDV}
-          rows={rows}
+          columns={columns}
+          rows={visibleRows}
+          tableID={tableID}
           isEmpty={isEmptyState}
           emptyState={empty}
           isError={!!loadError}

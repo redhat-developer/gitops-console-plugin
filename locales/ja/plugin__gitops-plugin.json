@@ -407,5 +407,11 @@
   "You don't have permission to perform this action": "このアクションを実行する権限がありません",
   "annotations": "アノテーション",
   "annotation": "アノテーション",
-  "No owner": "オーナーなし"
+  "No owner": "オーナーなし",
+  "Application source": "Application source",
+  "Pod": "Pod",
+  "Recent update": "Recent update",
+  "Resource": "Resource",
+  "Role": "Role",
+  "Sync window": "Sync window"
 }

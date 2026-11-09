@@ -407,5 +407,11 @@
   "You don't have permission to perform this action": "Vous n’êtes pas autorisé à effectuer cette action.",
   "annotations": "annotations",
   "annotation": "annotation",
-  "No owner": "Aucun propriétaire"
+  "No owner": "Aucun propriétaire",
+  "Application source": "Application source",
+  "Pod": "Pod",
+  "Recent update": "Recent update",
+  "Resource": "Resource",
+  "Role": "Role",
+  "Sync window": "Sync window"
 }

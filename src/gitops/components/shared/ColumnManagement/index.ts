@@ -25,3 +25,4 @@ export {
 } from './types';
 export type { UseGitOpsColumnManagementResult } from './useGitOpsColumnManagement';
 export { useGitOpsColumnManagement } from './useGitOpsColumnManagement';
+export { buildManagedDataViewColumns, useGitOpsManagedDataView } from './useGitOpsManagedDataView';

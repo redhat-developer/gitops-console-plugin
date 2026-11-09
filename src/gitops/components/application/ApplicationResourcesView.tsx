@@ -12,24 +12,27 @@ import {
   RowFilterItem,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  EmptyState,
-  EmptyStateBody,
-  Flex,
-  FlexItem,
-  Stack,
-  StackItem,
-} from '@patternfly/react-core';
+import { EmptyState, EmptyStateBody, Stack, StackItem } from '@patternfly/react-core';
 import { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
-import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import { DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
-import { Tbody, Td, Tr } from '@patternfly/react-table';
+import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
+import {
+  APPLICATION_RESOURCES_COLUMN_MANAGEMENT_ID,
+  getApplicationResourcesManagedColumns,
+} from '../shared/applicationResourcesColumns';
+import {
+  type GitOpsManagedColumn,
+  buildManagedDataViewColumns,
+  useGitOpsManagedDataView,
+} from '../shared/ColumnManagement';
 import {
   GitOpsDataViewTable,
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from '../shared/DataView';
+import { GitOpsListPageToolbar } from '../shared/GitOpsListPageToolbar';
 import ResourceActionsCell from '../shared/ResourceActionsCell/ResourceActionsCell';
 
 import { ApplicationGraphView } from './graph/ApplicationGraphView';
@@ -53,17 +56,16 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
   onViewChange,
   argoBaseURL,
 }) => {
+  const managedColumns = React.useMemo(() => getApplicationResourcesManagedColumns(t), []);
   const columnSortConfig = React.useMemo(
     () =>
-      ['name', 'namespace', 'sync-wave', 'sync-status', 'health-status', 'actions'].map((key) => ({
-        key,
-      })),
-    [],
+      managedColumns.filter((column) => !column.alwaysShown).map((column) => ({ key: column.id })),
+    [managedColumns],
   );
 
   const { searchParams, sortBy, direction, getSortParams } =
     useGitOpsDataViewSort(columnSortConfig);
-  const columnsDV = useResourceColumnsDV(getSortParams);
+  const columnsDV = useResourceColumnsDV(managedColumns, getSortParams, columnSortConfig);
   const sortedResources = React.useMemo(
     () => sortData(resources, sortBy, direction),
     [resources, sortBy, direction],
@@ -95,13 +97,25 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
   });
 
   const isEmptyResources = filteredResources.length === 0;
-  const rows = useResourceRowsDV(pagedResources, application, argoBaseURL);
+  const rows = useResourceRowsDV(pagedResources, application, argoBaseURL, managedColumns);
+  const {
+    columns,
+    rows: visibleRows,
+    columnManagement,
+    tableID,
+  } = useGitOpsManagedDataView({
+    columnManagementID: APPLICATION_RESOURCES_COLUMN_MANAGEMENT_ID,
+    managedColumns,
+    resourceType: t('Resource'),
+    columns: columnsDV,
+    rows,
+  });
   const isListView = viewType === ApplicationResourcesViewType.list;
 
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={columns.length}>
           <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No resources')}>
             <EmptyStateBody>
               {resources.length === 0
@@ -127,8 +141,8 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
     >
       <Stack>
         <StackItem isFilled={false} className="gitops-graph-list-view__toolbar-row">
-          <Flex alignItems={{ default: 'alignItemsCenter' }}>
-            <FlexItem flex={{ default: 'flex_1' }}>
+          <GitOpsListPageToolbar
+            filters={
               <ListPageFilter
                 data={data}
                 loaded={true}
@@ -137,11 +151,12 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
                 nameFilterPlaceholder={t('plugin__gitops-plugin~Search by name...')}
                 hideLabelFilter
               />
-            </FlexItem>
-            <FlexItem className="gitops-graph-list-view__header">
+            }
+            columnManagement={isListView ? columnManagement : undefined}
+            actions={
               <ApplicationResourcesToolbar viewType={viewType} onViewChange={onViewChange} />
-            </FlexItem>
-          </Flex>
+            }
+          />
         </StackItem>
         <StackItem isFilled className="gitops-graph-list-view__content">
           <div
@@ -151,8 +166,9 @@ const ApplicationResourcesView: React.FC<ApplicationResourcesViewProps> = ({
           >
             {isListView ? (
               <GitOpsDataViewTable
-                rows={rows}
-                columns={columnsDV}
+                rows={visibleRows}
+                columns={columns}
+                tableID={tableID}
                 emptyState={empty}
                 isEmpty={isEmptyResources}
                 activeState={isEmptyResources ? DataViewState.empty : null}
@@ -216,56 +232,30 @@ const sortData = (
   });
 };
 
-export const useResourceColumnsDV = (getSortParams) => {
-  const columns: DataViewTh[] = [
+const useResourceColumnsDV = (
+  managedColumns: GitOpsManagedColumn[],
+  getSortParams: (columnIndex: number) => ThProps['sort'],
+  columnSortConfig: { key: string }[],
+) =>
+  buildManagedDataViewColumns(
+    managedColumns,
     {
-      cell: t('Name'),
-      props: {
-        'aria-label': 'name',
-        sort: getSortParams(0),
-      },
+      name: t('Name'),
+      namespace: t('Namespace'),
+      'sync-wave': t('Sync Wave'),
+      'sync-status': t('Sync Status'),
+      'health-status': t('Health Status'),
+      actions: '',
     },
-    {
-      cell: t('Namespace'),
-      props: {
-        'aria-label': 'namespace',
-        sort: getSortParams(1),
-      },
-    },
-    {
-      cell: t('Sync Wave'),
-      props: {
-        'aria-label': 'sync wave',
-        sort: getSortParams(2),
-      },
-    },
-    {
-      cell: t('Sync Status'),
-      props: {
-        'aria-label': 'sync status',
-        sort: getSortParams(3),
-      },
-    },
-    {
-      cell: t('Health Status'),
-      props: {
-        'aria-label': 'health status',
-        sort: getSortParams(4),
-      },
-    },
-    {
-      cell: '',
-      props: { 'aria-label': 'actions' },
-    },
-  ];
-
-  return columns;
-};
+    getSortParams,
+    columnSortConfig,
+  );
 
 const useResourceRowsDV = (
   resources: ApplicationResourceStatus[],
   obj: ApplicationKind,
   argoBaseURL: string,
+  managedColumns: GitOpsManagedColumn[],
 ): DataViewTr[] => {
   const rows: DataViewTr[] = [];
 
@@ -276,8 +266,8 @@ const useResourceRowsDV = (
       kind: resource.kind,
     };
 
-    rows.push([
-      {
+    const cellsById = {
+      name: {
         cell: (
           <div>
             <ResourceLink
@@ -290,21 +280,21 @@ const useResourceRowsDV = (
         id: resource.name + '-' + index,
         dataLabel: t('Name'),
       },
-      {
+      namespace: {
         cell: resource.namespace ? resource.namespace : '-',
         id: resource.namespace,
         dataLabel: t('Namespace'),
       },
-      {
+      'sync-wave': {
         id: 'sync-wave-' + index,
         cell: <>{resource.syncWave ?? '-'}</>,
         dataLabel: t('Sync Wave'),
       },
-      {
+      'sync-status': {
         id: 'sync-status-' + index,
         cell: <>{resource.status ? <SyncStatus status={resource.status} /> : '-'}</>,
       },
-      {
+      'health-status': {
         id: 'health-status-' + index,
         cell: (
           <>
@@ -315,7 +305,7 @@ const useResourceRowsDV = (
           </>
         ),
       },
-      {
+      actions: {
         id: 'actions-' + index,
         cell: (
           <ResourceActionsCell
@@ -326,7 +316,9 @@ const useResourceRowsDV = (
           />
         ),
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
   return rows;
 };

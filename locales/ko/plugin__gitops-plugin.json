@@ -407,5 +407,11 @@
   "You don't have permission to perform this action": "이 작업을 수행할 수 있는 권한이 없습니다",
   "annotations": "주석",
   "annotation": "주석",
-  "No owner": "소유자 없음"
+  "No owner": "소유자 없음",
+  "Application source": "Application source",
+  "Pod": "Pod",
+  "Recent update": "Recent update",
+  "Resource": "Resource",
+  "Role": "Role",
+  "Sync window": "Sync window"
 }

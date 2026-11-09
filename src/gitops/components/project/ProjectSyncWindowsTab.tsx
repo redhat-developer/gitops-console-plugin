@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import { Badge, EmptyState, EmptyStateBody, PageSection, Title } from '@patternfly/react-core';
-import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import { DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { ThProps } from '@patternfly/react-table';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
@@ -13,10 +13,20 @@ import { ArgoServer, getArgoServerForProject } from '../../utils/gitops';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
 import { ArgoCDLink } from '../shared/ArgoCDLink/ArgoCDLink';
 import {
+  type GitOpsManagedColumn,
+  buildManagedDataViewColumns,
+  useGitOpsManagedDataView,
+} from '../shared/ColumnManagement';
+import {
   GitOpsDataViewTable,
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from '../shared/DataView';
+import { GitOpsListPageToolbar } from '../shared/GitOpsListPageToolbar';
+import {
+  getProjectSyncWindowsManagedColumns,
+  PROJECT_SYNC_WINDOWS_COLUMN_MANAGEMENT_ID,
+} from '../shared/projectSyncWindowsColumns';
 
 type ProjectSyncWindowsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: AppProjectKind;
@@ -41,24 +51,15 @@ const ProjectSyncWindowsTab: React.FC<ProjectSyncWindowsTabProps> = ({ obj }) =>
 
   const syncWindows = React.useMemo(() => obj?.spec?.syncWindows || [], [obj?.spec?.syncWindows]);
 
+  const managedColumns = React.useMemo(() => getProjectSyncWindowsManagedColumns(t), [t]);
   const columnSortConfig = React.useMemo(
-    () =>
-      [
-        'kind',
-        'schedule',
-        'duration',
-        'applications',
-        'clusters',
-        'namespaces',
-        'manualSync',
-        'timeZone',
-      ].map((key) => ({ key })),
-    [],
+    () => managedColumns.map((column) => ({ key: column.id })),
+    [managedColumns],
   );
 
   const { searchParams, sortBy, direction, getSortParams } =
     useGitOpsDataViewSort(columnSortConfig);
-  const columnsDV = useSyncWindowsColumnsDV(getSortParams, t);
+  const columnsDV = useColumnsDV(managedColumns, getSortParams, columnSortConfig, t);
   const sortedSyncWindows = React.useMemo(() => {
     return sortSyncWindowsData(syncWindows, sortBy, direction);
   }, [syncWindows, sortBy, direction]);
@@ -73,14 +74,26 @@ const ProjectSyncWindowsTab: React.FC<ProjectSyncWindowsTabProps> = ({ obj }) =>
     searchParams,
   });
 
-  const rows = useSyncWindowsRowsDV(pagedSyncWindows, t);
+  const rows = useSyncWindowsRowsDV(pagedSyncWindows, t, managedColumns);
+  const {
+    columns,
+    rows: visibleRows,
+    columnManagement,
+    tableID,
+  } = useGitOpsManagedDataView({
+    columnManagementID: PROJECT_SYNC_WINDOWS_COLUMN_MANAGEMENT_ID,
+    managedColumns,
+    resourceType: t('Sync window'),
+    columns: columnsDV,
+    rows,
+  });
 
   if (!obj) return null;
 
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={columns.length}>
           <EmptyState
             headingLevel="h4"
             icon={CubesIcon}
@@ -105,10 +118,14 @@ const ProjectSyncWindowsTab: React.FC<ProjectSyncWindowsTabProps> = ({ obj }) =>
       <Title headingLevel="h2" className="co-section-heading">
         {t('Sync Windows')}
       </Title>
-      {argoCDUrl && <ArgoCDLink href={argoCDUrl} />}
+      <GitOpsListPageToolbar
+        filters={argoCDUrl ? <ArgoCDLink href={argoCDUrl} /> : undefined}
+        columnManagement={columnManagement}
+      />
       <GitOpsDataViewTable
-        columns={columnsDV}
-        rows={rows}
+        columns={columns}
+        rows={visibleRows}
+        tableID={tableID}
         isEmpty={syncWindows.length === 0}
         emptyState={empty}
         itemCount={itemCount}
@@ -238,81 +255,38 @@ const sortSyncWindowsData = (
   });
 };
 
-export const useSyncWindowsColumnsDV = (
+const useColumnsDV = (
+  managedColumns: GitOpsManagedColumn[],
   getSortParams: (columnIndex: number) => ThProps['sort'],
+  columnSortConfig: { key: string }[],
   t: (key: string) => string,
-): DataViewTh[] => {
-  const columns: DataViewTh[] = [
+) =>
+  buildManagedDataViewColumns(
+    managedColumns,
     {
-      cell: t('Kind'),
-      props: {
-        'aria-label': 'kind',
-        sort: getSortParams(0),
-      },
+      kind: t('Kind'),
+      schedule: t('Schedule'),
+      duration: t('Duration'),
+      applications: t('Applications'),
+      clusters: t('Clusters'),
+      namespaces: t('Namespaces'),
+      manualSync: t('Manual Sync'),
+      timeZone: t('Time Zone'),
     },
-    {
-      cell: t('Schedule'),
-      props: {
-        'aria-label': 'schedule',
-        sort: getSortParams(1),
-      },
-    },
-    {
-      cell: t('Duration'),
-      props: {
-        'aria-label': 'duration',
-        sort: getSortParams(2),
-      },
-    },
-    {
-      cell: t('Applications'),
-      props: {
-        'aria-label': 'applications',
-        sort: getSortParams(3),
-      },
-    },
-    {
-      cell: t('Clusters'),
-      props: {
-        'aria-label': 'clusters',
-        sort: getSortParams(4),
-      },
-    },
-    {
-      cell: t('Namespaces'),
-      props: {
-        'aria-label': 'namespaces',
-        sort: getSortParams(5),
-      },
-    },
-    {
-      cell: t('Manual Sync'),
-      props: {
-        'aria-label': 'manual sync',
-        sort: getSortParams(6),
-      },
-    },
-    {
-      cell: t('Time Zone'),
-      props: {
-        'aria-label': 'time zone',
-        sort: getSortParams(7),
-      },
-    },
-  ];
-
-  return columns;
-};
+    getSortParams,
+    columnSortConfig,
+  );
 
 const useSyncWindowsRowsDV = (
   syncWindows: SyncWindow[],
   t: (key: string) => string,
+  managedColumns: GitOpsManagedColumn[],
 ): DataViewTr[] => {
   const rows: DataViewTr[] = [];
 
   syncWindows.forEach((window, index) => {
-    rows.push([
-      {
+    const cellsById = {
+      kind: {
         cell: (
           <Badge isRead color="blue">
             {window.kind || '-'}
@@ -321,17 +295,17 @@ const useSyncWindowsRowsDV = (
         id: `kind-${index}`,
         dataLabel: t('Kind'),
       },
-      {
+      schedule: {
         cell: window.schedule || '-',
         id: `schedule-${index}`,
         dataLabel: t('Schedule'),
       },
-      {
+      duration: {
         cell: window.duration || '-',
         id: `duration-${index}`,
         dataLabel: t('Duration'),
       },
-      {
+      applications: {
         cell:
           window.applications && window.applications.length > 0 ? (
             <div>
@@ -347,7 +321,7 @@ const useSyncWindowsRowsDV = (
         id: `applications-${index}`,
         dataLabel: t('Applications'),
       },
-      {
+      clusters: {
         cell:
           window.clusters && window.clusters.length > 0 ? (
             <div>
@@ -363,7 +337,7 @@ const useSyncWindowsRowsDV = (
         id: `clusters-${index}`,
         dataLabel: t('Clusters'),
       },
-      {
+      namespaces: {
         cell:
           window.namespaces && window.namespaces.length > 0 ? (
             <div>
@@ -379,7 +353,7 @@ const useSyncWindowsRowsDV = (
         id: `namespaces-${index}`,
         dataLabel: t('Namespaces'),
       },
-      {
+      manualSync: {
         cell:
           window.manualSync !== undefined ? (
             <Badge isRead color={window.manualSync ? 'green' : 'red'}>
@@ -391,12 +365,14 @@ const useSyncWindowsRowsDV = (
         id: `manualSync-${index}`,
         dataLabel: t('Manual Sync'),
       },
-      {
+      timeZone: {
         cell: window.timeZone || '-',
         id: `timeZone-${index}`,
         dataLabel: t('Time Zone'),
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
 
   return rows;

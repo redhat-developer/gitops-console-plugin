@@ -407,5 +407,11 @@
   "You don't have permission to perform this action": "您没有执行此操作的权限",
   "annotations": "注解",
   "annotation": "注解",
-  "No owner": "没有所有者"
+  "No owner": "没有所有者",
+  "Application source": "Application source",
+  "Pod": "Pod",
+  "Recent update": "Recent update",
+  "Resource": "Resource",
+  "Role": "Role",
+  "Sync window": "Sync window"
 }
