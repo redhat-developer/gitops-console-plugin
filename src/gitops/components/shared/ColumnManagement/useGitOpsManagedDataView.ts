@@ -20,7 +20,7 @@ export const useGitOpsManagedDataView = ({
   columnManagementID,
   managedColumns,
   resourceType,
-  includeNamespaceColumn = false,
+  includeNamespaceColumn = true,
   columns,
   rows,
 }: UseGitOpsManagedDataViewOptions) => {
