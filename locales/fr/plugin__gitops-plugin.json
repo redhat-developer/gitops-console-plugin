@@ -254,6 +254,7 @@
   "Application reconciliation performance over time": "Application reconciliation performance over time",
   "View in Observe/Metrics": "View in Observe/Metrics",
   "Syncs (24h sliding window)": "Syncs (24h sliding window)",
+  "Reconciliations (24h sliding window)": "Reconciliations (24h sliding window)",
   "Synced": "Synced",
   "Out of Sync": "Out of Sync",
   "Application Sync Activity (24 hours)": "Application Sync Activity (24 hours)",

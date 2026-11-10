@@ -22,7 +22,11 @@ Confirm the **Project** (namespace) selector and that resources exist. Empty lis
 
 **Health is Unknown or missing**
 
-The plugin reads health from the Application CR. Set `controller.resource.health.persist: "true"` in the `argocd-cmd-params-cm` ConfigMap (for example in the `openshift-gitops` namespace). See [Applications in the GitOps Console](applications.md).
+The plugin reads health from the Application CR. Set `controller.resource.health.persist: "true"` in the `argocd-cmd-params-cm` ConfigMap (for example in the `openshift-gitops` namespace). The Overview **Health Status** and **Applications Needing Attention** cards use the same health data. See [Applications in the GitOps Console](applications.md) and [GitOps Overview dashboard](dashboard.md).
+
+**Overview metric cards are empty or show errors**
+
+The **Operational metrics**, **Application Sync Activity (24 hours)**, and **Application Reconciliation Performance (24 hours)** cards depend on cluster monitoring and Argo CD Prometheus metrics. Sync status, Health status, Applications Needing Attention, and Recent Operations do not. Confirm monitoring is enabled and that Argo CD exposes the expected metrics for the selected namespace. See [GitOps Overview dashboard](dashboard.md).
 
 **Application stays OutOfSync**
 
