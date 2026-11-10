@@ -22,7 +22,7 @@ Confirm the **Project** (namespace) selector and that resources exist. Empty lis
 
 **Health is Unknown or missing**
 
-The plugin reads health from the Application CR. Set `controller.resource.health.persist: "true"` in the `argocd-cmd-params-cm` ConfigMap (for example in the `openshift-gitops` namespace). The Overview **Health Status** and **Applications Needing Attention** cards use the same health data. See [Applications in the GitOps Console](applications.md) and [GitOps Overview dashboard](dashboard.md).
+The plugin reads health from the Application CR. Set `controller.resource.health.persist: "true"` in the `argocd-cmd-params-cm` ConfigMap (for example in the `openshift-gitops` namespace). The Overview **Health status** and **Applications Needing Attention** cards use the same health data. See [Applications in the GitOps Console](applications.md) and [GitOps Overview dashboard](dashboard.md).
 
 **Overview metric cards are empty or show errors**
 
