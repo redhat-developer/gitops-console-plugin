@@ -8,4 +8,5 @@
 - [Rollouts in the GitOps Console](rollouts.md)
 - [Graphs and topology views](topology.md)
 - [Filter, search, and paginate resources](filter-resources.md)
+- [Manage table columns](manage-columns.md)
 - [Troubleshooting](troubleshooting.md)

@@ -24,12 +24,26 @@ The ImageUpdaters list page includes:
   * **Ready**: Ready, Not Ready
 * **Search**: Use the search field to match by **Name** or **Label**. Choose the mode from the dropdown next to the field.
 * **Create action**: Click **Create ImageUpdater** to open the YAML editor with a default ImageUpdater template
-* **Table columns**: **Name**, **Namespace**, **Apps**, **Images**, **Last Checked**, **Ready**, **Labels**, and row actions
 * **Pagination**: Browse results in pages of 10, 20, 50, or 100 items (default 50). Search and filters change which rows are included. See [Filter, search, and paginate resources](filter-resources.md).
 
 > **NOTE**
 >
 > Creation uses the YAML editor. The console does not provide an ImageUpdater form wizard.
+
+### Table columns
+
+| Column | Default | Description |
+| --- | --- | --- |
+| **Name** | Always shown | ImageUpdater name, with a link to the details page. |
+| **Namespace** | Shown by default when viewing all projects | Namespace of the ImageUpdater. Available only when viewing all projects. |
+| **Apps** | Shown by default | Applications managed by the ImageUpdater. |
+| **Images** | Shown by default | Images managed by the ImageUpdater. |
+| **Ready** | Shown by default | Ready status of the ImageUpdater. |
+| **Labels** | Shown by default | ImageUpdater labels. |
+| **Last Checked** | Additional | Last check timestamp. |
+| **Actions** | Always shown | Row kebab menu. |
+
+For more details on how to show or hide columns, restore defaults, or reset column widths, see [Manage table columns](manage-columns.md).
 
 ### Row actions
 
@@ -105,5 +119,6 @@ The editor includes a **Schema** side panel that describes ImageUpdater fields, 
 ## Related information
 
 * [Filter, search, and paginate resources](filter-resources.md)
+* [Manage table columns](manage-columns.md)
 * [Applications in the GitOps Console](applications.md)
 * [Troubleshooting](troubleshooting.md)

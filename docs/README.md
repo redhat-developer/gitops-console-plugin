@@ -27,6 +27,7 @@ You can use these pages to:
 * Create resources by using YAML templates
 * Edit labels and annotations
 * Filter resources by status, where applicable
+* Manage which columns appear on GitOps list tables and reset saved column widths
 * Paginate large filtered lists and details tables (10, 20, 50, or 100 items per page; default 50)
 * Access related resources and events
 
@@ -48,6 +49,7 @@ The GitOps Console plugin provides search and template capabilities:
 * [ImageUpdaters in the GitOps Console](image-updaters.md)
 * [Rollouts in the GitOps Console](rollouts.md)
 * [Filter, search, and paginate resources](filter-resources.md)
+* [Manage table columns](manage-columns.md)
 * [Graphs and topology views](topology.md)
 * [Getting started](getting-started.md)
 * [Troubleshooting](troubleshooting.md)
