@@ -1,46 +1,47 @@
 import { renderToStaticMarkup } from 'react-dom/server';
+
 import HealthStatus, { HealthStatusIcon } from './HealthStatus';
 
 describe('HealthStatus', () => {
   it('renders Healthy', () => {
     expect(renderToStaticMarkup(<HealthStatus status="Healthy" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="HeartIcon" style="color:var(--pf-t--global--icon--color--status--success--default)"></svg> Healthy</div></div>"`,
+      `"<div><div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg data-icon="HeartIcon" style="color:var(--pf-t--global--icon--color--status--success--default)"></svg> Healthy</div></div>"`,
     );
   });
 
   it('renders Degraded', () => {
     expect(renderToStaticMarkup(<HealthStatus status="Degraded" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="HeartBrokenIcon" style="color:var(--pf-t--global--icon--color--status--danger--default)"></svg> Degraded</div></div>"`,
+      `"<div><div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg data-icon="HeartBrokenIcon" style="color:var(--pf-t--global--icon--color--status--danger--default)"></svg> Degraded</div></div>"`,
     );
   });
 
   it('renders Progressing', () => {
     expect(renderToStaticMarkup(<HealthStatus status="Progressing" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="CircleNotchIcon" class="undefined fa-spin" style="color:var(--pf-t--global--icon--color--brand--default)"></svg> Progressing</div></div>"`,
+      `"<div><div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg data-icon="CircleNotchIcon" class="undefined fa-spin" style="color:var(--pf-t--global--icon--color--brand--default)"></svg> Progressing</div></div>"`,
     );
   });
 
   it('renders Suspended', () => {
     expect(renderToStaticMarkup(<HealthStatus status="Suspended" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="OutlinedPauseCircleIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> Suspended</div></div>"`,
+      `"<div><div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg data-icon="OutlinedPauseCircleIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> Suspended</div></div>"`,
     );
   });
 
   it('renders Missing', () => {
     expect(renderToStaticMarkup(<HealthStatus status="Missing" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="GhostIcon" style="color:var(--pf-t--global--icon--color--status--warning--default)"></svg> Missing</div></div>"`,
+      `"<div><div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg data-icon="GhostIcon" style="color:var(--pf-t--global--icon--color--status--warning--default)"></svg> Missing</div></div>"`,
     );
   });
 
   it('renders Unknown for unrecognized status', () => {
     expect(renderToStaticMarkup(<HealthStatus status="SomethingElse" />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="UnknownIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> SomethingElse</div></div>"`,
+      `"<div><div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg data-icon="UnknownIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> SomethingElse</div></div>"`,
     );
   });
 
   it('renders Unknown for undefined status', () => {
     expect(renderToStaticMarkup(<HealthStatus status={undefined as any} />)).toMatchInlineSnapshot(
-      `"<div><div><svg data-icon="UnknownIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> </div></div>"`,
+      `"<div><div style="display:flex;align-items:center;gap:4px;flex-shrink:0"><svg data-icon="UnknownIcon" style="color:var(--pf-t--global--icon--color--disabled)"></svg> </div></div>"`,
     );
   });
 
