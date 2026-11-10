@@ -1,6 +1,7 @@
 - [Working with the GitOps Console plugin](/)
 - [Getting started](getting-started.md)
 - [Enable the GitOps Console plugin](admin-enable-plugin.md)
+- [GitOps Overview dashboard](dashboard.md)
 - [Applications in the GitOps Console](applications.md)
 - [ApplicationSets in the GitOps Console](applicationsets.md)
 - [AppProjects in the GitOps Console](appprojects-rbac.md)

@@ -33,13 +33,14 @@ If **GitOps** is already in the navigation, skip this step. Otherwise follow [En
 
 2. Verify that you can open the following pages:
 
+   * **Overview**
    * **Applications**
    * **ApplicationSets**
    * **AppProjects**
    * **ImageUpdaters**
    * **Rollouts**
 
-ImageUpdaters and Rollouts appear when those CRDs are installed on the cluster.
+ImageUpdaters and Rollouts appear when those CRDs are installed on the cluster. The Overview dashboard is described in [GitOps Overview dashboard](dashboard.md).
 
 ## Verification
 
@@ -49,6 +50,7 @@ ImageUpdaters and Rollouts appear when those CRDs are installed on the cluster.
 ## Additional resources
 
 * [Enable the GitOps Console plugin](admin-enable-plugin.md)
+* [GitOps Overview dashboard](dashboard.md)
 * [Applications in the GitOps Console](applications.md)
 * [Filter, search, and paginate resources](filter-resources.md)
 * [Troubleshooting](troubleshooting.md)
