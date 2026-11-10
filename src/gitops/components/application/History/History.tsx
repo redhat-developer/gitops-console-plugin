@@ -1,7 +1,17 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import {
+  APPLICATION_HISTORY_COLUMN_MANAGEMENT_ID,
+  getApplicationHistoryManagedColumns,
+} from '@gitops/components/shared/applicationHistoryColumns';
 import ArgoCDLink from '@gitops/components/shared/ArgoCDLink/ArgoCDLink';
+import {
+  type GitOpsManagedColumn,
+  buildManagedDataViewColumns,
+  useGitOpsManagedDataView,
+} from '@gitops/components/shared/ColumnManagement';
+import { GitOpsListPageToolbar } from '@gitops/components/shared/GitOpsListPageToolbar';
 import { useArgoServer } from '@gitops/hooks/useArgoServer';
 import Revision from '@gitops/Revision/Revision';
 import ExternalLink from '@gitops/utils/components/ExternalLink/ExternalLink';
@@ -10,7 +20,7 @@ import { repoUrl } from '@gitops/utils/urls';
 import { ApplicationHistory, ApplicationKind } from '@gitops-models/ApplicationModel';
 import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
 import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
-import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import { DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
@@ -29,14 +39,15 @@ interface HistoryListProps {
 
 const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
   const { t } = useTranslation('plugin__gitops-plugin');
+  const managedColumns = React.useMemo(() => getApplicationHistoryManagedColumns(t), [t]);
   const columnSortConfig = React.useMemo(
-    () => ['id', 'started-at', 'deployed-at', 'initiated-by', 'revision'].map((key) => ({ key })),
-    [],
+    () => managedColumns.map((column) => ({ key: column.id })),
+    [managedColumns],
   );
 
   const { searchParams, sortBy, direction, getSortParams } =
     useGitOpsDataViewSort(columnSortConfig);
-  const columnsDV = useColumnsDV(getSortParams);
+  const columnsDV = useColumnsDV(managedColumns, getSortParams, columnSortConfig);
 
   const displayHistory = React.useMemo(
     () => sortData([...history].reverse(), sortBy, direction),
@@ -53,7 +64,19 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
     searchParams,
   });
 
-  const rows = useRowsDV(pagedHistory, obj);
+  const rows = useRowsDV(pagedHistory, obj, managedColumns);
+  const {
+    columns,
+    rows: visibleRows,
+    columnManagement,
+    tableID,
+  } = useGitOpsManagedDataView({
+    columnManagementID: APPLICATION_HISTORY_COLUMN_MANAGEMENT_ID,
+    managedColumns,
+    resourceType: t('History'),
+    columns: columnsDV,
+    rows,
+  });
 
   const argoServer = useArgoServer(obj);
   const argoUrl = getApplicationArgoUrl(argoServer, obj);
@@ -61,7 +84,7 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={columns.length}>
           <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No history')}>
             <EmptyStateBody>
               {t('There is no history associated with the application.')}
@@ -74,22 +97,28 @@ const HistoryList: React.FC<HistoryListProps> = ({ history, obj }) => {
 
   return (
     <div>
-      {argoUrl && (
-        <ArgoCDLink
-          href={
-            argoUrl +
-            '?resource=&node=argoproj.io%2FApplication%2F' +
-            obj?.metadata?.namespace +
-            '%2F' +
-            obj?.metadata?.name +
-            '%2F' +
-            '&view=tree&resource=&operation=false&rollback=0'
-          }
-        />
-      )}
+      <GitOpsListPageToolbar
+        filters={
+          argoUrl ? (
+            <ArgoCDLink
+              href={
+                argoUrl +
+                '?resource=&node=argoproj.io%2FApplication%2F' +
+                obj?.metadata?.namespace +
+                '%2F' +
+                obj?.metadata?.name +
+                '%2F' +
+                '&view=tree&resource=&operation=false&rollback=0'
+              }
+            />
+          ) : undefined
+        }
+        columnManagement={columnManagement}
+      />
       <GitOpsDataViewTable
-        rows={rows}
-        columns={columnsDV}
+        rows={visibleRows}
+        columns={columns}
+        tableID={tableID}
         emptyState={empty}
         isEmpty={displayHistory.length === 0}
         itemCount={itemCount}
@@ -109,7 +138,11 @@ const renderRepoUrl = (repoURL?: string) => {
   return <ExternalLink href={repoURL}>{repoUrl(repoURL)}</ExternalLink>;
 };
 
-const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataViewTr[] => {
+const useRowsDV = (
+  history: ApplicationHistory[],
+  app: ApplicationKind,
+  managedColumns: GitOpsManagedColumn[],
+): DataViewTr[] => {
   const rows: DataViewTr[] = [];
 
   history.forEach((obj) => {
@@ -171,79 +204,63 @@ const useRowsDV = (history: ApplicationHistory[], app: ApplicationKind): DataVie
         </>
       );
     }
-    rows.push([
-      {
+    const cellsById = {
+      id: {
         cell: obj.id,
         id: 'id',
         dataLabel: 'ID',
       },
-      {
+      'started-at': {
         cell: <Timestamp timestamp={obj.deployStartedAt} />,
         id: 'started-at',
         dataLabel: 'Deployed Started At',
       },
-      {
+      'deployed-at': {
         cell: <Timestamp timestamp={obj.deployedAt} />,
         id: 'deployed-at',
         dataLabel: 'Depoyed At',
       },
-      {
+      'initiated-by': {
         cell: <>{initByString}</>,
         id: 'initiated-by',
         dataLabel: 'Initiated By',
       },
-      {
+      revision: {
         cell: <>{revisionValue}</>,
         id: 'revision',
         dataLabel: 'Revision',
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
   return rows;
 };
 
-const useColumnsDV = (getSortParams: (columnIndex: number) => ThProps['sort']) => {
+const useColumnsDV = (
+  managedColumns: GitOpsManagedColumn[],
+  getSortParams: (columnIndex: number) => ThProps['sort'],
+  columnSortConfig: { key: string }[],
+) => {
   const { t } = useTranslation('plugin__gitops-plugin');
-  const columns: DataViewTh[] = [
+  return buildManagedDataViewColumns(
+    managedColumns,
     {
-      cell: t('ID'),
-      props: {
-        'aria-label': 'ID',
-        sort: getSortParams(0),
-      },
+      id: t('ID'),
+      'started-at': t('Deploy Started At'),
+      'deployed-at': t('Deployed At'),
+      'initiated-by': t('Initiated By'),
+      revision: t('Revision(s) and Source Repo URL(s)'),
     },
+    getSortParams,
+    columnSortConfig,
     {
-      cell: t('Deploy Started At'),
-      props: {
-        className: 'pf-m-width-15',
-        sort: getSortParams(1),
-      },
-    },
-    {
-      cell: t('Deployed At'),
-      props: {
-        className: 'pf-m-width-15',
-        sort: getSortParams(2),
-      },
-    },
-    {
-      cell: t('Initiated By'),
-      props: {
-        className: 'pf-m-width-15',
-        sort: getSortParams(3),
-      },
-    },
-    {
-      cell: t('Revision(s) and Source Repo URL(s)'),
-      props: {
+      revision: {
         key: 'revision',
-        className: 'gitops-plugin__history-id-column pf-m-width-50',
-        sort: getSortParams(4),
+        className: 'gitops-plugin__history-id-column',
       },
     },
-  ];
-
-  return columns;
+  );
 };
 
 const sortData = (

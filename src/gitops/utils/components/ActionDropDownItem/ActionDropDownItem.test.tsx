@@ -1,7 +1,8 @@
 import { renderToStaticMarkup } from 'react-dom/server';
+
 import ActionDropdownItem from './ActionDropDownItem';
 
-const noop = () => {};
+const noop = () => undefined;
 
 describe('ActionDropdownItem', () => {
   it('renders basic action', () => {

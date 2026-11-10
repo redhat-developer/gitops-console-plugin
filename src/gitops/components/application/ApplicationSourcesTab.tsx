@@ -19,12 +19,22 @@ import {
   Title,
   Tooltip,
 } from '@patternfly/react-core';
-import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import { DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon, GithubIcon } from '@patternfly/react-icons';
 import { Tbody, Td, Tr } from '@patternfly/react-table';
 
+import {
+  APPLICATION_SOURCES_COLUMN_MANAGEMENT_ID,
+  getApplicationSourcesManagedColumns,
+} from '../shared/applicationSourcesColumns';
 import ArgoCDLink from '../shared/ArgoCDLink/ArgoCDLink';
+import {
+  type GitOpsManagedColumn,
+  buildManagedDataViewColumns,
+  useGitOpsManagedDataView,
+} from '../shared/ColumnManagement';
 import { GitOpsDataViewTable, useGitOpsListPagePagination } from '../shared/DataView';
+import { GitOpsListPageToolbar } from '../shared/GitOpsListPageToolbar';
 
 type ApplicationDetailsTabProps = RouteComponentProps<{
   ns: string;
@@ -39,56 +49,14 @@ interface SourceListProps {
   argoServer?: ArgoServer;
 }
 
-export const useColumnsDV = () => {
-  const columns: DataViewTh[] = [
-    {
-      id: 'type',
-      cell: t('Type'),
-      props: {
-        key: 'type',
-        'aria-label': 'type',
-        className: 'pf-v6-u-max-width',
-        style: { maxWidth: '2ch' },
-      },
-    },
-    {
-      cell: t('Repository'),
-      id: 'repository',
-      props: {
-        key: 'repository',
-        'aria-label': 'repository',
-        className: 'pf-v6-u-max-width',
-        style: { maxWidth: '50ch' },
-      },
-    },
-    {
-      cell: t('Target Revision'),
-      id: 'targetRevision',
-      props: {
-        key: 'targetRevision',
-        'aria-label': 'targetRevision',
-        className: 'pf-v6-u-min-width pf-v6-u-max-width',
-        style: { minWidth: '20ch', maxWidth: '20ch' },
-      },
-    },
-    {
-      cell: t('Path / Chart'),
-      id: 'path',
-      props: {
-        key: 'path',
-        'aria-label': 'path',
-        className: 'pf-v6-u-min-width pf-v6-u-max-width',
-        style: { minWidth: '20ch', maxWidth: '25ch' },
-      },
-    },
-    {
-      cell: t('Ref'),
-      id: 'ref',
-    },
-  ];
-
-  return columns;
-};
+const useColumnsDV = (managedColumns: GitOpsManagedColumn[]) =>
+  buildManagedDataViewColumns(managedColumns, {
+    type: t('Type'),
+    repository: t('Repository'),
+    targetRevision: t('Target Revision'),
+    path: t('Path / Chart'),
+    ref: t('Ref'),
+  });
 
 function processPath(path: string) {
   if (path !== null && path !== undefined) {
@@ -100,13 +68,16 @@ function processPath(path: string) {
   return '';
 }
 
-export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
+export const useRowsDV = (
+  sources: ApplicationSource[],
+  managedColumns: GitOpsManagedColumn[],
+): DataViewTr[] => {
   const rows: DataViewTr[] = [];
 
   sources.forEach((source, index) => {
     const isOci = source?.repoURL?.startsWith('oci://');
-    rows.push([
-      {
+    const cellsById: Record<string, any> = {
+      type: {
         id: index + '-type',
         cell: (
           // eslint-disable-next-line no-nested-ternary
@@ -119,7 +90,7 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
         ),
         dataLabel: 'Type',
       },
-      {
+      repository: {
         id: index + '-repository',
         cell: (
           <div>
@@ -138,12 +109,12 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
         ),
         dataLabel: 'Repository',
       },
-      {
+      targetRevision: {
         id: index + '-revision',
         cell: <div>{source.targetRevision}</div>,
         dataLabel: 'TargetRevision',
       },
-      {
+      path: {
         id: index + '-path',
         cell: (
           <div>
@@ -170,18 +141,22 @@ export const useRowsDV = (sources: ApplicationSource[]): DataViewTr[] => {
         ),
         dataLabel: 'Chart / Path',
       },
-      {
+      ref: {
         id: index + '-ref',
         cell: <div>{source.ref ? source.ref : '-'}</div>,
         dataLabel: 'Ref',
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
   return rows;
 };
 
 export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer }) => {
-  const columns = useColumnsDV();
+  const managedColumns = React.useMemo(() => getApplicationSourcesManagedColumns(t), []);
+
+  const columnsDV = useColumnsDV(managedColumns);
   const [searchParams] = useSearchParams();
   const {
     pagination,
@@ -192,7 +167,20 @@ export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer
     namespace: obj?.metadata?.namespace,
     searchParams,
   });
-  const rows = useRowsDV(pagedSources);
+  const rows = useRowsDV(pagedSources, managedColumns);
+  const {
+    columns,
+    rows: visibleRows,
+    columnManagement,
+    tableID,
+  } = useGitOpsManagedDataView({
+    columnManagementID: APPLICATION_SOURCES_COLUMN_MANAGEMENT_ID,
+    managedColumns,
+    resourceType: t('Application source'),
+    columns: columnsDV,
+    rows,
+  });
+
   const argoUrl = getApplicationArgoUrl(argoServer, obj);
   const empty = (
     <Tbody>
@@ -209,22 +197,28 @@ export const SourceList: React.FC<SourceListProps> = ({ sources, obj, argoServer
   );
   return (
     <>
-      {argoUrl && (
-        <ArgoCDLink
-          href={
-            argoUrl +
-            '?resource=&node=argoproj.io%2FApplication%2F' +
-            obj?.metadata?.namespace +
-            '%2F' +
-            obj?.metadata?.name +
-            '%2F' +
-            '&tab=parameters'
-          }
-        />
-      )}
+      <GitOpsListPageToolbar
+        filters={
+          argoUrl ? (
+            <ArgoCDLink
+              href={
+                argoUrl +
+                '?resource=&node=argoproj.io%2FApplication%2F' +
+                obj?.metadata?.namespace +
+                '%2F' +
+                obj?.metadata?.name +
+                '%2F' +
+                '&tab=parameters'
+              }
+            />
+          ) : undefined
+        }
+        columnManagement={columnManagement}
+      />
       <GitOpsDataViewTable
-        rows={rows}
+        rows={visibleRows}
         columns={columns}
+        tableID={tableID}
         emptyState={empty}
         isEmpty={sources.length === 0}
         itemCount={itemCount}

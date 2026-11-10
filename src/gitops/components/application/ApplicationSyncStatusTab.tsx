@@ -29,16 +29,26 @@ import {
   Title,
 } from '@patternfly/react-core';
 import { DataViewState } from '@patternfly/react-data-view/dist/esm/DataView';
-import { DataViewTh, DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
+import { DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { Tbody, Td, ThProps, Tr } from '@patternfly/react-table';
 
+import {
+  APPLICATION_SYNC_STATUS_RESOURCES_COLUMN_MANAGEMENT_ID,
+  getApplicationSyncStatusResourcesManagedColumns,
+} from '../shared/applicationSyncStatusResourcesColumns';
 import { DetailsDescriptionGroup } from '../shared/BaseDetailsSummary/BaseDetailsSummary';
+import {
+  type GitOpsManagedColumn,
+  buildManagedDataViewColumns,
+  useGitOpsManagedDataView,
+} from '../shared/ColumnManagement';
 import {
   GitOpsDataViewTable,
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from '../shared/DataView';
+import { GitOpsListPageToolbar } from '../shared/GitOpsListPageToolbar';
 import ResourceActionsCell from '../shared/ResourceActionsCell/ResourceActionsCell';
 
 import { ConditionsPopover } from './Conditions/ConditionsPopover';
@@ -61,14 +71,19 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
     resources = [];
   }
 
-  const columnSortConfig = React.useMemo(
-    () => ['name', 'namespace', 'status', 'hook', 'message', 'actions'].map((key) => ({ key })),
+  const managedColumns = React.useMemo(
+    () => getApplicationSyncStatusResourcesManagedColumns(t),
     [],
+  );
+  const columnSortConfig = React.useMemo(
+    () =>
+      managedColumns.filter((column) => !column.alwaysShown).map((column) => ({ key: column.id })),
+    [managedColumns],
   );
 
   const { searchParams, sortBy, direction, getSortParams } =
     useGitOpsDataViewSort(columnSortConfig);
-  const columnsDV = useResourceColumnsDV(getSortParams);
+  const columnsDV = useResourceColumnsDV(managedColumns, getSortParams, columnSortConfig);
   const sortedResources = React.useMemo(() => {
     return sortData(resources, sortBy, direction);
   }, [resources, sortBy, direction]);
@@ -83,12 +98,24 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
     searchParams,
   });
 
-  const rows = useResourceRowsDV(pagedResources, obj, argoUrl);
+  const rows = useResourceRowsDV(pagedResources, obj, argoUrl, managedColumns);
+  const {
+    columns,
+    rows: visibleRows,
+    columnManagement,
+    tableID,
+  } = useGitOpsManagedDataView({
+    columnManagementID: APPLICATION_SYNC_STATUS_RESOURCES_COLUMN_MANAGEMENT_ID,
+    managedColumns,
+    resourceType: t('Resource'),
+    columns: columnsDV,
+    rows,
+  });
 
   const empty = (
     <Tbody>
       <Tr key="loading" ouiaId="table-tr-loading">
-        <Td colSpan={columnsDV.length}>
+        <Td colSpan={columns.length}>
           <EmptyState headingLevel="h4" icon={CubesIcon} titleText={t('No resources')}>
             <EmptyStateBody>
               {t('There are no resources associated with the application.')}
@@ -256,9 +283,11 @@ const ApplicationSyncStatusTab: React.FC<ApplicationSyncStatusTabProps> = ({ obj
         <Title headingLevel="h2" className="co-section-heading">
           {t('Resources Last Synced')}
         </Title>
+        <GitOpsListPageToolbar columnManagement={columnManagement} />
         <GitOpsDataViewTable
-          rows={rows}
-          columns={columnsDV}
+          rows={visibleRows}
+          columns={columns}
+          tableID={tableID}
           emptyState={empty}
           isEmpty={sortedResources.length === 0}
           activeState={resources.length === 0 ? DataViewState.empty : null}
@@ -315,63 +344,30 @@ const sortData = (
   });
 };
 
-export const useResourceColumnsDV = (getSortParams: (columnIndex: number) => ThProps['sort']) => {
-  const columns: DataViewTh[] = [
+const useResourceColumnsDV = (
+  managedColumns: GitOpsManagedColumn[],
+  getSortParams: (columnIndex: number) => ThProps['sort'],
+  columnSortConfig: { key: string }[],
+) =>
+  buildManagedDataViewColumns(
+    managedColumns,
     {
-      cell: t('plugin__gitops-plugin~Name'),
-      props: {
-        'aria-label': 'name',
-        className: 'pf-m-width-25',
-        sort: getSortParams(0),
-      },
+      name: t('plugin__gitops-plugin~Name'),
+      namespace: t('Namespace'),
+      status: t('Status'),
+      hook: t('Hook'),
+      message: t('Message'),
+      actions: '',
     },
-    {
-      cell: t('Namespace'),
-      props: {
-        'aria-label': 'namespace',
-        className: 'pf-m-width-20',
-        sort: getSortParams(1),
-      },
-    },
-    {
-      cell: t('Status'),
-      props: {
-        'aria-label': 'status',
-        className: 'pf-m-width-15',
-        sort: getSortParams(2),
-      },
-    },
-    {
-      cell: t('Hook'),
-      props: {
-        'aria-label': 'hook',
-        className: 'pf-m-width-15',
-        sort: getSortParams(3),
-      },
-    },
-    {
-      cell: t('Message'),
-      props: {
-        'aria-label': 'message',
-        className: 'pf-m-width-15',
-        sort: getSortParams(4),
-      },
-    },
-    {
-      cell: '',
-      props: {
-        'aria-label': 'actions',
-        className: 'dropdown-kebab-pf pf-v6-c-table__action',
-      },
-    },
-  ];
-  return columns;
-};
+    getSortParams,
+    columnSortConfig,
+  );
 
 const useResourceRowsDV = (
   resources: ApplicationResourceStatus[],
   obj: ApplicationKind,
   argoBaseURL: string,
+  managedColumns: GitOpsManagedColumn[],
 ): DataViewTr[] => {
   const rows: DataViewTr[] = [];
 
@@ -382,8 +378,8 @@ const useResourceRowsDV = (
       kind: resource.kind,
     };
 
-    rows.push([
-      {
+    const cellsById = {
+      name: {
         cell: (
           <div>
             <ResourceLink
@@ -396,26 +392,26 @@ const useResourceRowsDV = (
         id: resource.name + '-' + index,
         dataLabel: 'Name',
       },
-      {
+      namespace: {
         cell: resource.namespace,
         id: resource.namespace,
         dataLabel: 'Namespace',
       },
-      {
+      status: {
         id: 'status-' + index,
         cell: <>{resource.status ? <SyncStatus status={resource.status} /> : '-'}</>,
         dataLabel: 'Status',
       },
-      {
+      hook: {
         id: 'hook-' + index,
         cell: <>{resource.hookPhase}</>,
       },
-      {
+      message: {
         id: 'message-' + index,
         cell: <>{resource.message}</>,
         dataLabel: 'Message',
       },
-      {
+      actions: {
         id: 'actions-' + index,
         cell: (
           <ResourceActionsCell
@@ -425,12 +421,10 @@ const useResourceRowsDV = (
             index={index}
           />
         ),
-        props: {
-          style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 },
-          className: 'dropdown-kebab-pf pf-v6-c-table__action',
-        },
       },
-    ]);
+    };
+
+    rows.push(managedColumns.map((column) => cellsById[column.id]));
   });
   return rows;
 };

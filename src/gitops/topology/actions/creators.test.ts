@@ -1,8 +1,8 @@
-import { getDeleteRolloutAction, editRollout } from './creators';
+import { editRollout, getDeleteRolloutAction } from './creators';
 
 describe('topology action creators', () => {
   it('returns the delete action id and label', () => {
-    const action = getDeleteRolloutAction(() => {});
+    const action = getDeleteRolloutAction(() => undefined);
     expect({ id: action.id, label: action.label }).toMatchInlineSnapshot(`
       {
         "id": "delete-rollout",

@@ -1,7 +1,17 @@
 import * as React from 'react';
 
-export const Button: React.FC<any> = ({ children, variant, isInline, component, ...rest }) => (
-  <button data-variant={variant} {...rest}>{children}</button>
+export const Button: React.FC<any> = ({
+  children,
+  variant,
+  isInline,
+  component,
+  icon,
+  ...rest
+}) => (
+  <button data-variant={variant} {...rest}>
+    {icon}
+    {children}
+  </button>
 );
 
 export const Popover: React.FC<any> = ({ headerContent, bodyContent, children }) => (
@@ -111,3 +121,11 @@ export const EmptyStateBody: React.FC<any> = ({ children }) => (
 export const Spinner: React.FC<any> = ({ size, ...rest }) => (
   <svg data-testid="spinner" role="progressbar" aria-valuetext="Loading..." data-size={size} {...rest} />
 );
+
+export enum ButtonVariant {
+  plain = 'plain',
+  primary = 'primary',
+  secondary = 'secondary',
+  link = 'link',
+}
+

@@ -3,6 +3,11 @@ import * as React from 'react';
 import { useUserSettings } from '@openshift-console/dynamic-plugin-sdk';
 
 import {
+  GitOpsResetColumnWidthsButton,
+  useGitOpsResetColumnWidths,
+} from '../DataView/resetColumnWidths';
+
+import {
   filterDataViewColumnsAndRows,
   getDefaultActiveColumnIds,
   getSavableColumnIds,
@@ -28,6 +33,8 @@ export type UseGitOpsColumnManagementResult = {
   columnManagement: React.ReactElement;
   applyColumns: (modalColumns: GitOpsColumnManagementModalColumn[]) => void;
   filterDataView: typeof filterDataViewColumnsAndRows;
+  /** Pass to GitOpsDataViewTable to save column widths. */
+  tableID: string;
 };
 
 export const useGitOpsColumnManagement = ({
@@ -45,6 +52,10 @@ export const useGitOpsColumnManagement = ({
     defaultIds,
     true,
   );
+
+  // Reset clears saved widths for this table.
+  const { resetColumnWidths, canResetColumnWidths } =
+    useGitOpsResetColumnWidths(columnManagementID);
 
   const activeColumnIds = React.useMemo(
     () =>
@@ -82,14 +93,26 @@ export const useGitOpsColumnManagement = ({
 
   const columnManagement = React.useMemo(
     () => (
-      <GitOpsColumnManagementControl
-        appliedColumns={appliedModalColumns}
-        applyColumns={applyColumns}
-        resourceType={resourceType}
-        showNamespaceHelp={showNamespaceHelp}
-      />
+      <>
+        <GitOpsColumnManagementControl
+          appliedColumns={appliedModalColumns}
+          applyColumns={applyColumns}
+          resourceType={resourceType}
+          showNamespaceHelp={showNamespaceHelp}
+        />
+        {canResetColumnWidths ? (
+          <GitOpsResetColumnWidthsButton onReset={resetColumnWidths} />
+        ) : null}
+      </>
     ),
-    [appliedModalColumns, applyColumns, resourceType, showNamespaceHelp],
+    [
+      appliedModalColumns,
+      applyColumns,
+      resourceType,
+      showNamespaceHelp,
+      canResetColumnWidths,
+      resetColumnWidths,
+    ],
   );
 
   return {
@@ -101,5 +124,6 @@ export const useGitOpsColumnManagement = ({
     columnManagement,
     applyColumns,
     filterDataView: filterDataViewColumnsAndRows,
+    tableID: columnManagementID,
   };
 };

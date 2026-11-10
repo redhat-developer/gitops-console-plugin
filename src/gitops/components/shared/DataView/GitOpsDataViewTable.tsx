@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useSearchParams } from 'react-router-dom-v5-compat';
+import classNames from 'classnames';
 
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { Pagination, PaginationVariant } from '@patternfly/react-core';
@@ -10,7 +11,7 @@ import DataViewTable, {
 } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import DataViewToolbar from '@patternfly/react-data-view/dist/esm/DataViewToolbar';
 import { useDataViewPagination, useDataViewSort } from '@patternfly/react-data-view/dist/esm/Hooks';
-import { ThProps } from '@patternfly/react-table';
+import { InnerScrollContainer, ThProps } from '@patternfly/react-table';
 
 import {
   getGitOpsPaginationResetKey,
@@ -18,6 +19,8 @@ import {
   GITOPS_PER_PAGE_OPTIONS,
   paginateItems,
 } from './gitOpsDataViewPagination';
+import { enhanceGitOpsDataViewLayout } from './gitOpsDataViewTableLayout';
+import { useGitOpsDataViewResizableColumns } from './useGitOpsDataViewResizableColumns';
 
 import './GitOpsDataViewTable.scss';
 
@@ -39,6 +42,12 @@ export type GitOpsDataViewBodyStates = Partial<Record<BodyStateKey, React.ReactN
 export type GitOpsDataViewTableProps = {
   columns: DataViewTh[];
   rows: DataViewTr[];
+  /** Resizable columns. Defaults to true. */
+  isResizable?: boolean;
+  /** Sticky Name column. Defaults to true. */
+  stickyNameColumn?: boolean;
+  /** Sticky Actions (kebab) column. Defaults to true. */
+  stickyActionsColumn?: boolean;
   /**
    * Whether the table should display its empty state.
    */
@@ -78,6 +87,8 @@ export type GitOpsDataViewTableProps = {
    * Optional PF pagination state. When omitted, the table renders every row.
    */
   pagination?: GitOpsDataViewPagination;
+  /** Pass to save/restore column widths after refresh. */
+  tableID?: string;
 };
 
 export type GitOpsDataViewPagination = {
@@ -111,6 +122,9 @@ const mergeBodyStates = (
 export const GitOpsDataViewTable: React.FC<GitOpsDataViewTableProps> = ({
   columns,
   rows,
+  isResizable = true,
+  stickyNameColumn = true,
+  stickyActionsColumn = true,
   isEmpty,
   isLoading,
   emptyState,
@@ -120,6 +134,7 @@ export const GitOpsDataViewTable: React.FC<GitOpsDataViewTableProps> = ({
   activeState,
   itemCount,
   pagination,
+  tableID,
 }) => {
   const paginationWidgetIdBase = useGitOpsPaginationWidgetIdBase();
   const resolvedBodyStates = React.useMemo(
@@ -147,38 +162,148 @@ export const GitOpsDataViewTable: React.FC<GitOpsDataViewTableProps> = ({
     return null;
   }, [activeState, isEmpty, isError, isLoading]);
 
+  const { columns: layoutColumns, rows: layoutRows } = React.useMemo(
+    () =>
+      enhanceGitOpsDataViewLayout({
+        columns,
+        rows,
+        isResizable,
+        stickyNameColumn,
+        stickyActionsColumn,
+      }),
+    [columns, rows, isResizable, stickyNameColumn, stickyActionsColumn],
+  );
+
+  // Persist widths when tableID is set. Remount key bumps on Reset only, not each drag.
+  const {
+    columns: widthColumns,
+    widthsLoaded,
+    resetEpoch,
+    widthsReadyKey,
+    tableColumnsKey,
+  } = useGitOpsDataViewResizableColumns({
+    columns: layoutColumns,
+    tableID,
+    isResizable,
+  });
+
+  // Show loading until saved widths are ready (keeps empty/error states visible).
+  const tableActiveState = widthsLoaded ? resolvedActiveState : DataViewState.loading;
+
   const paginationItemCount = itemCount ?? 0;
   const showPagination = !!pagination && paginationItemCount > 0 && !isError && !isLoading;
 
+  // Lock sideways scroll when sticky Name meets Actions.
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const [foldsMeet, setFoldsMeet] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!stickyNameColumn || !stickyActionsColumn) {
+      setFoldsMeet(false);
+      return undefined;
+    }
+    const root = rootRef.current;
+    if (!root) {
+      return undefined;
+    }
+
+    const updateFoldsMeet = () => {
+      const name = root.querySelector<HTMLElement>(
+        '.pf-v6-c-table__thead .pf-v6-c-table__sticky-cell.pf-m-border-right',
+      );
+      const actions = root.querySelector<HTMLElement>(
+        '.pf-v6-c-table__thead .pf-v6-c-table__sticky-cell.pf-m-border-left',
+      );
+      if (!name || !actions) {
+        setFoldsMeet(false);
+        return;
+      }
+      setFoldsMeet(name.getBoundingClientRect().right >= actions.getBoundingClientRect().left - 1);
+    };
+
+    updateFoldsMeet();
+    // Guard: jsdom has no ResizeObserver.
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(updateFoldsMeet) : undefined;
+    resizeObserver?.observe(root);
+    // Also watch <table> for content-driven Name width changes.
+    const tableEl = root.querySelector('table');
+    if (tableEl) {
+      resizeObserver?.observe(tableEl);
+    }
+    // pointerup = drag resize; keyup = keyboard resize.
+    root.addEventListener('pointerup', updateFoldsMeet);
+    root.addEventListener('keyup', updateFoldsMeet);
+    const scrollEl = root.querySelector('.pf-v6-c-scroll-inner-wrapper');
+    scrollEl?.addEventListener('scroll', updateFoldsMeet, { passive: true });
+    window.addEventListener('resize', updateFoldsMeet);
+
+    return () => {
+      resizeObserver?.disconnect();
+      root.removeEventListener('pointerup', updateFoldsMeet);
+      root.removeEventListener('keyup', updateFoldsMeet);
+      scrollEl?.removeEventListener('scroll', updateFoldsMeet);
+      window.removeEventListener('resize', updateFoldsMeet);
+    };
+  }, [
+    stickyNameColumn,
+    stickyActionsColumn,
+    widthsLoaded,
+    resetEpoch,
+    tableColumnsKey,
+    widthsReadyKey,
+  ]);
+
+  const table = (
+    <DataViewTable
+      key={`${tableID ?? 'gitops-table'}-${resetEpoch}-${tableColumnsKey}-${widthsReadyKey}`}
+      isStickyHeader={false}
+      isResizable={isResizable}
+      gridBreakPoint=""
+      variant="compact"
+      columns={widthColumns}
+      rows={widthsLoaded ? layoutRows : []}
+      bodyStates={resolvedBodyStates}
+    />
+  );
+
   return (
-    <DataView activeState={resolvedActiveState} className="gitops-data-view-table">
-      {showPagination && pagination && (
-        <DataViewToolbar
-          pagination={
-            <GitOpsPagination
-              itemCount={paginationItemCount}
-              pagination={pagination}
-              variant={PaginationVariant.top}
-              widgetId={`${paginationWidgetIdBase}-top`}
-            />
-          }
-        />
-      )}
-      <DataViewTable columns={columns} rows={rows} bodyStates={resolvedBodyStates} />
-      {showPagination && pagination && (
-        <DataViewToolbar
-          pagination={
-            <GitOpsPagination
-              itemCount={paginationItemCount}
-              pagination={pagination}
-              variant={PaginationVariant.bottom}
-              widgetId={`${paginationWidgetIdBase}-bottom`}
-              isStatic
-            />
-          }
-        />
-      )}
-    </DataView>
+    <div
+      ref={rootRef}
+      className={classNames('gitops-data-view-table', {
+        'gitops-data-view-table--folds-meet': foldsMeet,
+      })}
+    >
+      <DataView activeState={tableActiveState}>
+        {showPagination && pagination && (
+          <DataViewToolbar
+            pagination={
+              <GitOpsPagination
+                itemCount={paginationItemCount}
+                pagination={pagination}
+                variant={PaginationVariant.top}
+                widgetId={`${paginationWidgetIdBase}-top`}
+              />
+            }
+          />
+        )}
+        {/* Resizable tables already have one scrollport; don't wrap again. */}
+        {isResizable ? table : <InnerScrollContainer>{table}</InnerScrollContainer>}
+        {showPagination && pagination && (
+          <DataViewToolbar
+            pagination={
+              <GitOpsPagination
+                itemCount={paginationItemCount}
+                pagination={pagination}
+                variant={PaginationVariant.bottom}
+                widgetId={`${paginationWidgetIdBase}-bottom`}
+                isStatic
+              />
+            }
+          />
+        )}
+      </DataView>
+    </div>
   );
 };
 

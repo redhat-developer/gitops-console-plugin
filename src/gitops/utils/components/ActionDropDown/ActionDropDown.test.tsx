@@ -1,4 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
+
 import ActionsDropdown from './ActionDropDown';
 
 describe('ActionsDropdown', () => {
@@ -8,8 +9,8 @@ describe('ActionsDropdown', () => {
         <ActionsDropdown
           actions={
             [
-              { id: 'edit', label: 'Edit', cta: () => {} },
-              { id: 'delete', label: 'Delete', cta: () => {} },
+              { id: 'edit', label: 'Edit', cta: () => undefined },
+              { id: 'delete', label: 'Delete', cta: () => undefined },
             ] as any
           }
         />,
@@ -23,7 +24,7 @@ describe('ActionsDropdown', () => {
     expect(
       renderToStaticMarkup(
         <ActionsDropdown
-          actions={[{ id: 'edit', label: 'Edit', cta: () => {} }] as any}
+          actions={[{ id: 'edit', label: 'Edit', cta: () => undefined }] as any}
           isKebabToggle
         />,
       ),

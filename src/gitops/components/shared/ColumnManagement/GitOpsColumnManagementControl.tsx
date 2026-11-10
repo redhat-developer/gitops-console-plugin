@@ -1,8 +1,8 @@
 import * as React from 'react';
 
+import { RhUiColumnsIcon } from '@gitops/components/shared/icons/rhUiIcons';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { Button, ButtonVariant, Tooltip } from '@patternfly/react-core';
-import { ColumnsIcon } from '@patternfly/react-icons';
 
 import { GitOpsColumnManagementModal } from './GitOpsColumnManagementModal';
 import type { GitOpsColumnManagementModalColumn } from './types';
@@ -44,7 +44,7 @@ export const GitOpsColumnManagementControl: React.FC<GitOpsColumnManagementContr
           aria-label={manageColumnsLabel}
           data-test="gitops-manage-columns"
           onClick={() => setIsOpen(true)}
-          icon={<ColumnsIcon />}
+          icon={<RhUiColumnsIcon />}
         />
       </Tooltip>
       <GitOpsColumnManagementModal

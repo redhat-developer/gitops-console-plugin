@@ -136,7 +136,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
   const includeNamespaceColumn = !namespace;
   const managedColumns = React.useMemo(() => getApplicationSetManagedColumns(true, t), [t]);
 
-  const { activeColumnIds, columnManagement, filterDataView } = useGitOpsColumnManagement({
+  const { activeColumnIds, columnManagement, filterDataView, tableID } = useGitOpsColumnManagement({
     columnManagementID: APPLICATION_SET_LIST_COLUMN_MANAGEMENT_ID,
     columns: managedColumns,
     resourceType: t('ApplicationSet'),
@@ -290,6 +290,7 @@ const ApplicationSetList: React.FC<ApplicationSetProps> = ({
         <GitOpsDataViewTable
           rows={visibleRows}
           columns={visibleColumnsDV}
+          tableID={tableID}
           isEmpty={isEmptyState}
           emptyState={empty}
           isLoading={!loaded}
@@ -312,14 +313,13 @@ const ApplicationSetActionsCell: React.FC<{ appSet: ApplicationSetKind; index: n
   index,
 }) => {
   const [actions] = useApplicationSetActionsProvider(appSet);
+  // Match Console LazyActionMenu / ApplicationList: no wrapper — pf-v6-c-table__action sizes the column.
   return (
-    <div style={{ textAlign: 'right' }}>
-      <ActionsDropdown
-        actions={actions}
-        id={'gitops-applicationset-actions-' + index}
-        isKebabToggle={true}
-      />
-    </div>
+    <ActionsDropdown
+      actions={actions}
+      id={'gitops-applicationset-actions-' + index}
+      isKebabToggle={true}
+    />
   );
 };
 
@@ -389,7 +389,6 @@ const useApplicationSetRowsDV = (
       actions: {
         id: 'actions-' + index,
         cell: <ApplicationSetActionsCell appSet={appSet} index={index} />,
-        props: { style: { paddingTop: 8, paddingRight: 0, paddingLeft: 0, width: 10 } },
       },
     };
 
@@ -416,16 +415,6 @@ const useColumnsDV = (
     actions: '',
   };
 
-  const widthById: Record<string, string> = {
-    name: 'pf-m-width-25',
-    [NAMESPACE_COLUMN_ID]: 'pf-m-width-15',
-    status: 'pf-m-width-15',
-    'generated-apps': 'pf-m-width-15',
-    generators: 'pf-m-width-15',
-    labels: 'pf-m-width-20',
-    'created-at': 'pf-m-width-15',
-  };
-
   return managedColumns.map((column) => {
     if (column.id === 'actions') {
       return {
@@ -438,7 +427,6 @@ const useColumnsDV = (
       cell: titleById[column.id] ?? column.title,
       props: {
         'aria-label': column.id,
-        className: widthById[column.id],
         ...(sortIndex >= 0 ? { sort: getSortParams(sortIndex) } : {}),
       },
     };
