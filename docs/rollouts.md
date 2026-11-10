@@ -40,7 +40,7 @@ When the list has results, a **Topology view** control opens the Topology graph 
 | **Pods** | Shown by default | Pod counts for the Rollout. |
 | **Labels** | Shown by default | Rollout labels. |
 | **Selector** | Additional | Workload selector. |
-| **Last Updated** | Additional | Last update timestamp. |
+| **Last Updated** | Additional | Creation timestamp of the Rollout (shown as **Last Updated** in the table). |
 | **Actions** | Always shown | Row kebab menu. |
 
 For more details on how to show or hide columns, restore defaults, or reset column widths, see [Manage table columns](manage-columns.md).
