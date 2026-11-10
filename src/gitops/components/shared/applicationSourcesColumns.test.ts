@@ -13,15 +13,16 @@ describe('APPLICATION_SOURCES_COLUMN_MANAGEMENT_ID', () => {
 });
 
 describe('getApplicationSourcesManagedColumns', () => {
-  it('locks Type and puts Ref under Additional columns', () => {
+  it('locks Repository first and puts Ref under Additional columns', () => {
     const columns = getApplicationSourcesManagedColumns(t);
     const byId = Object.fromEntries(columns.map((column) => [column.id, column]));
 
-    expect(byId.type.isUntoggleable).toBe(true);
+    expect(byId.repository.isUntoggleable).toBe(true);
+    expect(byId.type.isUntoggleable).toBeUndefined();
     expect(byId.ref).toMatchObject({ isShownByDefault: false, additional: true });
     expect(columns.map((column) => column.id)).toEqual([
-      'type',
       'repository',
+      'type',
       'targetRevision',
       'path',
       'ref',
@@ -30,8 +31,8 @@ describe('getApplicationSourcesManagedColumns', () => {
 
   it('defaults to all columns except Ref', () => {
     expect(getDefaultActiveColumnIds(getApplicationSourcesManagedColumns(t))).toEqual([
-      'type',
       'repository',
+      'type',
       'targetRevision',
       'path',
     ]);
