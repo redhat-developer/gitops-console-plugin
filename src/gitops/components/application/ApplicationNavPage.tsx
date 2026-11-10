@@ -99,7 +99,7 @@ const ApplicationNavPage: React.FC<ApplicationPageProps> = ({ name, namespace, k
         alertSection={
           <AgenticRunLink application={application} namespace={namespace}>
             {(link) =>
-              link ? (
+              link && loaded && application ? (
                 <Alert
                   variant="info"
                   isInline
