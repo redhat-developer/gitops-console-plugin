@@ -1,31 +1,42 @@
 import * as React from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom-v5-compat';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom-v5-compat';
 
-import { ApplicationKind } from '@gitops/models/ApplicationModel';
 import { t } from '@gitops/utils/hooks/useGitOpsTranslation';
 import {
-  ListPageBody,
+  HorizontalNav,
   ListPageHeader,
   NamespaceBar,
   useActiveNamespace,
-  useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Grid, GridItem } from '@patternfly/react-core';
 
-import HealthStatusCard from './health-status/HealthStatusCard';
-import OperationalMetricsCard from './operational-metrics/OperationalMetricsCard';
-import ReconciliationCard from './reconciliation/ReconciliationCard';
-import SyncActivityCard from './sync-activity/SyncActivityCard';
-import SyncStatusCard from './sync-status/SyncStatusCard';
+import ApplicationsOverviewTab from './tabs/ApplicationsOverviewTab';
+import InfrastructureOverviewTab from './tabs/InfrastructureOverviewTab';
 
 import './DashboardOverviewPage.scss';
 
 const ALL_NAMESPACES_KEY = '#ALL_NS#';
+const ALL_NAMESPACES_PATH = '/gitops/overview/all-namespaces';
+const NS_PATH_PREFIX = '/gitops/overview/ns/';
 
-const buildOverviewPath = (namespace: string): string =>
-  !namespace || namespace === ALL_NAMESPACES_KEY
-    ? '/gitops/overview/all-namespaces'
-    : `/gitops/overview/ns/${namespace}`;
+const buildOverviewPath = (namespace: string, tabSuffix = ''): string => {
+  const base =
+    !namespace || namespace === ALL_NAMESPACES_KEY
+      ? ALL_NAMESPACES_PATH
+      : `${NS_PATH_PREFIX}${namespace}`;
+  return tabSuffix ? `${base}/${tabSuffix}` : base;
+};
+
+/** Tab path after the overview base (e.g. '' or 'infrastructure'). */
+const getOverviewTabSuffix = (pathname: string): string => {
+  if (pathname.startsWith(`${ALL_NAMESPACES_PATH}/`)) {
+    return pathname.slice(ALL_NAMESPACES_PATH.length + 1);
+  }
+  if (pathname === ALL_NAMESPACES_PATH) {
+    return '';
+  }
+  const nsMatch = pathname.match(/^\/gitops\/overview\/ns\/[^/]+(?:\/(.*))?$/);
+  return nsMatch?.[1] ?? '';
+};
 
 // Registered at the `/gitops/overview` path - see console-extensions.json
 export const GitOpsOverviewRedirect: React.FC = () => {
@@ -42,6 +53,7 @@ const DashboardOverviewPage: React.FC<DashboardOverviewPageProps> = ({
 }) => {
   const { ns } = useParams<{ ns?: string }>();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [, setActiveNamespace] = useActiveNamespace();
   const namespace = ns || namespaceProp;
 
@@ -50,55 +62,34 @@ const DashboardOverviewPage: React.FC<DashboardOverviewPageProps> = ({
   }, [namespace, setActiveNamespace]);
 
   const handleNamespaceChange = (newNamespace: string) => {
-    navigate(buildOverviewPath(newNamespace));
+    navigate(buildOverviewPath(newNamespace, getOverviewTabSuffix(pathname)));
   };
 
-  const [applications, isAppsLoaded, appsLoadedError] = useK8sWatchResource<ApplicationKind[]>({
-    isList: true,
-    groupVersionKind: {
-      group: 'argoproj.io',
-      kind: 'Application',
-      version: 'v1alpha1',
-    },
-    namespaced: !!namespace,
-    namespace,
-  });
+  // HorizontalNav appends each page.href to the current path and renders that page's component.
+  // Pass shared data (like namespace) via customData — tab components receive it as a prop.
+  const pages = React.useMemo(
+    () => [
+      {
+        href: '',
+        name: t('Application Overview'),
+        component: ApplicationsOverviewTab,
+      },
+      {
+        href: 'infrastructure',
+        name: t('Infrastructure'),
+        component: InfrastructureOverviewTab,
+      },
+    ],
+    [],
+  );
 
   return (
-    <div>
+    <div className="gitops-dashboard-overview-page">
       <NamespaceBar onNamespaceChange={handleNamespaceChange} />
-      <ListPageHeader title={t('GitOps Overview')} hideFavoriteButton={false}></ListPageHeader>
-      <ListPageBody>
-        <Grid hasGutter md={2} wrap="true">
-          <GridItem span={12} md={6} lg={4} rowSpan={1}>
-            <SyncStatusCard
-              namespace={namespace}
-              applications={applications}
-              isAppsLoaded={isAppsLoaded}
-              appsLoadedError={appsLoadedError}
-            />
-          </GridItem>
-          <GridItem span={12} md={6} lg={4} rowSpan={1}>
-            <HealthStatusCard
-              namespace={namespace}
-              applications={applications}
-              isAppsLoaded={isAppsLoaded}
-              appsLoadedError={appsLoadedError}
-            />
-          </GridItem>
-          <GridItem span={12} md={6} lg={4} rowSpan={1} smRowSpan={1} mdRowSpan={1}>
-            <OperationalMetricsCard namespace={namespace} />
-          </GridItem>
-
-          <GridItem span={12} md={6} lg={6} sm={12} rowSpan={1} smRowSpan={1} mdRowSpan={1}>
-            <SyncActivityCard namespace={namespace} />
-          </GridItem>
-
-          <GridItem span={12} md={6} lg={6} sm={12} rowSpan={1} smRowSpan={1} mdRowSpan={1}>
-            <ReconciliationCard namespace={namespace} />
-          </GridItem>
-        </Grid>
-      </ListPageBody>
+      <div className="gitops-dashboard-overview-page__content">
+        <ListPageHeader title={t('GitOps Overview')} hideFavoriteButton={false} />
+        <HorizontalNav pages={pages} customData={{ namespace }} />
+      </div>
     </div>
   );
 };

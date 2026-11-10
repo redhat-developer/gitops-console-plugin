@@ -18,7 +18,7 @@ const SyncStatus: React.FC<SyncProps> = ({ status }) => {
     targetIcon = <SyncUnknownIcon />;
   }
   return (
-    <span>
+    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
       {status ? targetIcon : ''} {status}
     </span>
   );

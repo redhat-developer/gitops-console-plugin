@@ -285,6 +285,17 @@ export const errorState = (errorTitle: string, errorMessage: string) => {
   );
 };
 
+export const warningState = (title: string, message: string) => {
+  return (
+    <ErrorState
+      titleText={title}
+      status="warning"
+      customFooter={<></>} // Hide the button
+      bodyText={message}
+    />
+  );
+};
+
 export const StatusChartLegendLabel = ({ datum, ...props }: any) => {
   return (
     <ChartLabel

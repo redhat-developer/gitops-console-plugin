@@ -97,18 +97,12 @@ const OperationalMetricsCard: React.FC<OverviewCardProps> = ({ namespace }) => {
       query: successfulSyncsPQ,
     });
   const noOfSuccessfulSyncs = resultSuccessfulSyncsPQ?.data?.result[0]?.value[1];
-  // Use first metric to determine last update time.  For the other metrics, it will be the same delay
-  const timeOfSuccessfulSyncs = resultSuccessfulSyncsPQ?.data?.result[0]?.value[0]
-    ? new Date(
-        Number(resultSuccessfulSyncsPQ?.data?.result[0]?.value[0]) * 1000,
-      ).toLocaleTimeString()
-    : undefined;
 
   // Failed Syncs
   const failedSyncsPQ =
-    `sum(argocd_app_sync_total{phase!='Succeeded'` +
+    `sum(increase(argocd_app_sync_total{phase!='Succeeded'` +
     (namespace ? `,namespace='` + namespace + `'` : ``) +
-    `})`;
+    `}[24h]))`;
   const [resultFailedSyncsPQ, loadedFailedSyncsPQ, errorFailedSyncsPQ] = usePrometheusPoll({
     endpoint: PrometheusEndpoint.QUERY,
     delay: lastUpdateTime * 1000,
@@ -144,6 +138,15 @@ const OperationalMetricsCard: React.FC<OverviewCardProps> = ({ namespace }) => {
       query: autosyncEnabledPQ,
     });
   const noOfAutosyncEnabled = resultAutosyncEnabledPQ?.data?.result[0]?.value[1];
+  // Last update time can be undefined for 0 apps. If last successful sync is used, then the last update time
+  // can be undefined for > 0 apps that haven't synced yet. Therefore, use the following two metrics to determine the
+  // last update time. For any x number of apps, the there should be at least one with either autosync enabled or disabled.
+  // The same delay update time will be used for all metrics.
+  let timeOfLastUpdate = resultAutosyncEnabledPQ?.data?.result[0]?.value[0]
+    ? new Date(
+        Number(resultAutosyncEnabledPQ?.data?.result[0]?.value[0]) * 1000,
+      ).toLocaleTimeString()
+    : undefined;
 
   // Apps with Autosync disabled
   const autosyncDisabledPQ =
@@ -157,7 +160,14 @@ const OperationalMetricsCard: React.FC<OverviewCardProps> = ({ namespace }) => {
       query: autosyncDisabledPQ,
     });
   const noOfAutosyncDisabled = resultAutosyncDisabledPQ?.data?.result[0]?.value[1];
-
+  // If there are no apps with autosync enabled, then there should be at least one with autosync disabled.
+  if (!timeOfLastUpdate) {
+    timeOfLastUpdate = resultAutosyncDisabledPQ?.data?.result[0]?.value[0]
+      ? new Date(
+          Number(resultAutosyncDisabledPQ?.data?.result[0]?.value[0]) * 1000,
+        ).toLocaleTimeString()
+      : undefined;
+  }
   // Repo Queue
   const repoQueuePQ =
     `sum(argocd_repo_pending_request_total` +
@@ -181,20 +191,23 @@ const OperationalMetricsCard: React.FC<OverviewCardProps> = ({ namespace }) => {
   const noOfGitFetchFailedTotal = resultGitFetchFailedTotalPQ?.data?.result[0]?.value[1];
 
   return (
-    <Card className="gitops-dashboard__fixed-height-row-card">
+    <Card className="gitops-dashboard__operational-metrics-card">
       <CardTitle>
         <span style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>{t('Operational metrics')}</span>
-          {timeOfSuccessfulSyncs && (
-            <Tooltip content={t('Last update time.  Updated every 10 seconds.')}>
+          {timeOfLastUpdate && (
+            <Tooltip content={t('Last update time. Updated every 10 seconds.')}>
               <Label status={'info'} variant="outline" tooltipPosition="left">
-                {timeOfSuccessfulSyncs}
+                {timeOfLastUpdate}
               </Label>
             </Tooltip>
           )}
         </span>
       </CardTitle>
-      <CardBody style={{ fontSize: '12px' }}>
+      <CardBody
+        className="gitops-dashboard__operational-metrics-card-body"
+        style={{ fontSize: '12px' }}
+      >
         {rowMetric(
           t('Successful syncs'),
           successfulSyncsPQ,
@@ -216,7 +229,7 @@ const OperationalMetricsCard: React.FC<OverviewCardProps> = ({ namespace }) => {
           loadedFailedSyncsPQ,
           errorFailedSyncsPQ,
           t(
-            'Number of failed syncs. Apps successfully synced from a failed sync will not decrease this count.',
+            'Number of failed syncs over a 24 hour moving window. If a failed sync happens, this counter increases by one. 24 hours later, this number will then decrease by one.',
           ),
           noOfFailedSyncs ? (
             <Label
@@ -226,7 +239,7 @@ const OperationalMetricsCard: React.FC<OverviewCardProps> = ({ namespace }) => {
               isClickable
               className="gitops-dashboard__label-with-external-link"
             >
-              {noOfFailedSyncs}
+              {Number.parseInt(noOfFailedSyncs)}
             </Label>
           ) : (
             <Label

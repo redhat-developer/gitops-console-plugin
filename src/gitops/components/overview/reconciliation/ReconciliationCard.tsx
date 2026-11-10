@@ -89,7 +89,9 @@ const ReconciliationCard: React.FC<OverviewCardProps> = ({ namespace }) => {
           <div>
             {errorState(
               t('Unable to retrieve metrics data'),
-              t('Error occurred running query on reconciliation metric: ' + promError),
+              t(
+                'Cannot retrieve data for the Argo CD reconciliation performance. Check that the cluster metrics monitoring is enabled.',
+              ),
             )}
           </div>
         ) : (
