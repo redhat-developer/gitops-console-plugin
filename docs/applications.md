@@ -1,6 +1,6 @@
 # Applications in the GitOps Console
 
-The GitOps Console plugin provides list and details pages for Argo CD Applications in the OpenShift web console. You can search and filter Applications, create them from a YAML template, review health and sync status, inspect sources, managed resources, sync history, and events.
+The GitOps Console plugin provides list and details pages for Argo CD Applications in the OpenShift web console. You can search and filter Applications, manage which table columns are visible, create them from a YAML template, review health and sync status, inspect sources, managed resources, sync history, and events.
 
 > **IMPORTANT**
 >
@@ -33,18 +33,18 @@ You can combine search and filters. Clear individual chips or use **Clear all fi
 
 ### Table columns
 
-The Applications table includes:
+| Column | Default | Description |
+| --- | --- | --- |
+| **Name** | Always shown | Application name, with a link to the details page. |
+| **Namespace** | Shown by default when viewing all projects | Namespace of the Application. Available only when viewing all projects. |
+| **Sync Status** | Shown by default | Current sync state, with quiet operation state when a sync is in progress or recently finished. |
+| **Health Status** | Shown by default | Overall Application health. |
+| **Labels** | Shown by default | Application labels. |
+| **Revision** | Additional | Target revision (or **HEAD**). Multi-source Applications may show additional revision count. |
+| **App Project** | Additional | AppProject that this Application belongs to. |
+| **Actions** | Always shown | Row kebab menu. |
 
-| Column | Description |
-| --- | --- |
-| **Name** | Application name, with a link to the details page. |
-| **Namespace** | Namespace of the Application. |
-| **Sync Status** | Current sync state, with quiet operation state when a sync is in progress or recently finished. |
-| **Health Status** | Overall Application health. |
-| **Revision** | Target revision (or **HEAD**). Multi-source Applications may show additional revision count. |
-| **Labels** | Application labels. |
-| **App Project** | AppProject that this Application belongs to. |
-| **Actions** | Row kebab menu. |
+For more details on how to show or hide columns, restore defaults, or reset column widths, see [Manage table columns](manage-columns.md).
 
 ### Pagination
 
@@ -230,6 +230,7 @@ The **Events** tab shows Kubernetes events for the Application object, using the
 ## Related information
 
 * [Filter, search, and paginate resources](filter-resources.md)
+* [Manage table columns](manage-columns.md)
 * [Graphs and topology views](topology.md)
 * [ApplicationSets in the GitOps Console](applicationsets.md)
 * [AppProjects in the GitOps Console](appprojects-rbac.md)

@@ -24,12 +24,25 @@ The AppProjects list page includes:
   * **Destinations**: Has Destinations, No Destinations
 * **Search**: Use the search field to match by **Name** or **Label**. Choose the mode from the dropdown next to the field.
 * **Create action**: Click **Create AppProject** to open the YAML editor with a default AppProject template
-* **Table columns**: **Name**, **Namespace**, **Description**, **Applications**, **Labels**, **Last Updated**, and row actions
 * **Pagination**: Browse results in pages of 10, 20, 50, or 100 items (default 50). Search and filters change which rows are included. See [Filter, search, and paginate resources](filter-resources.md).
 
 > **NOTE**
 >
 > Creation uses the YAML editor. The console does not provide an AppProject form wizard.
+
+### Table columns
+
+| Column | Default | Description |
+| --- | --- | --- |
+| **Name** | Always shown | AppProject name, with a link to the details page. |
+| **Namespace** | Shown by default when viewing all projects | Namespace of the AppProject. Available only when viewing all projects. |
+| **Applications** | Shown by default | Applications associated with the AppProject. |
+| **Labels** | Shown by default | AppProject labels. |
+| **Description** | Additional | AppProject description. |
+| **Last Updated** | Additional | Last update timestamp. |
+| **Actions** | Always shown | Row kebab menu. |
+
+For more details on how to show or hide columns, restore defaults, or reset column widths, see [Manage table columns](manage-columns.md).
 
 ### Row actions
 
@@ -145,5 +158,6 @@ OpenShift RBAC and Argo CD AppProject rules both apply; they control different t
 ## Related information
 
 * [Filter, search, and paginate resources](filter-resources.md)
+* [Manage table columns](manage-columns.md)
 * [Applications in the GitOps Console](applications.md)
 * [Troubleshooting](troubleshooting.md)

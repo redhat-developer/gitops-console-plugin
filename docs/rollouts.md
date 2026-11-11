@@ -22,7 +22,6 @@ The Rollouts list page includes:
   * **Rollout Status**: Healthy, Paused, Progressing, Degraded
 * **Search**: Use the search field to match by **Name** or **Label**. Choose the mode from the dropdown next to the field.
 * **Create action**: Click **Create Rollout** to open the YAML editor with a default Rollout template
-* **Table columns**: **Name**, **Namespace**, **Status**, **Pods**, **Labels**, **Selector**, **Last Updated**, and row actions
 * **Pagination**: Browse results in pages of 10, 20, 50, or 100 items (default 50). Search and filters change which rows are included. See [Filter, search, and paginate resources](filter-resources.md).
 
 When the list has results, a **Topology view** control opens the Topology graph for the current namespace (or all namespaces).
@@ -30,6 +29,21 @@ When the list has results, a **Topology view** control opens the Topology graph 
 > **NOTE**
 >
 > Creation uses the YAML editor. The console does not provide a Rollout form wizard.
+
+### Table columns
+
+| Column | Default | Description |
+| --- | --- | --- |
+| **Name** | Always shown | Rollout name, with a link to the details page. |
+| **Namespace** | Shown by default when viewing all projects | Namespace of the Rollout. Available only when viewing all projects. |
+| **Status** | Shown by default | Current Rollout status. |
+| **Pods** | Shown by default | Pod counts for the Rollout. |
+| **Labels** | Shown by default | Rollout labels. |
+| **Selector** | Additional | Workload selector. |
+| **Last Updated** | Additional | Creation timestamp of the Rollout (shown as **Last Updated** in the table). |
+| **Actions** | Always shown | Row kebab menu. |
+
+For more details on how to show or hide columns, restore defaults, or reset column widths, see [Manage table columns](manage-columns.md).
 
 ### Row actions
 
@@ -147,5 +161,6 @@ The **Events** tab shows Kubernetes events for the Rollout object, using the sta
 ## Related information
 
 * [Filter, search, and paginate resources](filter-resources.md)
+* [Manage table columns](manage-columns.md)
 * [Rollouts in Topology](topology.md#rollouts-in-topology)
 * [Troubleshooting](troubleshooting.md)
