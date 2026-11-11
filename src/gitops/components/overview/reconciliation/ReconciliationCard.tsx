@@ -37,7 +37,8 @@ const RECONCILE_CHART_PADDING = { bottom: 50, left: 60, right: 25, top: 10 };
 
 const legendData = [
   {
-    name: 'Reconciliation Performance (s)',
+    // Count of reconciliations over 24h (same pattern as SyncActivityCard's syncs series).
+    name: t('Reconciliations (24h sliding window)'),
     childName: 'RECONCILIATION_PERFORMANCE', // See Chartline below
     symbol: { type: 'square', fill: 'var(--pf-t--global--color--nonstatus--blue--default)' },
   },

@@ -4,8 +4,9 @@ The GitOps Console plugin extends the OpenShift Container Platform web console b
 
 After you install the Red Hat OpenShift GitOps Operator, the OpenShift web console displays a **GitOps** navigation tab in the **Administrator** or **Core platform** perspective. The plugin is enabled by default. The GitOps navigation tab replaces the previous **Environments** tab and related pages in the **Developer** perspective.
 
-The GitOps navigation tab provides access to the following Argo CD and Argo Rollouts resources:
+The GitOps navigation tab provides access to the following pages:
 
+* Overview
 * Applications
 * ApplicationSets
 * AppProjects
@@ -32,6 +33,8 @@ You can use these pages to:
 
 The GitOps Console plugin integrates with the console navigation, allowing you to navigate between related resources and access contextual actions for each resource type.
 
+In addition to these resource pages, the **Overview** page provides a dashboard of Application sync and health status, operations, Argo CD metrics, and GitOps infrastructure for the selected project or all projects. See [GitOps Overview dashboard](dashboard.md).
+
 ### Search and YAML templates
 
 The GitOps Console plugin provides search and template capabilities:
@@ -42,6 +45,7 @@ The GitOps Console plugin provides search and template capabilities:
 ## Additional resources
 
 * [Enable the GitOps Console plugin](admin-enable-plugin.md)
+* [GitOps Overview dashboard](dashboard.md)
 * [Applications in the GitOps Console](applications.md)
 * [ApplicationSets in the GitOps Console](applicationsets.md)
 * [AppProjects in the GitOps Console](appprojects-rbac.md)
