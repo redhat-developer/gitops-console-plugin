@@ -87,7 +87,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.7.0",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
-    "typesafe-actions": "^4.4.2",
+    "typesafe-actions": "^5.0.0",
     "typescript": "5.9.3",
     "victory-area": "^37.3.6",
     "victory-axis": "^37.3.6",

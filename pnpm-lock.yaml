@@ -255,8 +255,8 @@ importers:
         specifier: ^4.1.0
         version: 4.2.0
       typesafe-actions:
-        specifier: ^4.4.2
-        version: 4.4.2
+        specifier: ^5.0.0
+        version: 5.1.0
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -2278,6 +2278,7 @@ packages:
   clone-buffer@1.0.0:
     resolution: {integrity: sha512-KLLTJWrvwIP+OPfMn0x2PheDEP20RPUcGXj/ERegTgdmPEZylALQldygiqrPPu8P45uNuPs7ckmReLY6v/iA5g==}
     engines: {node: '>= 0.10'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   clone-deep@4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}
@@ -5523,6 +5524,10 @@ packages:
 
   typesafe-actions@4.4.2:
     resolution: {integrity: sha512-QW61P4cOX8dCNmrfpcUMjvU/MF/sFTC8/PlG9215W1gKDzZUBjRGdyYSO6ZcEUNsn491S2VpryJOHSIVSDqJrg==}
+    engines: {node: '>= 4'}
+
+  typesafe-actions@5.1.0:
+    resolution: {integrity: sha512-bna6Yi1pRznoo6Bz1cE6btB/Yy8Xywytyfrzu/wc+NFW3ZF0I+2iCGImhBsoYYCOWuICtRO4yHcnDlzgo1AdNg==}
     engines: {node: '>= 4'}
 
   typescript@4.9.5:
@@ -12307,6 +12312,8 @@ snapshots:
   typedarray@0.0.6: {}
 
   typesafe-actions@4.4.2: {}
+
+  typesafe-actions@5.1.0: {}
 
   typescript@4.9.5: {}
 
