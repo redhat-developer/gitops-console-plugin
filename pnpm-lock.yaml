@@ -53,8 +53,8 @@ importers:
         specifier: 2.4.3
         version: 2.4.3(react-router-dom@5.3.4(react@17.0.2))(react@17.0.2)
       redux:
-        specifier: 4.0.1
-        version: 4.0.1
+        specifier: 4.2.1
+        version: 4.2.1
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
@@ -2278,6 +2278,7 @@ packages:
   clone-buffer@1.0.0:
     resolution: {integrity: sha512-KLLTJWrvwIP+OPfMn0x2PheDEP20RPUcGXj/ERegTgdmPEZylALQldygiqrPPu8P45uNuPs7ckmReLY6v/iA5g==}
     engines: {node: '>= 0.10'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   clone-deep@4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}
