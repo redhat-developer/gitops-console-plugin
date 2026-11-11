@@ -6,17 +6,21 @@ import { ApplicationKind, ApplicationModel } from '@gitops/models/ApplicationMod
 import { getApplicationArgoUrl } from '@gitops/utils/gitops';
 import { useGitOpsTranslation } from '@gitops/utils/hooks/useGitOpsTranslation';
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
-import { Bullseye, Spinner } from '@patternfly/react-core';
+import { Alert, Bullseye, Flex, Spinner } from '@patternfly/react-core';
 
+import { AgenticRunLink } from '../shared/AgenticRunLink/AgenticRunLink';
 import DetailsPageHeader from '../shared/DetailsPageHeader/DetailsPageHeader';
 import EventsTab from '../shared/EventsTab/EventsTab';
 import ResourceYAMLTab from '../shared/ResourceYAMLTab/ResourceYAMLTab';
+import TechPreviewBadge from '../shared/TechPreviewBadge/TechPreviewBadge';
 
 import ApplicationDetailsTab from './ApplicationDetailsTab';
 import ApplicationHistoryTab from './ApplicationHistoryTab';
 import ApplicationResourcesTab from './ApplicationResourcesTab';
 import ApplicationSourcesTab from './ApplicationSourcesTab';
 import ApplicationSyncStatusTab from './ApplicationSyncStatusTab';
+
+import './application-details-title.scss';
 
 type ApplicationPageProps = {
   name: string;
@@ -92,6 +96,34 @@ const ApplicationNavPage: React.FC<ApplicationPageProps> = ({ name, namespace, k
         actions={actions}
         iconText="A"
         iconTitle="Argo CD Application"
+        alertSection={
+          <AgenticRunLink application={application} namespace={namespace}>
+            {(link) =>
+              link && loaded && application ? (
+                <Alert
+                  variant="info"
+                  isInline
+                  title={
+                    <React.Fragment>
+                      <Flex direction={{ default: 'row' }}>
+                        <Flex flex={{ default: 'flex_3' }}>{t('AI remediation available')}</Flex>
+                        <Flex
+                          flex={{ default: 'flex_1' }}
+                          justifyContent={{ default: 'justifyContentFlexEnd' }}
+                        >
+                          <TechPreviewBadge />
+                        </Flex>
+                      </Flex>
+                    </React.Fragment>
+                  }
+                  actionLinks={link}
+                >
+                  {t('OpenShift Lightspeed analyzed this resource and proposed a fix.')}
+                </Alert>
+              ) : null
+            }
+          </AgenticRunLink>
+        }
       />
       {loaded ? (
         <div>

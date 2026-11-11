@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 import { HealthStatus as HS, SyncStatus as SS } from 'src/gitops/utils/constants';
 
+import { AgenticRunLink } from '@gitops/components/shared/AgenticRunLink/AgenticRunLink';
 import {
   ApplicationCondition,
   ApplicationKind,
@@ -408,6 +409,9 @@ const createApplicationResourceEntry = (
                   <SyncStatus status={syncStatus || SS.UNKNOWN} />
                 </Tooltip>
               }
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <AgenticRunLink application={instance} namespace={projectNamespace} />
             </span>
           </FlexItem>
         </Flex>
