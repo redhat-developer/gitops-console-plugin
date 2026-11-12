@@ -80,3 +80,39 @@ export const LabelGroup: React.FC<any> = ({ children, className, numLabels }) =>
 export const Icon: React.FC<any> = ({ children, size }) => (
   <span data-testid="icon" data-size={size}>{children}</span>
 );
+
+export const EmptyState: React.FC<any> = ({
+  children,
+  className,
+  variant,
+  ...rest
+}) => (
+  <div data-testid="empty-state" className={className} data-variant={variant} {...rest}>
+    {children}
+  </div>
+);
+
+export const EmptyStateHeader: React.FC<any> = ({
+  children,
+  titleText,
+  headingLevel: Tag = 'h1',
+  icon,
+}) => (
+  <div data-testid="empty-state-header">
+    {icon}
+    {titleText && <Tag>{titleText}</Tag>}
+    {children}
+  </div>
+);
+
+export const EmptyStateIcon: React.FC<any> = ({ icon: IconComponent, className }) => (
+  <IconComponent className={className} data-testid="empty-state-icon" />
+);
+
+export const EmptyStateBody: React.FC<any> = ({ children }) => (
+  <div data-testid="empty-state-body">{children}</div>
+);
+
+export const Spinner: React.FC<any> = ({ size, ...rest }) => (
+  <svg data-testid="spinner" role="progressbar" aria-valuetext="Loading..." data-size={size} {...rest} />
+);

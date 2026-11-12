@@ -53,6 +53,7 @@ type DetailsPageHeaderProps = {
   actions: Action[];
   iconText: string;
   iconTitle: string;
+  alertSection?: React.ReactNode;
 };
 
 const DetailsPageHeader: React.FC<DetailsPageHeaderProps> = ({
@@ -63,6 +64,7 @@ const DetailsPageHeader: React.FC<DetailsPageHeaderProps> = ({
   actions,
   iconText,
   iconTitle,
+  alertSection,
 }) => {
   const { t } = useGitOpsTranslation();
   return (
@@ -108,6 +110,7 @@ const DetailsPageHeader: React.FC<DetailsPageHeaderProps> = ({
               </ActionListGroup>
             </ActionList>
           </PaneHeading>
+          {alertSection && alertSection}
         </DetailsPageTitle>
       </div>
     </>

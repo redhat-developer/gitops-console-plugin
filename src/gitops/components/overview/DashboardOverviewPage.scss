@@ -1,0 +1,147 @@
+// Overview dashboard cards in grid layout
+.gitops-dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--pf-v5-global--gutter);
+}
+
+.gitops-dashboard__chart-card {
+  min-width: 300px;
+}
+
+// Fix the donut to set size so it doesn't grow as the card grows.
+.gitops-dashboard__donut-container {
+  height: 270px;
+  width: 270px;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
+.gitops-dashboard__donut-card-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  overflow-y: hidden;
+}
+
+.gitops-dashboard__fixed-height-application-firstrow-card {
+  @media (min-width: 768px) {
+    height: 300px;
+  }
+}
+
+.gitops-dashboard__operational-metrics-card-body {
+  // height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.gitops-dashboard__operational-metrics-card {
+  @media (min-width: 768px) {
+    height: 300px;
+  }
+  overflow: visible;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.gitops-dashboard__fixed-height-row-card {
+  @media (min-width: 768px) {
+    height: 350px;
+  }
+}
+
+.gitops-dashboard-overview-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+
+  // overflow: visible;
+  &__content {
+    display: flex;
+    // flex: 1;
+    flex-direction: column;
+    position: relative;
+    overflow: auto;
+  }
+}
+
+// PatternFly's `.pf-v5-c-card` can make the whole card (title + body) scroll together once a
+// fixed height is applied. Override `overflow` back to `visible` here and make only the body
+// scrollable via `.gitops-dashboard__infrastructure-card-body`, so the title/border stay fixed
+// while just the body's content scrolls internally.
+.gitops-dashboard__infrastructure-card {
+  .pf-v5-c-card__title {
+    margin-bottom: 1px;
+    padding-bottom: 1px;
+  }
+  @media (min-width: 768px) {
+    height: 200px;
+  }
+  overflow: visible;
+
+  &__loading-condition {
+    height: 80%;
+  }
+
+  &__error-condition {
+    height: 60%;
+  }
+}
+
+.gitops-dashboard__infrastructure-card-applications-needing-attention {
+  .pf-v5-c-card__title {
+    margin-bottom: 1px;
+    padding-bottom: 1px;
+  }
+
+  @media (min-width: 768px) {
+    height: 300px;
+  }
+  overflow: visible;
+}
+
+.gitops-dashboard__infrastructure-card-body {
+  // Allow the body to shrink within the card's fixed height instead of growing to fit its
+  // content (flex items default to `min-height: auto`, which otherwise prevents shrinking).
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.gitops-dashboard__chart-container {
+  @media (min-width: 768px) {
+    width: 100%;
+  }
+}
+
+.gitops-dashboard__reconcile-card-body {
+  height: 100%;
+}
+
+.gitops-dashboard__reconcile-card {
+  @media (min-width: 768px) {
+    height: 310px;
+  }
+}
+
+.gitops-dashboard__half-size-empty-state {
+  --pf-v5-c-empty-state__title-text--FontSize: 0.8rem;
+  --pf-v5-c-empty-state--PaddingBottom: 4rem;
+  .pf-v5-c-spinner {
+    --pf-v5-c-spinner--diameter: 1.75rem;
+  }
+}
+
+.gitops-dashboard__label-with-external-link {
+  padding-inline-start: 10px;
+  padding-inline-end: 10px;
+  min-width: 40px;
+}
+
+.gitops-dashboard__link {
+  text-decoration-style: dashed;
+}

@@ -1,6 +1,11 @@
 import { DeploymentCondition, PodTemplate } from '@gitops/topology/console/types';
 import { modelToRef } from '@gitops/utils/utils';
-import { K8sModel, K8sResourceCommon, Selector } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  K8sModel,
+  K8sResourceCommon,
+  K8sResourceCondition,
+  Selector,
+} from '@openshift-console/dynamic-plugin-sdk';
 
 export const RolloutModel: K8sModel = {
   label: 'Rollout',
@@ -110,3 +115,32 @@ export type RolloutKind = K8sResourceCommon & {
 export type ReplicaSetKind = NonNullable<unknown> & ReplicationControllerKind;
 
 export const rolloutModelRef = modelToRef(RolloutModel);
+
+export const RolloutManagerModel: K8sModel = {
+  label: 'RolloutManager',
+  labelPlural: 'RolloutManagers',
+  apiVersion: 'v1alpha1',
+  apiGroup: 'argoproj.io',
+  plural: 'rolloutmanagers',
+  abbr: 'rm',
+  namespaced: true,
+  kind: 'RolloutManager',
+  id: 'rolloutmanager',
+  crd: true,
+};
+
+export const RolloutManagerGroupVersionKind = {
+  group: 'argoproj.io',
+  version: 'v1alpha1',
+  kind: 'RolloutManager',
+};
+
+export type RolloutManagerKind = K8sResourceCommon & {
+  status?: RolloutManagerStatus;
+};
+
+export type RolloutManagerStatus = {
+  conditions: K8sResourceCondition[];
+  phase: string;
+  rolloutController: string;
+};
