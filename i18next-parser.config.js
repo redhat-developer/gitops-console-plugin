@@ -1,7 +1,7 @@
 module.exports = {
   createOldCatalogs: false,
   keySeparator: false,
-  locales: ['en', 'ja', 'ko', 'zh'],
+  locales: ['en', 'ja', 'ko', 'zh', 'es', 'fr'],
   namespaceSeparator: '~',
   reactNamespace: false,
   useKeysAsDefaultValue: true,
