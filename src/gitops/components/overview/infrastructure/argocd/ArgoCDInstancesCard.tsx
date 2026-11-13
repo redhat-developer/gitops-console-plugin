@@ -68,7 +68,7 @@ const ArgoCDInstancesCard: React.FC<OverviewCardProps> = ({ namespace }) => {
     ...(namespace ? { namespace: namespace } : {}),
   });
 
-  const canCreateArgoCDAccess = useAccessReview({
+  const [canCreateArgoCDAccess, isLoadingCreateArgoCDAccess] = useAccessReview({
     group: ArgoCDGroupVersionKind.group,
     resource: ArgoCDModel.plural,
     verb: 'create',
@@ -99,8 +99,8 @@ const ArgoCDInstancesCard: React.FC<OverviewCardProps> = ({ namespace }) => {
               {t('No {{x}} found', { x: ArgoCDModel.labelPlural })}
             </Flex>
           )}
-          {canCreateArgoCDAccess[0] &&
-            !canCreateArgoCDAccess[1] &&
+          {canCreateArgoCDAccess &&
+            !isLoadingCreateArgoCDAccess &&
             csvsLoaded &&
             !csvsError &&
             gitopsOperator &&

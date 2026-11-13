@@ -51,14 +51,14 @@ const InfrastructureResourceCard: React.FC<InfrastructureResourceCardProps> = ({
   });
 
   // K8sVerb from Dynamic Pluging SDK - we need to move up
-  const canCreateAccess = useAccessReview({
+  const [canCreateAccess, isLoadingCreateAccess] = useAccessReview({
     group: model.apiGroup,
     resource: model.plural,
     verb: 'create',
     namespace,
   });
 
-  const canListAccess = useAccessReview({
+  const [canListAccess, isLoadingListAccess] = useAccessReview({
     group: model.apiGroup,
     resource: model.plural,
     verb: 'list',
@@ -90,7 +90,7 @@ const InfrastructureResourceCard: React.FC<InfrastructureResourceCardProps> = ({
               {t('No {{x}} found', { x: model.labelPlural })}
             </Flex>
           )}
-          {canListAccess[0] && !canListAccess[1] && (
+          {canListAccess && !isLoadingListAccess && (
             <>
               <Divider style={isEmpty ? LINK_MARGIN_FOR_EMPTY_LIST : LINK_MARGIN} />
               <Flex key={`${entryKeyPrefix}-resource-list-link`}>
@@ -98,7 +98,7 @@ const InfrastructureResourceCard: React.FC<InfrastructureResourceCardProps> = ({
               </Flex>
             </>
           )}
-          {canCreateAccess[0] && !canCreateAccess[1] && namespace && (
+          {canCreateAccess && !isLoadingCreateAccess && namespace && (
             <CreateResourceLink
               isEmptyList={isEmpty}
               createLinkUrlString={`/k8s/ns/${namespace}/${modelRef}/~new`}
