@@ -210,14 +210,14 @@ export const DeploymentSideBarDetails: React.FC<DeploymentSideBarDetailsProps> =
   const labelsModalLauncher = useLabelsModal(d);
   const annotationsModalLauncher = useAnnotationsModal(d);
 
-  const canUpdateAccess = useAccessReview({
+  const [canUpdateAccess, isLoadingUpdateAccess] = useAccessReview({
     group: model?.apiGroup,
     resource: model?.plural,
     verb: 'patch',
     name: d.metadata?.name,
     namespace: d.metadata?.namespace,
   });
-  const canUpdate = canUpdateAccess && true;
+  const canUpdate = canUpdateAccess && !isLoadingUpdateAccess;
   const labelItems = _.map(d.metadata?.labels, (label, key) => (
     <Label
       key={key}

@@ -56,7 +56,7 @@ const NeedsAttentionCard: React.FC<OverviewCardForApplicationsProps> = ({
     ? `/k8s/ns/${namespace}/${modelRef}`
     : `/k8s/all-namespaces/${modelRef}`;
 
-  const canListAccess = useAccessReview({
+  const [canListAccess, isLoadingListAccess] = useAccessReview({
     group: ApplicationModel.apiGroup,
     resource: ApplicationModel.plural,
     verb: 'list',
@@ -141,7 +141,7 @@ const NeedsAttentionCard: React.FC<OverviewCardForApplicationsProps> = ({
                 {t('No {{x}} needing attention', { x: ApplicationModel.labelPlural })}
               </Flex>
             )}
-            {canListAccess[0] && !canListAccess[1] && (
+            {canListAccess && !isLoadingListAccess && (
               <>
                 <Divider style={isEmpty ? LINK_MARGIN_FOR_EMPTY_LIST : LINK_MARGIN} />
                 <Flex key={`apps-needing-attention-resource-list-link`}>

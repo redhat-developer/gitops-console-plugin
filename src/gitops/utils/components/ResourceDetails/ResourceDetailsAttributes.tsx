@@ -57,7 +57,7 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
 
   // Check if user has permission to update the resource
   // This enables/disables the Labels and Annotations edit buttons based on user permissions
-  const [canUpdate] = useAccessReview({
+  const [canUpdate, isLoadingUpdate] = useAccessReview({
     group: 'argoproj.io',
     verb: 'patch',
     resource: 'applicationsets',
@@ -212,7 +212,7 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
         </DescriptionListTermHelpText>
         <DescriptionListDescription>
           <div style={{ display: 'inline-block' }}>
-            {canUpdate && (
+            {canUpdate && !isLoadingUpdate && (
               <div
                 style={{
                   display: 'flex',
@@ -326,7 +326,7 @@ const ResourceDetailsAttributes: React.FC<ResourceDetailsAttributesProps> = ({
         </DescriptionListTermHelpText>
         <DescriptionListDescription>
           <div style={{ display: 'inline-block' }}>
-            {canUpdate && (
+            {canUpdate && !isLoadingUpdate && (
               <div
                 style={{ display: 'flex', alignItems: 'center', marginBottom: 4, width: '100%' }}
               >
