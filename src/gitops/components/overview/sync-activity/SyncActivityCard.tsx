@@ -281,14 +281,12 @@ const SyncActivityCard: React.FC<OverviewCardProps> = ({ namespace }) => {
               )}
             </div>
             <ExternalLink
-              href={
-                '/monitoring/query-browser?units=short&query0=' +
-                numberOfSyncsPQ +
-                '&query1=' +
-                appsSyncedPQ +
-                '&query2=' +
-                appsOutOfSyncPQ
-              }
+              href={`/monitoring/query-browser?${new URLSearchParams({
+                units: 'short',
+                query0: numberOfSyncsPQ,
+                query1: appsSyncedPQ,
+                query2: appsOutOfSyncPQ,
+              }).toString()}`}
             >
               {t('View in Observe/Metrics')}
             </ExternalLink>

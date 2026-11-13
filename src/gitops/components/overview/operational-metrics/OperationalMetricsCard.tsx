@@ -26,13 +26,14 @@ const rowMetric = (
   tooltipContent: string,
   labelComponent: React.ReactElement,
 ) => {
+  const href = `/monitoring/query-browser?${new URLSearchParams({
+    units: 'short',
+    query0: query,
+  }).toString()}`;
   return (
     <Grid hasGutter md={2} wrap="true">
       <GridItem span={9} md={9} lg={9} sm={9} rowSpan={1} smRowSpan={1} mdRowSpan={1}>
-        <ExternalLink
-          href={'/monitoring/query-browser?units=short&query0=' + query}
-          stopPropagation={true}
-        >
+        <ExternalLink href={href} stopPropagation={true}>
           <div>{title}</div>
         </ExternalLink>
       </GridItem>
@@ -46,10 +47,7 @@ const rowMetric = (
         mdRowSpan={2}
         style={{ textAlign: 'right' }}
       >
-        <ExternalLink
-          href={'/monitoring/query-browser?units=short&query0=' + query}
-          stopPropagation={true}
-        >
+        <ExternalLink href={href} stopPropagation={true}>
           {/* eslint-disable-next-line no-nested-ternary */}
           {!loading && !error ? (
             <Tooltip content={'Loading metric data...'}>
