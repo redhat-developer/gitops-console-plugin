@@ -6,7 +6,7 @@ const metadata: ConsolePluginBuildMetadata = {
   },
   name: "gitops-plugin",
   displayName: 'GitOps Plugin',
-  version: "0.1.0",
+  version: "0.1.1",
   description: "OpenShift Console Plugin for GitOps",
   exposedModules: {
     "gitopsFlags": "./plugin/utils/flags",
