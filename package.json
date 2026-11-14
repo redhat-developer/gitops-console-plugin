@@ -3,7 +3,7 @@
   "description": "OpenShift Console plugin for GitOps.",
   "version": "1.1.0",
   "private": true,
-  "packageManager": "pnpm@10.34.6",
+  "packageManager": "pnpm@12.18.0",
   "license": "Apache-2.0",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
