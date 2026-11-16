@@ -61,6 +61,7 @@
   "Started At": "시작 시간",
   "When the operation was started.": "작업이 시작된 시간입니다.",
   "Duration": "소요 기간",
+  "Invalid duration": "Invalid duration",
   "How long the operation took to complete.": "작업을 완료하는 데 걸린 시간입니다.",
   "Finished At": "완료 시간",
   "When the operation was finished.": "작업이 완료된 시간입니다.",
