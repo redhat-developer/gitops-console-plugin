@@ -57,6 +57,7 @@
   "Started At": "開始日時",
   "When the operation was started.": "操作を開始した時刻。",
   "Duration": "期間",
+  "Invalid duration": "Invalid duration",
   "How long the operation took to complete.": "操作完了までにかかった時刻。",
   "Finished At": "終了日時",
   "When the operation was finished.": "操作が完了した時間。",

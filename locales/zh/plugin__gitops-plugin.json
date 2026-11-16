@@ -57,6 +57,7 @@
   "Started At": "开始于",
   "When the operation was started.": "启动该操作的时间。",
   "Duration": "持续时间",
+  "Invalid duration": "Invalid duration",
   "How long the operation took to complete.": "操作完成所需的时间。",
   "Finished At": "完成时间",
   "When the operation was finished.": "操作完成后。",
