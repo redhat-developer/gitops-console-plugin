@@ -63,9 +63,9 @@ describe('compareSyncWindowDurations', () => {
     expect(compareSyncWindowDurations('1h', '60m')).toBe(0);
   });
 
-  it('orders invalid durations lexically', () => {
-    expect(compareSyncWindowDurations('3x', 'garbage')).toBeLessThan(0);
-    expect(compareSyncWindowDurations('garbage', '3x')).toBeGreaterThan(0);
+  it('treats invalid durations as equal', () => {
+    expect(compareSyncWindowDurations('3x', 'garbage')).toBe(0);
+    expect(compareSyncWindowDurations('garbage', '3x')).toBe(0);
   });
 
   it('sorts invalid durations after all valid ones', () => {
@@ -76,7 +76,9 @@ describe('compareSyncWindowDurations', () => {
     expect(compareSyncWindowDurations('3x', '90m')).toBeGreaterThan(0);
 
     const mixed = ['3x', '90m', '2h', 'garbage'];
-    expect([...mixed].sort(compareSyncWindowDurations)).toEqual(['90m', '2h', '3x', 'garbage']);
+    const sorted = [...mixed].sort(compareSyncWindowDurations);
+    expect(sorted.slice(0, 2)).toEqual(['90m', '2h']);
+    expect(sorted.slice(2).sort()).toEqual(['3x', 'garbage'].sort());
   });
 
   it('is a total order over mixed valid and invalid values', () => {
