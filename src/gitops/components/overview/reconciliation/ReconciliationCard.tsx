@@ -171,7 +171,12 @@ const ReconciliationCard: React.FC<OverviewCardProps> = ({ namespace }) => {
                 </Chart>
               )}
             </div>
-            <ExternalLink href={'/monitoring/query-browser?units=short&query0=' + prometheusQuery}>
+            <ExternalLink
+              href={`/monitoring/query-browser?${new URLSearchParams({
+                units: 'short',
+                query0: prometheusQuery,
+              }).toString()}`}
+            >
               {t('View in Observe/Metrics')}
             </ExternalLink>
           </>

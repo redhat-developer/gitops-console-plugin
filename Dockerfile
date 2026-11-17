@@ -1,6 +1,6 @@
 FROM docker.io/library/node:23 AS build
 
-RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
+RUN corepack enable && corepack prepare pnpm@10.34.6 --activate
 
 ADD . /usr/src/app
 WORKDIR /usr/src/app
