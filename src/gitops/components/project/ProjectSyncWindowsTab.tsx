@@ -2,7 +2,14 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
-import { Badge, EmptyState, EmptyStateBody, PageSection, Title } from '@patternfly/react-core';
+import {
+  Badge,
+  EmptyState,
+  EmptyStateBody,
+  PageSection,
+  Title,
+  Tooltip,
+} from '@patternfly/react-core';
 import { DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
 import { ThProps } from '@patternfly/react-table';
@@ -27,6 +34,12 @@ import {
   getProjectSyncWindowsManagedColumns,
   PROJECT_SYNC_WINDOWS_COLUMN_MANAGEMENT_ID,
 } from '../shared/projectSyncWindowsColumns';
+
+import {
+  compareSyncWindowDurations,
+  isValidSyncWindowDuration,
+  MAX_SYNC_WINDOW_DURATION_LENGTH,
+} from './parseDurationToMinutes';
 
 type ProjectSyncWindowsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: AppProjectKind;
@@ -135,20 +148,6 @@ const ProjectSyncWindowsTab: React.FC<ProjectSyncWindowsTabProps> = ({ obj }) =>
   );
 };
 
-const parseDurationToMinutes = (duration: string): number => {
-  if (!duration) return 0;
-
-  const hourMatch = duration.match(/(\d+)h/i);
-  const minuteMatch = duration.match(/(\d+)m/i);
-  const secondMatch = duration.match(/(\d+)s/i);
-
-  const hours = hourMatch ? parseInt(hourMatch[1], 10) : 0;
-  const minutes = minuteMatch ? parseInt(minuteMatch[1], 10) : 0;
-  const seconds = secondMatch ? parseInt(secondMatch[1], 10) : 0;
-
-  return hours * 60 + minutes + seconds / 60;
-};
-
 const normalizeScheduleForSort = (schedule: string): number => {
   if (!schedule) return 0;
 
@@ -186,10 +185,10 @@ const sortSyncWindowsData = (
           bValue = b.schedule || '';
         }
         break;
-      case 'duration':
-        aValue = parseDurationToMinutes(a.duration || '');
-        bValue = parseDurationToMinutes(b.duration || '');
-        break;
+      case 'duration': {
+        const cmp = compareSyncWindowDurations(a.duration || '', b.duration || '');
+        return direction === 'asc' ? cmp : -cmp;
+      }
       case 'applications':
         const aAppsCount = a.applications?.length || 0;
         const bAppsCount = b.applications?.length || 0;
@@ -277,6 +276,28 @@ const useColumnsDV = (
     columnSortConfig,
   );
 
+const renderSyncWindowDurationCell = (
+  duration: string | undefined,
+  t: (key: string) => string,
+): React.ReactNode => {
+  if (!duration) {
+    return '-';
+  }
+  if (isValidSyncWindowDuration(duration)) {
+    return duration;
+  }
+  // Keep the original value available (truncated) without putting a huge string in the cell.
+  const truncated =
+    duration.length > MAX_SYNC_WINDOW_DURATION_LENGTH
+      ? `${duration.slice(0, MAX_SYNC_WINDOW_DURATION_LENGTH)}…`
+      : duration;
+  return (
+    <Tooltip content={truncated}>
+      <span tabIndex={0}>{t('Invalid duration')}</span>
+    </Tooltip>
+  );
+};
+
 const useSyncWindowsRowsDV = (
   syncWindows: SyncWindow[],
   t: (key: string) => string,
@@ -301,7 +322,7 @@ const useSyncWindowsRowsDV = (
         dataLabel: t('Schedule'),
       },
       duration: {
-        cell: window.duration || '-',
+        cell: renderSyncWindowDurationCell(window.duration, t),
         id: `duration-${index}`,
         dataLabel: t('Duration'),
       },
