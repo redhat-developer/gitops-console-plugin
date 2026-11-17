@@ -50,7 +50,7 @@ export const isValidSyncWindowDuration = (duration?: string): boolean => {
 
 /**
  * Ascending compare for sync-window durations.
- * Valid pairs: numeric. Invalid pairs: lexical. Invalids always after valids (to avoid mixed cycles).
+ * Valid pairs: numeric. Invalids treated as equal and always after valids (to avoid mixed cycles).
  */
 export const compareSyncWindowDurations = (a: string, b: string): number => {
   const aMinutes = parseDurationToMinutes(a);
@@ -59,7 +59,7 @@ export const compareSyncWindowDurations = (a: string, b: string): number => {
   const bInvalid = Number.isNaN(bMinutes);
 
   if (aInvalid && bInvalid) {
-    return a.localeCompare(b);
+    return 0;
   }
   if (aInvalid) {
     return 1;
