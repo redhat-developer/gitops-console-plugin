@@ -1,10 +1,11 @@
 import { resolveOpenShiftVersion, shouldEnableGitOpsTopology } from './shouldEnableGitOpsTopology';
 
 describe('shouldEnableGitOpsTopology', () => {
-  it('fails open when version is unavailable (namespace-scoped users)', () => {
-    expect(shouldEnableGitOpsTopology(undefined)).toBe(true);
-    expect(shouldEnableGitOpsTopology(null)).toBe(true);
-    expect(shouldEnableGitOpsTopology('')).toBe(true);
+  it('disables when version is unavailable or unparseable', () => {
+    expect(shouldEnableGitOpsTopology(undefined)).toBe(false);
+    expect(shouldEnableGitOpsTopology(null)).toBe(false);
+    expect(shouldEnableGitOpsTopology('')).toBe(false);
+    expect(shouldEnableGitOpsTopology('not-a-version')).toBe(false);
   });
 
   it('enables for OpenShift 4.19+', () => {
