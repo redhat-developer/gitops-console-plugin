@@ -2,7 +2,6 @@ import React from 'react';
 
 import { COLORS } from '@gitops/components/shared/colors';
 import {
-  getGroupVersionKindForModel,
   GroupVersionKind,
   K8sResourceCommon,
   K8sResourceKindReference,
@@ -10,6 +9,7 @@ import {
   useAccessReview,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk/lib/api/common-types';
+import { getReferenceForModel } from 'src/plugin/utils/useClusterVersion';
 
 const modelToRef = (obj: K8sModel) => `${obj.apiGroup}~${obj.apiVersion}~${obj.kind}`;
 const modelToGroupVersionKind = (obj: K8sModel) => ({
@@ -68,7 +68,7 @@ export const resourcePathFromModel = (model: K8sModel, name?: string, namespace?
     url +=
       model.kind === 'Application'
         ? 'argoproj.io~v1alpha1~Application'
-        : getGroupVersionKindForModel(model);
+        : getReferenceForModel(model);
   } else if (plural) {
     url += plural;
   }
