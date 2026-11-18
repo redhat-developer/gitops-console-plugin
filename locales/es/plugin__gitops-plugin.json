@@ -57,6 +57,7 @@
   "Started At": "Iniciado a las",
   "When the operation was started.": "Cuándo se inició la operación.",
   "Duration": "Duración",
+  "Invalid duration": "Invalid duration",
   "How long the operation took to complete.": "Cuánto tiempo tardó en completarse la operación.",
   "Finished At": "Finalizado a las",
   "When the operation was finished.": "Cuándo terminó la operación.",
