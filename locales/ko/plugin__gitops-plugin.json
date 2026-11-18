@@ -104,6 +104,7 @@
   "Started At": "Started At",
   "When the operation was started.": "When the operation was started.",
   "Duration": "Duration",
+  "Invalid duration": "Invalid duration",
   "How long the operation took to complete.": "How long the operation took to complete.",
   "Finished At": "Finished At",
   "When the operation was finished.": "When the operation was finished.",
