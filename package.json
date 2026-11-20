@@ -1,7 +1,7 @@
 {
   "name": "gitops-plugin",
   "description": "OpenShift Console plugin for GitOps.",
-  "version": "0.0.1",
+  "version": "0.0.18",
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@dagrejs/dagre": "^1.1.8",
+    "@types/jest": "^29.0.0",
     "@openshift-console/dynamic-plugin-sdk": "^4.19.1",
     "@openshift-console/dynamic-plugin-sdk-internal": "^4.19.1",
     "@openshift-console/dynamic-plugin-sdk-webpack": "^4.19.1",
@@ -89,7 +90,7 @@
   },
   "consolePlugin": {
     "name": "gitops-plugin",
-    "version": "0.0.17",
+    "version": "0.0.18",
     "displayName": "GitOps Plugin",
     "description": "OpenShift Console plugin for GitOps.",
     "dependencies": {
