@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@dagrejs/dagre": "^1.1.8",
+    "@types/jest": "^29.0.0",
     "@openshift-console/dynamic-plugin-sdk": "^4.19.1",
     "@openshift-console/dynamic-plugin-sdk-internal": "^4.19.1",
     "@openshift-console/dynamic-plugin-sdk-webpack": "^4.19.1",
@@ -28,6 +29,7 @@
     "@patternfly/react-icons": "^6.4.0",
     "@patternfly/react-table": "^6.4.0",
     "@patternfly/react-tokens": "6.4.0",
+    "@patternfly/react-topology": "^6.4.0",
     "@svgr/webpack": "^8.1.0",
     "@types/classnames": "^2.3.1",
     "@types/dagre": "^0.7.53",
@@ -47,7 +49,7 @@
     "eslint-plugin-chai-friendly": "^0.7.2",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jsdoc": "^62.0.0",
+    "eslint-plugin-jsdoc": "^49.0.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.3.0",
@@ -75,13 +77,14 @@
     "webpack-dev-server": "^4.9.3"
   },
   "resolutions": {
-    "glob-parent": "^6.0.0",
+    "glob-parent": "^5.1.2",
     "showdown": "^2.1.0",
     "express": "4.22.1",
     "@types/jest": "21.x",
     "hosted-git-info": "^3.0.8",
-    "jquery": "4.0.0",
-    "lodash-es": "^4.17.23",
+    "jquery": "3.7.1",
+    "lodash-es": "^4.18.1",
+    "lodash": "^4.18.1",
     "minimist": "1.2.8",
     "ua-parser-js": "^0.7.24",
     "jest": "21.x",
@@ -89,9 +92,15 @@
   },
   "consolePlugin": {
     "name": "gitops-plugin",
-    "version": "0.0.17",
+    "version": "0.0.16",
     "displayName": "GitOps Plugin",
     "description": "OpenShift Console plugin for GitOps.",
+    "exposedModules": {
+      "environments": "./components/ApplicationListPage",
+      "detailsPage": "./components/EnvironmentDetailsPageTabs",
+      "gitopsFlags": "./components/utils/flags",
+      "topology": "./components/topology"
+    },
     "dependencies": {
       "@console/pluginAPI": "*"
     }
