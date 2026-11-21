@@ -10,7 +10,7 @@ overrides:
   express: 4.22.1
   '@types/jest': ^29.5.0
   hosted-git-info: ^3.0.8
-  jquery: 4.0.0
+  jquery: 4.1.0
   lodash-es: ^4.18.1
   lodash: ^4.18.1
   minimist: 1.2.8
@@ -2278,6 +2278,7 @@ packages:
   clone-buffer@1.0.0:
     resolution: {integrity: sha512-KLLTJWrvwIP+OPfMn0x2PheDEP20RPUcGXj/ERegTgdmPEZylALQldygiqrPPu8P45uNuPs7ckmReLY6v/iA5g==}
     engines: {node: '>= 0.10'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   clone-deep@4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}
