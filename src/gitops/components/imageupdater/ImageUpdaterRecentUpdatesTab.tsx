@@ -17,7 +17,6 @@ import {
   EmptyStateBody,
   PageSection,
   PageSectionVariants,
-  Title,
 } from '@patternfly/react-core';
 import { DataViewTr } from '@patternfly/react-data-view/dist/esm/DataViewTable';
 import { CubesIcon } from '@patternfly/react-icons';
@@ -102,9 +101,6 @@ const ImageUpdaterRecentUpdatesTab: React.FC<ImageUpdaterRecentUpdatesTabProps> 
         variant={PageSectionVariants.default}
         className="co-m-pane__body co-m-pane__body--section-heading"
       >
-        <Title headingLevel="h2" className="co-section-heading">
-          {t('Recent Updates')}
-        </Title>
         <GitOpsListPageToolbar columnManagement={columnManagement} />
         <GitOpsDataViewTable
           rows={visibleRows}
@@ -128,6 +124,11 @@ const useRowsDV = (
 
   updates.forEach((update) => {
     const cellsById = {
+      'when': {
+        cell: update.updatedAt ? <Timestamp timestamp={update.updatedAt} /> : '-',
+        id: 'when',
+        dataLabel: 'When',
+      },
       alias: {
         cell: update.alias || '-',
         id: 'alias',
@@ -141,17 +142,12 @@ const useRowsDV = (
       'new-version': {
         cell: update.newVersion || '-',
         id: 'new-version',
-        dataLabel: 'New Version',
+        dataLabel: 'New version',
       },
       'apps-updated': {
         cell: update.applicationsUpdated != null ? String(update.applicationsUpdated) : '-',
         id: 'apps-updated',
-        dataLabel: 'Apps Updated',
-      },
-      'updated-at': {
-        cell: update.updatedAt ? <Timestamp timestamp={update.updatedAt} /> : '-',
-        id: 'updated-at',
-        dataLabel: 'Updated At',
+        dataLabel: 'Apps updated',
       },
       message: {
         cell: update.message || '-',
@@ -175,11 +171,11 @@ const useColumnsDV = (
   buildManagedDataViewColumns(
     managedColumns,
     {
-      alias: t('Alias'),
+      'when': t('When'),
       image: t('Image'),
-      'new-version': t('New Version'),
-      'apps-updated': t('Apps Updated'),
-      'updated-at': t('Updated At'),
+      alias: t('Alias'),
+      'new-version': t('New version'),
+      'apps-updated': t('Apps updated'),
       message: t('Message'),
     },
     getSortParams,
@@ -197,6 +193,10 @@ const sortData = (
     let aValue: string | number, bValue: string | number;
 
     switch (sortBy) {
+      case 'when':
+        aValue = a.updatedAt || '';
+        bValue = b.updatedAt || '';
+        break;
       case 'alias':
         aValue = a.alias || '';
         bValue = b.alias || '';
@@ -212,10 +212,6 @@ const sortData = (
       case 'apps-updated':
         aValue = a.applicationsUpdated ?? -1;
         bValue = b.applicationsUpdated ?? -1;
-        break;
-      case 'updated-at':
-        aValue = a.updatedAt || '';
-        bValue = b.updatedAt || '';
         break;
       case 'message':
         aValue = a.message || '';

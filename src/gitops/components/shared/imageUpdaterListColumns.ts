@@ -7,9 +7,9 @@ export const getImageUpdaterManagedColumns = (
   t: (key: string) => string,
 ): GitOpsManagedColumn[] =>
   buildGitOpsManagedColumns(includeNamespaceColumn, t, [
-    { id: 'apps', title: t('Apps'), isShownByDefault: true },
+    { id: 'apps', title: t('Applications'), isShownByDefault: true },
     { id: 'images', title: t('Images'), isShownByDefault: true },
-    { id: 'last-checked', title: t('Last Checked'), isShownByDefault: false, additional: true },
+    { id: 'last-checked', title: t('Last checked'), isShownByDefault: true },
     { id: 'ready', title: t('Ready'), isShownByDefault: true },
-    { id: 'labels', title: t('Labels'), isShownByDefault: true },
+    { id: 'age', title: t('Age'), isShownByDefault: true },
   ]);
