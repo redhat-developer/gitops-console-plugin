@@ -86,7 +86,8 @@
     "minimist": "1.2.8",
     "ua-parser-js": "^0.7.24",
     "jest": "21.x",
-    "postcss": "^8.2.13"
+    "postcss": "^8.2.13",
+    "parse5": ">=8.1.1"
   },
   "consolePlugin": {
     "name": "gitops-plugin",
