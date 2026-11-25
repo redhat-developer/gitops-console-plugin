@@ -4,7 +4,7 @@ overrides:
   express: "4.22.1"
   "@types/jest": "^29.5.0"
   hosted-git-info: "^3.0.8"
-  jquery: "4.0.0"
+  jquery: "4.1.0"
   lodash-es: "^4.18.1"
   lodash: "^4.18.1"
   minimist: "1.2.8"
