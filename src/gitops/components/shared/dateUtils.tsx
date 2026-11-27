@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Timestamp } from '@openshift-console/dynamic-plugin-sdk';
 import { Tooltip } from '@patternfly/react-core';
 
 export const getAge = (creationTimestamp?: string): string => {
@@ -14,23 +15,12 @@ export const getAge = (creationTimestamp?: string): string => {
   return `${diffInDays}d`;
 };
 
-const formatCreationDate = (creationTimestamp: string): string =>
-  new Date(creationTimestamp).toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: 'UTC',
-    timeZoneName: 'short',
-  });
-
 export const AgeCell: React.FC<{ creationTimestamp?: string }> = ({ creationTimestamp }) => {
   const age = getAge(creationTimestamp);
   if (!creationTimestamp) return <>{age}</>;
 
   return (
-    <Tooltip content={formatCreationDate(creationTimestamp)}>
+    <Tooltip content={<Timestamp timestamp={creationTimestamp} />}>
       <span>{age}</span>
     </Tooltip>
   );
