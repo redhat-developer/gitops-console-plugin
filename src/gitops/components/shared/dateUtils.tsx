@@ -15,7 +15,7 @@ export const getAge = (creationTimestamp?: string): string => {
 };
 
 const formatCreationDate = (creationTimestamp: string): string =>
-  new Date(creationTimestamp).toLocaleString('en-US', {
+  new Date(creationTimestamp).toLocaleString(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
