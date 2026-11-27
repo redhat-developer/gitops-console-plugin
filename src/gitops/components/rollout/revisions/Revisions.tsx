@@ -269,7 +269,7 @@ const getRowsDV = (
             </div>
           ),
         },
-        replicaSet?.replicaSet.kind,
+        replicaSet?.replicaSet?.kind,
         {
           cell: (
             <div>
@@ -298,7 +298,7 @@ const getRowsDV = (
             </div>
           ),
         },
-        getAgeInMinutes(replicaSet?.replicaSet?.metadata?.creationTimestamp) + 'm',
+        replicaSet?.replicaSet ? getAgeInMinutes(replicaSet.replicaSet.metadata?.creationTimestamp) + 'm': '',
         getStatusSection(replicaSet.statuses),
         {
           cell: (
