@@ -43,6 +43,7 @@ import {
   useGitOpsDataViewSort,
   useGitOpsListPagePagination,
 } from '../shared/DataView';
+import { AgeCell } from '../shared/dateUtils';
 import { GitOpsListPageToolbar } from '../shared/GitOpsListPageToolbar';
 import {
   getImageUpdaterManagedColumns,
@@ -50,10 +51,8 @@ import {
 } from '../shared/imageUpdaterListColumns';
 import {
   filterByConsoleNameAndLabels,
-  getLabelsSortKey,
   parseLabelFilterParam,
 } from '../shared/listPageTextFilters';
-import MetadataLabels from '../shared/MetadataLabels';
 
 import { useImageUpdaterActionsProvider } from './hooks/useImageUpdaterActionsProvider';
 
@@ -292,9 +291,9 @@ export const sortData = (
         aValue = a.status?.conditions?.find((c) => c.type === 'Ready')?.status || '';
         bValue = b.status?.conditions?.find((c) => c.type === 'Ready')?.status || '';
         break;
-      case 'labels':
-        aValue = getLabelsSortKey(a.metadata?.labels);
-        bValue = getLabelsSortKey(b.metadata?.labels);
+      case 'age':
+        aValue = a.metadata?.creationTimestamp || '';
+        bValue = b.metadata?.creationTimestamp || '';
         break;
       default:
         return 0;
@@ -320,19 +319,18 @@ export const useColumnsDV = (
   const titleById: Record<string, string> = {
     name: t('Name'),
     [NAMESPACE_COLUMN_ID]: t('Namespace'),
-    apps: t('Apps'),
+    apps: t('Applications'),
     images: t('Images'),
-    'last-checked': t('Last Checked'),
+    'last-checked': t('Last checked'),
     ready: t('Ready'),
-    labels: t('Labels'),
-    actions: '',
+    age: t('Age'),
+    actions: t('Actions'),
   };
 
   return managedColumns.map((column) => {
     if (column.id === 'actions') {
       return {
-        cell: '',
-        props: { 'aria-label': 'actions' },
+        cell: titleById.actions,
       };
     }
     const sortIndex = columnSortConfig.findIndex((entry) => entry.key === column.id);
@@ -382,7 +380,7 @@ export const useImageUpdaterRowsDV = (
         id: 'apps',
         cell:
           obj.status?.applicationsMatched != null ? String(obj.status.applicationsMatched) : '-',
-        dataLabel: 'Apps',
+        dataLabel: 'Applications',
       },
       images: {
         id: 'images',
@@ -398,31 +396,17 @@ export const useImageUpdaterRowsDV = (
         ) : (
           '-'
         ),
-        dataLabel: 'Last Checked',
+        dataLabel: 'Last checked',
       },
       ready: {
         id: 'ready',
         cell: readyCondition ? String(isReady) : '-',
         dataLabel: 'Ready',
       },
-      labels: {
-        id: 'labels',
-        dataLabel: 'Labels',
-        cell: (
-          <div>
-            <MetadataLabels
-              kind={
-                ImageUpdaterModel.apiGroup +
-                '~' +
-                ImageUpdaterModel.apiVersion +
-                '~' +
-                ImageUpdaterModel.kind
-              }
-              labels={obj?.metadata?.labels}
-              numLabels={3}
-            />
-          </div>
-        ),
+      age: {
+        id: 'age',
+        cell: <AgeCell creationTimestamp={obj.metadata?.creationTimestamp} />,
+        dataLabel: 'Age',
       },
       actions: {
         id: 'actions-' + index,
@@ -453,7 +437,7 @@ const ImageUpdaterActionsCell: React.FC<{
 
 const getFilters = (t: (key: string) => string): RowFilter[] => [
   {
-    filterGroupName: t('Apps'),
+    filterGroupName: t('Applications'),
     type: 'apps-status',
     reducer: (item) => {
       const apps = (item as ImageUpdaterKind).status?.applicationsMatched;
@@ -469,8 +453,8 @@ const getFilters = (t: (key: string) => string): RowFilter[] => [
       );
     },
     items: [
-      { id: 'has-apps', title: t('Has Apps') },
-      { id: 'no-apps', title: t('No Apps') },
+      { id: 'has-apps', title: t('Has applications') },
+      { id: 'no-apps', title: t('No applications') },
     ],
   },
   {
@@ -495,7 +479,7 @@ const getFilters = (t: (key: string) => string): RowFilter[] => [
     },
     items: [
       { id: 'ready', title: t('Ready') },
-      { id: 'not-ready', title: t('Not Ready') },
+      { id: 'not-ready', title: t('Not ready') },
     ],
   },
 ];

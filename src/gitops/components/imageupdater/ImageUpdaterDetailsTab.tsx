@@ -12,12 +12,10 @@ import {
   Title,
 } from '@patternfly/react-core';
 
-import { ImageUpdaterKind, ImageUpdaterModel } from '../../models/ImageUpdaterModel';
-import { Conditions } from '../../utils/components/Conditions/Conditions';
+import { ImageUpdaterKind } from '../../models/ImageUpdaterModel';
 import { useGitOpsTranslation } from '../../utils/hooks/useGitOpsTranslation';
-import BaseDetailsSummary, {
-  DetailsDescriptionGroup,
-} from '../shared/BaseDetailsSummary/BaseDetailsSummary';
+import { DetailsDescriptionGroup } from '../shared/BaseDetailsSummary/BaseDetailsSummary';
+import { AgeCell } from '../shared/dateUtils';
 
 type ImageUpdaterDetailsTabProps = RouteComponentProps<{ ns: string; name: string }> & {
   obj?: ImageUpdaterKind;
@@ -41,62 +39,32 @@ const ImageUpdaterDetailsTab: React.FC<ImageUpdaterDetailsTabProps> = ({ obj }) 
         variant={PageSectionVariants.default}
         className={classNames('co-m-pane__body', { 'co-m-pane__body--section-heading': true })}
       >
-        <Title headingLevel="h2" className="co-section-heading">
-          {t('ImageUpdater details')}
-        </Title>
         <Flex
           justifyContent={{ default: 'justifyContentSpaceEvenly' }}
           direction={{ default: 'column', lg: 'row' }}
         >
           <Flex flex={{ default: 'flex_2' }}>
             <FlexItem fullWidth={{ default: 'fullWidth' }}>
-              <BaseDetailsSummary obj={obj} model={ImageUpdaterModel} showOwner={false} />
-            </FlexItem>
-          </Flex>
-
-          <Flex flex={{ default: 'flex_2' }} direction={{ default: 'column' }}>
-            <FlexItem>
               <DescriptionList className="pf-v6-c-description-list">
                 <DetailsDescriptionGroup
-                  title={t('Ready')}
-                  help={t('Whether the last reconciliation completed without errors.')}
+                  title={t('Name')}
+                  help={t('Name must be unique within a namespace.')}
                 >
-                  {readyLabel}
+                  {obj.metadata?.name}
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
-                  title={t('Applications Matched')}
-                  help={t('Number of applications matched by this ImageUpdater.')}
+                  title={t('Namespace')}
+                  help={t('Namespace defines the space within which each name must be unique.')}
                 >
-                  {String(status.applicationsMatched ?? '-')}
+                  {obj.metadata?.namespace}
                 </DetailsDescriptionGroup>
 
                 <DetailsDescriptionGroup
-                  title={t('Images Managed')}
-                  help={t('Number of images eligible for update checking.')}
+                  title={t('Age')}
+                  help={t('Time since the ImageUpdater was created.')}
                 >
-                  {String(status.imagesManaged ?? '-')}
-                </DetailsDescriptionGroup>
-
-                <DetailsDescriptionGroup
-                  title={t('Last Checked At')}
-                  help={t('When the controller last checked for image updates.')}
-                >
-                  {status.lastCheckedAt ? <Timestamp timestamp={status.lastCheckedAt} /> : '-'}
-                </DetailsDescriptionGroup>
-
-                <DetailsDescriptionGroup
-                  title={t('Last Updated At')}
-                  help={t('When the controller last performed an image update.')}
-                >
-                  {status.lastUpdatedAt ? <Timestamp timestamp={status.lastUpdatedAt} /> : '-'}
-                </DetailsDescriptionGroup>
-
-                <DetailsDescriptionGroup
-                  title={t('Observed Generation')}
-                  help={t('The generation of the resource that was last reconciled.')}
-                >
-                  {String(status.observedGeneration ?? '-')}
+                  <AgeCell creationTimestamp={obj.metadata?.creationTimestamp} />
                 </DetailsDescriptionGroup>
               </DescriptionList>
             </FlexItem>
@@ -104,14 +72,60 @@ const ImageUpdaterDetailsTab: React.FC<ImageUpdaterDetailsTabProps> = ({ obj }) 
         </Flex>
       </PageSection>
 
-      {status.conditions && status.conditions.length > 0 && (
-        <PageSection>
-          <Title headingLevel="h2" className="co-section-heading">
-            {t('Conditions')}
-          </Title>
-          <Conditions conditions={status.conditions} />
-        </PageSection>
-      )}
+      <PageSection>
+        <Title headingLevel="h2" className="co-section-heading">
+            {t('Controller status')}
+        </Title>
+        <Flex flex={{ default: 'flex_2' }}>
+          <FlexItem fullWidth={{ default: 'fullWidth' }}>
+            <DescriptionList className="pf-v6-c-description-list">
+              <DetailsDescriptionGroup
+                title={t('Applications matched')}
+                help={t('Number of applications matched by this ImageUpdater.')}
+              >
+                {String(status.applicationsMatched ?? '-')}
+              </DetailsDescriptionGroup>
+
+              <DetailsDescriptionGroup
+                title={t('Images managed')}
+                help={t('Number of images eligible for update checking.')}
+              >
+                {String(status.imagesManaged ?? '-')}
+              </DetailsDescriptionGroup>
+
+              <DetailsDescriptionGroup
+                title={t('Last registry check')}
+                help={t('When the controller last checked for image updates.')}
+              >
+                {status.lastCheckedAt ? <Timestamp timestamp={status.lastCheckedAt} /> : '-'}
+              </DetailsDescriptionGroup>
+
+              <DetailsDescriptionGroup
+                title={t('Last update applied')}
+                help={t('When the controller last performed an image update.')}
+              >
+                {status.lastUpdatedAt ? <Timestamp timestamp={status.lastUpdatedAt} /> : '-'}
+              </DetailsDescriptionGroup>
+
+              <DetailsDescriptionGroup
+                title={t('Ready')}
+                help={t('Whether the last reconciliation completed without errors.')}
+              >
+                {readyLabel}
+              </DetailsDescriptionGroup>
+
+              <DetailsDescriptionGroup
+                title={t('Created at')}
+                help={t(
+                  'Time is a wrapper around time. Time which supports correct marshaling to YAML and JSON.',
+                )}
+              >
+                <Timestamp timestamp={obj?.metadata?.creationTimestamp} />
+              </DetailsDescriptionGroup>
+            </DescriptionList>
+          </FlexItem>
+        </Flex>
+      </PageSection>
     </>
   );
 };

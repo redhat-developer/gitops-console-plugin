@@ -13,23 +13,12 @@ describe('IMAGE_UPDATER_LIST_COLUMN_MANAGEMENT_ID', () => {
 });
 
 describe('getImageUpdaterManagedColumns', () => {
-  it('locks Name, keeps Labels default-visible, and always shows actions', () => {
+  it('locks Name and always shows actions', () => {
     const columns = getImageUpdaterManagedColumns(true, t);
     const byId = Object.fromEntries(columns.map((column) => [column.id, column]));
 
     expect(byId.name.isUntoggleable).toBe(true);
-    expect(byId.labels.isShownByDefault).toBe(true);
     expect(byId.actions.alwaysShown).toBe(true);
-  });
-
-  it('puts Last Checked under Additional columns', () => {
-    const columns = getImageUpdaterManagedColumns(true, t);
-    const byId = Object.fromEntries(columns.map((column) => [column.id, column]));
-
-    expect(byId['last-checked']).toMatchObject({ isShownByDefault: false, additional: true });
-    expect(columns.filter((column) => column.additional).map((column) => column.id)).toEqual([
-      'last-checked',
-    ]);
   });
 
   it('includes Namespace only for All projects', () => {
@@ -40,7 +29,7 @@ describe('getImageUpdaterManagedColumns', () => {
       'images',
       'last-checked',
       'ready',
-      'labels',
+      'age',
       'actions',
     ]);
     expect(getImageUpdaterManagedColumns(false, t).map((column) => column.id)).toEqual([
@@ -49,7 +38,7 @@ describe('getImageUpdaterManagedColumns', () => {
       'images',
       'last-checked',
       'ready',
-      'labels',
+      'age',
       'actions',
     ]);
   });
@@ -61,8 +50,9 @@ describe('getImageUpdaterManagedColumns', () => {
       'namespace',
       'apps',
       'images',
+      'last-checked',
       'ready',
-      'labels',
+      'age',
       'actions',
     ]);
   });
